@@ -4,6 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const OUT = process.env.OUT || "/mnt/documents/asmi-demo-v5.mp4";
 
 const bundled = await bundle({
   entryPoint: path.resolve(__dirname, "../src/index.ts"),
@@ -26,11 +27,12 @@ await renderMedia({
   composition,
   serveUrl: bundled,
   codec: "h264",
-  outputLocation: "/tmp/asmi-silent.mp4",
+  audioCodec: "aac",
+  enforceAudioTrack: true,
+  outputLocation: OUT,
   puppeteerInstance: browser,
-  muted: true,
   concurrency: 1,
 });
 
 await browser.close({ silent: false });
-console.log("rendered silent video");
+console.log("rendered ->", OUT);
