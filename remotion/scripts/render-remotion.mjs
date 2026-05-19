@@ -26,12 +26,11 @@ await renderMedia({
   composition,
   serveUrl: bundled,
   codec: "h264",
-  audioCodec: "mp3",
-  enforceAudioTrack: true,
-  outputLocation: "/mnt/documents/asmi-demo-v3.mp4",
+  outputLocation: "/tmp/asmi-silent.mp4",
   puppeteerInstance: browser,
+  muted: true,
   concurrency: 1,
 });
 
 await browser.close({ silent: false });
-console.log("rendered");
+console.log("rendered silent video");
