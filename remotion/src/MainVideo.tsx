@@ -471,8 +471,9 @@ const SceneIMessageTyping: React.FC<{
           </div>
 
           {/* Faint earlier context so thread isn't empty */}
-          <Bubble msg={{ from: "in", text: "you up?" }} opacity={0.55} />
-          <Bubble msg={{ from: "out", text: "yep, what's up" }} opacity={0.55} />
+          <Bubble msg={{ from: "out", text: "hey asmi" }} opacity={0.55} />
+          <Bubble msg={{ from: "in",  text: "here — what do you need?" }} opacity={0.55} />
+
 
           {isSent && (() => {
             const e = spring({ frame: frame - sentFrame, fps, config: { damping: 16, stiffness: 220 } });
