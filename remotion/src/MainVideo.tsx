@@ -5,6 +5,8 @@ import {
   interpolate,
   spring,
   Sequence,
+  Audio,
+  staticFile,
 } from "remotion";
 import { loadFont as loadSerif } from "@remotion/google-fonts/InstrumentSerif";
 import { loadFont as loadInter } from "@remotion/google-fonts/Inter";
@@ -127,7 +129,19 @@ export const MainVideo: React.FC = () => {
 
       <Sequence from={O.outro} durationInFrames={D.outro}><Outro /></Sequence>
 
-      {/* Audio track is muxed in post-render */}
+      {/* Call voice tracks — louder while on screen */}
+      <Sequence from={O.doc} durationInFrames={D.doc}>
+        <Audio src={staticFile("audio/trimmed/doc.mp3")} volume={1} />
+      </Sequence>
+      <Sequence from={O.hvac} durationInFrames={D.hvac}>
+        <Audio src={staticFile("audio/trimmed/hvac.mp3")} volume={1} />
+      </Sequence>
+      <Sequence from={O.gp} durationInFrames={D.gp}>
+        <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={1} />
+      </Sequence>
+
+      {/* Background music — ducks under call scenes */}
+      <Audio src={staticFile("audio/bgm.mp3")} volume={(f) => bgmVolume(f)} />
     </AbsoluteFill>
   );
 };
