@@ -753,8 +753,8 @@ const SceneWhatsAppThread: React.FC<{
     <AbsoluteFill>
       <ChatRail
         tag="01  ·  whatsapp"
-        title={<>the<br /><i style={{ fontStyle: "italic" }}>ask.</i></>  as any}
-        sub="you message asmi like a friend. it picks up the context and starts working."
+        title={"the ask."}
+        sub="message asmi like a friend. it picks up the thread and starts working."
       />
       <div style={{ opacity: phoneOp, transform: `translate(180px, ${phoneY}px)` }}>
         <PhoneFrame>
