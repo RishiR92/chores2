@@ -180,12 +180,35 @@ export const MainVideo: React.FC = () => {
         <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={1.8} />
       </Sequence>
 
+      {/* Call voice tracks — boosted while on screen (sources already normalized to -14 LUFS) */}
+      <Sequence from={O.doc} durationInFrames={D.doc}>
+        <Audio src={staticFile("audio/trimmed/doc.mp3")} volume={2.2} />
+      </Sequence>
+      <Sequence from={O.hvac} durationInFrames={D.hvac}>
+        <Audio src={staticFile("audio/trimmed/hvac.mp3")} volume={2.2} />
+      </Sequence>
+      <Sequence from={O.gp} durationInFrames={D.gp}>
+        <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={2.2} />
+      </Sequence>
+
+      {/* iMessage "ting" on each Asmi reply bubble */}
+      <Sequence from={O.imDoc + THREAD_REPLY_DELAY} durationInFrames={20}>
+        <Audio src={staticFile(TING)} volume={0.55} />
+      </Sequence>
+      <Sequence from={O.imHvac + typingReplyFrame(HVAC_TYPED.length)} durationInFrames={20}>
+        <Audio src={staticFile(TING)} volume={0.55} />
+      </Sequence>
+      <Sequence from={O.imGp + typingReplyFrame(GP_TYPED.length)} durationInFrames={20}>
+        <Audio src={staticFile(TING)} volume={0.55} />
+      </Sequence>
+
       {/* Background music — ducks hard under call scenes */}
       <Audio src={staticFile("audio/bgm.mp3")} volume={(f) => bgmVolume(f)} />
 
     </AbsoluteFill>
   );
 };
+
 
 // ============= Persistent =============
 
