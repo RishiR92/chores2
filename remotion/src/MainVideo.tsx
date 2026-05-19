@@ -734,12 +734,12 @@ const SceneWhatsAppThread: React.FC<{
 
   return (
     <AbsoluteFill>
-      <ChatRail
-        tag="01  ·  whatsapp"
+      <ChatOverlay
+        tag="01 · whatsapp"
         title={"the ask."}
         sub="message asmi like a friend. it picks up the thread and starts working."
       />
-      <div style={{ opacity: phoneOp, transform: `translate(180px, ${phoneY}px)` }}>
+      <div style={{ opacity: phoneOp, transform: `translateY(${phoneY}px)` }}>
         <PhoneFrame>
           <StatusBar time={time} />
           <WAHeader name={contactName} subtitle={subtitle} />
