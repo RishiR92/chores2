@@ -1,71 +1,120 @@
-# Asmi launch video v4 — punchy BGM + audible calls
+# Asmi Product Hunt launch video v5
 
-Two focused fixes on top of the existing v3 video. No structural/UI changes.
+This revision fixes the silent call problem at the source, makes the chat beats feel intentional, and ends on a stronger Product Hunt-style statement.
 
-## 1. Why the call audio isn't audible (root cause)
+## What will change
 
-The render pipeline is muxing audio with `ffmpeg amix` after a silent Remotion render (`muted: true` in `scripts/render-remotion.mjs`). `amix` normalizes by dividing each input by the number of active inputs, so the BGM (which plays the entire 50s) and the 8s call snippet get equal weight when they overlap — the voice ends up roughly half as loud as it should be, and the BGM masks it.
+### 1. Fix the call audio properly
 
-On top of that, the trimmed call MP3s aren't loudness-normalized, so they sit several dB below the BGM to begin with.
+The biggest issue is not just mixing: the current trimmed call files are effectively silent, while the original source recordings do contain audible speech.
 
-### Fix
+#### Plan
 
-Stop post-muxing. Let Remotion render audio natively (Nix ffmpeg has working `aac`, the `libfdk_aac`-only issue was a red herring).
+- Rebuild all 3 call snippets from the original source recordings:
+  - `doc-sandra-call.mp4`
+  - `hvac-call.mp4`
+  - `spanish-grandpa-call.mp4`
+- Extract new 7–8 second windows that contain clear speech and align them to the on-screen captions.
+- Loudness-normalize each snippet for intelligibility and consistency.
+- Reduce background music much more aggressively during call scenes so the voice is the focus.
+- Make the render pipeline reproducible so the final exported MP4 always includes the correct audio mix.
 
-- `scripts/render-remotion.mjs`: remove `muted: true`, add `audioCodec: "aac"`, `enforceAudioTrack: true`, write directly to `/mnt/documents/asmi-demo-v4.mp4`.
-- `MainVideo.tsx` mix levels:
-  - Call snippets: `volume={1.4}` (gentle boost; Remotion clips above 1 only if the source is hot, these aren't).
-  - BGM base: `0.20` outside calls, ducked to `0.04` during calls (was `0.07` — still too loud against the new drum track).
-  - Add a 6-frame crossfade on the duck so it's not a step.
-- Pre-normalize the three call MP3s once with `ffmpeg loudnorm` (target -16 LUFS, peak -1 dBTP) and overwrite in place. This is the durable fix for "voice is quiet" across any future render.
+#### Result
 
-## 2. New background music — SF launch energy
+When a call scene is on screen, the viewer should clearly hear the actual snippet without straining. Outside of calls, the music carries the energy.
 
-Current "At Launch" by Kevin MacLeod is ambient pads. You want drum-forward, momentum-building, the kind of thing under a Linear / Arc / Rabbit launch film.
+### 2. Upgrade the background music
 
-### Track brief
+Replace the current track with a more launch-worthy, drum-led soundtrack from an open library.
 
-- 50–60s, builds across three beats matching the video arc (intro → 3 calls → outro).
-- Tight punchy kick on every beat, crisp snare/clap on 2 & 4, hi-hat 16ths.
-- 110–118 BPM. Subby low end, bright top.
-- One melodic hook: short plucked synth or muted-guitar motif, repeats and evolves.
-- Drop/lift around 0:08 (right as the first iMessage hits) and a final swell into the outro.
-- No vocals, no cheesy EDM risers.
+#### Music brief
 
-Reference vibes: ODESZA "A Moment Apart" intro energy, Tycho "Awake", Rival Consoles "Recovery", Bonobo "Cirrus".
+- Percussion-forward, startup launch energy
+- Clean, modern, cinematic build
+- Strong kick/snare pulse
+- Momentum through the middle, lift into the finish
+- No vocals
+- Works under UI/chat visuals without feeling cheesy
 
-### Source — pick one
+I’ll use a royalty-free/open-library track that fits this brief and then mix it so it supports the story instead of fighting the call audio.
 
-**A. Generate with ElevenLabs Music API (preferred — tailored to the video).**
-Requires `ELEVENLABS_API_KEY` secret. Saved to `remotion/public/audio/bgm.mp3` (overwrites current).
+### 3. Make the three chat examples feel real and different
 
-**B. Free / CC-BY track from Pixabay or Uppbeat** if you don't want to add the key. I'll pick one matching the brief, download it, and credit appropriately.
+The chat scenes should not feel empty or repetitive.
 
-I'll wait for your choice before fetching/generating.
+#### New structure
 
-## 3. Out of scope
+1. **Example 1 — existing message already in the thread**
+   - Show a realistic pre-existing inbound request already sitting in the conversation.
+   - Asmi replies and immediately transitions into the corresponding call.
 
-- iMessage UI, call UI, scene timing, video length — all unchanged from v3.
-- No web app changes.
+2. **Example 2 — new typed request**
+   - Show the user actively typing a fresh request into the chat composer.
+   - The typed text resolves into a sent message, then Asmi replies.
 
-## Technical summary
+3. **Example 3 — another new typed request**
+   - Same realistic chat UI, but with a different request pattern so it does not feel templated.
+   - Use distinct pacing/content from example 2.
+
+### 4. End on a stronger final beat
+
+Replace the softer ending treatment with a high-impact closing message:
+
+**AI That Handles Your Personal Chores in the Physical World**
+
+This becomes the emotional finish of the video and should land with the strongest music moment.
+
+## Exact content direction
+
+### Chat storytelling
+
+- Keep the chat UI realistic and populated
+- Avoid empty thread space
+- Use one pre-existing request + two typed-in-live requests
+- Ensure each example clearly maps to a different real-world task
+
+### Call storytelling
+
+- Doctor booking call
+- HVAC service call
+- Grandfather wellness check call in Spanish
+
+### Ending
+
+- Final message should feel like the headline, not a small caption
+- Music should peak here
+- Visual pacing should feel resolved and premium
+
+## Technical implementation
 
 ```text
-render-remotion.mjs:
-  - muted: true                      // REMOVE
-  + audioCodec: "aac"
-  + enforceAudioTrack: true
-  + outputLocation: "/mnt/documents/asmi-demo-v4.mp4"
-  (drop the ad-hoc ffmpeg amix post-step entirely)
+MainVideo.tsx
+  - Replace repetitive chat beat structure with 3 distinct message patterns
+  - Update on-screen copy so each chat scene feels active and real
+  - Retime captions if needed to match newly extracted audible call windows
+  - Increase BGM ducking during calls
+  - Rework ending scene around the final headline
 
-MainVideo.tsx:
-  call <Audio volume={1.4} />
-  bgm  base 0.20 / duck 0.04 with 6-frame ramp
+audio assets
+  - Re-extract call snippets from original MP4 source recordings
+  - Normalize voice tracks for clarity
+  - Replace bgm.mp3 with a better royalty-free launch track
 
-one-shot:
-  ffmpeg -i doc.mp3   -af loudnorm=I=-16:TP=-1 doc.norm.mp3   && mv
-  ffmpeg -i hvac.mp3  -af loudnorm=I=-16:TP=-1 hvac.norm.mp3  && mv
-  ffmpeg -i grandpa.mp3 -af loudnorm=I=-16:TP=-1 grandpa.norm.mp3 && mv
+render-remotion.mjs
+  - Make final audio export reproducible
+  - Ensure the rendered MP4 includes the intended mixed soundtrack
 ```
 
-Output: `/mnt/documents/asmi-demo-v4.mp4`.
+## Acceptance criteria
+
+- All 3 call scenes have clearly audible voice snippets
+- Background music feels more premium and launch-ready
+- The 3 chat examples are visibly different from each other
+- One example shows a pre-existing message in thread
+- Two examples show new requests being typed and sent
+- The video ends on: **AI That Handles Your Personal Chores in the Physical World**
+- Final output is a new exported MP4 version
+
+## Output
+
+`/mnt/documents/asmi-demo-v5.mp4`
