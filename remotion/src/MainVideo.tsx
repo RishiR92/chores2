@@ -68,8 +68,8 @@ const callRanges: Array<[number, number]> = [
 ];
 const bgmVolume = (f: number) => {
   const fadeIn = Math.min(1, f / 45);
-  const fadeOut = Math.min(1, (TOTAL - f) / 60);
-  // Smooth duck: 22-frame ramp into/out of call ranges. Deep duck so call voice sits clearly on top.
+  // Short fade-out only at the very end so the music lands on its climax
+  const fadeOut = Math.min(1, (TOTAL - f) / 18);
   const RAMP = 22;
   let duckAmt = 0;
   for (const [a, b] of callRanges) {
@@ -77,11 +77,12 @@ const bgmVolume = (f: number) => {
     const outOf = Math.max(0, Math.min(1, (b - f) / RAMP));
     duckAmt = Math.max(duckAmt, Math.min(into, outOf));
   }
-  // Smooth (ease-in-out) the duck transition
   const eased = duckAmt * duckAmt * (3 - 2 * duckAmt);
-  const base = 0.36 * (1 - eased) + 0.015 * eased;
+  // Louder base, deeper duck under calls
+  const base = 0.6 * (1 - eased) + 0.025 * eased;
   return Math.max(0, base * fadeIn * fadeOut);
 };
+
 
 // iMessage receive "ting" — absolute frames computed below from scene offsets + reply delays
 const TING = "audio/sfx/imessage-receive.mp3";
