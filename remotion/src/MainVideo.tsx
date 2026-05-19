@@ -83,11 +83,12 @@ export const MainVideo: React.FC = () => {
           contactName="Sarah"
           time="9:03 AM"
           history={[
-            { from: "in",  text: "morning! quick favor 🙏" },
-            { from: "out", text: "Of course — what do you need?" },
-            { from: "in",  text: "Hey, can you book Jonathan a checkup with Dr. Weng's office?" },
+            { from: "out", text: "morning! quick favor 🙏" },
+            { from: "in",  text: "of course — what do you need?" },
+            { from: "out", text: "Hey, can you book Jonathan a checkup with Dr. Weng's office?" },
           ]}
           reply="On it — calling them now."
+
         />
       </Sequence>
 
