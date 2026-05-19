@@ -826,15 +826,71 @@ const SceneDone: React.FC = () => {
 
 const Outro: React.FC = () => {
   const frame = useCurrentFrame();
-  const opacity = interpolate(frame, [0, 12, 70, 90], [0, 1, 1, 0]);
+  const { fps } = useVideoConfig();
+  const opacity = interpolate(frame, [0, 14, 80, 90], [0, 1, 1, 0]);
+
+  // Three lines reveal sequentially with springs
+  const lines = [
+    { text: "AI That Handles",       delay: 0  },
+    { text: "Your Personal Chores",  delay: 14 },
+    { text: "In The Physical World", delay: 28, accent: true },
+  ];
+
   return (
-    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", opacity }}>
-      <div style={{ fontFamily: serif, fontStyle: "italic", fontSize: 180, color: ESPRESSO }}>
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", opacity, padding: 80 }}>
+      {/* tiny wordmark */}
+      <div
+        style={{
+          fontFamily: serif,
+          fontStyle: "italic",
+          fontSize: 56,
+          color: STONE,
+          marginBottom: 36,
+          letterSpacing: -1,
+        }}
+      >
         asmi
       </div>
-      <div style={{ marginTop: 24, fontSize: 28, letterSpacing: 6, textTransform: "uppercase", color: STONE }}>
-        you text. asmi handles it.
+
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+        {lines.map((l, i) => {
+          const s = spring({ frame: frame - l.delay, fps, config: { damping: 18, stiffness: 140 } });
+          const op = interpolate(s, [0, 1], [0, 1]);
+          const y = interpolate(s, [0, 1], [30, 0]);
+          return (
+            <div
+              key={i}
+              style={{
+                fontFamily: serif,
+                fontStyle: "italic",
+                fontSize: 112,
+                lineHeight: 1.05,
+                color: l.accent ? TERRACOTTA : ESPRESSO,
+                textAlign: "center",
+                opacity: op,
+                transform: `translateY(${y}px)`,
+                letterSpacing: -2,
+              }}
+            >
+              {l.text}
+            </div>
+          );
+        })}
+      </div>
+
+      <div
+        style={{
+          marginTop: 50,
+          fontSize: 26,
+          letterSpacing: 8,
+          textTransform: "uppercase",
+          color: STONE,
+          fontWeight: 500,
+        }}
+      >
+        you text · asmi calls · it's done
       </div>
     </AbsoluteFill>
   );
 };
+
