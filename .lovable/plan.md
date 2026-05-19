@@ -5,9 +5,9 @@ Full reset on visual language and chat UI. Same content/script and same scene or
 ## What changes
 
 ### 1. New background music
-- Replace `remotion/public/audio/bgm.mp3` with the newly uploaded `Asmi_Demo_-_2-2.mp3`.
-- Re-tune ducking against the new track's dynamics. Music sits louder in intro/outro, ducks smoothly under each call snippet.
-- End on the track's natural climax (no premature fade).
+- Replace `remotion/public/audio/bgm.mp3` with the newly uploaded `Asmi_Demo_-_2-3.mp3`.
+- Probe the new track's duration/peaks with ffprobe, then align video length so the outro lands on the track's climax (no premature fade).
+- Re-tune ducking against the new track's dynamics: louder in intro/outro, smooth duck under each call snippet (~22-frame eased ramp).
 
 ### 2. Chat UI — switch to realistic WhatsApp
 Current iMessage mock looks web-like. Replace with a high-fidelity WhatsApp mobile UI:
