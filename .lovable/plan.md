@@ -1,78 +1,48 @@
-# Act 5 playback wash — lighter, full-card, 90s loop
+# Asmi demo video (15s, MP4)
 
-## Goal
+A short cinematic motion-graphic showing Asmi's loop: user texts in iMessage → Asmi calls the user to clarify → Asmi calls the place/person → done. Two woven micro-stories in one 15s piece: **doctor appointment** and **grandpa check-in**.
 
-The wash on the active audio card should feel like a slow, soft light pass across the card:
+Output: `/mnt/documents/asmi-demo.mp4` — 1080×1920 (vertical, 9:16, social-ready) at 30fps.
 
-- lighter color than today (more washed out, less saturated)
-- covers the whole card top-to-bottom and edge-to-edge, not a narrow patch
-- starts at the left edge, ends at the right edge over 90 seconds (1.5 min)
-- when it reaches the right, it restarts from the left and loops as long as audio is playing
-- decoupled from audio length and from `progress` — pure visual time-based loop
+## Story beats (15s = 450 frames @ 30fps)
 
-## Change to make
-
-In `src/components/asmi/Act5.tsx`, replace the current wash layer in `FieldNoteCard` with a full-card light sweep driven by its own 90-second loop while `isActive` is true.
-
-1. **Lighter color**
-   - Lower the wash overlay opacity so the cream card remains dominant.
-   - Keep the per-story hue (`story.wash`) but render it noticeably softer.
-
-2. **Full-card coverage**
-   - The gradient layer spans the entire card (`inset-0`), full width and full height.
-   - The gradient defines a wide, feathered light band that extends top to bottom, so as it sweeps the entire card surface is touched (not a small floating patch).
-
-3. **90-second left-to-right loop**
-   - Use a CSS keyframe animation, not `progress`-based transforms.
-   - Keyframe moves `background-position` from the left edge to the right edge.
-   - `animation: asmi-wash-sweep 90s linear infinite` while `isActive`.
-   - Animation is removed (and opacity faded) when playback stops, so the next play restarts cleanly from the left.
-
-## Implementation intent
-
-```tsx
-<span
-  aria-hidden
-  className="absolute inset-0 pointer-events-none"
-  style={{
-    backgroundImage: `linear-gradient(100deg,
-      transparent 0%,
-      transparent 35%,
-      ${story.wash} 50%,
-      transparent 65%,
-      transparent 100%)`,
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "220% 100%",
-    backgroundPosition: "0% 0%",
-    opacity: isActive ? 0.35 : 0,
-    animation: isActive ? "asmi-wash-sweep 90s linear infinite" : "none",
-    transition: "opacity 0.5s ease",
-  }}
-/>
+```text
+0:00–0:03  Scene 1  iMessage   "Can you book Jonathan with Dr. Weng?"
+0:03–0:06  Scene 2  Asmi → User call (clarifying: insurance, timing)
+0:06–0:09  Scene 3  Asmi → Dr. Weng's office (booking)
+0:09–0:11  Scene 4  iMessage   "Check on grandpa in Spain?"
+0:11–0:14  Scene 5  Asmi → Grandpa call (Spanish, warmth)
+0:14–0:15  Scene 6  Done card: two ✓ confirmations stacked
 ```
 
-Global keyframe (added in `src/styles.css`):
+Transitions: soft cross-fade + slight scale, ~10 frames each (in the Asmi cream / terracotta / sage palette already used on the site).
 
-```css
-@keyframes asmi-wash-sweep {
-  from { background-position: 0% 0%; }
-  to   { background-position: 100% 0%; }
-}
-```
+## Audio plan
 
-- `background-size: 220% 100%` makes the band wider than the card and full height.
-- Moving `background-position` from `0%` to `100%` sweeps the band from the left edge to the right edge over 90 seconds, then loops.
-- Lower opacity (`~0.35`) makes the wash visibly lighter than the current treatment.
+Use the real call recordings already in `public/audio/` — short snippets only:
 
-## Keep unchanged
+- Scene 2 (Asmi→user clarify): 3s snippet from `doc-sandra-call.mp4` (intro)
+- Scene 3 (Asmi→office): 3s snippet from same file (mid-call booking moment)
+- Scene 5 (grandpa): 3s snippet from `spanish-grandpa-call.mp4` (warm exchange)
 
-- Footer, privacy link, support email
-- Audio startup / preload logic
-- Phrase reveal timing and card copy
-- Other acts and layouts
-- Existing corner bloom and ambient bloom layers
+Snippets are trimmed with ffmpeg to ~3s with 200ms fades, concatenated into one timeline track. Light ambient hum under iMessage scenes (silence is fine if you'd rather keep it minimal — say the word).
 
-## File touched
+## Visual direction
 
-- `src/components/asmi/Act5.tsx` — replace the wash layer
-- `src/styles.css` — add the `asmi-wash-sweep` keyframes
+- **Palette**: cream `#F5EFE6` background, espresso `#2C2520` text, terracotta `#C25B3F` (doc story), clay `#D4A574` (grandpa story), sage `#5F8365` (success ticks). Matches the live site.
+- **Type**: Instrument Serif (display) + Inter (UI/body), same as site.
+- **iMessage scenes**: realistic iOS bubble (gray incoming from user, blue outgoing from Asmi), top status bar, typing dots → bubble pop-in with spring.
+- **Call scenes**: stylized "call card" with avatar circle, name, live waveform reacting to the audio snippet, soft radiating rings. Live transcript line types out under the waveform ("booking Jonathan for Tuesday 10am…").
+- **Done card**: two stacked confirmation chips (terracotta + clay) with sage ✓, gentle float-in.
+
+Persistent layer: very subtle grain + slow drifting warm gradient bloom behind every scene to keep it cohesive (the Atmosphere look from the site).
+
+## Technical
+
+- Scaffold a fresh Remotion project at `remotion/` (per the video-creator skill), 1080×1920, 30fps, 450 frames.
+- Copy `public/audio/*.mp4` into `remotion/public/audio/` and pre-trim 3s snippets with ffmpeg (`-ss` + `-t` + fade filters) into `remotion/public/audio/trimmed/`.
+- Build six scene components under `remotion/src/scenes/` wired through `<TransitionSeries>`; persistent background + audio track in `MainVideo.tsx`.
+- Fonts via `@remotion/google-fonts/InstrumentSerif` and `@remotion/google-fonts/Inter`.
+- Render via the programmatic script (`scripts/render-remotion.mjs`) to `/mnt/documents/asmi-demo.mp4`, then spot-check 3–4 key frames.
+
+No changes to the live Asmi site — this is a standalone artifact you can download and share.
