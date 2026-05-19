@@ -1,48 +1,71 @@
-# Asmi demo video (15s, MP4)
+# Asmi launch video v3 — fix audio, real iMessage UI, music
 
-A short cinematic motion-graphic showing Asmi's loop: user texts in iMessage → Asmi calls the user to clarify → Asmi calls the place/person → done. Two woven micro-stories in one 15s piece: **doctor appointment** and **grandpa check-in**.
+A focused rebuild of the 50s vertical demo for a Product Hunt launch. Three problems to solve, in order of impact.
 
-Output: `/mnt/documents/asmi-demo.mp4` — 1080×1920 (vertical, 9:16, social-ready) at 30fps.
+## 1. Audio is silent — the real fix
 
-## Story beats (15s = 450 frames @ 30fps)
+The current render script passes `muted: true`, which strips ALL audio (call snippets + any music) from the MP4. That's why nothing is audible.
+
+Fix:
+- Remove `muted: true`.
+- Set `audioCodec: "aac"` explicitly on `renderMedia` (Nix ffmpeg has native `aac`, not `libfdk_aac` — this combo works in the sandbox).
+- Add `enforceAudioTrack: true` so silent stretches still produce a valid track.
+- Mix levels in `MainVideo.tsx` via `<Audio volume={...}>`:
+  - Call snippets: `1.0` while a call scene is on screen.
+  - Background music: `0.18` under iMessage/intro/outro scenes, ducked to `0.06` during calls so the voice is clearly audible.
+
+## 2. Realistic iMessage UI (replaces the empty chat)
+
+Build a proper iOS Messages screen, not floating bubbles on a gradient:
+
+- Real iOS status bar (time, signal, wifi, battery icons drawn in SVG).
+- Messages header: back chevron, circular contact avatar with initials, contact name + "iMessage" subtitle, FaceTime icon.
+- Bubble system:
+  - Inbound (user → Asmi): light gray (`#E9E9EB`), left-aligned, tail on bottom-left.
+  - Outbound (Asmi → user): iMessage blue gradient (`#0B93F6` → `#1FA2FF`), right-aligned, tail on bottom-right, white text.
+  - Bubbles animate in with a small spring + scale-from-tail, not a generic fade.
+  - Typing indicator (three pulsing dots in a gray bubble) before Asmi replies.
+  - "Delivered" / "Read 9:41 AM" micro-label under the last outbound bubble.
+- Realistic copy per scenario:
+  - Sarah: "Hey can you book my annual physical w/ Dr. Weng? Mornings only 🙏" → Asmi: "On it. I'll call the office now and lock a morning slot."
+  - Marco: "AC died again 😩 it's 95° in here" → Asmi: "Calling Pacific HVAC for a same-day visit."
+  - Priya: "Can you check on Abuelo in Sevilla? He hasn't texted back." → Asmi: "Llamándolo ahora. I'll report back in español."
+- Subtle iOS wallpaper tint behind the chat, not a brand gradient — sells the "this is really my phone" feel.
+
+## 3. Call UI upgrade
+
+Match the iMessage realism:
+- iOS-style incoming/active call screen: contact avatar large and centered, name, "calling…" → live timer, mute/keypad/speaker buttons (decorative).
+- Live transcript card slides up over the bottom half showing the caller's actual words synced to the audio (short, 2–3 line captions cycling).
+- Keep waveform but make it react to time, smaller, under the avatar.
+
+## 4. Background music
+
+Use ElevenLabs Music API to generate ONE 50s track tailored to launch energy:
+- Prompt: "Uplifting modern tech launch track, warm synth pads, gentle pluck arpeggio, subtle four-on-the-floor kick, optimistic and human, builds gently, no vocals, 90 BPM, Apple keynote vibe."
+- Save to `remotion/public/audio/bgm.mp3`.
+- Apply with ducking as described in §1.
+
+If `ELEVENLABS_API_KEY` is not set, I'll stop and ask before proceeding rather than ship without music.
+
+## 5. Render fixes
+
+`scripts/render-remotion.mjs` updates:
 
 ```text
-0:00–0:03  Scene 1  iMessage   "Can you book Jonathan with Dr. Weng?"
-0:03–0:06  Scene 2  Asmi → User call (clarifying: insurance, timing)
-0:06–0:09  Scene 3  Asmi → Dr. Weng's office (booking)
-0:09–0:11  Scene 4  iMessage   "Check on grandpa in Spain?"
-0:11–0:14  Scene 5  Asmi → Grandpa call (Spanish, warmth)
-0:14–0:15  Scene 6  Done card: two ✓ confirmations stacked
+renderMedia({
+  codec: "h264",
+  audioCodec: "aac",
+  enforceAudioTrack: true,
+  // muted: true  <-- removed
+  concurrency: 1,
+})
 ```
 
-Transitions: soft cross-fade + slight scale, ~10 frames each (in the Asmi cream / terracotta / sage palette already used on the site).
+Output → `/mnt/documents/asmi-demo-v3.mp4`.
 
-## Audio plan
+## Out of scope
 
-Use the real call recordings already in `public/audio/` — short snippets only:
-
-- Scene 2 (Asmi→user clarify): 3s snippet from `doc-sandra-call.mp4` (intro)
-- Scene 3 (Asmi→office): 3s snippet from same file (mid-call booking moment)
-- Scene 5 (grandpa): 3s snippet from `spanish-grandpa-call.mp4` (warm exchange)
-
-Snippets are trimmed with ffmpeg to ~3s with 200ms fades, concatenated into one timeline track. Light ambient hum under iMessage scenes (silence is fine if you'd rather keep it minimal — say the word).
-
-## Visual direction
-
-- **Palette**: cream `#F5EFE6` background, espresso `#2C2520` text, terracotta `#C25B3F` (doc story), clay `#D4A574` (grandpa story), sage `#5F8365` (success ticks). Matches the live site.
-- **Type**: Instrument Serif (display) + Inter (UI/body), same as site.
-- **iMessage scenes**: realistic iOS bubble (gray incoming from user, blue outgoing from Asmi), top status bar, typing dots → bubble pop-in with spring.
-- **Call scenes**: stylized "call card" with avatar circle, name, live waveform reacting to the audio snippet, soft radiating rings. Live transcript line types out under the waveform ("booking Jonathan for Tuesday 10am…").
-- **Done card**: two stacked confirmation chips (terracotta + clay) with sage ✓, gentle float-in.
-
-Persistent layer: very subtle grain + slow drifting warm gradient bloom behind every scene to keep it cohesive (the Atmosphere look from the site).
-
-## Technical
-
-- Scaffold a fresh Remotion project at `remotion/` (per the video-creator skill), 1080×1920, 30fps, 450 frames.
-- Copy `public/audio/*.mp4` into `remotion/public/audio/` and pre-trim 3s snippets with ffmpeg (`-ss` + `-t` + fade filters) into `remotion/public/audio/trimmed/`.
-- Build six scene components under `remotion/src/scenes/` wired through `<TransitionSeries>`; persistent background + audio track in `MainVideo.tsx`.
-- Fonts via `@remotion/google-fonts/InstrumentSerif` and `@remotion/google-fonts/Inter`.
-- Render via the programmatic script (`scripts/render-remotion.mjs`) to `/mnt/documents/asmi-demo.mp4`, then spot-check 3–4 key frames.
-
-No changes to the live Asmi site — this is a standalone artifact you can download and share.
+- No changes to the web app / routes.
+- Keeping the existing 3-scenario structure and ~50s length.
+- Reusing existing trimmed call audio files; not re-trimming.
