@@ -58,16 +58,29 @@ const callRanges: Array<[number, number]> = [
 const bgmVolume = (f: number) => {
   const fadeIn = Math.min(1, f / 45);
   const fadeOut = Math.min(1, (TOTAL - f) / 60);
-  // Smooth duck: 8-frame ramp into/out of call ranges. Aggressive duck so voice cuts through.
+  // Smooth duck: 22-frame ramp into/out of call ranges. Deep duck so call voice sits clearly on top.
+  const RAMP = 22;
   let duckAmt = 0;
   for (const [a, b] of callRanges) {
-    const into = Math.max(0, Math.min(1, (f - a) / 8));
-    const outOf = Math.max(0, Math.min(1, (b - f) / 8));
+    const into = Math.max(0, Math.min(1, (f - a) / RAMP));
+    const outOf = Math.max(0, Math.min(1, (b - f) / RAMP));
     duckAmt = Math.max(duckAmt, Math.min(into, outOf));
   }
-  const base = 0.32 * (1 - duckAmt) + 0.025 * duckAmt;
+  // Smooth (ease-in-out) the duck transition
+  const eased = duckAmt * duckAmt * (3 - 2 * duckAmt);
+  const base = 0.36 * (1 - eased) + 0.015 * eased;
   return Math.max(0, base * fadeIn * fadeOut);
 };
+
+// iMessage receive "ting" — absolute frames computed below from scene offsets + reply delays
+const TING = "audio/sfx/imessage-receive.mp3";
+// Thread scene reply delay (must match SceneIMessageThread)
+const THREAD_REPLY_DELAY = 55;
+// Typing scenes: sentFrame = 8 + ceil(len * 1.6) + 6 ; replyDelay = sentFrame + 28
+const typingReplyFrame = (len: number) => 8 + Math.ceil(len * 1.6) + 6 + 28;
+const HVAC_TYPED = "AC is dead. Need a tech ASAP 🥵";
+const GP_TYPED = "Can you check on grandpa in Sevilla? In Spanish 🙏";
+
 
 
 export const MainVideo: React.FC = () => {
@@ -156,15 +169,27 @@ export const MainVideo: React.FC = () => {
 
       <Sequence from={O.outro} durationInFrames={D.outro}><Outro /></Sequence>
 
-      {/* Call voice tracks — boosted while on screen */}
+
+      {/* Call voice tracks — boosted while on screen (sources already normalized to -14 LUFS) */}
       <Sequence from={O.doc} durationInFrames={D.doc}>
-        <Audio src={staticFile("audio/trimmed/doc.mp3")} volume={1.8} />
+        <Audio src={staticFile("audio/trimmed/doc.mp3")} volume={2.2} />
       </Sequence>
       <Sequence from={O.hvac} durationInFrames={D.hvac}>
-        <Audio src={staticFile("audio/trimmed/hvac.mp3")} volume={1.8} />
+        <Audio src={staticFile("audio/trimmed/hvac.mp3")} volume={2.2} />
       </Sequence>
       <Sequence from={O.gp} durationInFrames={D.gp}>
-        <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={1.8} />
+        <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={2.2} />
+      </Sequence>
+
+      {/* iMessage "ting" on each Asmi reply bubble */}
+      <Sequence from={O.imDoc + THREAD_REPLY_DELAY} durationInFrames={20}>
+        <Audio src={staticFile(TING)} volume={0.55} />
+      </Sequence>
+      <Sequence from={O.imHvac + typingReplyFrame(HVAC_TYPED.length)} durationInFrames={20}>
+        <Audio src={staticFile(TING)} volume={0.55} />
+      </Sequence>
+      <Sequence from={O.imGp + typingReplyFrame(GP_TYPED.length)} durationInFrames={20}>
+        <Audio src={staticFile(TING)} volume={0.55} />
       </Sequence>
 
       {/* Background music — ducks hard under call scenes */}
@@ -173,6 +198,7 @@ export const MainVideo: React.FC = () => {
     </AbsoluteFill>
   );
 };
+
 
 // ============= Persistent =============
 
