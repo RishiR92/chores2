@@ -48,6 +48,21 @@ const O = {
   outro: D.intro + D.imDoc + D.doc + D.imHvac + D.hvac + D.imGp + D.gp + D.done,
 };
 
+const TOTAL = 1500;
+// Duck music during call scenes so voice is clear
+const callRanges: Array<[number, number]> = [
+  [O.doc, O.doc + D.doc],
+  [O.hvac, O.hvac + D.hvac],
+  [O.gp, O.gp + D.gp],
+];
+const bgmVolume = (f: number) => {
+  const fadeIn = Math.min(1, f / 45);
+  const fadeOut = Math.min(1, (TOTAL - f) / 60);
+  const inCall = callRanges.some(([a, b]) => f >= a + 8 && f < b - 8);
+  const base = inCall ? 0.07 : 0.22;
+  return Math.max(0, base * fadeIn * fadeOut);
+};
+
 export const MainVideo: React.FC = () => {
   return (
     <AbsoluteFill style={{ background: CREAM, fontFamily: sans }}>
