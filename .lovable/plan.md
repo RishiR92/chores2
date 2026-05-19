@@ -1,71 +1,71 @@
-# Asmi launch video v3 — fix audio, real iMessage UI, music
+# Asmi launch video v4 — punchy BGM + audible calls
 
-A focused rebuild of the 50s vertical demo for a Product Hunt launch. Three problems to solve, in order of impact.
+Two focused fixes on top of the existing v3 video. No structural/UI changes.
 
-## 1. Audio is silent — the real fix
+## 1. Why the call audio isn't audible (root cause)
 
-The current render script passes `muted: true`, which strips ALL audio (call snippets + any music) from the MP4. That's why nothing is audible.
+The render pipeline is muxing audio with `ffmpeg amix` after a silent Remotion render (`muted: true` in `scripts/render-remotion.mjs`). `amix` normalizes by dividing each input by the number of active inputs, so the BGM (which plays the entire 50s) and the 8s call snippet get equal weight when they overlap — the voice ends up roughly half as loud as it should be, and the BGM masks it.
 
-Fix:
-- Remove `muted: true`.
-- Set `audioCodec: "aac"` explicitly on `renderMedia` (Nix ffmpeg has native `aac`, not `libfdk_aac` — this combo works in the sandbox).
-- Add `enforceAudioTrack: true` so silent stretches still produce a valid track.
-- Mix levels in `MainVideo.tsx` via `<Audio volume={...}>`:
-  - Call snippets: `1.0` while a call scene is on screen.
-  - Background music: `0.18` under iMessage/intro/outro scenes, ducked to `0.06` during calls so the voice is clearly audible.
+On top of that, the trimmed call MP3s aren't loudness-normalized, so they sit several dB below the BGM to begin with.
 
-## 2. Realistic iMessage UI (replaces the empty chat)
+### Fix
 
-Build a proper iOS Messages screen, not floating bubbles on a gradient:
+Stop post-muxing. Let Remotion render audio natively (Nix ffmpeg has working `aac`, the `libfdk_aac`-only issue was a red herring).
 
-- Real iOS status bar (time, signal, wifi, battery icons drawn in SVG).
-- Messages header: back chevron, circular contact avatar with initials, contact name + "iMessage" subtitle, FaceTime icon.
-- Bubble system:
-  - Inbound (user → Asmi): light gray (`#E9E9EB`), left-aligned, tail on bottom-left.
-  - Outbound (Asmi → user): iMessage blue gradient (`#0B93F6` → `#1FA2FF`), right-aligned, tail on bottom-right, white text.
-  - Bubbles animate in with a small spring + scale-from-tail, not a generic fade.
-  - Typing indicator (three pulsing dots in a gray bubble) before Asmi replies.
-  - "Delivered" / "Read 9:41 AM" micro-label under the last outbound bubble.
-- Realistic copy per scenario:
-  - Sarah: "Hey can you book my annual physical w/ Dr. Weng? Mornings only 🙏" → Asmi: "On it. I'll call the office now and lock a morning slot."
-  - Marco: "AC died again 😩 it's 95° in here" → Asmi: "Calling Pacific HVAC for a same-day visit."
-  - Priya: "Can you check on Abuelo in Sevilla? He hasn't texted back." → Asmi: "Llamándolo ahora. I'll report back in español."
-- Subtle iOS wallpaper tint behind the chat, not a brand gradient — sells the "this is really my phone" feel.
+- `scripts/render-remotion.mjs`: remove `muted: true`, add `audioCodec: "aac"`, `enforceAudioTrack: true`, write directly to `/mnt/documents/asmi-demo-v4.mp4`.
+- `MainVideo.tsx` mix levels:
+  - Call snippets: `volume={1.4}` (gentle boost; Remotion clips above 1 only if the source is hot, these aren't).
+  - BGM base: `0.20` outside calls, ducked to `0.04` during calls (was `0.07` — still too loud against the new drum track).
+  - Add a 6-frame crossfade on the duck so it's not a step.
+- Pre-normalize the three call MP3s once with `ffmpeg loudnorm` (target -16 LUFS, peak -1 dBTP) and overwrite in place. This is the durable fix for "voice is quiet" across any future render.
 
-## 3. Call UI upgrade
+## 2. New background music — SF launch energy
 
-Match the iMessage realism:
-- iOS-style incoming/active call screen: contact avatar large and centered, name, "calling…" → live timer, mute/keypad/speaker buttons (decorative).
-- Live transcript card slides up over the bottom half showing the caller's actual words synced to the audio (short, 2–3 line captions cycling).
-- Keep waveform but make it react to time, smaller, under the avatar.
+Current "At Launch" by Kevin MacLeod is ambient pads. You want drum-forward, momentum-building, the kind of thing under a Linear / Arc / Rabbit launch film.
 
-## 4. Background music
+### Track brief
 
-Use ElevenLabs Music API to generate ONE 50s track tailored to launch energy:
-- Prompt: "Uplifting modern tech launch track, warm synth pads, gentle pluck arpeggio, subtle four-on-the-floor kick, optimistic and human, builds gently, no vocals, 90 BPM, Apple keynote vibe."
-- Save to `remotion/public/audio/bgm.mp3`.
-- Apply with ducking as described in §1.
+- 50–60s, builds across three beats matching the video arc (intro → 3 calls → outro).
+- Tight punchy kick on every beat, crisp snare/clap on 2 & 4, hi-hat 16ths.
+- 110–118 BPM. Subby low end, bright top.
+- One melodic hook: short plucked synth or muted-guitar motif, repeats and evolves.
+- Drop/lift around 0:08 (right as the first iMessage hits) and a final swell into the outro.
+- No vocals, no cheesy EDM risers.
 
-If `ELEVENLABS_API_KEY` is not set, I'll stop and ask before proceeding rather than ship without music.
+Reference vibes: ODESZA "A Moment Apart" intro energy, Tycho "Awake", Rival Consoles "Recovery", Bonobo "Cirrus".
 
-## 5. Render fixes
+### Source — pick one
 
-`scripts/render-remotion.mjs` updates:
+**A. Generate with ElevenLabs Music API (preferred — tailored to the video).**
+Requires `ELEVENLABS_API_KEY` secret. Saved to `remotion/public/audio/bgm.mp3` (overwrites current).
+
+**B. Free / CC-BY track from Pixabay or Uppbeat** if you don't want to add the key. I'll pick one matching the brief, download it, and credit appropriately.
+
+I'll wait for your choice before fetching/generating.
+
+## 3. Out of scope
+
+- iMessage UI, call UI, scene timing, video length — all unchanged from v3.
+- No web app changes.
+
+## Technical summary
 
 ```text
-renderMedia({
-  codec: "h264",
-  audioCodec: "aac",
-  enforceAudioTrack: true,
-  // muted: true  <-- removed
-  concurrency: 1,
-})
+render-remotion.mjs:
+  - muted: true                      // REMOVE
+  + audioCodec: "aac"
+  + enforceAudioTrack: true
+  + outputLocation: "/mnt/documents/asmi-demo-v4.mp4"
+  (drop the ad-hoc ffmpeg amix post-step entirely)
+
+MainVideo.tsx:
+  call <Audio volume={1.4} />
+  bgm  base 0.20 / duck 0.04 with 6-frame ramp
+
+one-shot:
+  ffmpeg -i doc.mp3   -af loudnorm=I=-16:TP=-1 doc.norm.mp3   && mv
+  ffmpeg -i hvac.mp3  -af loudnorm=I=-16:TP=-1 hvac.norm.mp3  && mv
+  ffmpeg -i grandpa.mp3 -af loudnorm=I=-16:TP=-1 grandpa.norm.mp3 && mv
 ```
 
-Output → `/mnt/documents/asmi-demo-v3.mp4`.
-
-## Out of scope
-
-- No changes to the web app / routes.
-- Keeping the existing 3-scenario structure and ~50s length.
-- Reusing existing trimmed call audio files; not re-trimming.
+Output: `/mnt/documents/asmi-demo-v4.mp4`.
