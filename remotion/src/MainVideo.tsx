@@ -240,108 +240,207 @@ const SceneIMessage: React.FC<{
 }> = ({ contactName, time, incoming, reply }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const replyDelay = 55;
+  const replyDelay = 60;
 
-  const inEnter = spring({ frame: frame - 8, fps, config: { damping: 14, stiffness: 180 } });
-  const inOpacity = interpolate(inEnter, [0, 1], [0, 1]);
-  const inY = interpolate(inEnter, [0, 1], [24, 0]);
+  const inEnter = spring({ frame: frame - 10, fps, config: { damping: 14, stiffness: 200 } });
+  const inOp = interpolate(inEnter, [0, 1], [0, 1]);
+  const inY = interpolate(inEnter, [0, 1], [30, 0]);
+  const inScale = interpolate(inEnter, [0, 1], [0.85, 1]);
 
+  // iOS wallpaper tint
   return (
-    <AbsoluteFill style={{ padding: "120px 60px", justifyContent: "flex-start" }}>
+    <AbsoluteFill style={{ background: "#000", padding: 0, justifyContent: "flex-start" }}>
       <div
         style={{
+          margin: 60,
+          marginTop: 80,
+          borderRadius: 72,
+          background: "#fff",
+          flex: 1,
+          overflow: "hidden",
+          boxShadow: "0 40px 120px -30px rgba(0,0,0,0.6), inset 0 0 0 8px #1a1a1a",
           display: "flex",
-          justifyContent: "space-between",
-          color: ESPRESSO,
-          fontWeight: 600,
-          fontSize: 36,
-          marginBottom: 24,
-          opacity: 0.85,
+          flexDirection: "column",
+          position: "relative",
         }}
       >
-        <span>{time}</span>
-        <span style={{ letterSpacing: 4 }}>●●●●●</span>
-      </div>
-
-      <div
-        style={{
-          textAlign: "center",
-          marginBottom: 60,
-          paddingBottom: 28,
-          borderBottom: "1px solid rgba(44,37,32,0.08)",
-        }}
-      >
+        {/* Notch */}
         <div
           style={{
-            width: 110,
-            height: 110,
-            borderRadius: 999,
-            background: "linear-gradient(135deg, #C25B3F, #D4A574)",
-            margin: "0 auto 14px",
+            position: "absolute",
+            top: 24,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: 340,
+            height: 38,
+            borderRadius: 20,
+            background: "#000",
+            zIndex: 10,
+          }}
+        />
+
+        {/* Status bar */}
+        <div
+          style={{
             display: "flex",
+            justifyContent: "space-between",
             alignItems: "center",
-            justifyContent: "center",
-            color: CREAM,
-            fontFamily: serif,
-            fontStyle: "italic",
-            fontSize: 54,
+            padding: "30px 60px 12px",
+            color: "#000",
+            fontSize: 30,
+            fontWeight: 600,
+            fontVariantNumeric: "tabular-nums",
           }}
         >
-          a
+          <span>9:41</span>
+          <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+            {/* signal */}
+            <svg width="34" height="22" viewBox="0 0 34 22"><g fill="#000">
+              <rect x="0"  y="14" width="6" height="8" rx="1"/>
+              <rect x="9"  y="10" width="6" height="12" rx="1"/>
+              <rect x="18" y="5"  width="6" height="17" rx="1"/>
+              <rect x="27" y="0"  width="6" height="22" rx="1"/>
+            </g></svg>
+            {/* wifi */}
+            <svg width="32" height="22" viewBox="0 0 32 22" fill="#000">
+              <path d="M16 4 C7 4 1 10 1 10 L4 14 C4 14 9 9 16 9 C23 9 28 14 28 14 L31 10 C31 10 25 4 16 4 Z"/>
+              <path d="M16 12 C11 12 7 16 7 16 L10 19 C10 19 13 17 16 17 C19 17 22 19 22 19 L25 16 C25 16 21 12 16 12 Z"/>
+              <circle cx="16" cy="20" r="2"/>
+            </svg>
+            {/* battery */}
+            <svg width="50" height="22" viewBox="0 0 50 22">
+              <rect x="1" y="2" width="42" height="18" rx="5" ry="5" fill="none" stroke="#000" strokeWidth="2"/>
+              <rect x="45" y="8" width="4" height="6" rx="1.5" fill="#000"/>
+              <rect x="4" y="5" width="36" height="12" rx="2" fill="#34C759"/>
+            </svg>
+          </div>
         </div>
-        <div style={{ fontSize: 38, color: ESPRESSO, fontWeight: 500 }}>
-          {contactName} ↔ Asmi
-        </div>
-        <div style={{ fontSize: 24, color: STONE, marginTop: 6, letterSpacing: 2, textTransform: "uppercase" }}>
-          iMessage
-        </div>
-      </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+        {/* Contact header */}
         <div
           style={{
-            alignSelf: "flex-start",
-            maxWidth: "78%",
-            padding: "26px 34px",
-            borderRadius: 38,
-            background: IMSG_GRAY,
-            color: ESPRESSO,
-            fontSize: 36,
-            lineHeight: 1.32,
-            opacity: inOpacity,
-            transform: `translateY(${inY}px)`,
-            boxShadow: "0 8px 24px -12px rgba(44,37,32,0.18)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: "20px 0 22px",
+            borderBottom: "1px solid #E5E5EA",
+            background: "rgba(247,247,247,0.92)",
+            position: "relative",
           }}
         >
-          {incoming}
+          {/* back chevron */}
+          <div style={{ position: "absolute", left: 36, top: 52, color: IMSG_BLUE, fontSize: 40, fontWeight: 400 }}>‹ 12</div>
+          {/* facetime icon */}
+          <div style={{ position: "absolute", right: 36, top: 56, color: IMSG_BLUE }}>
+            <svg width="44" height="28" viewBox="0 0 44 28" fill="none" stroke={IMSG_BLUE} strokeWidth="2.5" strokeLinejoin="round">
+              <rect x="2" y="4" width="28" height="20" rx="5"/>
+              <path d="M30 10 L42 4 L42 24 L30 18 Z" fill={IMSG_BLUE}/>
+            </svg>
+          </div>
+          <div
+            style={{
+              width: 96,
+              height: 96,
+              borderRadius: 999,
+              background: "linear-gradient(135deg, #8E8E93, #C7C7CC)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#fff",
+              fontSize: 44,
+              fontWeight: 500,
+              marginBottom: 10,
+            }}
+          >
+            {contactName[0]}
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, color: "#000", fontSize: 28, fontWeight: 500 }}>
+            {contactName}
+            <span style={{ color: "#8E8E93", fontSize: 26 }}>›</span>
+          </div>
         </div>
 
-        {frame > 28 && frame < replyDelay && <TypingDots />}
+        {/* Messages area */}
+        <div style={{ flex: 1, padding: "40px 32px 32px", display: "flex", flexDirection: "column", gap: 14, justifyContent: "flex-end" }}>
+          <div style={{ textAlign: "center", color: "#8E8E93", fontSize: 22, marginBottom: 8 }}>
+            iMessage · Today {time}
+          </div>
 
-        {frame >= replyDelay && (() => {
-          const e = spring({ frame: frame - replyDelay, fps, config: { damping: 14, stiffness: 180 } });
-          const op = interpolate(e, [0, 1], [0, 1]);
-          const y = interpolate(e, [0, 1], [24, 0]);
-          return (
+          {/* Inbound bubble */}
+          <div style={{ display: "flex", justifyContent: "flex-start" }}>
             <div
               style={{
-                alignSelf: "flex-end",
                 maxWidth: "78%",
-                padding: "26px 34px",
-                borderRadius: 38,
-                background: IMSG_BLUE,
-                color: "#fff",
-                fontSize: 36,
+                padding: "20px 26px",
+                borderRadius: 32,
+                borderBottomLeftRadius: 8,
+                background: "#E9E9EB",
+                color: "#000",
+                fontSize: 34,
                 lineHeight: 1.32,
-                opacity: op,
-                transform: `translateY(${y}px)`,
-                boxShadow: "0 8px 24px -12px rgba(44,37,32,0.18)",
+                opacity: inOp,
+                transform: `translateY(${inY}px) scale(${inScale})`,
+                transformOrigin: "bottom left",
               }}
             >
-              {reply}
+              {incoming}
             </div>
-          );
-        })()}
+          </div>
+
+          {frame > 32 && frame < replyDelay && (
+            <div style={{ display: "flex", justifyContent: "flex-end" }}><TypingDots /></div>
+          )}
+
+          {frame >= replyDelay && (() => {
+            const e = spring({ frame: frame - replyDelay, fps, config: { damping: 14, stiffness: 200 } });
+            const op = interpolate(e, [0, 1], [0, 1]);
+            const y = interpolate(e, [0, 1], [24, 0]);
+            const sc = interpolate(e, [0, 1], [0.85, 1]);
+            return (
+              <>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  <div
+                    style={{
+                      maxWidth: "78%",
+                      padding: "20px 26px",
+                      borderRadius: 32,
+                      borderBottomRightRadius: 8,
+                      background: "linear-gradient(180deg, #1FA1FF 0%, #0B84FF 100%)",
+                      color: "#fff",
+                      fontSize: 34,
+                      lineHeight: 1.32,
+                      opacity: op,
+                      transform: `translateY(${y}px) scale(${sc})`,
+                      transformOrigin: "bottom right",
+                      boxShadow: "0 4px 14px -6px rgba(11,132,255,0.5)",
+                    }}
+                  >
+                    {reply}
+                  </div>
+                </div>
+                <div style={{ textAlign: "right", color: "#8E8E93", fontSize: 20, marginTop: 4, opacity: op }}>
+                  Delivered
+                </div>
+              </>
+            );
+          })()}
+        </div>
+
+        {/* Input bar */}
+        <div
+          style={{
+            padding: "18px 28px 30px",
+            borderTop: "1px solid #E5E5EA",
+            display: "flex",
+            gap: 14,
+            alignItems: "center",
+            background: "#fff",
+          }}
+        >
+          <div style={{ width: 44, height: 44, borderRadius: 999, border: "2px solid #C7C7CC", color: "#8E8E93", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32 }}>+</div>
+          <div style={{ flex: 1, height: 50, borderRadius: 25, border: "1px solid #D1D1D6", display: "flex", alignItems: "center", padding: "0 20px", color: "#C7C7CC", fontSize: 24 }}>iMessage</div>
+          <div style={{ color: IMSG_BLUE, fontSize: 30 }}>🎤</div>
+        </div>
       </div>
     </AbsoluteFill>
   );
@@ -352,20 +451,20 @@ const TypingDots: React.FC = () => {
   return (
     <div
       style={{
-        alignSelf: "flex-end",
-        background: IMSG_GRAY,
-        borderRadius: 30,
-        padding: "20px 28px",
+        background: "#E9E9EB",
+        borderRadius: 26,
+        borderBottomLeftRadius: 8,
+        padding: "18px 24px",
         display: "flex",
         gap: 10,
       }}
     >
       {[0, 1, 2].map((i) => {
-        const o = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(frame / 6 - i * 0.7));
+        const o = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(frame / 5 - i * 0.8));
         return (
           <span
             key={i}
-            style={{ width: 16, height: 16, borderRadius: 999, background: STONE, opacity: o }}
+            style={{ width: 14, height: 14, borderRadius: 999, background: "#8E8E93", opacity: o }}
           />
         );
       })}
