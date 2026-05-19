@@ -66,13 +66,7 @@ Same sequence as v7 — only visual treatment and chat scenes change:
 - BGM base volume tuned to new track; duck depth retuned (likely 0.18 under calls, 0.55 normal, 0.7 outro climax).
 - iMessage "ting" SFX → swap for WhatsApp-style soft "pop" SFX (synth bell at 1200/1800Hz, shorter decay).
 
-## Scene list (unchanged content, new dressing)
-Same sequence as v7 — only visual treatment and chat scenes change:
-
-1. Cold open — editorial title card
-2. Doc/Sandra call (audio + caller card)
-3. WhatsApp thread with Asmi (doc follow-up, with prior chat history visible above)
-4. HVAC call (audio + caller card)
+## Out of scope
 5. WhatsApp typing scene (HVAC follow-up)
 6. Spanish grandpa call (audio + caller card)
 7. Closing title — climax with BGM peak
