@@ -1,120 +1,108 @@
-# Asmi Product Hunt launch video v5
+# Asmi launch video v6 — aesthetic overhaul
 
-This revision fixes the silent call problem at the source, makes the chat beats feel intentional, and ends on a stronger Product Hunt-style statement.
+Structure is locked. This pass is purely about craft: typography, motion, transitions, chat UI polish, and audio quality. Goal: feels like a launch film made by a top SF creative studio.
 
-## What will change
+## 1. Use the uploaded background music
 
-### 1. Fix the call audio properly
+- Replace `remotion/public/audio/bgm.mp3` with the user-uploaded `Asmi_Demo_Music.mp3`.
+- Re-time scene beats so key visual moments (scene cuts, headline reveals, final card) land on actual musical hits in the new track.
+- Final headline lands on the track's strongest moment.
 
-The biggest issue is not just mixing: the current trimmed call files are effectively silent, while the original source recordings do contain audible speech.
+## 2. Fix call audio quality and the music ↔ call handoff
 
-#### Plan
+Current call audio sounds thin and the duck feels abrupt.
 
-- Rebuild all 3 call snippets from the original source recordings:
-  - `doc-sandra-call.mp4`
-  - `hvac-call.mp4`
-  - `spanish-grandpa-call.mp4`
-- Extract new 7–8 second windows that contain clear speech and align them to the on-screen captions.
-- Loudness-normalize each snippet for intelligibility and consistency.
-- Reduce background music much more aggressively during call scenes so the voice is the focus.
-- Make the render pipeline reproducible so the final exported MP4 always includes the correct audio mix.
+- Re-extract each call snippet from the original source MP4s at the cleanest 7–8s window (clear speech, no clipping).
+- Process each snippet: high-pass at 90 Hz, light de-noise, EQ presence lift around 2–4 kHz, gentle compression, then normalize to about −14 LUFS / −1 dBTP.
+- Smooth crossfade between BGM and call audio:
+  - 18–24 frame ramp in/out (vs current 6).
+  - BGM drops further during calls (about −18 dB instead of light duck) and low-pass filters slightly so the call sits on top.
+  - Add a short pre-roll (a phone connect/UI tick) so the cut into a call feels intentional, not jarring.
 
-#### Result
+## 3. Modern, sleek visual direction
 
-When a call scene is on screen, the viewer should clearly hear the actual snippet without straining. Outside of calls, the music carries the energy.
+Pick one cohesive art direction and apply everywhere. Proposed:
 
-### 2. Upgrade the background music
+- Aesthetic: warm minimal editorial, soft off-white background with deep ink text, one warm accent (terracotta/amber), subtle film grain, gentle vignette.
+- Type system:
+  - Display: a refined modern serif (e.g. Instrument Serif or Fraunces) for headlines and the final message.
+  - UI/body: a clean geometric sans (e.g. Geist or Inter Tight) for chat, captions, labels.
+  - Strict scale (display / title / body / caption). No more than 2 families.
+- Color: single accent used sparingly (active states, key word highlights, final headline underline).
+- Texture: soft grain layer, subtle radial light, slow ambient drift on the background — never static frames.
 
-Replace the current track with a more launch-worthy, drum-led soundtrack from an open library.
+## 4. iMessage chat screens — make them beautiful
 
-#### Music brief
+- Pixel-accurate iOS look: correct status bar, Dynamic Island, contact header with avatar + "Asmi", time row, proper bubble radii and tails, read receipts, tapback-ready spacing.
+- Bubbles: real iOS blue gradient for outbound, true light gray for inbound, correct text color and weight.
+- Typing animation:
+  - Cursor blink in composer.
+  - Characters appear with subtle per-character spring, not robotic typewriter.
+  - "Sending" → bubble lifts from composer into the thread (shared-layout style move), then "Delivered" fades in.
+- Incoming reply: 3-dot typing indicator bubble first, then the message bubble springs in.
+- Scene 1 thread shows realistic prior context (timestamp divider, 2–3 historical messages) so it doesn't feel empty.
 
-- Percussion-forward, startup launch energy
-- Clean, modern, cinematic build
-- Strong kick/snare pulse
-- Momentum through the middle, lift into the finish
-- No vocals
-- Works under UI/chat visuals without feeling cheesy
+## 5. Motion system
 
-I’ll use a royalty-free/open-library track that fits this brief and then mix it so it supports the story instead of fighting the call audio.
+One coherent motion language across the whole film.
 
-### 3. Make the three chat examples feel real and different
+- Default entrance: 8–12px rise + blur(6px → 0) + opacity, ~18 frames, soft ease.
+- Accent entrance (headlines, final card): spring with mild overshoot, slightly longer.
+- Default exit: inverse, faster (~10 frames).
+- Scene transitions: only 2 styles, reused:
+  - Soft cross-dissolve with a 6px blur bridge for calm cuts.
+  - Vertical clip-reveal (mask wipes up) for energetic cuts into calls.
+- Persistent background layer (grain + slow gradient drift + faint floating shapes) continues across all scenes so cuts feel like one film, not a slideshow.
+- Subtle parallax on chat phones and call cards (2–4px drift) so nothing is ever fully static.
 
-The chat scenes should not feel empty or repetitive.
+## 6. Final headline beat
 
-#### New structure
+"AI That Handles Your Personal Chores In The Physical World"
 
-1. **Example 1 — existing message already in the thread**
-   - Show a realistic pre-existing inbound request already sitting in the conversation.
-   - Asmi replies and immediately transitions into the corresponding call.
-
-2. **Example 2 — new typed request**
-   - Show the user actively typing a fresh request into the chat composer.
-   - The typed text resolves into a sent message, then Asmi replies.
-
-3. **Example 3 — another new typed request**
-   - Same realistic chat UI, but with a different request pattern so it does not feel templated.
-   - Use distinct pacing/content from example 2.
-
-### 4. End on a stronger final beat
-
-Replace the softer ending treatment with a high-impact closing message:
-
-**AI That Handles Your Personal Chores in the Physical World**
-
-This becomes the emotional finish of the video and should land with the strongest music moment.
-
-## Exact content direction
-
-### Chat storytelling
-
-- Keep the chat UI realistic and populated
-- Avoid empty thread space
-- Use one pre-existing request + two typed-in-live requests
-- Ensure each example clearly maps to a different real-world task
-
-### Call storytelling
-
-- Doctor booking call
-- HVAC service call
-- Grandfather wellness check call in Spanish
-
-### Ending
-
-- Final message should feel like the headline, not a small caption
-- Music should peak here
-- Visual pacing should feel resolved and premium
+- Set in display serif, large, left-aligned with generous leading.
+- Reveal line-by-line with mask wipe + soft blur clear.
+- Accent underline draws under "Physical World" on the music's peak.
+- Hold ~45 frames, then a clean fade with grain.
 
 ## Technical implementation
 
 ```text
-MainVideo.tsx
-  - Replace repetitive chat beat structure with 3 distinct message patterns
-  - Update on-screen copy so each chat scene feels active and real
-  - Retime captions if needed to match newly extracted audible call windows
-  - Increase BGM ducking during calls
-  - Rework ending scene around the final headline
+remotion/public/audio/
+  bgm.mp3                    # replaced with uploaded Asmi_Demo_Music.mp3
+  trimmed/doc.mp3            # re-extracted, cleaned, normalized to -14 LUFS
+  trimmed/hvac.mp3           # same
+  trimmed/grandpa.mp3        # same
 
-audio assets
-  - Re-extract call snippets from original MP4 source recordings
-  - Normalize voice tracks for clarity
-  - Replace bgm.mp3 with a better royalty-free launch track
+remotion/src/MainVideo.tsx
+  - Retime scenes to musical hits
+  - New duck curve: 18-24f ramp, BGM -18 dB + low-pass during calls
+  - Add persistent background layer (grain, gradient drift, soft shapes)
+  - Apply unified entrance/exit motion primitives
+  - Swap transitions to the 2 chosen styles only
 
-render-remotion.mjs
-  - Make final audio export reproducible
-  - Ensure the rendered MP4 includes the intended mixed soundtrack
+remotion/src/components/IMessage*.tsx (new/refactor)
+  - Pixel-accurate iOS shell (Dynamic Island, status bar, header)
+  - Bubble component with gradient, tail, read receipt
+  - Typing composer with caret + per-char spring
+  - Typing indicator bubble + bubble-lift send animation
+
+remotion/src/components/Type.tsx (new)
+  - Load display serif + UI sans via @remotion/google-fonts
+  - Export <Display/>, <Title/>, <Body/>, <Caption/> for consistent scale
+
+remotion/src/scenes/FinalHeadline.tsx
+  - Line-by-line mask reveal, accent underline draw on music peak
+
+remotion/scripts/render-remotion.mjs
+  - Keep two-stage render (silent video + WAV audio) + ffmpeg mux
+  - Pre-process call MP3s with loudnorm + EQ before bundling
 ```
 
-## Acceptance criteria
+## Out of scope
 
-- All 3 call scenes have clearly audible voice snippets
-- Background music feels more premium and launch-ready
-- The 3 chat examples are visibly different from each other
-- One example shows a pre-existing message in thread
-- Two examples show new requests being typed and sent
-- The video ends on: **AI That Handles Your Personal Chores in the Physical World**
-- Final output is a new exported MP4 version
+- Overall scene order, length, and the 3-example + calls + final-message structure (already approved).
+- Web app pages.
 
 ## Output
 
-`/mnt/documents/asmi-demo-v5.mp4`
+`/mnt/documents/asmi-demo-v6.mp4`
