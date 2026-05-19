@@ -805,12 +805,12 @@ const SceneWhatsAppTyping: React.FC<{
 
   return (
     <AbsoluteFill>
-      <ChatRail
-        tag="02  ·  whatsapp"
+      <ChatOverlay
+        tag="02 · whatsapp"
         title="just text it."
         sub="no app, no form, no menus. type it like you'd text anyone."
       />
-      <div style={{ opacity: phoneOp, transform: `translate(180px, ${phoneY}px)` }}>
+      <div style={{ opacity: phoneOp, transform: `translateY(${phoneY}px)` }}>
         <PhoneFrame>
           <StatusBar time={time} />
           <WAHeader name={contactName} subtitle={subtitle} />
