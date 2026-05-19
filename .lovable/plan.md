@@ -18,6 +18,7 @@ Current call audio sounds thin and the duck feels abrupt.
   - 18–24 frame ramp in/out (vs current 6).
   - BGM drops further during calls (about −18 dB instead of light duck) and low-pass filters slightly so the call sits on top.
   - Add a short pre-roll (a phone connect/UI tick) so the cut into a call feels intentional, not jarring.
+- iMessage "ting" SFX on every Asmi reply bubble (classic iOS receive tone), mixed at a tasteful level under BGM, ducked out during call scenes. Source a royalty-free iMessage-style receive tone and place at `remotion/public/audio/sfx/imessage-receive.mp3`.
 
 ## 3. Modern, sleek visual direction
 
