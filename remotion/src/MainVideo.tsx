@@ -345,8 +345,8 @@ const PhoneFrame: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     {/* Outer device shell */}
     <div
       style={{
-        width: 920,
-        height: 1760,
+        width: 760,
+        height: 1500,
         borderRadius: 96,
         background: "#000",
         padding: 14,
