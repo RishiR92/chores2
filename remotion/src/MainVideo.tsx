@@ -10,9 +10,20 @@ import {
 } from "remotion";
 import { loadFont as loadSerif } from "@remotion/google-fonts/InstrumentSerif";
 import { loadFont as loadInter } from "@remotion/google-fonts/Inter";
+import { loadFont } from "@remotion/fonts";
 
 const { fontFamily: serif } = loadSerif("normal", { weights: ["400"], subsets: ["latin"] });
 const { fontFamily: sans } = loadInter("normal", { weights: ["400", "500", "600"], subsets: ["latin"] });
+
+// Color emoji font so 🙏 🥵 etc render in the chat
+loadFont({
+  family: "Noto Color Emoji",
+  url: staticFile("fonts/NotoColorEmoji.ttf"),
+  format: "truetype",
+}).catch(() => {});
+
+const EMOJI_STACK = `${sans}, "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", sans-serif`;
+
 
 const CREAM = "#F5EFE6";
 const ESPRESSO = "#2C2520";
