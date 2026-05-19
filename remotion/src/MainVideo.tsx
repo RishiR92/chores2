@@ -58,16 +58,17 @@ const callRanges: Array<[number, number]> = [
 const bgmVolume = (f: number) => {
   const fadeIn = Math.min(1, f / 45);
   const fadeOut = Math.min(1, (TOTAL - f) / 60);
-  // Smooth duck: 6-frame ramp into/out of call ranges
+  // Smooth duck: 8-frame ramp into/out of call ranges. Aggressive duck so voice cuts through.
   let duckAmt = 0;
   for (const [a, b] of callRanges) {
-    const into = Math.max(0, Math.min(1, (f - a) / 6));
-    const outOf = Math.max(0, Math.min(1, (b - f) / 6));
+    const into = Math.max(0, Math.min(1, (f - a) / 8));
+    const outOf = Math.max(0, Math.min(1, (b - f) / 8));
     duckAmt = Math.max(duckAmt, Math.min(into, outOf));
   }
-  const base = 0.22 * (1 - duckAmt) + 0.04 * duckAmt;
+  const base = 0.32 * (1 - duckAmt) + 0.025 * duckAmt;
   return Math.max(0, base * fadeIn * fadeOut);
 };
+
 
 export const MainVideo: React.FC = () => {
   return (
@@ -78,10 +79,14 @@ export const MainVideo: React.FC = () => {
       <Sequence from={O.intro} durationInFrames={D.intro}><Intro /></Sequence>
 
       <Sequence from={O.imDoc} durationInFrames={D.imDoc}>
-        <SceneIMessage
+        <SceneIMessageThread
           contactName="Sarah"
           time="9:03 AM"
-          incoming="Hey, can you book Jonathan a checkup with Dr. Weng's office?"
+          history={[
+            { from: "in",  text: "morning! quick favor 🙏" },
+            { from: "out", text: "Of course — what do you need?" },
+            { from: "in",  text: "Hey, can you book Jonathan a checkup with Dr. Weng's office?" },
+          ]}
           reply="On it — calling them now."
         />
       </Sequence>
@@ -101,10 +106,10 @@ export const MainVideo: React.FC = () => {
       </Sequence>
 
       <Sequence from={O.imHvac} durationInFrames={D.imHvac}>
-        <SceneIMessage
+        <SceneIMessageTyping
           contactName="Marco"
           time="11:18 AM"
-          incoming="AC is dead. Need a tech ASAP."
+          typedMessage="AC is dead. Need a tech ASAP 🥵"
           reply="Getting quotes from 5 HVAC companies."
         />
       </Sequence>
@@ -124,10 +129,10 @@ export const MainVideo: React.FC = () => {
       </Sequence>
 
       <Sequence from={O.imGp} durationInFrames={D.imGp}>
-        <SceneIMessage
+        <SceneIMessageTyping
           contactName="Sarah"
           time="6:42 PM"
-          incoming="Can you check on grandpa in Sevilla? In Spanish."
+          typedMessage="Can you check on grandpa in Sevilla? In Spanish 🙏"
           reply="Calling abuelo now."
         />
       </Sequence>
@@ -150,19 +155,20 @@ export const MainVideo: React.FC = () => {
 
       <Sequence from={O.outro} durationInFrames={D.outro}><Outro /></Sequence>
 
-      {/* Call voice tracks — louder while on screen */}
+      {/* Call voice tracks — boosted while on screen */}
       <Sequence from={O.doc} durationInFrames={D.doc}>
-        <Audio src={staticFile("audio/trimmed/doc.mp3")} volume={1.6} />
+        <Audio src={staticFile("audio/trimmed/doc.mp3")} volume={1.8} />
       </Sequence>
       <Sequence from={O.hvac} durationInFrames={D.hvac}>
-        <Audio src={staticFile("audio/trimmed/hvac.mp3")} volume={1.6} />
+        <Audio src={staticFile("audio/trimmed/hvac.mp3")} volume={1.8} />
       </Sequence>
       <Sequence from={O.gp} durationInFrames={D.gp}>
-        <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={1.6} />
+        <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={1.8} />
       </Sequence>
 
-      {/* Background music — ducks under call scenes */}
+      {/* Background music — ducks hard under call scenes */}
       <Audio src={staticFile("audio/bgm.mp3")} volume={(f) => bgmVolume(f)} />
+
     </AbsoluteFill>
   );
 };
