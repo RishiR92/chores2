@@ -425,14 +425,15 @@ const SceneIMessageThread: React.FC<{
             const sc = interpolate(e, [0, 1], [0.9, 1]);
             return (
               <>
-                <Bubble msg={{ from: "out", text: reply }} opacity={op} transform={`translateY(${y}px) scale(${sc})`} />
-                <div style={{ textAlign: "right", color: "#8E8E93", fontSize: 20, marginTop: 2, opacity: op }}>
-                  Delivered
+                <Bubble msg={{ from: "in", text: reply }} opacity={op} transform={`translateY(${y}px) scale(${sc})`} />
+                <div style={{ textAlign: "left", color: "#8E8E93", fontSize: 20, marginTop: 2, opacity: op, paddingLeft: 8 }}>
+                  Asmi
                 </div>
               </>
             );
           })()}
         </>
+
       }
     />
   );
