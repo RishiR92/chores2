@@ -169,16 +169,6 @@ export const MainVideo: React.FC = () => {
 
       <Sequence from={O.outro} durationInFrames={D.outro}><Outro /></Sequence>
 
-      {/* Call voice tracks — boosted while on screen */}
-      <Sequence from={O.doc} durationInFrames={D.doc}>
-        <Audio src={staticFile("audio/trimmed/doc.mp3")} volume={1.8} />
-      </Sequence>
-      <Sequence from={O.hvac} durationInFrames={D.hvac}>
-        <Audio src={staticFile("audio/trimmed/hvac.mp3")} volume={1.8} />
-      </Sequence>
-      <Sequence from={O.gp} durationInFrames={D.gp}>
-        <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={1.8} />
-      </Sequence>
 
       {/* Call voice tracks — boosted while on screen (sources already normalized to -14 LUFS) */}
       <Sequence from={O.doc} durationInFrames={D.doc}>
