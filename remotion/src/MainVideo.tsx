@@ -291,72 +291,174 @@ const IMessageShell: React.FC<{
   messages: React.ReactNode;
   composer: React.ReactNode;
 }> = ({ contactName, time, messages, composer }) => (
-  <AbsoluteFill style={{ background: "#000", padding: 0, justifyContent: "flex-start" }}>
+  <AbsoluteFill style={{ background: "#0a0a0a", padding: 0, justifyContent: "flex-start", fontFamily: EMOJI_STACK }}>
     <div
       style={{
-        margin: 60,
-        marginTop: 80,
-        borderRadius: 72,
+        margin: 32,
+        marginTop: 36,
+        borderRadius: 88,
         background: "#fff",
         flex: 1,
         overflow: "hidden",
-        boxShadow: "0 40px 120px -30px rgba(0,0,0,0.6), inset 0 0 0 8px #1a1a1a",
+        boxShadow:
+          "0 50px 140px -30px rgba(0,0,0,0.7), inset 0 0 0 12px #0a0a0a, inset 0 0 0 14px #2a2a2a",
         display: "flex",
         flexDirection: "column",
         position: "relative",
       }}
     >
-      {/* Notch */}
-      <div style={{ position: "absolute", top: 24, left: "50%", transform: "translateX(-50%)", width: 340, height: 38, borderRadius: 20, background: "#000", zIndex: 10 }} />
+      {/* Dynamic Island */}
+      <div
+        style={{
+          position: "absolute",
+          top: 28,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: 360,
+          height: 44,
+          borderRadius: 24,
+          background: "#000",
+          zIndex: 10,
+        }}
+      />
 
       {/* Status bar */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "30px 60px 12px", color: "#000", fontSize: 30, fontWeight: 600, fontVariantNumeric: "tabular-nums" }}>
-        <span>{time}</span>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "38px 70px 14px",
+          color: "#000",
+          fontSize: 30,
+          fontWeight: 600,
+          fontVariantNumeric: "tabular-nums",
+          letterSpacing: -0.5,
+        }}
+      >
+        <span style={{ marginLeft: 6 }}>{time}</span>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
           <svg width="34" height="22" viewBox="0 0 34 22"><g fill="#000">
-            <rect x="0"  y="14" width="6" height="8" rx="1"/>
-            <rect x="9"  y="10" width="6" height="12" rx="1"/>
-            <rect x="18" y="5"  width="6" height="17" rx="1"/>
-            <rect x="27" y="0"  width="6" height="22" rx="1"/>
+            <rect x="0" y="14" width="6" height="8" rx="1.5" />
+            <rect x="9" y="10" width="6" height="12" rx="1.5" />
+            <rect x="18" y="5" width="6" height="17" rx="1.5" />
+            <rect x="27" y="0" width="6" height="22" rx="1.5" />
           </g></svg>
           <svg width="32" height="22" viewBox="0 0 32 22" fill="#000">
-            <path d="M16 4 C7 4 1 10 1 10 L4 14 C4 14 9 9 16 9 C23 9 28 14 28 14 L31 10 C31 10 25 4 16 4 Z"/>
-            <path d="M16 12 C11 12 7 16 7 16 L10 19 C10 19 13 17 16 17 C19 17 22 19 22 19 L25 16 C25 16 21 12 16 12 Z"/>
-            <circle cx="16" cy="20" r="2"/>
+            <path d="M16 4 C7 4 1 10 1 10 L4 14 C4 14 9 9 16 9 C23 9 28 14 28 14 L31 10 C31 10 25 4 16 4 Z" />
+            <path d="M16 12 C11 12 7 16 7 16 L10 19 C10 19 13 17 16 17 C19 17 22 19 22 19 L25 16 C25 16 21 12 16 12 Z" />
+            <circle cx="16" cy="20" r="2" />
           </svg>
           <svg width="50" height="22" viewBox="0 0 50 22">
-            <rect x="1" y="2" width="42" height="18" rx="5" ry="5" fill="none" stroke="#000" strokeWidth="2"/>
-            <rect x="45" y="8" width="4" height="6" rx="1.5" fill="#000"/>
-            <rect x="4" y="5" width="36" height="12" rx="2" fill="#34C759"/>
+            <rect x="1" y="2" width="42" height="18" rx="5" ry="5" fill="none" stroke="#000" strokeWidth="2" />
+            <rect x="45" y="8" width="4" height="6" rx="1.5" fill="#000" />
+            <rect x="4" y="5" width="36" height="12" rx="2" fill="#34C759" />
           </svg>
         </div>
       </div>
 
       {/* Contact header */}
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "20px 0 22px", borderBottom: "1px solid #E5E5EA", background: "rgba(247,247,247,0.92)", position: "relative" }}>
-        <div style={{ position: "absolute", left: 36, top: 52, color: IMSG_BLUE, fontSize: 40, fontWeight: 400 }}>‹ 12</div>
-        <div style={{ position: "absolute", right: 36, top: 56, color: IMSG_BLUE }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          padding: "16px 0 18px",
+          borderBottom: "1px solid #E5E5EA",
+          background: "rgba(247,247,247,0.94)",
+          backdropFilter: "saturate(180%)",
+          position: "relative",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            left: 30,
+            top: 56,
+            color: IMSG_BLUE,
+            fontSize: 36,
+            fontWeight: 400,
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+          }}
+        >
+          <span style={{ fontSize: 44, lineHeight: 1, marginTop: -4 }}>‹</span>
+          <span style={{
+            background: "#FF3B30", color: "#fff", borderRadius: 999,
+            minWidth: 36, height: 28, padding: "0 8px", fontSize: 22, fontWeight: 600,
+            display: "inline-flex", alignItems: "center", justifyContent: "center"
+          }}>12</span>
+        </div>
+        <div style={{ position: "absolute", right: 32, top: 64, color: IMSG_BLUE }}>
           <svg width="44" height="28" viewBox="0 0 44 28" fill="none" stroke={IMSG_BLUE} strokeWidth="2.5" strokeLinejoin="round">
-            <rect x="2" y="4" width="28" height="20" rx="5"/>
-            <path d="M30 10 L42 4 L42 24 L30 18 Z" fill={IMSG_BLUE}/>
+            <rect x="2" y="4" width="28" height="20" rx="5" />
+            <path d="M30 10 L42 4 L42 24 L30 18 Z" fill={IMSG_BLUE} />
           </svg>
         </div>
-        <div style={{ width: 96, height: 96, borderRadius: 999, background: "linear-gradient(135deg, #8E8E93, #C7C7CC)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 44, fontWeight: 500, marginBottom: 10 }}>
+        <div
+          style={{
+            width: 88,
+            height: 88,
+            borderRadius: 999,
+            background: "linear-gradient(135deg, #A8A8AD, #6E6E73)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#fff",
+            fontSize: 40,
+            fontWeight: 500,
+            marginBottom: 8,
+            letterSpacing: -1,
+          }}
+        >
           {contactName[0]}
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, color: "#000", fontSize: 28, fontWeight: 500 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            color: "#000",
+            fontSize: 26,
+            fontWeight: 500,
+            letterSpacing: -0.3,
+          }}
+        >
           {contactName}
-          <span style={{ color: "#8E8E93", fontSize: 26 }}>›</span>
+          <span style={{ color: "#8E8E93", fontSize: 24 }}>›</span>
         </div>
       </div>
 
       {/* Messages */}
-      <div style={{ flex: 1, padding: "32px 28px 24px", display: "flex", flexDirection: "column", gap: 12, justifyContent: "flex-end" }}>
+      <div
+        style={{
+          flex: 1,
+          padding: "28px 22px 16px",
+          display: "flex",
+          flexDirection: "column",
+          gap: 8,
+          justifyContent: "flex-end",
+          background: "#fff",
+        }}
+      >
         {messages}
       </div>
 
       {/* Input bar */}
       {composer}
+
+      {/* Home indicator */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          padding: "10px 0 14px",
+          background: "#fff",
+        }}
+      >
+        <div style={{ width: 280, height: 8, borderRadius: 4, background: "#000" }} />
+      </div>
     </div>
   </AbsoluteFill>
 );
@@ -367,19 +469,23 @@ const Bubble: React.FC<{ msg: Msg; opacity?: number; transform?: string; tail?: 
     <div style={{ display: "flex", justifyContent: isOut ? "flex-end" : "flex-start" }}>
       <div
         style={{
-          maxWidth: "78%",
-          padding: "18px 24px",
-          borderRadius: 32,
+          maxWidth: "76%",
+          padding: "14px 22px",
+          borderRadius: 28,
           ...(tail && isOut ? { borderBottomRightRadius: 8 } : {}),
           ...(tail && !isOut ? { borderBottomLeftRadius: 8 } : {}),
-          background: isOut ? "linear-gradient(180deg, #1FA1FF 0%, #0B84FF 100%)" : "#E9E9EB",
+          background: isOut
+            ? "linear-gradient(180deg, #2AABFF 0%, #0B84FF 100%)"
+            : "#E9E9EB",
           color: isOut ? "#fff" : "#000",
-          fontSize: 32,
-          lineHeight: 1.32,
+          fontSize: 30,
+          lineHeight: 1.28,
+          letterSpacing: -0.3,
           opacity,
           transform,
           transformOrigin: isOut ? "bottom right" : "bottom left",
-          boxShadow: isOut ? "0 4px 14px -6px rgba(11,132,255,0.5)" : "none",
+          boxShadow: isOut ? "0 6px 18px -8px rgba(11,132,255,0.55)" : "0 1px 0 rgba(0,0,0,0.02)",
+          fontFamily: EMOJI_STACK,
         }}
       >
         {msg.text}
@@ -389,22 +495,86 @@ const Bubble: React.FC<{ msg: Msg; opacity?: number; transform?: string; tail?: 
 };
 
 const IdleComposer: React.FC = () => (
-  <div style={{ padding: "18px 28px 30px", borderTop: "1px solid #E5E5EA", display: "flex", gap: 14, alignItems: "center", background: "#fff" }}>
-    <div style={{ width: 44, height: 44, borderRadius: 999, border: "2px solid #C7C7CC", color: "#8E8E93", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32 }}>+</div>
-    <div style={{ flex: 1, height: 50, borderRadius: 25, border: "1px solid #D1D1D6", display: "flex", alignItems: "center", padding: "0 20px", color: "#C7C7CC", fontSize: 24 }}>iMessage</div>
-    <div style={{ color: IMSG_BLUE, fontSize: 30 }}>🎤</div>
+  <div
+    style={{
+      padding: "16px 22px 8px",
+      borderTop: "1px solid #E5E5EA",
+      display: "flex",
+      gap: 12,
+      alignItems: "flex-end",
+      background: "#fff",
+    }}
+  >
+    <div
+      style={{
+        width: 56, height: 56, borderRadius: 999,
+        background: "#E9E9EB", color: "#8E8E93",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        fontSize: 36, fontWeight: 300, flexShrink: 0,
+      }}
+    >
+      +
+    </div>
+    <div
+      style={{
+        flex: 1, minHeight: 56, borderRadius: 28,
+        border: "1.5px solid #D1D1D6",
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "0 22px", color: "#8E8E93", fontSize: 26,
+        background: "#fff",
+      }}
+    >
+      <span>iMessage</span>
+      <span style={{ fontFamily: EMOJI_STACK, fontSize: 28, color: "#C7C7CC" }}>🎙</span>
+    </div>
   </div>
 );
 
 const TypingComposer: React.FC<{ text: string; sent: boolean }> = ({ text, sent }) => {
   const frame = useCurrentFrame();
   const blink = Math.floor(frame / 12) % 2 === 0;
+  const hasText = text.length > 0 && !sent;
   return (
-    <div style={{ padding: "18px 28px 30px", borderTop: "1px solid #E5E5EA", display: "flex", gap: 14, alignItems: "center", background: "#fff" }}>
-      <div style={{ width: 44, height: 44, borderRadius: 999, border: "2px solid #C7C7CC", color: "#8E8E93", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32 }}>+</div>
-      <div style={{ flex: 1, minHeight: 50, borderRadius: 25, border: "1px solid #D1D1D6", display: "flex", alignItems: "center", padding: "10px 22px", color: "#000", fontSize: 26, lineHeight: 1.25 }}>
-        {sent ? <span style={{ color: "#C7C7CC" }}>iMessage</span> : (
-          <span>
+    <div
+      style={{
+        padding: "16px 22px 8px",
+        borderTop: "1px solid #E5E5EA",
+        display: "flex",
+        gap: 12,
+        alignItems: "flex-end",
+        background: "#fff",
+      }}
+    >
+      <div
+        style={{
+          width: 56, height: 56, borderRadius: 999,
+          background: "#E9E9EB", color: "#8E8E93",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 36, fontWeight: 300, flexShrink: 0,
+        }}
+      >
+        +
+      </div>
+      <div
+        style={{
+          flex: 1,
+          minHeight: 56,
+          borderRadius: 28,
+          border: "1.5px solid #D1D1D6",
+          display: "flex",
+          alignItems: "center",
+          padding: "14px 22px",
+          color: "#000",
+          fontSize: 28,
+          lineHeight: 1.28,
+          background: "#fff",
+          fontFamily: EMOJI_STACK,
+        }}
+      >
+        {sent ? (
+          <span style={{ color: "#8E8E93" }}>iMessage</span>
+        ) : (
+          <span style={{ wordBreak: "break-word" }}>
             {text}
             <span style={{ opacity: blink ? 1 : 0, color: IMSG_BLUE, marginLeft: 2 }}>|</span>
           </span>
@@ -412,9 +582,13 @@ const TypingComposer: React.FC<{ text: string; sent: boolean }> = ({ text, sent 
       </div>
       <div
         style={{
-          width: 46, height: 46, borderRadius: 999,
-          background: text.length > 0 && !sent ? IMSG_BLUE : "#D1D1D6",
-          color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, fontWeight: 700,
+          width: 56, height: 56, borderRadius: 999,
+          background: hasText ? IMSG_BLUE : "#E9E9EB",
+          color: hasText ? "#fff" : "#8E8E93",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 32, fontWeight: 700, flexShrink: 0,
+          transition: "none",
+          boxShadow: hasText ? "0 4px 12px -4px rgba(11,132,255,0.4)" : "none",
         }}
       >
         ↑
@@ -422,6 +596,7 @@ const TypingComposer: React.FC<{ text: string; sent: boolean }> = ({ text, sent 
     </div>
   );
 };
+
 
 // Variant 1: pre-existing thread with multiple messages, latest inbound sets up the ask.
 const SceneIMessageThread: React.FC<{
