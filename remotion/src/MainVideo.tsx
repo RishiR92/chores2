@@ -58,8 +58,14 @@ const callRanges: Array<[number, number]> = [
 const bgmVolume = (f: number) => {
   const fadeIn = Math.min(1, f / 45);
   const fadeOut = Math.min(1, (TOTAL - f) / 60);
-  const inCall = callRanges.some(([a, b]) => f >= a + 8 && f < b - 8);
-  const base = inCall ? 0.07 : 0.22;
+  // Smooth duck: 6-frame ramp into/out of call ranges
+  let duckAmt = 0;
+  for (const [a, b] of callRanges) {
+    const into = Math.max(0, Math.min(1, (f - a) / 6));
+    const outOf = Math.max(0, Math.min(1, (b - f) / 6));
+    duckAmt = Math.max(duckAmt, Math.min(into, outOf));
+  }
+  const base = 0.22 * (1 - duckAmt) + 0.04 * duckAmt;
   return Math.max(0, base * fadeIn * fadeOut);
 };
 
