@@ -702,35 +702,18 @@ const WAComposerTyping: React.FC<{ text: string; sent: boolean }> = ({ text, sen
   );
 };
 
-// Side rail tag — gives the chat scene editorial framing
-const ChatRail: React.FC<{ tag: string; title: string; sub: string }> = ({ tag, title, sub }) => (
-  <div
-    style={{
-      position: "absolute",
-      top: 100,
-      left: 70,
-      width: 380,
-      color: INK,
-      zIndex: 2,
-    }}
-  >
-    <MicroLabel color={LIME}>·  {tag}</MicroLabel>
-    <div
-      style={{
-        fontFamily: serif,
-        fontSize: 88,
-        color: INK,
-        marginTop: 18,
-        lineHeight: 0.98,
-        letterSpacing: -2,
-      }}
-    >
-      {title}
+// Floating overlay above and below the centered phone.
+const ChatOverlay: React.FC<{ tag: string; title: string; sub: string }> = ({ tag, title, sub }) => (
+  <>
+    <div style={{ position: "absolute", top: 56, left: 60, right: 60, display: "flex", justifyContent: "space-between", alignItems: "center", zIndex: 5 }}>
+      <MicroLabel color={LIME}>· {tag}</MicroLabel>
+      <div style={{ fontFamily: mono, fontSize: 22, color: INK_DIM, letterSpacing: 2 }}>SCREEN · REC</div>
     </div>
-    <div style={{ marginTop: 20, fontSize: 26, color: INK_DIM, lineHeight: 1.35, maxWidth: 360 }}>
-      {sub}
+    <div style={{ position: "absolute", bottom: 60, left: 60, right: 60, zIndex: 5, display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 30 }}>
+      <div style={{ fontFamily: serif, fontSize: 68, color: INK, lineHeight: 0.95, letterSpacing: -1.5, maxWidth: 540 }}>{title}</div>
+      <div style={{ fontSize: 22, color: INK_DIM, maxWidth: 380, textAlign: "right", lineHeight: 1.4 }}>{sub}</div>
     </div>
-  </div>
+  </>
 );
 
 // Variant 1: pre-existing thread with older messages + new ask, then Asmi replies.
