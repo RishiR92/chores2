@@ -21,7 +21,21 @@ Current iMessage mock looks web-like. Replace with a high-fidelity WhatsApp mobi
 - **Emoji**: keep Noto Color Emoji font already bundled.
 - **Composer**: realistic height (~52px), rounded pill input with attach + emoji icons, mic icon that swaps to send arrow when user is "typing".
 
-Two WhatsApp scenes update: doc-Sandra thread and HVAC typing scene. Both start from the top of the screen with the header visible.
+Flow is unchanged: user gives the task to Asmi on WhatsApp first, then Asmi makes the outbound call. The past-chat history is purely for realism (to show this isn't a first-time hello) — it does not change which scene comes first.
+
+Two WhatsApp scenes update: doc-Sandra thread and HVAC typing scene. Both start from the top of the screen with the header visible, then the user's current task message appears below the faded older threads, then Asmi acknowledges and the scene cuts to the call.
+
+## Scene list (unchanged order, new dressing)
+Same sequence as v7 — only visual treatment and chat scenes change:
+
+1. Cold open — editorial title card
+2. WhatsApp thread: user asks Asmi to handle doc appt (prior chats visible above)
+3. Doc/Sandra outbound call (audio + caller card)
+4. WhatsApp typing scene: user asks Asmi to deal with HVAC
+5. HVAC outbound call
+6. WhatsApp typing scene: user asks Asmi to call Spanish-speaking grandpa
+7. Spanish grandpa outbound call
+8. Closing title — climax with BGM peak
 
 ### 3. Brand new visual system (independent of website theme)
 2026 launch-video aesthetic. Editorial-meets-tech:
