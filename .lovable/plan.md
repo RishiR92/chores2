@@ -66,10 +66,6 @@ Same sequence as v7 — only visual treatment and chat scenes change:
 - BGM base volume tuned to new track; duck depth retuned (likely 0.18 under calls, 0.55 normal, 0.7 outro climax).
 - iMessage "ting" SFX → swap for WhatsApp-style soft "pop" SFX (synth bell at 1200/1800Hz, shorter decay).
 
-## Out of scope
-5. WhatsApp typing scene (HVAC follow-up)
-6. Spanish grandpa call (audio + caller card)
-7. Closing title — climax with BGM peak
 
 ## Technical notes
 - File edits scoped to: `remotion/src/MainVideo.tsx`, `remotion/public/audio/bgm.mp3`, `remotion/public/audio/sfx/whatsapp-pop.mp3` (new), possibly split chat component into `remotion/src/components/WhatsAppShell.tsx` for cleanliness.
