@@ -26,7 +26,7 @@ await renderMedia({
   composition,
   serveUrl: bundled,
   codec: "h264",
-  audioCodec: "aac",
+  audioCodec: "mp3",
   enforceAudioTrack: true,
   outputLocation: "/mnt/documents/asmi-demo-v3.mp4",
   puppeteerInstance: browser,
