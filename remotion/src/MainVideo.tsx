@@ -43,7 +43,7 @@ const D = {
   imGp: 75,
   gp: 240,
   done: 180,    // 6.0s
-  outro: 75,    // 2.5s
+  outro: 105,   // 3.5s
 };
 
 const O = {
