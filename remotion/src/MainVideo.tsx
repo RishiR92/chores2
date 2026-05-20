@@ -532,17 +532,18 @@ const TypingDots: React.FC = () => {
       <div
         style={{
           background: WA_IN,
-          borderRadius: 18,
-          borderTopLeftRadius: 4,
-          padding: "18px 24px",
+          borderRadius: 34,
+          borderTopLeftRadius: 8,
+          padding: "32px 40px",
           display: "flex",
-          gap: 10,
+          gap: 16,
+          boxShadow: "0 18px 40px -18px rgba(0,0,0,0.55)",
         }}
       >
         {[0, 1, 2].map((i) => {
           const o = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(frame / 5 - i * 0.8));
           return (
-            <span key={i} style={{ width: 14, height: 14, borderRadius: 999, background: WA_INK_DIM, opacity: o }} />
+            <span key={i} style={{ width: 22, height: 22, borderRadius: 999, background: WA_INK_DIM, opacity: o }} />
           );
         })}
       </div>
