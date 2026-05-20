@@ -281,214 +281,218 @@ const Intro: React.FC = () => {
   );
 };
 
-// ============= iMessage scenes =============
+// ============= WhatsApp scenes (zoomed phone) =============
 
-type Msg = { from: "in" | "out"; text: string };
+type Msg = { from: "in" | "out"; text: string; t?: string };
 
-const IMessageShell: React.FC<{
+const WA_BG = "#0B141A";
+const WA_HEADER = "#1F2C34";
+const WA_IN = "#1F2C34";
+const WA_OUT = "#005C4B";
+const WA_INK = "#E9EDEF";
+const WA_INK_DIM = "#8A9BA4";
+
+const WhatsAppShell: React.FC<{
   contactName: string;
   time: string;
   messages: React.ReactNode;
   composer: React.ReactNode;
 }> = ({ contactName, time, messages, composer }) => (
-  <AbsoluteFill style={{ background: "#0a0a0a", padding: 0, justifyContent: "flex-start", fontFamily: EMOJI_STACK }}>
+  <AbsoluteFill style={{ background: "#0a0a0a", fontFamily: EMOJI_STACK }}>
+    {/* Zoomed-in phone: nearly fills the 1080x1920 frame */}
     <div
       style={{
-        margin: 32,
-        marginTop: 36,
-        borderRadius: 88,
-        background: "#fff",
-        flex: 1,
-        overflow: "hidden",
+        position: "absolute",
+        inset: 24,
+        borderRadius: 96,
+        background: "#0a0a0c",
+        padding: 14,
         boxShadow:
-          "0 50px 140px -30px rgba(0,0,0,0.7), inset 0 0 0 12px #0a0a0a, inset 0 0 0 14px #2a2a2a",
-        display: "flex",
-        flexDirection: "column",
-        position: "relative",
+          "0 60px 160px -40px rgba(0,0,0,0.9), 0 0 0 2px #25252c, inset 0 0 0 1.5px #18181f",
       }}
     >
-      {/* Dynamic Island */}
       <div
         style={{
-          position: "absolute",
-          top: 28,
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: 360,
-          height: 44,
-          borderRadius: 24,
-          background: "#000",
-          zIndex: 10,
-        }}
-      />
-
-      {/* Status bar */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "38px 70px 14px",
-          color: "#000",
-          fontSize: 30,
-          fontWeight: 600,
-          fontVariantNumeric: "tabular-nums",
-          letterSpacing: -0.5,
-        }}
-      >
-        <span style={{ marginLeft: 6 }}>{time}</span>
-        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-          <svg width="34" height="22" viewBox="0 0 34 22"><g fill="#000">
-            <rect x="0" y="14" width="6" height="8" rx="1.5" />
-            <rect x="9" y="10" width="6" height="12" rx="1.5" />
-            <rect x="18" y="5" width="6" height="17" rx="1.5" />
-            <rect x="27" y="0" width="6" height="22" rx="1.5" />
-          </g></svg>
-          <svg width="32" height="22" viewBox="0 0 32 22" fill="#000">
-            <path d="M16 4 C7 4 1 10 1 10 L4 14 C4 14 9 9 16 9 C23 9 28 14 28 14 L31 10 C31 10 25 4 16 4 Z" />
-            <path d="M16 12 C11 12 7 16 7 16 L10 19 C10 19 13 17 16 17 C19 17 22 19 22 19 L25 16 C25 16 21 12 16 12 Z" />
-            <circle cx="16" cy="20" r="2" />
-          </svg>
-          <svg width="50" height="22" viewBox="0 0 50 22">
-            <rect x="1" y="2" width="42" height="18" rx="5" ry="5" fill="none" stroke="#000" strokeWidth="2" />
-            <rect x="45" y="8" width="4" height="6" rx="1.5" fill="#000" />
-            <rect x="4" y="5" width="36" height="12" rx="2" fill="#34C759" />
-          </svg>
-        </div>
-      </div>
-
-      {/* Contact header */}
-      <div
-        style={{
+          width: "100%",
+          height: "100%",
+          borderRadius: 84,
+          background: WA_BG,
+          overflow: "hidden",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-          padding: "16px 0 18px",
-          borderBottom: "1px solid #E5E5EA",
-          background: "rgba(247,247,247,0.94)",
-          backdropFilter: "saturate(180%)",
           position: "relative",
         }}
       >
+        {/* Dynamic Island */}
         <div
           style={{
             position: "absolute",
-            left: 30,
-            top: 56,
-            color: IMSG_BLUE,
-            fontSize: 36,
-            fontWeight: 400,
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
+            top: 28,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: 360,
+            height: 44,
+            borderRadius: 24,
+            background: "#000",
+            zIndex: 10,
           }}
-        >
-          <span style={{ fontSize: 44, lineHeight: 1, marginTop: -4 }}>‹</span>
-          <span style={{
-            background: "#FF3B30", color: "#fff", borderRadius: 999,
-            minWidth: 36, height: 28, padding: "0 8px", fontSize: 22, fontWeight: 600,
-            display: "inline-flex", alignItems: "center", justifyContent: "center"
-          }}>12</span>
-        </div>
-        <div style={{ position: "absolute", right: 32, top: 64, color: IMSG_BLUE }}>
-          <svg width="44" height="28" viewBox="0 0 44 28" fill="none" stroke={IMSG_BLUE} strokeWidth="2.5" strokeLinejoin="round">
-            <rect x="2" y="4" width="28" height="20" rx="5" />
-            <path d="M30 10 L42 4 L42 24 L30 18 Z" fill={IMSG_BLUE} />
-          </svg>
-        </div>
+        />
+        {/* iOS status bar */}
         <div
           style={{
-            width: 88,
-            height: 88,
-            borderRadius: 999,
-            background: "linear-gradient(135deg, #A8A8AD, #6E6E73)",
             display: "flex",
+            justifyContent: "space-between",
             alignItems: "center",
-            justifyContent: "center",
+            padding: "40px 70px 16px",
             color: "#fff",
-            fontSize: 40,
-            fontWeight: 500,
-            marginBottom: 8,
-            letterSpacing: -1,
+            fontSize: 32,
+            fontWeight: 600,
+            fontVariantNumeric: "tabular-nums",
+            letterSpacing: -0.5,
+            zIndex: 5,
           }}
         >
-          {contactName[0]}
+          <span>{time}</span>
+          <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
+            <svg width="38" height="24" viewBox="0 0 34 22"><g fill="#fff">
+              <rect x="0" y="14" width="6" height="8" rx="1.5" />
+              <rect x="9" y="10" width="6" height="12" rx="1.5" />
+              <rect x="18" y="5" width="6" height="17" rx="1.5" />
+              <rect x="27" y="0" width="6" height="22" rx="1.5" />
+            </g></svg>
+            <svg width="52" height="22" viewBox="0 0 50 22">
+              <rect x="1" y="2" width="42" height="18" rx="5" fill="none" stroke="#fff" strokeWidth="2" />
+              <rect x="45" y="8" width="4" height="6" rx="1.5" fill="#fff" />
+              <rect x="4" y="5" width="36" height="12" rx="2" fill="#fff" />
+            </svg>
+          </div>
         </div>
+
+        {/* WhatsApp header */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            gap: 8,
-            color: "#000",
-            fontSize: 26,
-            fontWeight: 500,
-            letterSpacing: -0.3,
+            padding: "10px 28px 18px",
+            background: WA_HEADER,
+            gap: 18,
           }}
         >
-          {contactName}
-          <span style={{ color: "#8E8E93", fontSize: 24 }}>›</span>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff"
+            strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+          <div
+            style={{
+              width: 88,
+              height: 88,
+              borderRadius: 999,
+              background: "linear-gradient(140deg, #2DD4A8, #0E7C5C)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#fff",
+              fontSize: 40,
+              fontWeight: 600,
+              letterSpacing: -1,
+              boxShadow: "inset 0 0 0 1.5px rgba(255,255,255,0.12)",
+              flexShrink: 0,
+            }}
+          >
+            {contactName[0]}
+          </div>
+          <div style={{ flex: 1, lineHeight: 1.15 }}>
+            <div style={{ color: "#fff", fontSize: 34, fontWeight: 600, letterSpacing: -0.3 }}>{contactName}</div>
+            <div style={{ color: WA_INK_DIM, fontSize: 24, marginTop: 4, fontWeight: 400 }}>online</div>
+          </div>
+          <div style={{ display: "flex", gap: 30, alignItems: "center" }}>
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff"
+              strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7" />
+              <rect x="1" y="5" width="15" height="14" rx="2" />
+            </svg>
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff"
+              strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+            </svg>
+          </div>
         </div>
-      </div>
 
-      {/* Messages */}
-      <div
-        style={{
-          flex: 1,
-          padding: "28px 22px 16px",
-          display: "flex",
-          flexDirection: "column",
-          gap: 8,
-          justifyContent: "flex-end",
-          background: "#fff",
-        }}
-      >
-        {messages}
-      </div>
+        {/* Chat area with subtle doodle pattern */}
+        <div
+          style={{
+            flex: 1,
+            background:
+              WA_BG + " url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><g fill='none' stroke='%23ffffff' stroke-opacity='0.025' stroke-width='1.2'><circle cx='30' cy='30' r='6'/><path d='M70 50 q10 -12 22 0'/><path d='M100 100 l8 8 l-8 8 l-8 -8 z'/><circle cx='130' cy='40' r='3'/><path d='M20 110 q14 8 28 0'/><circle cx='60' cy='130' r='4'/></g></svg>\")",
+            display: "flex",
+            flexDirection: "column",
+            padding: "24px 22px 14px",
+            gap: 8,
+            justifyContent: "flex-end",
+            overflow: "hidden",
+          }}
+        >
+          {messages}
+        </div>
 
-      {/* Input bar */}
-      {composer}
+        {composer}
 
-      {/* Home indicator */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          padding: "10px 0 14px",
-          background: "#fff",
-        }}
-      >
-        <div style={{ width: 280, height: 8, borderRadius: 4, background: "#000" }} />
+        {/* Home indicator */}
+        <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 18px", background: "#0B141A" }}>
+          <div style={{ width: 280, height: 8, borderRadius: 4, background: "#fff", opacity: 0.7 }} />
+        </div>
       </div>
     </div>
   </AbsoluteFill>
 );
 
-const Bubble: React.FC<{ msg: Msg; opacity?: number; transform?: string; tail?: boolean }> = ({ msg, opacity = 1, transform = "none", tail = true }) => {
+const WATick: React.FC = () => (
+  <svg width="26" height="16" viewBox="0 0 22 14" fill="none">
+    <path d="M1 7 L5 11 L12 3" stroke="#53BDEB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8 7 L12 11 L19 3" stroke="#53BDEB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const Bubble: React.FC<{ msg: Msg; opacity?: number; transform?: string; tail?: boolean }> = ({ msg, opacity = 1, transform = "none" }) => {
   const isOut = msg.from === "out";
   return (
-    <div style={{ display: "flex", justifyContent: isOut ? "flex-end" : "flex-start" }}>
+    <div style={{ display: "flex", justifyContent: isOut ? "flex-end" : "flex-start", opacity, transform }}>
       <div
         style={{
-          maxWidth: "76%",
-          padding: "14px 22px",
-          borderRadius: 28,
-          ...(tail && isOut ? { borderBottomRightRadius: 8 } : {}),
-          ...(tail && !isOut ? { borderBottomLeftRadius: 8 } : {}),
-          background: isOut
-            ? "linear-gradient(180deg, #2AABFF 0%, #0B84FF 100%)"
-            : "#E9E9EB",
-          color: isOut ? "#fff" : "#000",
+          maxWidth: "78%",
+          padding: "14px 18px 12px",
+          borderRadius: 18,
+          ...(isOut ? { borderTopRightRadius: 4 } : { borderTopLeftRadius: 4 }),
+          background: isOut ? WA_OUT : WA_IN,
+          color: WA_INK,
           fontSize: 30,
           lineHeight: 1.28,
-          letterSpacing: -0.3,
-          opacity,
-          transform,
-          transformOrigin: isOut ? "bottom right" : "bottom left",
-          boxShadow: isOut ? "0 6px 18px -8px rgba(11,132,255,0.55)" : "0 1px 0 rgba(0,0,0,0.02)",
+          letterSpacing: -0.2,
           fontFamily: EMOJI_STACK,
+          fontWeight: 400,
+          boxShadow: "0 1px 0 rgba(0,0,0,0.25)",
+          position: "relative",
+          display: "inline-flex",
+          flexDirection: "column",
         }}
       >
-        {msg.text}
+        <div style={{ paddingRight: isOut ? 100 : 70, paddingBottom: 4 }}>{msg.text}</div>
+        <div
+          style={{
+            position: "absolute",
+            right: 14,
+            bottom: 8,
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            color: "rgba(233,237,239,0.55)",
+            fontSize: 18,
+            fontVariantNumeric: "tabular-nums",
+          }}
+        >
+          <span>{msg.t ?? ""}</span>
+          {isOut && <WATick />}
+        </div>
       </div>
     </div>
   );
@@ -497,35 +501,42 @@ const Bubble: React.FC<{ msg: Msg; opacity?: number; transform?: string; tail?: 
 const IdleComposer: React.FC = () => (
   <div
     style={{
-      padding: "16px 22px 8px",
-      borderTop: "1px solid #E5E5EA",
       display: "flex",
-      gap: 12,
-      alignItems: "flex-end",
-      background: "#fff",
+      alignItems: "center",
+      gap: 14,
+      padding: "14px 18px 18px",
+      background: WA_BG,
     }}
   >
     <div
       style={{
-        width: 56, height: 56, borderRadius: 999,
-        background: "#E9E9EB", color: "#8E8E93",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: 36, fontWeight: 300, flexShrink: 0,
+        flex: 1,
+        minHeight: 64,
+        background: "#2A3942",
+        borderRadius: 32,
+        display: "flex",
+        alignItems: "center",
+        padding: "0 22px",
+        color: WA_INK_DIM,
+        fontSize: 26,
+        gap: 16,
       }}
     >
-      +
+      <span style={{ fontFamily: EMOJI_STACK }}>😊</span>
+      <span style={{ flex: 1 }}>Message</span>
+      <span style={{ fontFamily: EMOJI_STACK }}>📎</span>
     </div>
     <div
       style={{
-        flex: 1, minHeight: 56, borderRadius: 28,
-        border: "1.5px solid #D1D1D6",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "0 22px", color: "#8E8E93", fontSize: 26,
-        background: "#fff",
+        width: 68, height: 68, borderRadius: 999,
+        background: "#00A884",
+        display: "flex", alignItems: "center", justifyContent: "center",
       }}
     >
-      <span>iMessage</span>
-      <span style={{ fontFamily: EMOJI_STACK, fontSize: 28, color: "#C7C7CC" }}>🎙</span>
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff">
+        <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3z" />
+        <path d="M19 11a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11z" />
+      </svg>
     </div>
   </div>
 );
@@ -537,66 +548,87 @@ const TypingComposer: React.FC<{ text: string; sent: boolean }> = ({ text, sent 
   return (
     <div
       style={{
-        padding: "16px 22px 8px",
-        borderTop: "1px solid #E5E5EA",
         display: "flex",
-        gap: 12,
         alignItems: "flex-end",
-        background: "#fff",
+        gap: 14,
+        padding: "14px 18px 18px",
+        background: WA_BG,
       }}
     >
       <div
         style={{
-          width: 56, height: 56, borderRadius: 999,
-          background: "#E9E9EB", color: "#8E8E93",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 36, fontWeight: 300, flexShrink: 0,
-        }}
-      >
-        +
-      </div>
-      <div
-        style={{
           flex: 1,
-          minHeight: 56,
-          borderRadius: 28,
-          border: "1.5px solid #D1D1D6",
+          minHeight: 64,
+          background: "#2A3942",
+          borderRadius: 32,
           display: "flex",
           alignItems: "center",
-          padding: "14px 22px",
-          color: "#000",
+          padding: "16px 22px",
+          color: WA_INK,
           fontSize: 28,
-          lineHeight: 1.28,
-          background: "#fff",
+          lineHeight: 1.25,
+          gap: 16,
           fontFamily: EMOJI_STACK,
         }}
       >
-        {sent ? (
-          <span style={{ color: "#8E8E93" }}>iMessage</span>
-        ) : (
-          <span style={{ wordBreak: "break-word" }}>
-            {text}
-            <span style={{ opacity: blink ? 1 : 0, color: IMSG_BLUE, marginLeft: 2 }}>|</span>
-          </span>
-        )}
+        <span style={{ opacity: 0.85 }}>😊</span>
+        <div style={{ flex: 1, wordBreak: "break-word" }}>
+          {sent || text.length === 0 ? (
+            <span style={{ color: WA_INK_DIM }}>Message</span>
+          ) : (
+            <>
+              {text}
+              <span style={{ opacity: blink ? 1 : 0, color: "#00A884", marginLeft: 2 }}>|</span>
+            </>
+          )}
+        </div>
       </div>
       <div
         style={{
-          width: 56, height: 56, borderRadius: 999,
-          background: hasText ? IMSG_BLUE : "#E9E9EB",
-          color: hasText ? "#fff" : "#8E8E93",
+          width: 68, height: 68, borderRadius: 999,
+          background: "#00A884",
           display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 32, fontWeight: 700, flexShrink: 0,
-          transition: "none",
-          boxShadow: hasText ? "0 4px 12px -4px rgba(11,132,255,0.4)" : "none",
         }}
       >
-        ↑
+        {hasText ? (
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="#fff">
+            <path d="M2 21l21-9L2 3v7l15 2-15 2z" />
+          </svg>
+        ) : (
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff">
+            <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3z" />
+            <path d="M19 11a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11z" />
+          </svg>
+        )}
       </div>
     </div>
   );
 };
 
+const TypingDots: React.FC = () => {
+  const frame = useCurrentFrame();
+  return (
+    <div style={{ display: "flex", justifyContent: "flex-start" }}>
+      <div
+        style={{
+          background: WA_IN,
+          borderRadius: 18,
+          borderTopLeftRadius: 4,
+          padding: "18px 24px",
+          display: "flex",
+          gap: 10,
+        }}
+      >
+        {[0, 1, 2].map((i) => {
+          const o = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(frame / 5 - i * 0.8));
+          return (
+            <span key={i} style={{ width: 14, height: 14, borderRadius: 999, background: WA_INK_DIM, opacity: o }} />
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
 // Variant 1: pre-existing thread with multiple messages, latest inbound sets up the ask.
 const SceneIMessageThread: React.FC<{
@@ -610,43 +642,32 @@ const SceneIMessageThread: React.FC<{
   const replyDelay = 55;
 
   return (
-    <IMessageShell
+    <WhatsAppShell
       contactName={contactName}
       time={time}
       composer={<IdleComposer />}
       messages={
         <>
-          <div style={{ textAlign: "center", color: "#8E8E93", fontSize: 22, marginBottom: 6 }}>
-            iMessage · Today {time}
-          </div>
           {history.map((m, i) => {
-            // historical messages settle in fast then stay
             const e = spring({ frame: frame - i * 4, fps, config: { damping: 18, stiffness: 220 } });
             const op = interpolate(e, [0, 1], [0, 1]);
             const y = interpolate(e, [0, 1], [16, 0]);
-            return <Bubble key={i} msg={m} opacity={op} transform={`translateY(${y}px)`} />;
+            const sc = interpolate(e, [0, 1], [0.95, 1]);
+            return <Bubble key={i} msg={{ ...m, t: time }} opacity={op} transform={`translateY(${y}px) scale(${sc})`} />;
           })}
 
-          {frame > 28 && frame < replyDelay && (
-            <div style={{ display: "flex", justifyContent: "flex-end" }}><TypingDots /></div>
-          )}
+          {frame > 28 && frame < replyDelay && <TypingDots />}
 
           {frame >= replyDelay && (() => {
-            const e = spring({ frame: frame - replyDelay, fps, config: { damping: 14, stiffness: 200 } });
+            const e = spring({ frame: frame - replyDelay, fps, config: { damping: 18, stiffness: 220 } });
             const op = interpolate(e, [0, 1], [0, 1]);
-            const y = interpolate(e, [0, 1], [24, 0]);
-            const sc = interpolate(e, [0, 1], [0.9, 1]);
+            const y = interpolate(e, [0, 1], [16, 0]);
+            const sc = interpolate(e, [0, 1], [0.95, 1]);
             return (
-              <>
-                <Bubble msg={{ from: "in", text: reply }} opacity={op} transform={`translateY(${y}px) scale(${sc})`} />
-                <div style={{ textAlign: "left", color: "#8E8E93", fontSize: 20, marginTop: 2, opacity: op, paddingLeft: 8 }}>
-                  Asmi
-                </div>
-              </>
+              <Bubble msg={{ from: "in", text: reply, t: time }} opacity={op} transform={`translateY(${y}px) scale(${sc})`} />
             );
           })()}
         </>
-
       }
     />
   );
@@ -662,83 +683,43 @@ const SceneIMessageTyping: React.FC<{
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Typing animation: char-by-char from frame 6 to frame 6 + len*2
   const typeStart = 8;
-  const typeSpeed = 1.6; // frames per char
+  const typeSpeed = 1.6;
   const typeChars = Math.max(0, Math.min(typedMessage.length, Math.floor((frame - typeStart) / typeSpeed)));
   const sentFrame = typeStart + Math.ceil(typedMessage.length * typeSpeed) + 6;
   const isSent = frame >= sentFrame;
   const replyDelay = sentFrame + 28;
 
   return (
-    <IMessageShell
+    <WhatsAppShell
       contactName={contactName}
       time={time}
-      composer={
-        <TypingComposer text={typedMessage.slice(0, typeChars)} sent={isSent} />
-      }
+      composer={<TypingComposer text={typedMessage.slice(0, typeChars)} sent={isSent} />}
       messages={
         <>
-          <div style={{ textAlign: "center", color: "#8E8E93", fontSize: 22, marginBottom: 6 }}>
-            iMessage · Today {time}
-          </div>
-
-          {/* Faint earlier context so thread isn't empty */}
-          <Bubble msg={{ from: "out", text: "hey asmi" }} opacity={0.55} />
-          <Bubble msg={{ from: "in",  text: "here — what do you need?" }} opacity={0.55} />
-
+          <Bubble msg={{ from: "out", text: "hey asmi", t: time }} opacity={0.5} />
+          <Bubble msg={{ from: "in",  text: "here — what do you need?", t: time }} opacity={0.5} />
 
           {isSent && (() => {
-            const e = spring({ frame: frame - sentFrame, fps, config: { damping: 16, stiffness: 220 } });
+            const e = spring({ frame: frame - sentFrame, fps, config: { damping: 18, stiffness: 220 } });
             const op = interpolate(e, [0, 1], [0, 1]);
-            const y = interpolate(e, [0, 1], [40, 0]);
-            const sc = interpolate(e, [0, 1], [0.7, 1]);
-            return <Bubble msg={{ from: "out", text: typedMessage }} opacity={op} transform={`translateY(${y}px) scale(${sc})`} />;
+            const y = interpolate(e, [0, 1], [18, 0]);
+            const sc = interpolate(e, [0, 1], [0.95, 1]);
+            return <Bubble msg={{ from: "out", text: typedMessage, t: time }} opacity={op} transform={`translateY(${y}px) scale(${sc})`} />;
           })()}
 
-          {frame > sentFrame + 8 && frame < replyDelay && (
-            <div style={{ display: "flex", justifyContent: "flex-start" }}><TypingDots /></div>
-          )}
+          {frame > sentFrame + 8 && frame < replyDelay && <TypingDots />}
 
           {frame >= replyDelay && (() => {
-            const e = spring({ frame: frame - replyDelay, fps, config: { damping: 14, stiffness: 200 } });
+            const e = spring({ frame: frame - replyDelay, fps, config: { damping: 18, stiffness: 220 } });
             const op = interpolate(e, [0, 1], [0, 1]);
-            const y = interpolate(e, [0, 1], [20, 0]);
-            return (
-              <Bubble msg={{ from: "in", text: reply }} opacity={op} transform={`translateY(${y}px)`} />
-            );
+            const y = interpolate(e, [0, 1], [16, 0]);
+            const sc = interpolate(e, [0, 1], [0.95, 1]);
+            return <Bubble msg={{ from: "in", text: reply, t: time }} opacity={op} transform={`translateY(${y}px) scale(${sc})`} />;
           })()}
         </>
       }
     />
-  );
-};
-
-
-
-const TypingDots: React.FC = () => {
-  const frame = useCurrentFrame();
-  return (
-    <div
-      style={{
-        background: "#E9E9EB",
-        borderRadius: 26,
-        borderBottomLeftRadius: 8,
-        padding: "18px 24px",
-        display: "flex",
-        gap: 10,
-      }}
-    >
-      {[0, 1, 2].map((i) => {
-        const o = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(frame / 5 - i * 0.8));
-        return (
-          <span
-            key={i}
-            style={{ width: 14, height: 14, borderRadius: 999, background: "#8E8E93", opacity: o }}
-          />
-        );
-      })}
-    </div>
   );
 };
 
