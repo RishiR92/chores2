@@ -68,8 +68,11 @@ const callRanges: Array<[number, number]> = [
 ];
 const bgmVolume = (f: number) => {
   const fadeIn = Math.min(1, f / 45);
-  // Short fade-out only at the very end so the music lands on its climax
-  const fadeOut = Math.min(1, (TOTAL - f) / 18);
+  // Long, smooth tail — starts pulling down ~3.5s before end so it doesn't cut.
+  const FADE_OUT_FRAMES = 105;
+  const t = Math.max(0, Math.min(1, (TOTAL - f) / FADE_OUT_FRAMES));
+  // Ease-in-out cubic for a musical decay
+  const fadeOut = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   const RAMP = 22;
   let duckAmt = 0;
   for (const [a, b] of callRanges) {
@@ -78,7 +81,6 @@ const bgmVolume = (f: number) => {
     duckAmt = Math.max(duckAmt, Math.min(into, outOf));
   }
   const eased = duckAmt * duckAmt * (3 - 2 * duckAmt);
-  // Louder base, deeper duck under calls
   const base = 0.42 * (1 - eased) + 0.018 * eased;
   return Math.max(0, base * fadeIn * fadeOut);
 };
@@ -296,160 +298,78 @@ const WhatsAppShell: React.FC<{
   contactName: string;
   time: string;
   messages: React.ReactNode;
-  composer: React.ReactNode;
-}> = ({ contactName, time, messages, composer }) => (
-  <AbsoluteFill style={{ background: "#0a0a0a", fontFamily: EMOJI_STACK }}>
-    {/* Zoomed-in phone: nearly fills the 1080x1920 frame */}
+  composer?: React.ReactNode;
+}> = ({ contactName, time, messages }) => (
+  <AbsoluteFill
+    style={{
+      background:
+        "radial-gradient(120% 80% at 50% 30%, #11202A 0%, #0A1419 55%, #06090C 100%)",
+      fontFamily: EMOJI_STACK,
+    }}
+  >
+    {/* Minimal contact strip — keeps context without a phone frame */}
     <div
       style={{
         position: "absolute",
-        inset: 24,
-        borderRadius: 96,
-        background: "#0a0a0c",
-        padding: 14,
-        boxShadow:
-          "0 60px 160px -40px rgba(0,0,0,0.9), 0 0 0 2px #25252c, inset 0 0 0 1.5px #18181f",
+        top: 88,
+        left: 0,
+        right: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 24,
       }}
     >
       <div
         style={{
-          width: "100%",
-          height: "100%",
-          borderRadius: 84,
-          background: WA_BG,
-          overflow: "hidden",
+          width: 72,
+          height: 72,
+          borderRadius: 999,
+          background: "linear-gradient(140deg, #2DD4A8, #0E7C5C)",
           display: "flex",
-          flexDirection: "column",
-          position: "relative",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "#fff",
+          fontSize: 36,
+          fontWeight: 600,
+          letterSpacing: -1,
+          boxShadow: "inset 0 0 0 1.5px rgba(255,255,255,0.15)",
         }}
       >
-        {/* Dynamic Island */}
-        <div
-          style={{
-            position: "absolute",
-            top: 28,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: 360,
-            height: 44,
-            borderRadius: 24,
-            background: "#000",
-            zIndex: 10,
-          }}
-        />
-        {/* iOS status bar */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "40px 70px 16px",
-            color: "#fff",
-            fontSize: 32,
-            fontWeight: 600,
-            fontVariantNumeric: "tabular-nums",
-            letterSpacing: -0.5,
-            zIndex: 5,
-          }}
-        >
-          <span>{time}</span>
-          <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
-            <svg width="38" height="24" viewBox="0 0 34 22"><g fill="#fff">
-              <rect x="0" y="14" width="6" height="8" rx="1.5" />
-              <rect x="9" y="10" width="6" height="12" rx="1.5" />
-              <rect x="18" y="5" width="6" height="17" rx="1.5" />
-              <rect x="27" y="0" width="6" height="22" rx="1.5" />
-            </g></svg>
-            <svg width="52" height="22" viewBox="0 0 50 22">
-              <rect x="1" y="2" width="42" height="18" rx="5" fill="none" stroke="#fff" strokeWidth="2" />
-              <rect x="45" y="8" width="4" height="6" rx="1.5" fill="#fff" />
-              <rect x="4" y="5" width="36" height="12" rx="2" fill="#fff" />
-            </svg>
-          </div>
-        </div>
-
-        {/* WhatsApp header */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            padding: "10px 28px 18px",
-            background: WA_HEADER,
-            gap: 18,
-          }}
-        >
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff"
-            strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-          <div
-            style={{
-              width: 88,
-              height: 88,
-              borderRadius: 999,
-              background: "linear-gradient(140deg, #2DD4A8, #0E7C5C)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#fff",
-              fontSize: 40,
-              fontWeight: 600,
-              letterSpacing: -1,
-              boxShadow: "inset 0 0 0 1.5px rgba(255,255,255,0.12)",
-              flexShrink: 0,
-            }}
-          >
-            {contactName[0]}
-          </div>
-          <div style={{ flex: 1, lineHeight: 1.15 }}>
-            <div style={{ color: "#fff", fontSize: 34, fontWeight: 600, letterSpacing: -0.3 }}>{contactName}</div>
-            <div style={{ color: WA_INK_DIM, fontSize: 24, marginTop: 4, fontWeight: 400 }}>online</div>
-          </div>
-          <div style={{ display: "flex", gap: 30, alignItems: "center" }}>
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff"
-              strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="23 7 16 12 23 17 23 7" />
-              <rect x="1" y="5" width="15" height="14" rx="2" />
-            </svg>
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff"
-              strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-            </svg>
-          </div>
-        </div>
-
-        {/* Chat area with subtle doodle pattern */}
-        <div
-          style={{
-            flex: 1,
-            background:
-              WA_BG + " url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><g fill='none' stroke='%23ffffff' stroke-opacity='0.025' stroke-width='1.2'><circle cx='30' cy='30' r='6'/><path d='M70 50 q10 -12 22 0'/><path d='M100 100 l8 8 l-8 8 l-8 -8 z'/><circle cx='130' cy='40' r='3'/><path d='M20 110 q14 8 28 0'/><circle cx='60' cy='130' r='4'/></g></svg>\")",
-            display: "flex",
-            flexDirection: "column",
-            padding: "24px 22px 14px",
-            gap: 8,
-            justifyContent: "flex-end",
-            overflow: "hidden",
-          }}
-        >
-          {messages}
-        </div>
-
-        {composer}
-
-        {/* Home indicator */}
-        <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 18px", background: "#0B141A" }}>
-          <div style={{ width: 280, height: 8, borderRadius: 4, background: "#fff", opacity: 0.7 }} />
-        </div>
+        {contactName[0]}
       </div>
+      <div style={{ lineHeight: 1.1 }}>
+        <div style={{ color: "#fff", fontSize: 44, fontWeight: 600, letterSpacing: -0.5 }}>
+          {contactName}
+        </div>
+        <div style={{ color: WA_INK_DIM, fontSize: 26, marginTop: 6 }}>online · {time}</div>
+      </div>
+    </div>
+
+    {/* Zoomed bubbles — fill the canvas, no phone, no window chrome */}
+    <div
+      style={{
+        position: "absolute",
+        left: 70,
+        right: 70,
+        top: 220,
+        bottom: 120,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-end",
+        gap: 28,
+        overflow: "hidden",
+      }}
+    >
+      {messages}
     </div>
   </AbsoluteFill>
 );
 
 const WATick: React.FC = () => (
-  <svg width="26" height="16" viewBox="0 0 22 14" fill="none">
-    <path d="M1 7 L5 11 L12 3" stroke="#53BDEB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M8 7 L12 11 L19 3" stroke="#53BDEB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+  <svg width="40" height="22" viewBox="0 0 22 14" fill="none">
+    <path d="M1 7 L5 11 L12 3" stroke="#53BDEB" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8 7 L12 11 L19 3" stroke="#53BDEB" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
@@ -459,34 +379,34 @@ const Bubble: React.FC<{ msg: Msg; opacity?: number; transform?: string; tail?: 
     <div style={{ display: "flex", justifyContent: isOut ? "flex-end" : "flex-start", opacity, transform }}>
       <div
         style={{
-          maxWidth: "78%",
-          padding: "14px 18px 12px",
-          borderRadius: 18,
-          ...(isOut ? { borderTopRightRadius: 4 } : { borderTopLeftRadius: 4 }),
+          maxWidth: "86%",
+          padding: "28px 34px 24px",
+          borderRadius: 34,
+          ...(isOut ? { borderTopRightRadius: 8 } : { borderTopLeftRadius: 8 }),
           background: isOut ? WA_OUT : WA_IN,
           color: WA_INK,
-          fontSize: 30,
-          lineHeight: 1.28,
-          letterSpacing: -0.2,
+          fontSize: 56,
+          lineHeight: 1.24,
+          letterSpacing: -0.4,
           fontFamily: EMOJI_STACK,
           fontWeight: 400,
-          boxShadow: "0 1px 0 rgba(0,0,0,0.25)",
+          boxShadow: "0 18px 40px -18px rgba(0,0,0,0.55), 0 1px 0 rgba(0,0,0,0.25)",
           position: "relative",
           display: "inline-flex",
           flexDirection: "column",
         }}
       >
-        <div style={{ paddingRight: isOut ? 100 : 70, paddingBottom: 4 }}>{msg.text}</div>
+        <div style={{ paddingRight: isOut ? 150 : 110, paddingBottom: 8 }}>{msg.text}</div>
         <div
           style={{
             position: "absolute",
-            right: 14,
-            bottom: 8,
+            right: 24,
+            bottom: 14,
             display: "flex",
             alignItems: "center",
-            gap: 6,
-            color: "rgba(233,237,239,0.55)",
-            fontSize: 18,
+            gap: 8,
+            color: "rgba(233,237,239,0.6)",
+            fontSize: 26,
             fontVariantNumeric: "tabular-nums",
           }}
         >
@@ -612,17 +532,18 @@ const TypingDots: React.FC = () => {
       <div
         style={{
           background: WA_IN,
-          borderRadius: 18,
-          borderTopLeftRadius: 4,
-          padding: "18px 24px",
+          borderRadius: 34,
+          borderTopLeftRadius: 8,
+          padding: "32px 40px",
           display: "flex",
-          gap: 10,
+          gap: 16,
+          boxShadow: "0 18px 40px -18px rgba(0,0,0,0.55)",
         }}
       >
         {[0, 1, 2].map((i) => {
           const o = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(frame / 5 - i * 0.8));
           return (
-            <span key={i} style={{ width: 14, height: 14, borderRadius: 999, background: WA_INK_DIM, opacity: o }} />
+            <span key={i} style={{ width: 22, height: 22, borderRadius: 999, background: WA_INK_DIM, opacity: o }} />
           );
         })}
       </div>
