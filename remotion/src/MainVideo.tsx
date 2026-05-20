@@ -233,9 +233,10 @@ const Intro: React.FC = () => {
       <div
         style={{
           fontFamily: serif,
-          fontSize: 360,
+          fontStyle: "italic",
+          fontSize: 260,
           color: ESPRESSO,
-          letterSpacing: -6,
+          letterSpacing: -2,
           lineHeight: 1,
           transform: `translateY(${y}px)`,
         }}
@@ -245,16 +246,16 @@ const Intro: React.FC = () => {
       <div
         style={{
           marginTop: 36,
-          fontFamily: serif,
-          fontStyle: "italic",
-          fontSize: 64,
+          fontSize: 30,
+          letterSpacing: 8,
+          textTransform: "uppercase",
           color: STONE_DARK,
-          letterSpacing: 0.5,
+          fontWeight: 500,
           opacity: tagOp,
           transform: `translateY(${tagY}px)`,
         }}
       >
-        building personal intelligence
+        handles the real world
       </div>
     </AbsoluteFill>
   );
