@@ -8,15 +8,14 @@ import {
   Audio,
   staticFile,
 } from "remotion";
-import { loadFont as loadInter } from "@remotion/google-fonts/InterTight";
+import { loadFont as loadSerif } from "@remotion/google-fonts/InstrumentSerif";
+import { loadFont as loadInter } from "@remotion/google-fonts/Inter";
 import { loadFont } from "@remotion/fonts";
 
-const { fontFamily: sans } = loadInter("normal", {
-  weights: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-});
+const { fontFamily: serif } = loadSerif("normal", { weights: ["400"], subsets: ["latin"] });
+const { fontFamily: sans } = loadInter("normal", { weights: ["400", "500", "600"], subsets: ["latin"] });
 
-// Color emoji font — scoped to chat bubbles only
+// Color emoji font so 🙏 🥵 etc render in the chat
 loadFont({
   family: "Noto Color Emoji",
   url: staticFile("fonts/NotoColorEmoji.ttf"),
@@ -25,19 +24,29 @@ loadFont({
 
 const EMOJI_STACK = `${sans}, "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", sans-serif`;
 
-// ============= Palette (one ink, one paper, one accent) =============
-const BG       = "#0A0A0C";   // near-black
-const INK      = "#F5F2EA";   // warm off-white
-const INK_DIM  = "#7A7A85";   // muted
-const INK_FAINT = "#2A2A30";  // hairline
-const LIME     = "#E8FF5A";   // single accent
-const SURFACE  = "#13131A";
 
-// ============= Timing — identical to v7 =============
+const CREAM = "#F5EFE6";
+const ESPRESSO = "#2C2520";
+const STONE = "#7A6F64";
+const TERRACOTTA = "#C25B3F";
+const CLAY = "#D4A574";
+const SAGE = "#5F8365";
+const IMSG_BLUE = "#1FA1FF";
+const IMSG_GRAY = "#E6E2DA";
+
+// Frames @ 30fps — sums to 1500 (50s)
 const D = {
-  intro: 90, imDoc: 120, doc: 240, imHvac: 120, hvac: 240,
-  imGp: 120, gp: 240, done: 240, outro: 90,
+  intro: 90,    // 3s
+  imDoc: 120,   // 4s
+  doc: 240,     // 8s
+  imHvac: 120,  // 4s
+  hvac: 240,    // 8s
+  imGp: 120,    // 4s
+  gp: 240,      // 8s
+  done: 240,    // 8s
+  outro: 90,    // 3s
 };
+
 const O = {
   intro: 0,
   imDoc: D.intro,
@@ -51,15 +60,15 @@ const O = {
 };
 
 const TOTAL = 1500;
+// Duck music during call scenes so voice is clear
 const callRanges: Array<[number, number]> = [
   [O.doc, O.doc + D.doc],
   [O.hvac, O.hvac + D.hvac],
   [O.gp, O.gp + D.gp],
 ];
-
-// BGM ducking — base 0.55, duck to 0.06 under calls, never exceeds 0.55
 const bgmVolume = (f: number) => {
   const fadeIn = Math.min(1, f / 45);
+  // Short fade-out only at the very end so the music lands on its climax
   const fadeOut = Math.min(1, (TOTAL - f) / 18);
   const RAMP = 22;
   let duckAmt = 0;
@@ -69,75 +78,73 @@ const bgmVolume = (f: number) => {
     duckAmt = Math.max(duckAmt, Math.min(into, outOf));
   }
   const eased = duckAmt * duckAmt * (3 - 2 * duckAmt);
-  const base = 0.55 * (1 - eased) + 0.06 * eased;
-  return Math.max(0, Math.min(0.55, base * fadeIn * fadeOut));
+  // Louder base, deeper duck under calls
+  const base = 0.42 * (1 - eased) + 0.018 * eased;
+  return Math.max(0, base * fadeIn * fadeOut);
 };
 
-const POP = "audio/sfx/wa-pop.mp3";
-const THREAD_REPLY_DELAY = 62;
-const typingReplyFrame = (len: number) => 8 + Math.ceil(len * 1.6) + 6 + 32;
-const HVAC_TYPED = "AC's dead. need a tech ASAP 🥵";
-const GP_TYPED = "can u check on abuelo in sevilla? in spanish 🙏";
 
-// ============= Root =============
+// iMessage receive "ting" — absolute frames computed below from scene offsets + reply delays
+const TING = "audio/sfx/imessage-receive.mp3";
+// Thread scene reply delay (must match SceneIMessageThread)
+const THREAD_REPLY_DELAY = 55;
+// Typing scenes: sentFrame = 8 + ceil(len * 1.6) + 6 ; replyDelay = sentFrame + 28
+const typingReplyFrame = (len: number) => 8 + Math.ceil(len * 1.6) + 6 + 28;
+const HVAC_TYPED = "AC is dead. Need a tech ASAP 🥵";
+const GP_TYPED = "Can you check on grandpa in Sevilla? In Spanish 🙏";
+
+
 
 export const MainVideo: React.FC = () => {
   return (
-    <AbsoluteFill style={{ background: BG, fontFamily: sans, color: INK }}>
-      <Vignette />
+    <AbsoluteFill style={{ background: CREAM, fontFamily: sans }}>
+      <DriftingBloom />
+      <Grain />
 
       <Sequence from={O.intro} durationInFrames={D.intro}><Intro /></Sequence>
 
       <Sequence from={O.imDoc} durationInFrames={D.imDoc}>
-        <SceneWhatsAppThread
-          contactName="Asmi"
-          time="9:03"
+        <SceneIMessageThread
+          contactName="Sarah"
+          time="9:03 AM"
           history={[
-            { from: "in",  text: "morning ☀️ all good?", t: "Yesterday" },
-            { from: "out", text: "yes, dentist done. thanks for booking!", t: "Yesterday" },
-            { from: "in",  text: "anytime. let me know what's next.", t: "Yesterday" },
+            { from: "out", text: "morning! quick favor 🙏" },
+            { from: "in",  text: "of course — what do you need?" },
+            { from: "out", text: "Hey, can you book Jonathan a checkup with Dr. Weng's office?" },
           ]}
-          today={[
-            { from: "out", text: "hey — can u book Jonathan a checkup w/ Dr. Weng?", t: "9:02" },
-          ]}
-          reply="on it — calling them now."
-          replyTime="9:03"
+          reply="On it — calling them now."
+
         />
       </Sequence>
 
       <Sequence from={O.doc} durationInFrames={D.doc}>
         <SceneCall
-          tag="Call 01"
+          label="Asmi → Dr. Weng's office"
           name="Dr. Weng — Front Desk"
-          subtitle="mobile"
+          accent={TERRACOTTA}
           captions={[
             { at: 0,   text: "Hi, I'm calling on behalf of Sarah Kim." },
-            { at: 60,  text: "I'd like to book a checkup for her son, Jonathan." },
-            { at: 130, text: "Insurance is Blue Cross — ID on file." },
-            { at: 195, text: "Tuesday at 10am works. Confirmed." },
+            { at: 60,  text: "I'd like to book a checkup for her son Jonathan." },
+            { at: 130, text: "Insurance is Blue Cross, ID on file." },
+            { at: 195, text: "Tuesday at 10am works — confirmed." },
           ]}
         />
       </Sequence>
 
       <Sequence from={O.imHvac} durationInFrames={D.imHvac}>
-        <SceneWhatsAppTyping
-          contactName="Asmi"
-          time="11:18"
-          history={[
-            { from: "out", text: "appt confirmed for tues, ty 🙌", t: "9:04" },
-            { from: "in",  text: "all set. invoice synced to email.", t: "9:04" },
-          ]}
-          typedMessage={HVAC_TYPED}
-          reply="getting quotes from 5 HVAC techs."
-          replyTime="11:19"
+        <SceneIMessageTyping
+          contactName="Marco"
+          time="11:18 AM"
+          typedMessage="AC is dead. Need a tech ASAP 🥵"
+          reply="Getting quotes from 5 HVAC companies."
         />
       </Sequence>
 
       <Sequence from={O.hvac} durationInFrames={D.hvac}>
         <SceneCall
-          tag="Call 02"
+          label="Asmi → Pacific HVAC"
           name="Pacific HVAC"
-          subtitle="mobile"
+          accent={SAGE}
           captions={[
             { at: 0,   text: "Hi, calling for Marco — AC stopped working." },
             { at: 60,  text: "Two-story home in Oakland, central system." },
@@ -148,24 +155,19 @@ export const MainVideo: React.FC = () => {
       </Sequence>
 
       <Sequence from={O.imGp} durationInFrames={D.imGp}>
-        <SceneWhatsAppTyping
-          contactName="Asmi"
-          time="18:42"
-          history={[
-            { from: "in",  text: "HVAC booked sat 9am ✅", t: "11:21" },
-            { from: "out", text: "perfect 🙏", t: "11:22" },
-          ]}
-          typedMessage={GP_TYPED}
-          reply="calling abuelo now."
-          replyTime="18:42"
+        <SceneIMessageTyping
+          contactName="Sarah"
+          time="6:42 PM"
+          typedMessage="Can you check on grandpa in Sevilla? In Spanish 🙏"
+          reply="Calling abuelo now."
         />
       </Sequence>
 
       <Sequence from={O.gp} durationInFrames={D.gp}>
         <SceneCall
-          tag="Call 03"
+          label="Asmi → Abuelo · Sevilla"
           name="Abuelo"
-          subtitle="Sevilla · mobile"
+          accent={CLAY}
           captions={[
             { at: 0,   text: "Hola abuelo, soy Asmi. ¿Cómo estás hoy?" },
             { at: 60,  text: "¿Tomaste tu medicina esta mañana?" },
@@ -176,64 +178,71 @@ export const MainVideo: React.FC = () => {
       </Sequence>
 
       <Sequence from={O.done} durationInFrames={D.done}><SceneDone /></Sequence>
+
       <Sequence from={O.outro} durationInFrames={D.outro}><Outro /></Sequence>
 
-      {/* Call voice — volume 1.0 (no clipping) */}
+
+      {/* Call voice tracks — boosted while on screen (sources already normalized to -14 LUFS) */}
       <Sequence from={O.doc} durationInFrames={D.doc}>
-        <Audio src={staticFile("audio/trimmed/doc.mp3")} volume={1.0} />
+        <Audio src={staticFile("audio/trimmed/doc.mp3")} volume={1.4} />
       </Sequence>
       <Sequence from={O.hvac} durationInFrames={D.hvac}>
-        <Audio src={staticFile("audio/trimmed/hvac.mp3")} volume={1.0} />
+        <Audio src={staticFile("audio/trimmed/hvac.mp3")} volume={1.4} />
       </Sequence>
       <Sequence from={O.gp} durationInFrames={D.gp}>
-        <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={1.0} />
+        <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={1.4} />
       </Sequence>
 
-      {/* WhatsApp pop on each Asmi reply */}
-      <Sequence from={O.imDoc + THREAD_REPLY_DELAY} durationInFrames={12}>
-        <Audio src={staticFile(POP)} volume={0.5} />
+      {/* iMessage "ting" on each Asmi reply bubble */}
+      <Sequence from={O.imDoc + THREAD_REPLY_DELAY} durationInFrames={20}>
+        <Audio src={staticFile(TING)} volume={0.55} />
       </Sequence>
-      <Sequence from={O.imHvac + typingReplyFrame(HVAC_TYPED.length)} durationInFrames={12}>
-        <Audio src={staticFile(POP)} volume={0.5} />
+      <Sequence from={O.imHvac + typingReplyFrame(HVAC_TYPED.length)} durationInFrames={20}>
+        <Audio src={staticFile(TING)} volume={0.55} />
       </Sequence>
-      <Sequence from={O.imGp + typingReplyFrame(GP_TYPED.length)} durationInFrames={12}>
-        <Audio src={staticFile(POP)} volume={0.5} />
+      <Sequence from={O.imGp + typingReplyFrame(GP_TYPED.length)} durationInFrames={20}>
+        <Audio src={staticFile(TING)} volume={0.55} />
       </Sequence>
 
+      {/* Background music — ducks hard under call scenes */}
       <Audio src={staticFile("audio/bgm.mp3")} volume={(f) => bgmVolume(f)} />
+
     </AbsoluteFill>
   );
 };
 
-// ============= Static vignette (replaces orbs + grain) =============
 
-const Vignette: React.FC = () => (
+// ============= Persistent =============
+
+const DriftingBloom: React.FC = () => {
+  const frame = useCurrentFrame();
+  const x = Math.sin(frame / 200) * 80;
+  const y = Math.cos(frame / 220) * 60;
+  return (
+    <AbsoluteFill style={{ pointerEvents: "none" }}>
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: `radial-gradient(60% 40% at ${50 + x / 8}% ${30 + y / 8}%, rgba(194,91,63,0.16), transparent 70%),
+                       radial-gradient(55% 38% at ${30 + x / 6}% ${75 + y / 6}%, rgba(212,165,116,0.14), transparent 70%),
+                       radial-gradient(50% 35% at ${75 - x / 6}% ${60 - y / 6}%, rgba(95,131,101,0.10), transparent 70%)`,
+        }}
+      />
+    </AbsoluteFill>
+  );
+};
+
+const Grain: React.FC = () => (
   <AbsoluteFill
     style={{
       pointerEvents: "none",
-      background:
-        "radial-gradient(120% 80% at 50% 40%, transparent 50%, rgba(0,0,0,0.55) 100%)",
+      opacity: 0.05,
+      mixBlendMode: "multiply",
+      backgroundImage:
+        "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
     }}
   />
-);
-
-// ============= Tiny label =============
-
-const MicroLabel: React.FC<{ children: React.ReactNode; color?: string }> = ({
-  children, color = INK_DIM,
-}) => (
-  <div
-    style={{
-      fontFamily: sans,
-      fontSize: 22,
-      fontWeight: 500,
-      letterSpacing: 4,
-      textTransform: "uppercase",
-      color,
-    }}
-  >
-    {children}
-  </div>
 );
 
 // ============= Intro =============
@@ -241,65 +250,63 @@ const MicroLabel: React.FC<{ children: React.ReactNode; color?: string }> = ({
 const Intro: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const s = spring({ frame, fps, config: { damping: 20, stiffness: 130 } });
-  const opacity = interpolate(frame, [0, 14, 75, 90], [0, 1, 1, 0]);
+  const s = spring({ frame, fps, config: { damping: 16, stiffness: 120 } });
+  const opacity = interpolate(frame, [0, 15, 75, 90], [0, 1, 1, 0]);
   return (
-    <AbsoluteFill
-      style={{
-        justifyContent: "center",
-        alignItems: "flex-start",
-        padding: "0 90px",
-        opacity,
-      }}
-    >
-      <div style={{ transform: `translateY(${(1 - s) * 18}px)`, opacity: s }}>
-        <MicroLabel color={LIME}>asmi · 2026</MicroLabel>
-        <div
-          style={{
-            fontFamily: sans,
-            fontWeight: 700,
-            fontSize: 220,
-            color: INK,
-            lineHeight: 0.95,
-            marginTop: 28,
-            letterSpacing: -6,
-          }}
-        >
-          you text.
-          <br />
-          <span style={{ color: LIME }}>asmi calls.</span>
-        </div>
-        <div
-          style={{
-            marginTop: 40,
-            fontSize: 34,
-            color: INK_DIM,
-            maxWidth: 760,
-            lineHeight: 1.35,
-            fontWeight: 400,
-            letterSpacing: -0.4,
-          }}
-        >
-          a personal AI that handles the real world — one phone call at a time.
-        </div>
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", opacity }}>
+      <div
+        style={{
+          fontFamily: serif,
+          fontStyle: "italic",
+          fontSize: 220,
+          color: ESPRESSO,
+          transform: `scale(${0.94 + s * 0.06})`,
+        }}
+      >
+        asmi
+      </div>
+      <div
+        style={{
+          marginTop: 30,
+          fontSize: 30,
+          letterSpacing: 8,
+          textTransform: "uppercase",
+          color: STONE,
+          fontWeight: 500,
+        }}
+      >
+        handles the real world
       </div>
     </AbsoluteFill>
   );
 };
 
-// ============= WhatsApp UI =============
+// ============= WhatsApp scenes (zoomed phone) =============
 
 type Msg = { from: "in" | "out"; text: string; t?: string };
 
-const PhoneFrame: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
+const WA_BG = "#0B141A";
+const WA_HEADER = "#1F2C34";
+const WA_IN = "#1F2C34";
+const WA_OUT = "#005C4B";
+const WA_INK = "#E9EDEF";
+const WA_INK_DIM = "#8A9BA4";
+
+const WhatsAppShell: React.FC<{
+  contactName: string;
+  time: string;
+  messages: React.ReactNode;
+  composer: React.ReactNode;
+}> = ({ contactName, time, messages, composer }) => (
+  <AbsoluteFill style={{ background: "#0a0a0a", fontFamily: EMOJI_STACK }}>
+    {/* Zoomed-in phone: nearly fills the 1080x1920 frame */}
     <div
       style={{
-        width: 780,
-        height: 1540,
-        borderRadius: 110,
+        position: "absolute",
+        inset: 24,
+        borderRadius: 96,
         background: "#0a0a0c",
-        padding: 16,
+        padding: 14,
         boxShadow:
           "0 60px 160px -40px rgba(0,0,0,0.9), 0 0 0 2px #25252c, inset 0 0 0 1.5px #18181f",
       }}
@@ -308,274 +315,225 @@ const PhoneFrame: React.FC<{ children: React.ReactNode }> = ({ children }) => (
         style={{
           width: "100%",
           height: "100%",
-          borderRadius: 96,
-          background: "#0B141A",
+          borderRadius: 84,
+          background: WA_BG,
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
           position: "relative",
         }}
       >
-        {children}
+        {/* Dynamic Island */}
+        <div
+          style={{
+            position: "absolute",
+            top: 28,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: 360,
+            height: 44,
+            borderRadius: 24,
+            background: "#000",
+            zIndex: 10,
+          }}
+        />
+        {/* iOS status bar */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "40px 70px 16px",
+            color: "#fff",
+            fontSize: 32,
+            fontWeight: 600,
+            fontVariantNumeric: "tabular-nums",
+            letterSpacing: -0.5,
+            zIndex: 5,
+          }}
+        >
+          <span>{time}</span>
+          <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
+            <svg width="38" height="24" viewBox="0 0 34 22"><g fill="#fff">
+              <rect x="0" y="14" width="6" height="8" rx="1.5" />
+              <rect x="9" y="10" width="6" height="12" rx="1.5" />
+              <rect x="18" y="5" width="6" height="17" rx="1.5" />
+              <rect x="27" y="0" width="6" height="22" rx="1.5" />
+            </g></svg>
+            <svg width="52" height="22" viewBox="0 0 50 22">
+              <rect x="1" y="2" width="42" height="18" rx="5" fill="none" stroke="#fff" strokeWidth="2" />
+              <rect x="45" y="8" width="4" height="6" rx="1.5" fill="#fff" />
+              <rect x="4" y="5" width="36" height="12" rx="2" fill="#fff" />
+            </svg>
+          </div>
+        </div>
+
+        {/* WhatsApp header */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            padding: "10px 28px 18px",
+            background: WA_HEADER,
+            gap: 18,
+          }}
+        >
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff"
+            strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+          <div
+            style={{
+              width: 88,
+              height: 88,
+              borderRadius: 999,
+              background: "linear-gradient(140deg, #2DD4A8, #0E7C5C)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#fff",
+              fontSize: 40,
+              fontWeight: 600,
+              letterSpacing: -1,
+              boxShadow: "inset 0 0 0 1.5px rgba(255,255,255,0.12)",
+              flexShrink: 0,
+            }}
+          >
+            {contactName[0]}
+          </div>
+          <div style={{ flex: 1, lineHeight: 1.15 }}>
+            <div style={{ color: "#fff", fontSize: 34, fontWeight: 600, letterSpacing: -0.3 }}>{contactName}</div>
+            <div style={{ color: WA_INK_DIM, fontSize: 24, marginTop: 4, fontWeight: 400 }}>online</div>
+          </div>
+          <div style={{ display: "flex", gap: 30, alignItems: "center" }}>
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff"
+              strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7" />
+              <rect x="1" y="5" width="15" height="14" rx="2" />
+            </svg>
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff"
+              strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+            </svg>
+          </div>
+        </div>
+
+        {/* Chat area with subtle doodle pattern */}
+        <div
+          style={{
+            flex: 1,
+            background:
+              WA_BG + " url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><g fill='none' stroke='%23ffffff' stroke-opacity='0.025' stroke-width='1.2'><circle cx='30' cy='30' r='6'/><path d='M70 50 q10 -12 22 0'/><path d='M100 100 l8 8 l-8 8 l-8 -8 z'/><circle cx='130' cy='40' r='3'/><path d='M20 110 q14 8 28 0'/><circle cx='60' cy='130' r='4'/></g></svg>\")",
+            display: "flex",
+            flexDirection: "column",
+            padding: "24px 22px 14px",
+            gap: 8,
+            justifyContent: "flex-end",
+            overflow: "hidden",
+          }}
+        >
+          {messages}
+        </div>
+
+        {composer}
+
+        {/* Home indicator */}
+        <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 18px", background: "#0B141A" }}>
+          <div style={{ width: 280, height: 8, borderRadius: 4, background: "#fff", opacity: 0.7 }} />
+        </div>
       </div>
     </div>
   </AbsoluteFill>
 );
 
-const StatusBar: React.FC<{ time: string }> = ({ time }) => (
-  <>
-    {/* Dynamic Island */}
-    <div
-      style={{
-        position: "absolute",
-        top: 26,
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: 320,
-        height: 40,
-        borderRadius: 22,
-        background: "#000",
-        zIndex: 10,
-      }}
-    />
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "38px 60px 14px",
-        color: "#fff",
-        fontSize: 28,
-        fontWeight: 600,
-        fontVariantNumeric: "tabular-nums",
-        letterSpacing: -0.5,
-        zIndex: 5,
-      }}
-    >
-      <span>{time}</span>
-      <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-        <svg width="34" height="22" viewBox="0 0 34 22"><g fill="#fff">
-          <rect x="0" y="14" width="6" height="8" rx="1.5" />
-          <rect x="9" y="10" width="6" height="12" rx="1.5" />
-          <rect x="18" y="5" width="6" height="17" rx="1.5" />
-          <rect x="27" y="0" width="6" height="22" rx="1.5" />
-        </g></svg>
-        <svg width="46" height="20" viewBox="0 0 50 22">
-          <rect x="1" y="2" width="42" height="18" rx="5" fill="none" stroke="#fff" strokeWidth="2" />
-          <rect x="45" y="8" width="4" height="6" rx="1.5" fill="#fff" />
-          <rect x="4" y="5" width="32" height="12" rx="2" fill="#fff" />
-        </svg>
-      </div>
-    </div>
-  </>
-);
-
-const Avatar: React.FC<{ size?: number }> = ({ size = 76 }) => (
-  <div
-    style={{
-      width: size,
-      height: size,
-      borderRadius: 999,
-      background: `linear-gradient(140deg, #2DD4A8, #0E7C5C)`,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      color: "#fff",
-      fontWeight: 600,
-      fontSize: size * 0.46,
-      letterSpacing: -1,
-      flexShrink: 0,
-      boxShadow: "inset 0 0 0 1.5px rgba(255,255,255,0.12)",
-    }}
-  >
-    A
-  </div>
-);
-
-const WAHeader: React.FC<{ name: string }> = ({ name }) => (
-  <div
-    style={{
-      display: "flex",
-      alignItems: "center",
-      padding: "8px 22px 14px",
-      background: "#1F2C34",
-      borderBottom: "1px solid rgba(255,255,255,0.04)",
-      gap: 16,
-    }}
-  >
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff"
-      strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="15 18 9 12 15 6" />
-    </svg>
-    <Avatar size={76} />
-    <div style={{ flex: 1, lineHeight: 1.15 }}>
-      <div style={{ color: "#fff", fontSize: 30, fontWeight: 600, letterSpacing: -0.3 }}>{name}</div>
-      <div style={{ color: "#8A9BA4", fontSize: 22, marginTop: 2, fontWeight: 400 }}>online</div>
-    </div>
-    <div style={{ display: "flex", gap: 28, color: "#fff", alignItems: "center" }}>
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff"
-        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="23 7 16 12 23 17 23 7" />
-        <rect x="1" y="5" width="15" height="14" rx="2" />
-      </svg>
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff"
-        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-      </svg>
-    </div>
-  </div>
-);
-
-const ChatBackground: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div
-    style={{
-      flex: 1,
-      background:
-        "#0B141A url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><g fill='none' stroke='%23ffffff' stroke-opacity='0.025' stroke-width='1.2'><circle cx='30' cy='30' r='6'/><path d='M70 50 q10 -12 22 0'/><path d='M100 100 l8 8 l-8 8 l-8 -8 z'/><circle cx='130' cy='40' r='3'/><path d='M20 110 q14 8 28 0'/><circle cx='60' cy='130' r='4'/></g></svg>\")",
-      display: "flex",
-      flexDirection: "column",
-      padding: "20px 18px 10px",
-      gap: 6,
-      overflow: "hidden",
-    }}
-  >
-    {children}
-  </div>
-);
-
-const DayDivider: React.FC<{ label: string; opacity?: number }> = ({ label, opacity = 1 }) => (
-  <div style={{ display: "flex", justifyContent: "center", margin: "10px 0 6px", opacity }}>
-    <div
-      style={{
-        background: "#182229",
-        color: "#8A9BA4",
-        fontSize: 18,
-        padding: "6px 16px",
-        borderRadius: 12,
-        letterSpacing: 0.4,
-        fontWeight: 500,
-        textTransform: "uppercase",
-      }}
-    >
-      {label}
-    </div>
-  </div>
-);
-
-const Tick: React.FC = () => (
-  <svg width="22" height="14" viewBox="0 0 22 14" fill="none">
+const WATick: React.FC = () => (
+  <svg width="26" height="16" viewBox="0 0 22 14" fill="none">
     <path d="M1 7 L5 11 L12 3" stroke="#53BDEB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
     <path d="M8 7 L12 11 L19 3" stroke="#53BDEB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
-const WABubble: React.FC<{
-  msg: Msg; opacity?: number; transform?: string;
-}> = ({ msg, opacity = 1, transform = "none" }) => {
+const Bubble: React.FC<{ msg: Msg; opacity?: number; transform?: string; tail?: boolean }> = ({ msg, opacity = 1, transform = "none" }) => {
   const isOut = msg.from === "out";
   return (
     <div style={{ display: "flex", justifyContent: isOut ? "flex-end" : "flex-start", opacity, transform }}>
       <div
         style={{
           maxWidth: "78%",
-          padding: "10px 14px 8px",
-          borderRadius: 16,
+          padding: "14px 18px 12px",
+          borderRadius: 18,
           ...(isOut ? { borderTopRightRadius: 4 } : { borderTopLeftRadius: 4 }),
-          background: isOut ? "#005C4B" : "#1F2C34",
-          color: "#E9EDEF",
-          fontSize: 28,
+          background: isOut ? WA_OUT : WA_IN,
+          color: WA_INK,
+          fontSize: 30,
           lineHeight: 1.28,
           letterSpacing: -0.2,
           fontFamily: EMOJI_STACK,
           fontWeight: 400,
-          boxShadow: "0 1px 0 rgba(0,0,0,0.2)",
+          boxShadow: "0 1px 0 rgba(0,0,0,0.25)",
           position: "relative",
           display: "inline-flex",
           flexDirection: "column",
         }}
       >
-        <div style={{ paddingRight: isOut ? 96 : 70, paddingBottom: 4 }}>{msg.text}</div>
+        <div style={{ paddingRight: isOut ? 100 : 70, paddingBottom: 4 }}>{msg.text}</div>
         <div
           style={{
             position: "absolute",
-            right: 12,
-            bottom: 6,
+            right: 14,
+            bottom: 8,
             display: "flex",
             alignItems: "center",
             gap: 6,
-            color: "rgba(233,237,239,0.5)",
+            color: "rgba(233,237,239,0.55)",
             fontSize: 18,
             fontVariantNumeric: "tabular-nums",
           }}
         >
           <span>{msg.t ?? ""}</span>
-          {isOut && <Tick />}
+          {isOut && <WATick />}
         </div>
       </div>
     </div>
   );
 };
 
-const WATypingDots: React.FC = () => {
-  const frame = useCurrentFrame();
-  return (
-    <div style={{ display: "flex", justifyContent: "flex-start" }}>
-      <div
-        style={{
-          background: "#1F2C34",
-          borderRadius: 16,
-          borderTopLeftRadius: 4,
-          padding: "16px 22px",
-          display: "flex",
-          gap: 8,
-        }}
-      >
-        {[0, 1, 2].map((i) => {
-          const o = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(frame / 5 - i * 0.8));
-          return (
-            <span key={i} style={{ width: 12, height: 12, borderRadius: 999, background: "#8A9BA4", opacity: o }} />
-          );
-        })}
-      </div>
-    </div>
-  );
-};
-
-const WAComposerIdle: React.FC = () => (
+const IdleComposer: React.FC = () => (
   <div
     style={{
       display: "flex",
       alignItems: "center",
-      gap: 12,
-      padding: "12px 14px 18px",
-      background: "#0B141A",
+      gap: 14,
+      padding: "14px 18px 18px",
+      background: WA_BG,
     }}
   >
     <div
       style={{
         flex: 1,
-        minHeight: 56,
+        minHeight: 64,
         background: "#2A3942",
-        borderRadius: 28,
+        borderRadius: 32,
         display: "flex",
         alignItems: "center",
-        padding: "0 18px",
-        color: "#8A9BA4",
-        fontSize: 24,
-        gap: 14,
+        padding: "0 22px",
+        color: WA_INK_DIM,
+        fontSize: 26,
+        gap: 16,
       }}
     >
       <span style={{ fontFamily: EMOJI_STACK }}>😊</span>
       <span style={{ flex: 1 }}>Message</span>
+      <span style={{ fontFamily: EMOJI_STACK }}>📎</span>
     </div>
     <div
       style={{
-        width: 60, height: 60, borderRadius: 999,
+        width: 68, height: 68, borderRadius: 999,
         background: "#00A884",
         display: "flex", alignItems: "center", justifyContent: "center",
       }}
     >
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff">
         <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3z" />
         <path d="M19 11a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11z" />
       </svg>
@@ -583,7 +541,7 @@ const WAComposerIdle: React.FC = () => (
   </div>
 );
 
-const WAComposerTyping: React.FC<{ text: string; sent: boolean }> = ({ text, sent }) => {
+const TypingComposer: React.FC<{ text: string; sent: boolean }> = ({ text, sent }) => {
   const frame = useCurrentFrame();
   const blink = Math.floor(frame / 12) % 2 === 0;
   const hasText = text.length > 0 && !sent;
@@ -592,31 +550,31 @@ const WAComposerTyping: React.FC<{ text: string; sent: boolean }> = ({ text, sen
       style={{
         display: "flex",
         alignItems: "flex-end",
-        gap: 12,
-        padding: "12px 14px 18px",
-        background: "#0B141A",
+        gap: 14,
+        padding: "14px 18px 18px",
+        background: WA_BG,
       }}
     >
       <div
         style={{
           flex: 1,
-          minHeight: 56,
+          minHeight: 64,
           background: "#2A3942",
-          borderRadius: 28,
+          borderRadius: 32,
           display: "flex",
           alignItems: "center",
-          padding: "14px 18px",
-          color: "#E9EDEF",
-          fontSize: 26,
+          padding: "16px 22px",
+          color: WA_INK,
+          fontSize: 28,
           lineHeight: 1.25,
-          gap: 14,
+          gap: 16,
           fontFamily: EMOJI_STACK,
         }}
       >
-        <span style={{ opacity: 0.8 }}>😊</span>
+        <span style={{ opacity: 0.85 }}>😊</span>
         <div style={{ flex: 1, wordBreak: "break-word" }}>
           {sent || text.length === 0 ? (
-            <span style={{ color: "#8A9BA4" }}>Message</span>
+            <span style={{ color: WA_INK_DIM }}>Message</span>
           ) : (
             <>
               {text}
@@ -627,17 +585,17 @@ const WAComposerTyping: React.FC<{ text: string; sent: boolean }> = ({ text, sen
       </div>
       <div
         style={{
-          width: 60, height: 60, borderRadius: 999,
+          width: 68, height: 68, borderRadius: 999,
           background: "#00A884",
           display: "flex", alignItems: "center", justifyContent: "center",
         }}
       >
         {hasText ? (
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="#fff">
             <path d="M2 21l21-9L2 3v7l15 2-15 2z" />
           </svg>
         ) : (
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff">
             <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3z" />
             <path d="M19 11a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11z" />
           </svg>
@@ -647,242 +605,346 @@ const WAComposerTyping: React.FC<{ text: string; sent: boolean }> = ({ text, sen
   );
 };
 
-// Floating overlay above the centered phone — single keyword in lime, asymmetric
-const ChatOverlay: React.FC<{ tag: string; title: string; accentWord: string; sub: string }> =
-  ({ tag, title, accentWord, sub }) => (
-  <>
-    <div style={{ position: "absolute", top: 70, left: 80, right: 80, display: "flex", justifyContent: "space-between", zIndex: 5 }}>
-      <MicroLabel color={LIME}>{tag}</MicroLabel>
-    </div>
-    <div style={{ position: "absolute", bottom: 80, left: 80, right: 80, zIndex: 5, display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 40 }}>
-      <div style={{ fontFamily: sans, fontWeight: 700, fontSize: 78, color: INK, lineHeight: 0.95, letterSpacing: -2.5, maxWidth: 600 }}>
-        {title} <span style={{ color: LIME }}>{accentWord}</span>
-      </div>
-      <div style={{ fontSize: 22, color: INK_DIM, maxWidth: 360, textAlign: "right", lineHeight: 1.4, letterSpacing: -0.2 }}>{sub}</div>
-    </div>
-  </>
-);
-
-const SceneWhatsAppThread: React.FC<{
-  contactName: string; time: string; history: Msg[]; today: Msg[]; reply: string; replyTime: string;
-}> = ({ contactName, time, history, today, reply, replyTime }) => {
+const TypingDots: React.FC = () => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const enter = spring({ frame, fps, config: { damping: 22, stiffness: 130 } });
-  const phoneOp = interpolate(enter, [0, 1], [0, 1]);
-  const phoneY = interpolate(enter, [0, 1], [40, 0]);
-
   return (
-    <AbsoluteFill>
-      <ChatOverlay tag="01 · whatsapp" title="the" accentWord="ask" sub="text asmi like a friend. it picks up the thread." />
-      <AbsoluteFill style={{ opacity: phoneOp, transform: `translateY(${phoneY}px)` }}>
-        <PhoneFrame>
-          <StatusBar time={time} />
-          <WAHeader name={contactName} />
-          <ChatBackground>
-            <DayDivider label="Yesterday" opacity={0.55} />
-            {history.map((m, i) => <WABubble key={i} msg={m} opacity={0.5} />)}
-            <DayDivider label="Today" />
-            {today.map((m, i) => {
-              const e = spring({ frame: frame - 10 - i * 6, fps, config: { damping: 18, stiffness: 220 } });
-              const op = interpolate(e, [0, 1], [0, 1]);
-              const y = interpolate(e, [0, 1], [16, 0]);
-              const sc = interpolate(e, [0, 1], [0.95, 1]);
-              return <WABubble key={i} msg={m} opacity={op} transform={`translateY(${y}px) scale(${sc})`} />;
-            })}
-
-            {frame > 32 && frame < THREAD_REPLY_DELAY && <WATypingDots />}
-
-            {frame >= THREAD_REPLY_DELAY && (() => {
-              const e = spring({ frame: frame - THREAD_REPLY_DELAY, fps, config: { damping: 18, stiffness: 220 } });
-              const op = interpolate(e, [0, 1], [0, 1]);
-              const y = interpolate(e, [0, 1], [10, 0]);
-              const sc = interpolate(e, [0, 1], [0.95, 1]);
-              return (
-                <WABubble
-                  msg={{ from: "in", text: reply, t: replyTime }}
-                  opacity={op}
-                  transform={`translateY(${y}px) scale(${sc})`}
-                />
-              );
-            })()}
-            <div style={{ flex: 1 }} />
-          </ChatBackground>
-          <WAComposerIdle />
-        </PhoneFrame>
-      </AbsoluteFill>
-    </AbsoluteFill>
+    <div style={{ display: "flex", justifyContent: "flex-start" }}>
+      <div
+        style={{
+          background: WA_IN,
+          borderRadius: 18,
+          borderTopLeftRadius: 4,
+          padding: "18px 24px",
+          display: "flex",
+          gap: 10,
+        }}
+      >
+        {[0, 1, 2].map((i) => {
+          const o = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(frame / 5 - i * 0.8));
+          return (
+            <span key={i} style={{ width: 14, height: 14, borderRadius: 999, background: WA_INK_DIM, opacity: o }} />
+          );
+        })}
+      </div>
+    </div>
   );
 };
 
-const SceneWhatsAppTyping: React.FC<{
-  contactName: string; time: string; history: Msg[]; typedMessage: string; reply: string; replyTime: string;
-}> = ({ contactName, time, history, typedMessage, reply, replyTime }) => {
+// Variant 1: pre-existing thread with multiple messages, latest inbound sets up the ask.
+const SceneIMessageThread: React.FC<{
+  contactName: string;
+  time: string;
+  history: Msg[];
+  reply: string;
+}> = ({ contactName, time, history, reply }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const enter = spring({ frame, fps, config: { damping: 22, stiffness: 130 } });
-  const phoneOp = interpolate(enter, [0, 1], [0, 1]);
-  const phoneY = interpolate(enter, [0, 1], [40, 0]);
+  const replyDelay = 55;
+
+  return (
+    <WhatsAppShell
+      contactName={contactName}
+      time={time}
+      composer={<IdleComposer />}
+      messages={
+        <>
+          {history.map((m, i) => {
+            const e = spring({ frame: frame - i * 4, fps, config: { damping: 18, stiffness: 220 } });
+            const op = interpolate(e, [0, 1], [0, 1]);
+            const y = interpolate(e, [0, 1], [16, 0]);
+            const sc = interpolate(e, [0, 1], [0.95, 1]);
+            return <Bubble key={i} msg={{ ...m, t: time }} opacity={op} transform={`translateY(${y}px) scale(${sc})`} />;
+          })}
+
+          {frame > 28 && frame < replyDelay && <TypingDots />}
+
+          {frame >= replyDelay && (() => {
+            const e = spring({ frame: frame - replyDelay, fps, config: { damping: 18, stiffness: 220 } });
+            const op = interpolate(e, [0, 1], [0, 1]);
+            const y = interpolate(e, [0, 1], [16, 0]);
+            const sc = interpolate(e, [0, 1], [0.95, 1]);
+            return (
+              <Bubble msg={{ from: "in", text: reply, t: time }} opacity={op} transform={`translateY(${y}px) scale(${sc})`} />
+            );
+          })()}
+        </>
+      }
+    />
+  );
+};
+
+// Variants 2 & 3: user is actively typing a new request into the composer, then sends.
+const SceneIMessageTyping: React.FC<{
+  contactName: string;
+  time: string;
+  typedMessage: string;
+  reply: string;
+}> = ({ contactName, time, typedMessage, reply }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
 
   const typeStart = 8;
   const typeSpeed = 1.6;
   const typeChars = Math.max(0, Math.min(typedMessage.length, Math.floor((frame - typeStart) / typeSpeed)));
   const sentFrame = typeStart + Math.ceil(typedMessage.length * typeSpeed) + 6;
   const isSent = frame >= sentFrame;
-  const replyDelay = sentFrame + 32;
+  const replyDelay = sentFrame + 28;
 
   return (
-    <AbsoluteFill>
-      <ChatOverlay tag="02 · whatsapp" title="just" accentWord="text it." sub="no app. no menus. like texting a friend." />
-      <AbsoluteFill style={{ opacity: phoneOp, transform: `translateY(${phoneY}px)` }}>
-        <PhoneFrame>
-          <StatusBar time={time} />
-          <WAHeader name={contactName} />
-          <ChatBackground>
-            <DayDivider label="Today" opacity={0.7} />
-            {history.map((m, i) => <WABubble key={i} msg={m} opacity={0.55} />)}
+    <WhatsAppShell
+      contactName={contactName}
+      time={time}
+      composer={<TypingComposer text={typedMessage.slice(0, typeChars)} sent={isSent} />}
+      messages={
+        <>
+          <Bubble msg={{ from: "out", text: "hey asmi", t: time }} opacity={0.5} />
+          <Bubble msg={{ from: "in",  text: "here — what do you need?", t: time }} opacity={0.5} />
 
-            {isSent && (() => {
-              const e = spring({ frame: frame - sentFrame, fps, config: { damping: 18, stiffness: 220 } });
-              const op = interpolate(e, [0, 1], [0, 1]);
-              const y = interpolate(e, [0, 1], [18, 0]);
-              const sc = interpolate(e, [0, 1], [0.95, 1]);
-              return (
-                <WABubble
-                  msg={{ from: "out", text: typedMessage, t: time }}
-                  opacity={op}
-                  transform={`translateY(${y}px) scale(${sc})`}
-                />
-              );
-            })()}
+          {isSent && (() => {
+            const e = spring({ frame: frame - sentFrame, fps, config: { damping: 18, stiffness: 220 } });
+            const op = interpolate(e, [0, 1], [0, 1]);
+            const y = interpolate(e, [0, 1], [18, 0]);
+            const sc = interpolate(e, [0, 1], [0.95, 1]);
+            return <Bubble msg={{ from: "out", text: typedMessage, t: time }} opacity={op} transform={`translateY(${y}px) scale(${sc})`} />;
+          })()}
 
-            {frame > sentFrame + 10 && frame < replyDelay && <WATypingDots />}
+          {frame > sentFrame + 8 && frame < replyDelay && <TypingDots />}
 
-            {frame >= replyDelay && (() => {
-              const e = spring({ frame: frame - replyDelay, fps, config: { damping: 18, stiffness: 220 } });
-              const op = interpolate(e, [0, 1], [0, 1]);
-              const y = interpolate(e, [0, 1], [10, 0]);
-              const sc = interpolate(e, [0, 1], [0.95, 1]);
-              return (
-                <WABubble
-                  msg={{ from: "in", text: reply, t: replyTime }}
-                  opacity={op}
-                  transform={`translateY(${y}px) scale(${sc})`}
-                />
-              );
-            })()}
-
-            <div style={{ flex: 1 }} />
-          </ChatBackground>
-          <WAComposerTyping text={typedMessage.slice(0, typeChars)} sent={isSent} />
-        </PhoneFrame>
-      </AbsoluteFill>
-    </AbsoluteFill>
+          {frame >= replyDelay && (() => {
+            const e = spring({ frame: frame - replyDelay, fps, config: { damping: 18, stiffness: 220 } });
+            const op = interpolate(e, [0, 1], [0, 1]);
+            const y = interpolate(e, [0, 1], [16, 0]);
+            const sc = interpolate(e, [0, 1], [0.95, 1]);
+            return <Bubble msg={{ from: "in", text: reply, t: time }} opacity={op} transform={`translateY(${y}px) scale(${sc})`} />;
+          })()}
+        </>
+      }
+    />
   );
 };
 
-// ============= Call scene — CallKit-style =============
+// ============= Call scene =============
 
 type Caption = { at: number; text: string };
 
 const SceneCall: React.FC<{
-  tag: string; name: string; subtitle: string; captions: Caption[];
-}> = ({ tag, name, subtitle, captions }) => {
+  label: string;
+  name: string;
+  accent: string;
+  captions: Caption[];
+}> = ({ label, name, accent, captions }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const intro = spring({ frame, fps, config: { damping: 20, stiffness: 130 } });
+  const { fps, durationInFrames } = useVideoConfig();
+  const intro = spring({ frame, fps, config: { damping: 18, stiffness: 140 } });
   const opacity = interpolate(intro, [0, 1], [0, 1]);
-  const y = interpolate(intro, [0, 1], [30, 0]);
+  const scale = interpolate(intro, [0, 1], [0.94, 1]);
 
+  // pick current caption (whichever has the latest `at` <= frame)
   const active = captions.reduce<Caption | null>(
-    (acc, c) => (frame >= c.at ? c : acc), null,
+    (acc, c) => (frame >= c.at ? c : acc),
+    null,
   );
   const captionEnter = active
-    ? spring({ frame: frame - active.at, fps, config: { damping: 20, stiffness: 220 } })
+    ? spring({ frame: frame - active.at, fps, config: { damping: 16, stiffness: 180 } })
     : 0;
 
+  // call timer
   const sec = Math.floor(frame / fps);
-  const mm = Math.floor(sec / 60).toString();
+  const mm = Math.floor(sec / 60).toString().padStart(1, "0");
   const ss = (sec % 60).toString().padStart(2, "0");
 
   return (
-    <AbsoluteFill style={{ padding: "110px 90px 110px", opacity, transform: `translateY(${y}px)` }}>
-      {/* Top: tag */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <MicroLabel color={LIME}>· {tag}</MicroLabel>
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: 60 }}>
+      <div
+        style={{
+          opacity,
+          transform: `scale(${scale})`,
+          width: "100%",
+          maxWidth: 940,
+          background: "rgba(255,255,255,0.78)",
+          borderRadius: 56,
+          padding: "60px 56px",
+          border: "1px solid rgba(44,37,32,0.06)",
+          boxShadow: "0 30px 80px -30px rgba(44,37,32,0.28)",
+        }}
+      >
         <div
           style={{
-            display: "flex", alignItems: "center", gap: 10,
-            fontFamily: sans, fontWeight: 500, fontSize: 22, color: INK_DIM,
-            letterSpacing: 2, textTransform: "uppercase",
-            fontVariantNumeric: "tabular-nums",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: 24,
           }}
         >
-          <span style={{ width: 10, height: 10, borderRadius: 999, background: LIME, opacity: 0.5 + 0.5 * Math.sin(frame / 6) }} />
-          live · {mm}:{ss}
-        </div>
-      </div>
-
-      {/* CallKit card */}
-      <div style={{ marginTop: 80, display: "flex", flexDirection: "column", alignItems: "center", gap: 36 }}>
-        <Avatar size={260} />
-        <div style={{ textAlign: "center" }}>
-          <div style={{ fontFamily: sans, fontWeight: 600, fontSize: 84, color: INK, letterSpacing: -2, lineHeight: 1 }}>
-            {name}
+          <div
+            style={{
+              fontSize: 24,
+              letterSpacing: 4,
+              textTransform: "uppercase",
+              color: accent,
+              fontWeight: 600,
+            }}
+          >
+            {label}
           </div>
-          <div style={{ marginTop: 16, fontSize: 30, color: INK_DIM, fontWeight: 400, letterSpacing: -0.3 }}>
-            {subtitle}
+          <div
+            style={{
+              fontSize: 24,
+              color: STONE,
+              fontVariantNumeric: "tabular-nums",
+            }}
+          >
+            ● {mm}:{ss}
           </div>
         </div>
 
-        {/* Waveform */}
-        <div style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 5, height: 120 }}>
-          {Array.from({ length: 52 }).map((_, i) => {
-            const h = 10 + Math.abs(Math.sin(frame / 6 + i * 0.55)) * 80 + Math.abs(Math.sin(frame / 10 + i * 0.3)) * 24;
-            const mid = Math.abs(i - 26) < 4;
-            return (
-              <div
-                key={i}
-                style={{
-                  width: 6,
-                  height: h,
-                  background: mid ? LIME : INK,
-                  borderRadius: 6,
-                  opacity: mid ? 0.9 : 0.35 + 0.25 * Math.abs(Math.sin(frame / 12 + i * 0.2)),
-                }}
-              />
-            );
-          })}
+        <div style={{ display: "flex", justifyContent: "center", margin: "20px 0 30px", position: "relative", height: 260 }}>
+          <Rings accent={accent} />
+          <div
+            style={{
+              width: 200,
+              height: 200,
+              borderRadius: 999,
+              background: `linear-gradient(135deg, ${accent}, ${CLAY})`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: CREAM,
+              fontFamily: serif,
+              fontStyle: "italic",
+              fontSize: 100,
+              zIndex: 2,
+              boxShadow: `0 20px 60px -20px ${accent}aa`,
+            }}
+          >
+            {name[0].toLowerCase()}
+          </div>
         </div>
-      </div>
 
-      {/* Live caption */}
-      <div style={{ flex: 1, display: "flex", alignItems: "flex-end" }}>
-        <div style={{ width: "100%", minHeight: 240 }}>
+        <div
+          style={{
+            fontFamily: serif,
+            fontStyle: "italic",
+            fontSize: 52,
+            color: ESPRESSO,
+            textAlign: "center",
+            marginBottom: 24,
+          }}
+        >
+          {name}
+        </div>
+
+        <Waveform accent={accent} />
+
+        {/* live caption */}
+        <div
+          style={{
+            marginTop: 36,
+            minHeight: 160,
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "center",
+          }}
+        >
           {active && (
             <div
               style={{
                 opacity: captionEnter,
                 transform: `translateY(${(1 - captionEnter) * 12}px)`,
-                background: SURFACE,
-                border: `1px solid ${INK_FAINT}`,
-                borderLeft: `3px solid ${LIME}`,
-                borderRadius: 20,
-                padding: "32px 38px",
-                fontSize: 40,
-                color: INK,
-                fontFamily: sans,
-                fontWeight: 500,
-                lineHeight: 1.3,
-                letterSpacing: -0.5,
+                background: `${accent}14`,
+                border: `1px solid ${accent}33`,
+                borderRadius: 28,
+                padding: "22px 30px",
+                fontSize: 32,
+                color: ESPRESSO,
+                fontFamily: serif,
+                fontStyle: "italic",
+                textAlign: "center",
+                lineHeight: 1.4,
+                maxWidth: "92%",
               }}
             >
-              {active.text}
+              "{active.text}"
             </div>
           )}
         </div>
       </div>
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: 90,
+          left: "10%",
+          right: "10%",
+          height: 6,
+          borderRadius: 6,
+          background: "rgba(44,37,32,0.08)",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            height: "100%",
+            width: `${(frame / durationInFrames) * 100}%`,
+            background: accent,
+          }}
+        />
+      </div>
     </AbsoluteFill>
+  );
+};
+
+const Rings: React.FC<{ accent: string }> = ({ accent }) => {
+  const frame = useCurrentFrame();
+  return (
+    <>
+      {[0, 1, 2].map((i) => {
+        const t = ((frame + i * 25) % 75) / 75;
+        const size = 220 + t * 240;
+        const opacity = (1 - t) * 0.4;
+        return (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              width: size,
+              height: size,
+              marginLeft: -size / 2,
+              marginTop: -size / 2,
+              borderRadius: 999,
+              border: `2px solid ${accent}`,
+              opacity,
+            }}
+          />
+        );
+      })}
+    </>
+  );
+};
+
+const Waveform: React.FC<{ accent: string }> = ({ accent }) => {
+  const frame = useCurrentFrame();
+  const bars = 56;
+  return (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 5, height: 80 }}>
+      {Array.from({ length: bars }).map((_, i) => {
+        const h = 10 + Math.abs(Math.sin(frame / 5 + i * 0.55)) * 56 + Math.abs(Math.sin(frame / 9 + i * 0.3)) * 14;
+        return (
+          <div
+            key={i}
+            style={{
+              width: 6,
+              height: h,
+              background: accent,
+              borderRadius: 6,
+              opacity: 0.78,
+            }}
+          />
+        );
+      })}
+    </div>
   );
 };
 
@@ -891,72 +953,65 @@ const SceneCall: React.FC<{
 const SceneDone: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const intro = spring({ frame, fps, config: { damping: 20, stiffness: 140 } });
+  const intro = spring({ frame, fps, config: { damping: 16, stiffness: 160 } });
   const opacity = interpolate(intro, [0, 1], [0, 1]);
-  const y = interpolate(intro, [0, 1], [24, 0]);
+  const y = interpolate(intro, [0, 1], [20, 0]);
 
-  const row = (i: number, label: string, sub: string, delay: number) => {
-    const s = spring({ frame: frame - delay, fps, config: { damping: 18, stiffness: 180 } });
-    const op = interpolate(s, [0, 1], [0, 1]);
-    const dy = interpolate(s, [0, 1], [22, 0]);
+  const chip = (label: string, sub: string, color: string, delay: number) => {
+    const s = spring({ frame: frame - delay, fps, config: { damping: 14, stiffness: 180 } });
     return (
       <div
-        key={i}
+        key={label}
         style={{
-          opacity: op,
-          transform: `translateY(${dy}px)`,
+          opacity: s,
+          transform: `translateY(${(1 - s) * 24}px)`,
+          background: "rgba(255,255,255,0.9)",
+          border: `1px solid ${color}55`,
+          borderRadius: 36,
+          padding: "30px 38px",
           display: "flex",
           alignItems: "center",
-          gap: 28,
-          padding: "30px 36px",
-          background: SURFACE,
-          border: `1px solid ${INK_FAINT}`,
-          borderRadius: 20,
+          gap: 24,
+          boxShadow: `0 18px 50px -22px ${color}99`,
+          width: "82%",
+          maxWidth: 760,
         }}
       >
         <div
           style={{
-            width: 64, height: 64, borderRadius: 999,
-            background: LIME, color: BG,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 32, fontWeight: 700, flexShrink: 0,
+            width: 64,
+            height: 64,
+            borderRadius: 999,
+            background: SAGE,
+            color: CREAM,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 36,
+            fontWeight: 600,
+            flexShrink: 0,
           }}
         >
           ✓
         </div>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 34, color: INK, fontWeight: 500, letterSpacing: -0.4 }}>{label}</div>
-          <div style={{ fontSize: 24, color: INK_DIM, marginTop: 6, letterSpacing: -0.2 }}>{sub}</div>
+        <div>
+          <div style={{ fontSize: 34, color: ESPRESSO, fontWeight: 500 }}>{label}</div>
+          <div style={{ fontSize: 26, color: STONE, marginTop: 6 }}>{sub}</div>
         </div>
-        <div style={{ fontSize: 20, color: INK_DIM, letterSpacing: 3, textTransform: "uppercase", fontWeight: 500 }}>done</div>
       </div>
     );
   };
 
   return (
-    <AbsoluteFill style={{ padding: "110px 90px", opacity, transform: `translateY(${y}px)` }}>
-      <MicroLabel color={LIME}>· wrapped</MicroLabel>
-      <div
-        style={{
-          fontFamily: sans,
-          fontWeight: 700,
-          fontSize: 190,
-          color: INK,
-          lineHeight: 0.92,
-          letterSpacing: -6,
-          marginTop: 22,
-          marginBottom: 70,
-        }}
-      >
-        three calls.
-        <br />
-        <span style={{ color: LIME }}>zero minutes.</span>
+    <AbsoluteFill
+      style={{ justifyContent: "center", alignItems: "center", gap: 28, opacity, transform: `translateY(${y}px)`, padding: 60 }}
+    >
+      <div style={{ fontFamily: serif, fontStyle: "italic", fontSize: 110, color: ESPRESSO, marginBottom: 40 }}>
+        done.
       </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-        {row(0, "Dr. Weng · Jonathan", "Tuesday · 10:00 AM", 8)}
-        {row(1, "Pacific HVAC · Marco", "Saturday · 9:00 AM · $150", 34)}
-        {row(2, "Abuelo · Sevilla", "took medicine · feeling OK", 60)}
-      </div>
+      {chip("Dr. Weng · Jonathan", "Tuesday · 10:00 AM", TERRACOTTA, 6)}
+      {chip("Pacific HVAC · Marco", "Saturday · 9:00 AM · $150", SAGE, 30)}
+      {chip("Abuelo · Sevilla", "took medicine · feeling OK", CLAY, 54)}
     </AbsoluteFill>
   );
 };
@@ -968,32 +1023,47 @@ const Outro: React.FC = () => {
   const { fps } = useVideoConfig();
   const opacity = interpolate(frame, [0, 14, 80, 90], [0, 1, 1, 0]);
 
+  // Three lines reveal sequentially with springs
   const lines = [
-    { text: "you text.",   delay: 0,  accent: false },
-    { text: "asmi calls.", delay: 14, accent: false },
-    { text: "it's done.",  delay: 28, accent: true },
+    { text: "AI That Handles",       delay: 0  },
+    { text: "Your Personal Chores",  delay: 14 },
+    { text: "In The Physical World", delay: 28, accent: true },
   ];
 
   return (
-    <AbsoluteFill style={{ justifyContent: "center", alignItems: "flex-start", opacity, padding: "0 90px" }}>
-      <MicroLabel color={LIME}>asmi · 2026</MicroLabel>
-      <div style={{ display: "flex", flexDirection: "column", marginTop: 30 }}>
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", opacity, padding: 80 }}>
+      {/* tiny wordmark */}
+      <div
+        style={{
+          fontFamily: serif,
+          fontStyle: "italic",
+          fontSize: 56,
+          color: STONE,
+          marginBottom: 36,
+          letterSpacing: -1,
+        }}
+      >
+        asmi
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
         {lines.map((l, i) => {
-          const s = spring({ frame: frame - l.delay, fps, config: { damping: 22, stiffness: 140 } });
+          const s = spring({ frame: frame - l.delay, fps, config: { damping: 18, stiffness: 140 } });
           const op = interpolate(s, [0, 1], [0, 1]);
           const y = interpolate(s, [0, 1], [30, 0]);
           return (
             <div
               key={i}
               style={{
-                fontFamily: sans,
-                fontWeight: 700,
-                fontSize: 210,
-                lineHeight: 1.0,
-                color: l.accent ? LIME : INK,
+                fontFamily: serif,
+                fontStyle: "italic",
+                fontSize: 112,
+                lineHeight: 1.05,
+                color: l.accent ? TERRACOTTA : ESPRESSO,
+                textAlign: "center",
                 opacity: op,
                 transform: `translateY(${y}px)`,
-                letterSpacing: -6,
+                letterSpacing: -2,
               }}
             >
               {l.text}
@@ -1001,19 +1071,20 @@ const Outro: React.FC = () => {
           );
         })}
       </div>
+
       <div
         style={{
-          marginTop: 60,
-          fontSize: 24,
-          letterSpacing: 6,
+          marginTop: 50,
+          fontSize: 26,
+          letterSpacing: 8,
           textTransform: "uppercase",
-          color: INK_DIM,
-          fontFamily: sans,
+          color: STONE,
           fontWeight: 500,
         }}
       >
-        a personal AI for the real world
+        you text · asmi calls · it's done
       </div>
     </AbsoluteFill>
   );
 };
+
