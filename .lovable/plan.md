@@ -1,36 +1,61 @@
-# Asmi Demo v10 — v7 base + v9 WhatsApp zoom
+# Asmi Demo v12 — Launch-video polish
 
-## Decision
-v7 is the source of truth for everything — script, scene order, timings, transitions, typography, colors, atmosphere, call card, end card. The only thing pulled from v9 is the **zoomed-in WhatsApp phone rendering** used during chat scenes.
+## Goals
+1. Brand typography on bookend screens (intro + outro) matches the uploaded reference: serif wordmark "asmi" + italic serif tagline.
+2. Replace WhatsApp shell entirely with a single floating green chat bubble per beat — cinematic, dynamic, on-brand.
+3. Tighten the whole video — quicker, smoother transitions, launch-trailer pacing.
+4. BGM ends gracefully: audible through the final beat, then a smooth musical fade to silence (no abrupt drop, no cut-off swell).
 
-## Steps
+## 1. Bookend typography (intro + outro)
+Match reference exactly:
+- Wordmark: `Instrument Serif` (already loaded), regular, ~360px, near-black `#1A1714`, tight tracking, optical centering.
+- Tagline: `Instrument Serif` italic, ~64px, warm stone `#6B6259`, generous letter spacing, sits ~40px under wordmark.
+- Cream background `#F2EDE3` (slightly warmer than current), subtle vignette only — no decorative blobs on these two scenes.
+- Intro: wordmark fades + rises (spring 220/22, 18 frames), tagline reveals via mask wipe left→right (24 frames, 8-frame delay).
+- Outro: same composition, holds 60 frames, then gentle 18-frame fade.
 
-1. **Restore v7 `MainVideo.tsx`** — locate the commit that produced `/mnt/documents/asmi-demo-v7.mp4` (walk back through `git log` for `remotion/src/MainVideo.tsx`, render quick stills, compare to v7) and restore that file verbatim. Everything outside the WhatsApp scenes stays exactly as v7.
+## 2. Chat beats — single floating bubble (3 scenes)
+Kill the WhatsAppShell entirely. Each chat beat = one hero bubble on the cream backdrop, treated like a product shot.
 
-2. **Port the v9 WhatsApp shell into v7** — keep the v9 phone rendering used during chat scenes:
-   - iPhone 15 frame, Dynamic Island, real iOS status bar
-   - WhatsApp dark theme header (`#1F2C34`), chat area (`#0B141A`), outgoing bubble (`#005C4B`), incoming (`#1F2C34`)
-   - 32px circular avatar, "Asmi" + "online", composer pill
-   - Zoomed framing so the phone fills the vertical frame the way v9 did
-   - Bubble arrivals: spring (220/18), 6px Y rise, 0.95→1 scale, with the same pop SFX v7 used
-   - Chat **content** = v7 lines verbatim. No "Yesterday" block, no extra ack pairs, no v9 content drift.
+Per beat:
+- Single outgoing bubble, WhatsApp green gradient `#00A884 → #008F72`, 48px radius, soft layered shadow (ambient + key), subtle inner highlight.
+- Message text: `Inter` 600, 84px, white, line-height 1.18, max-width 760px, 56px padding.
+- Tiny meta row inside bubble bottom-right: time `10:24` + double blue tick, 28px, 70% opacity.
+- Entry: bubble scales 0.88→1 with spring (200/20), rises 40px, soft blur 12→0 over 14 frames. Pop SFX (existing).
+- Hold ~60 frames at rest with micro-float (±3px sinusoidal).
+- Exit: scales 1→0.96, blurs 0→8, fades over 12 frames as next scene wipes in.
+- Background: cream + a single drifting soft green radial glow behind bubble (very low opacity) tying it to the brand color.
+- No avatar, no header, no composer, no phone frame.
 
-3. **Audio sanity check (calls + BGM)**
-   - Call `Audio volume`: 1.0 (never >1; >1 clips in WebAudio).
-   - BGM: base 0.55, duck to 0.06 under calls with 22-frame eased ramp, cap at 0.9.
-   - After render, run an ffmpeg loudness pass on `asmi-demo-v10.mp4`:
-     - peak ≤ -1 dBFS (no clipping)
-     - integrated voice loudness ≥ -16 LUFS during call scenes
-     - BGM ducks ≥ 18 dB under voice
-   - If any check fails, retune and re-render before delivery.
+3 beats use the 3 existing v7 lines verbatim (doc, hvac, gp) — content unchanged.
 
-4. **Render** → `/mnt/documents/asmi-demo-v10.mp4` (1080×1920, 30fps, h264 + aac, same duration as v7).
+## 3. Pacing — launch-trailer feel
+- Cut intro 90→60 frames.
+- Cut each "im*" interstitial 120→75 frames.
+- Keep call scenes at 240 (voice-driven, can't shorten).
+- Cut done 240→180, outro 90→75.
+- New total ≈ 1395 frames (46.5s). Update `durationInFrames` in `Root.tsx` and `TOTAL` in `MainVideo.tsx`.
+- All scene-to-scene transitions: 12-frame cross-dissolve + 24px parallax slide, eased `easeInOutCubic`. No hard cuts.
+- Bubble pop SFX volume +20%; whoosh SFX on every scene change at 0.35.
 
-5. **Frame QA** — stills at the start of each WhatsApp scene to confirm the zoomed phone matches v9 framing, plus one still per non-WA scene to confirm v7 look is intact.
+## 4. Audio — graceful ending
+Problem: current fade starts 105 frames before end with cubic ease — BGM ducks under the last call's voice ramp and never recovers, so the tail sounds dead.
+Fix:
+- Restore BGM to full base (0.42) for the last 60 frames of the `done` scene — no duck (no voice there).
+- Begin fade only at the start of `outro` (last 75 frames): equal-power fade `cos²` curve to 0 over the full outro length.
+- Cap voice-duck depth at 0.10 (not 0.018) so BGM stays present, just clearly behind voice.
+- Add a 6-frame silence buffer at the very end so the encoder doesn't clip the tail.
+- Final ffmpeg pass: `-af "loudnorm=I=-16:TP=-1.5:LRA=11"` for clean true-peak ≤ -1 dBTP.
 
-## Out of scope (locked, do not touch)
-Voice script, call audio content, scene order, scene durations, transitions, title cards, end card, color palette outside the WhatsApp shell, atmosphere layers, BGM track.
+## 5. Files
+- `remotion/src/MainVideo.tsx` — rewrite chat scene component (`HeroBubble` replaces `WhatsAppShell`), update bookend typography, retime `D`/`O`, rewrite `bgmVolume`.
+- `remotion/src/Root.tsx` — update `durationInFrames` to 1395.
+- Output: `/mnt/documents/asmi-demo-v12.mp4` (1080×1920, 30fps, h264+aac).
 
-## Files
-- `remotion/src/MainVideo.tsx` — restore v7, swap chat scene's phone rendering for the v9 WhatsApp shell.
-- Output: `/mnt/documents/asmi-demo-v10.mp4`.
+## 6. QA
+- Stills at: intro mid (frame 30), each bubble peak, outro mid — confirm typography + bubble composition.
+- ffprobe loudness pass: true peak ≤ -1 dBTP, integrated ≥ -16 LUFS.
+- Listen to final 4 seconds — BGM must decay smoothly to silence with no pop, no premature drop.
+
+## Out of scope
+Voice script, call audio content, scene order, color palette outside bubble + bookends.
