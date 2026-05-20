@@ -675,7 +675,7 @@ const SceneWhatsAppThread: React.FC<{
   return (
     <AbsoluteFill>
       <ChatOverlay tag="01 · whatsapp" title="the" accentWord="ask" sub="text asmi like a friend. it picks up the thread." />
-      <div style={{ opacity: phoneOp, transform: `translateY(${phoneY}px)` }}>
+      <AbsoluteFill style={{ opacity: phoneOp, transform: `translateY(${phoneY}px)` }}>
         <PhoneFrame>
           <StatusBar time={time} />
           <WAHeader name={contactName} />
@@ -734,7 +734,7 @@ const SceneWhatsAppTyping: React.FC<{
   return (
     <AbsoluteFill>
       <ChatOverlay tag="02 · whatsapp" title="just" accentWord="text it." sub="no app. no menus. like texting a friend." />
-      <div style={{ opacity: phoneOp, transform: `translateY(${phoneY}px)` }}>
+      <AbsoluteFill style={{ opacity: phoneOp, transform: `translateY(${phoneY}px)` }}>
         <PhoneFrame>
           <StatusBar time={time} />
           <WAHeader name={contactName} />
