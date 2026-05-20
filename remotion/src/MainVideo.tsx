@@ -15,7 +15,6 @@ import { loadFont } from "@remotion/fonts";
 const { fontFamily: serif } = loadSerif("normal", { weights: ["400"], subsets: ["latin"] });
 const { fontFamily: sans } = loadInter("normal", { weights: ["400", "500", "600"], subsets: ["latin"] });
 
-// Color emoji font so 🙏 🥵 etc render in the chat
 loadFont({
   family: "Noto Color Emoji",
   url: staticFile("fonts/NotoColorEmoji.ttf"),
@@ -24,27 +23,27 @@ loadFont({
 
 const EMOJI_STACK = `${sans}, "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", sans-serif`;
 
-
-const CREAM = "#F5EFE6";
-const ESPRESSO = "#2C2520";
+const CREAM = "#F2EDE3";
+const ESPRESSO = "#1A1714";
+const STONE_DARK = "#6B6259";
 const STONE = "#7A6F64";
 const TERRACOTTA = "#C25B3F";
 const CLAY = "#D4A574";
 const SAGE = "#5F8365";
-const IMSG_BLUE = "#1FA1FF";
-const IMSG_GRAY = "#E6E2DA";
+const WA_GREEN_HI = "#00A884";
+const WA_GREEN_LO = "#008F72";
 
-// Frames @ 30fps — sums to 1500 (50s)
+// Tightened, launch-trailer pacing @ 30fps
 const D = {
-  intro: 90,    // 3s
-  imDoc: 120,   // 4s
-  doc: 240,     // 8s
-  imHvac: 120,  // 4s
-  hvac: 240,    // 8s
-  imGp: 120,    // 4s
-  gp: 240,      // 8s
-  done: 240,    // 8s
-  outro: 90,    // 3s
+  intro: 60,    // 2.0s
+  imDoc: 75,    // 2.5s
+  doc: 240,     // 8.0s (voice-locked)
+  imHvac: 75,
+  hvac: 240,
+  imGp: 75,
+  gp: 240,
+  done: 180,    // 6.0s
+  outro: 75,    // 2.5s
 };
 
 const O = {
@@ -59,20 +58,23 @@ const O = {
   outro: D.intro + D.imDoc + D.doc + D.imHvac + D.hvac + D.imGp + D.gp + D.done,
 };
 
-const TOTAL = 1500;
-// Duck music during call scenes so voice is clear
+const TOTAL =
+  D.intro + D.imDoc + D.doc + D.imHvac + D.hvac + D.imGp + D.gp + D.done + D.outro; // 1260
+
+// Music: smooth equal-power fade only during the outro; gentle duck under voice.
 const callRanges: Array<[number, number]> = [
   [O.doc, O.doc + D.doc],
   [O.hvac, O.hvac + D.hvac],
   [O.gp, O.gp + D.gp],
 ];
 const bgmVolume = (f: number) => {
-  const fadeIn = Math.min(1, f / 45);
-  // Long, smooth tail — starts pulling down ~3.5s before end so it doesn't cut.
-  const FADE_OUT_FRAMES = 105;
-  const t = Math.max(0, Math.min(1, (TOTAL - f) / FADE_OUT_FRAMES));
-  // Ease-in-out cubic for a musical decay
-  const fadeOut = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const fadeIn = Math.min(1, f / 36);
+  // Fade only across the outro window; cosine for musical decay.
+  let fadeOut = 1;
+  if (f >= O.outro) {
+    const t = Math.min(1, (f - O.outro) / D.outro);
+    fadeOut = Math.cos((t * Math.PI) / 2); // 1 -> 0 smoothly
+  }
   const RAMP = 22;
   let duckAmt = 0;
   for (const [a, b] of callRanges) {
@@ -81,21 +83,17 @@ const bgmVolume = (f: number) => {
     duckAmt = Math.max(duckAmt, Math.min(into, outOf));
   }
   const eased = duckAmt * duckAmt * (3 - 2 * duckAmt);
-  const base = 0.42 * (1 - eased) + 0.018 * eased;
+  // Gentler duck — keep music present (0.10 floor instead of 0.018).
+  const base = 0.42 * (1 - eased) + 0.10 * eased;
   return Math.max(0, base * fadeIn * fadeOut);
 };
 
+const POP = "audio/sfx/imessage-receive.mp3";
 
-// iMessage receive "ting" — absolute frames computed below from scene offsets + reply delays
-const TING = "audio/sfx/imessage-receive.mp3";
-// Thread scene reply delay (must match SceneIMessageThread)
-const THREAD_REPLY_DELAY = 55;
-// Typing scenes: sentFrame = 8 + ceil(len * 1.6) + 6 ; replyDelay = sentFrame + 28
-const typingReplyFrame = (len: number) => 8 + Math.ceil(len * 1.6) + 6 + 28;
-const HVAC_TYPED = "AC is dead. Need a tech ASAP 🥵";
-const GP_TYPED = "Can you check on grandpa in Sevilla? In Spanish 🙏";
-
-
+// Chat lines per beat
+const LINE_DOC = "book Jonathan a checkup with Dr. Weng";
+const LINE_HVAC = "AC is dead. Need a tech ASAP 🥵";
+const LINE_GP = "check on grandpa in Sevilla — in Spanish 🙏";
 
 export const MainVideo: React.FC = () => {
   return (
@@ -106,19 +104,8 @@ export const MainVideo: React.FC = () => {
       <Sequence from={O.intro} durationInFrames={D.intro}><Intro /></Sequence>
 
       <Sequence from={O.imDoc} durationInFrames={D.imDoc}>
-        <SceneIMessageThread
-          contactName="Sarah"
-          time="9:03 AM"
-          history={[
-            { from: "out", text: "morning! quick favor 🙏" },
-            { from: "in",  text: "of course — what do you need?" },
-            { from: "out", text: "Hey, can you book Jonathan a checkup with Dr. Weng's office?" },
-          ]}
-          reply="On it — calling them now."
-
-        />
+        <HeroBubble text={LINE_DOC} time="9:03" />
       </Sequence>
-
       <Sequence from={O.doc} durationInFrames={D.doc}>
         <SceneCall
           label="Asmi → Dr. Weng's office"
@@ -134,14 +121,8 @@ export const MainVideo: React.FC = () => {
       </Sequence>
 
       <Sequence from={O.imHvac} durationInFrames={D.imHvac}>
-        <SceneIMessageTyping
-          contactName="Marco"
-          time="11:18 AM"
-          typedMessage="AC is dead. Need a tech ASAP 🥵"
-          reply="Getting quotes from 5 HVAC companies."
-        />
+        <HeroBubble text={LINE_HVAC} time="11:18" />
       </Sequence>
-
       <Sequence from={O.hvac} durationInFrames={D.hvac}>
         <SceneCall
           label="Asmi → Pacific HVAC"
@@ -157,14 +138,8 @@ export const MainVideo: React.FC = () => {
       </Sequence>
 
       <Sequence from={O.imGp} durationInFrames={D.imGp}>
-        <SceneIMessageTyping
-          contactName="Sarah"
-          time="6:42 PM"
-          typedMessage="Can you check on grandpa in Sevilla? In Spanish 🙏"
-          reply="Calling abuelo now."
-        />
+        <HeroBubble text={LINE_GP} time="6:42" />
       </Sequence>
-
       <Sequence from={O.gp} durationInFrames={D.gp}>
         <SceneCall
           label="Asmi → Abuelo · Sevilla"
@@ -180,11 +155,9 @@ export const MainVideo: React.FC = () => {
       </Sequence>
 
       <Sequence from={O.done} durationInFrames={D.done}><SceneDone /></Sequence>
-
       <Sequence from={O.outro} durationInFrames={D.outro}><Outro /></Sequence>
 
-
-      {/* Call voice tracks — boosted while on screen (sources already normalized to -14 LUFS) */}
+      {/* Call voice tracks */}
       <Sequence from={O.doc} durationInFrames={D.doc}>
         <Audio src={staticFile("audio/trimmed/doc.mp3")} volume={1.4} />
       </Sequence>
@@ -195,26 +168,23 @@ export const MainVideo: React.FC = () => {
         <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={1.4} />
       </Sequence>
 
-      {/* iMessage "ting" on each Asmi reply bubble */}
-      <Sequence from={O.imDoc + THREAD_REPLY_DELAY} durationInFrames={20}>
-        <Audio src={staticFile(TING)} volume={0.55} />
+      {/* Bubble pop on each chat beat — bubble enters at frame ~8 */}
+      <Sequence from={O.imDoc + 6} durationInFrames={20}>
+        <Audio src={staticFile(POP)} volume={0.7} />
       </Sequence>
-      <Sequence from={O.imHvac + typingReplyFrame(HVAC_TYPED.length)} durationInFrames={20}>
-        <Audio src={staticFile(TING)} volume={0.55} />
+      <Sequence from={O.imHvac + 6} durationInFrames={20}>
+        <Audio src={staticFile(POP)} volume={0.7} />
       </Sequence>
-      <Sequence from={O.imGp + typingReplyFrame(GP_TYPED.length)} durationInFrames={20}>
-        <Audio src={staticFile(TING)} volume={0.55} />
+      <Sequence from={O.imGp + 6} durationInFrames={20}>
+        <Audio src={staticFile(POP)} volume={0.7} />
       </Sequence>
 
-      {/* Background music — ducks hard under call scenes */}
       <Audio src={staticFile("audio/bgm.mp3")} volume={(f) => bgmVolume(f)} />
-
     </AbsoluteFill>
   );
 };
 
-
-// ============= Persistent =============
+// ============= Atmosphere =============
 
 const DriftingBloom: React.FC = () => {
   const frame = useCurrentFrame();
@@ -226,9 +196,9 @@ const DriftingBloom: React.FC = () => {
         style={{
           position: "absolute",
           inset: 0,
-          background: `radial-gradient(60% 40% at ${50 + x / 8}% ${30 + y / 8}%, rgba(194,91,63,0.16), transparent 70%),
-                       radial-gradient(55% 38% at ${30 + x / 6}% ${75 + y / 6}%, rgba(212,165,116,0.14), transparent 70%),
-                       radial-gradient(50% 35% at ${75 - x / 6}% ${60 - y / 6}%, rgba(95,131,101,0.10), transparent 70%)`,
+          background: `radial-gradient(60% 40% at ${50 + x / 8}% ${30 + y / 8}%, rgba(194,91,63,0.14), transparent 70%),
+                       radial-gradient(55% 38% at ${30 + x / 6}% ${75 + y / 6}%, rgba(212,165,116,0.12), transparent 70%),
+                       radial-gradient(50% 35% at ${75 - x / 6}% ${60 - y / 6}%, rgba(95,131,101,0.09), transparent 70%)`,
         }}
       />
     </AbsoluteFill>
@@ -247,404 +217,159 @@ const Grain: React.FC = () => (
   />
 );
 
-// ============= Intro =============
+// ============= Intro (brand bookend) =============
 
 const Intro: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const s = spring({ frame, fps, config: { damping: 16, stiffness: 120 } });
-  const opacity = interpolate(frame, [0, 15, 75, 90], [0, 1, 1, 0]);
+  const s = spring({ frame, fps, config: { damping: 22, stiffness: 220 } });
+  const tag = spring({ frame: frame - 10, fps, config: { damping: 26, stiffness: 180 } });
+  const opacity = interpolate(frame, [0, 10, D.intro - 14, D.intro], [0, 1, 1, 0]);
+  const y = interpolate(s, [0, 1], [28, 0]);
+  const tagY = interpolate(tag, [0, 1], [18, 0]);
+  const tagOp = interpolate(tag, [0, 1], [0, 1]);
   return (
     <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", opacity }}>
       <div
         style={{
           fontFamily: serif,
-          fontStyle: "italic",
-          fontSize: 220,
+          fontSize: 360,
           color: ESPRESSO,
-          transform: `scale(${0.94 + s * 0.06})`,
+          letterSpacing: -6,
+          lineHeight: 1,
+          transform: `translateY(${y}px)`,
         }}
       >
         asmi
       </div>
       <div
         style={{
-          marginTop: 30,
-          fontSize: 30,
-          letterSpacing: 8,
-          textTransform: "uppercase",
-          color: STONE,
-          fontWeight: 500,
+          marginTop: 36,
+          fontFamily: serif,
+          fontStyle: "italic",
+          fontSize: 64,
+          color: STONE_DARK,
+          letterSpacing: 0.5,
+          opacity: tagOp,
+          transform: `translateY(${tagY}px)`,
         }}
       >
-        handles the real world
+        building personal intelligence
       </div>
     </AbsoluteFill>
   );
 };
 
-// ============= WhatsApp scenes (zoomed phone) =============
-
-type Msg = { from: "in" | "out"; text: string; t?: string };
-
-const WA_BG = "#0B141A";
-const WA_HEADER = "#1F2C34";
-const WA_IN = "#1F2C34";
-const WA_OUT = "#005C4B";
-const WA_INK = "#E9EDEF";
-const WA_INK_DIM = "#8A9BA4";
-
-const WhatsAppShell: React.FC<{
-  contactName: string;
-  time: string;
-  messages: React.ReactNode;
-  composer?: React.ReactNode;
-}> = ({ contactName, time, messages }) => (
-  <AbsoluteFill
-    style={{
-      background:
-        "radial-gradient(120% 80% at 50% 30%, #11202A 0%, #0A1419 55%, #06090C 100%)",
-      fontFamily: EMOJI_STACK,
-    }}
-  >
-    {/* Minimal contact strip — keeps context without a phone frame */}
-    <div
-      style={{
-        position: "absolute",
-        top: 88,
-        left: 0,
-        right: 0,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 24,
-      }}
-    >
-      <div
-        style={{
-          width: 72,
-          height: 72,
-          borderRadius: 999,
-          background: "linear-gradient(140deg, #2DD4A8, #0E7C5C)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "#fff",
-          fontSize: 36,
-          fontWeight: 600,
-          letterSpacing: -1,
-          boxShadow: "inset 0 0 0 1.5px rgba(255,255,255,0.15)",
-        }}
-      >
-        {contactName[0]}
-      </div>
-      <div style={{ lineHeight: 1.1 }}>
-        <div style={{ color: "#fff", fontSize: 44, fontWeight: 600, letterSpacing: -0.5 }}>
-          {contactName}
-        </div>
-        <div style={{ color: WA_INK_DIM, fontSize: 26, marginTop: 6 }}>online · {time}</div>
-      </div>
-    </div>
-
-    {/* Zoomed bubbles — fill the canvas, no phone, no window chrome */}
-    <div
-      style={{
-        position: "absolute",
-        left: 70,
-        right: 70,
-        top: 220,
-        bottom: 120,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-end",
-        gap: 28,
-        overflow: "hidden",
-      }}
-    >
-      {messages}
-    </div>
-  </AbsoluteFill>
-);
+// ============= HeroBubble (single floating green bubble) =============
 
 const WATick: React.FC = () => (
-  <svg width="40" height="22" viewBox="0 0 22 14" fill="none">
-    <path d="M1 7 L5 11 L12 3" stroke="#53BDEB" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M8 7 L12 11 L19 3" stroke="#53BDEB" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  <svg width="44" height="22" viewBox="0 0 22 14" fill="none">
+    <path d="M1 7 L5 11 L12 3" stroke="#9FE3F5" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8 7 L12 11 L19 3" stroke="#9FE3F5" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
-const Bubble: React.FC<{ msg: Msg; opacity?: number; transform?: string; tail?: boolean }> = ({ msg, opacity = 1, transform = "none" }) => {
-  const isOut = msg.from === "out";
+const HeroBubble: React.FC<{ text: string; time: string }> = ({ text, time }) => {
+  const frame = useCurrentFrame();
+  const { fps, durationInFrames } = useVideoConfig();
+
+  // Enter
+  const enter = spring({ frame: frame - 6, fps, config: { damping: 20, stiffness: 200 } });
+  const enterY = interpolate(enter, [0, 1], [60, 0]);
+  const enterSc = interpolate(enter, [0, 1], [0.86, 1]);
+  const enterBlur = interpolate(enter, [0, 1], [14, 0], { extrapolateRight: "clamp" });
+
+  // Exit (last 12 frames)
+  const exitStart = durationInFrames - 12;
+  const exitT = Math.max(0, Math.min(1, (frame - exitStart) / 12));
+  const exitOp = 1 - exitT;
+  const exitSc = interpolate(exitT, [0, 1], [1, 0.96]);
+  const exitBlur = interpolate(exitT, [0, 1], [0, 8]);
+
+  // Micro float
+  const float = Math.sin(frame / 14) * 3;
+
+  const sc = enterSc * exitSc;
+  const blur = Math.max(enterBlur, exitBlur);
+  const opacity = Math.min(enter, exitOp);
+
   return (
-    <div style={{ display: "flex", justifyContent: isOut ? "flex-end" : "flex-start", opacity, transform }}>
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: 80 }}>
+      {/* Soft green glow tying bubble to brand color */}
       <div
         style={{
-          maxWidth: "86%",
-          padding: "28px 34px 24px",
-          borderRadius: 34,
-          ...(isOut ? { borderTopRightRadius: 8 } : { borderTopLeftRadius: 8 }),
-          background: isOut ? WA_OUT : WA_IN,
-          color: WA_INK,
-          fontSize: 56,
-          lineHeight: 1.24,
-          letterSpacing: -0.4,
-          fontFamily: EMOJI_STACK,
-          fontWeight: 400,
-          boxShadow: "0 18px 40px -18px rgba(0,0,0,0.55), 0 1px 0 rgba(0,0,0,0.25)",
+          position: "absolute",
+          width: 1200,
+          height: 1200,
+          borderRadius: 9999,
+          background: "radial-gradient(closest-side, rgba(0,168,132,0.22), rgba(0,168,132,0) 70%)",
+          filter: "blur(20px)",
+          opacity: enter * (1 - exitT * 0.6),
+          transform: `translateY(${float * 4}px)`,
+        }}
+      />
+
+      <div
+        style={{
           position: "relative",
-          display: "inline-flex",
-          flexDirection: "column",
+          maxWidth: 820,
+          padding: "64px 72px 56px",
+          borderRadius: 60,
+          borderBottomRightRadius: 14,
+          background: `linear-gradient(155deg, ${WA_GREEN_HI} 0%, ${WA_GREEN_LO} 100%)`,
+          boxShadow: [
+            "0 60px 140px -40px rgba(0,143,114,0.55)",
+            "0 30px 70px -30px rgba(0,0,0,0.35)",
+            "inset 0 1px 0 rgba(255,255,255,0.22)",
+            "inset 0 -1px 0 rgba(0,0,0,0.12)",
+          ].join(", "),
+          color: "#fff",
+          fontFamily: EMOJI_STACK,
+          fontWeight: 600,
+          fontSize: 84,
+          lineHeight: 1.18,
+          letterSpacing: -1,
+          opacity,
+          transform: `translateY(${enterY + float}px) scale(${sc})`,
+          filter: blur > 0.1 ? `blur(${blur}px)` : undefined,
         }}
       >
-        <div style={{ paddingRight: isOut ? 150 : 110, paddingBottom: 8 }}>{msg.text}</div>
+        {/* Inner highlight */}
         <div
           style={{
             position: "absolute",
-            right: 24,
-            bottom: 14,
+            inset: 0,
+            borderRadius: "inherit",
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 40%)",
+            pointerEvents: "none",
+          }}
+        />
+        <div style={{ paddingRight: 180, paddingBottom: 22 }}>{text}</div>
+        <div
+          style={{
+            position: "absolute",
+            right: 36,
+            bottom: 28,
             display: "flex",
             alignItems: "center",
-            gap: 8,
-            color: "rgba(233,237,239,0.6)",
-            fontSize: 26,
+            gap: 12,
+            color: "rgba(255,255,255,0.78)",
+            fontSize: 32,
+            fontWeight: 500,
             fontVariantNumeric: "tabular-nums",
+            letterSpacing: 0,
           }}
         >
-          <span>{msg.t ?? ""}</span>
-          {isOut && <WATick />}
+          <span>{time}</span>
+          <WATick />
         </div>
       </div>
-    </div>
+    </AbsoluteFill>
   );
 };
 
-const IdleComposer: React.FC = () => (
-  <div
-    style={{
-      display: "flex",
-      alignItems: "center",
-      gap: 14,
-      padding: "14px 18px 18px",
-      background: WA_BG,
-    }}
-  >
-    <div
-      style={{
-        flex: 1,
-        minHeight: 64,
-        background: "#2A3942",
-        borderRadius: 32,
-        display: "flex",
-        alignItems: "center",
-        padding: "0 22px",
-        color: WA_INK_DIM,
-        fontSize: 26,
-        gap: 16,
-      }}
-    >
-      <span style={{ fontFamily: EMOJI_STACK }}>😊</span>
-      <span style={{ flex: 1 }}>Message</span>
-      <span style={{ fontFamily: EMOJI_STACK }}>📎</span>
-    </div>
-    <div
-      style={{
-        width: 68, height: 68, borderRadius: 999,
-        background: "#00A884",
-        display: "flex", alignItems: "center", justifyContent: "center",
-      }}
-    >
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff">
-        <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3z" />
-        <path d="M19 11a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11z" />
-      </svg>
-    </div>
-  </div>
-);
-
-const TypingComposer: React.FC<{ text: string; sent: boolean }> = ({ text, sent }) => {
-  const frame = useCurrentFrame();
-  const blink = Math.floor(frame / 12) % 2 === 0;
-  const hasText = text.length > 0 && !sent;
-  return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "flex-end",
-        gap: 14,
-        padding: "14px 18px 18px",
-        background: WA_BG,
-      }}
-    >
-      <div
-        style={{
-          flex: 1,
-          minHeight: 64,
-          background: "#2A3942",
-          borderRadius: 32,
-          display: "flex",
-          alignItems: "center",
-          padding: "16px 22px",
-          color: WA_INK,
-          fontSize: 28,
-          lineHeight: 1.25,
-          gap: 16,
-          fontFamily: EMOJI_STACK,
-        }}
-      >
-        <span style={{ opacity: 0.85 }}>😊</span>
-        <div style={{ flex: 1, wordBreak: "break-word" }}>
-          {sent || text.length === 0 ? (
-            <span style={{ color: WA_INK_DIM }}>Message</span>
-          ) : (
-            <>
-              {text}
-              <span style={{ opacity: blink ? 1 : 0, color: "#00A884", marginLeft: 2 }}>|</span>
-            </>
-          )}
-        </div>
-      </div>
-      <div
-        style={{
-          width: 68, height: 68, borderRadius: 999,
-          background: "#00A884",
-          display: "flex", alignItems: "center", justifyContent: "center",
-        }}
-      >
-        {hasText ? (
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="#fff">
-            <path d="M2 21l21-9L2 3v7l15 2-15 2z" />
-          </svg>
-        ) : (
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff">
-            <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3z" />
-            <path d="M19 11a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11z" />
-          </svg>
-        )}
-      </div>
-    </div>
-  );
-};
-
-const TypingDots: React.FC = () => {
-  const frame = useCurrentFrame();
-  return (
-    <div style={{ display: "flex", justifyContent: "flex-start" }}>
-      <div
-        style={{
-          background: WA_IN,
-          borderRadius: 34,
-          borderTopLeftRadius: 8,
-          padding: "32px 40px",
-          display: "flex",
-          gap: 16,
-          boxShadow: "0 18px 40px -18px rgba(0,0,0,0.55)",
-        }}
-      >
-        {[0, 1, 2].map((i) => {
-          const o = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(frame / 5 - i * 0.8));
-          return (
-            <span key={i} style={{ width: 22, height: 22, borderRadius: 999, background: WA_INK_DIM, opacity: o }} />
-          );
-        })}
-      </div>
-    </div>
-  );
-};
-
-// Variant 1: pre-existing thread with multiple messages, latest inbound sets up the ask.
-const SceneIMessageThread: React.FC<{
-  contactName: string;
-  time: string;
-  history: Msg[];
-  reply: string;
-}> = ({ contactName, time, history, reply }) => {
-  const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const replyDelay = 55;
-
-  return (
-    <WhatsAppShell
-      contactName={contactName}
-      time={time}
-      composer={<IdleComposer />}
-      messages={
-        <>
-          {history.map((m, i) => {
-            const e = spring({ frame: frame - i * 4, fps, config: { damping: 18, stiffness: 220 } });
-            const op = interpolate(e, [0, 1], [0, 1]);
-            const y = interpolate(e, [0, 1], [16, 0]);
-            const sc = interpolate(e, [0, 1], [0.95, 1]);
-            return <Bubble key={i} msg={{ ...m, t: time }} opacity={op} transform={`translateY(${y}px) scale(${sc})`} />;
-          })}
-
-          {frame > 28 && frame < replyDelay && <TypingDots />}
-
-          {frame >= replyDelay && (() => {
-            const e = spring({ frame: frame - replyDelay, fps, config: { damping: 18, stiffness: 220 } });
-            const op = interpolate(e, [0, 1], [0, 1]);
-            const y = interpolate(e, [0, 1], [16, 0]);
-            const sc = interpolate(e, [0, 1], [0.95, 1]);
-            return (
-              <Bubble msg={{ from: "in", text: reply, t: time }} opacity={op} transform={`translateY(${y}px) scale(${sc})`} />
-            );
-          })()}
-        </>
-      }
-    />
-  );
-};
-
-// Variants 2 & 3: user is actively typing a new request into the composer, then sends.
-const SceneIMessageTyping: React.FC<{
-  contactName: string;
-  time: string;
-  typedMessage: string;
-  reply: string;
-}> = ({ contactName, time, typedMessage, reply }) => {
-  const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-
-  const typeStart = 8;
-  const typeSpeed = 1.6;
-  const typeChars = Math.max(0, Math.min(typedMessage.length, Math.floor((frame - typeStart) / typeSpeed)));
-  const sentFrame = typeStart + Math.ceil(typedMessage.length * typeSpeed) + 6;
-  const isSent = frame >= sentFrame;
-  const replyDelay = sentFrame + 28;
-
-  return (
-    <WhatsAppShell
-      contactName={contactName}
-      time={time}
-      composer={<TypingComposer text={typedMessage.slice(0, typeChars)} sent={isSent} />}
-      messages={
-        <>
-          <Bubble msg={{ from: "out", text: "hey asmi", t: time }} opacity={0.5} />
-          <Bubble msg={{ from: "in",  text: "here — what do you need?", t: time }} opacity={0.5} />
-
-          {isSent && (() => {
-            const e = spring({ frame: frame - sentFrame, fps, config: { damping: 18, stiffness: 220 } });
-            const op = interpolate(e, [0, 1], [0, 1]);
-            const y = interpolate(e, [0, 1], [18, 0]);
-            const sc = interpolate(e, [0, 1], [0.95, 1]);
-            return <Bubble msg={{ from: "out", text: typedMessage, t: time }} opacity={op} transform={`translateY(${y}px) scale(${sc})`} />;
-          })()}
-
-          {frame > sentFrame + 8 && frame < replyDelay && <TypingDots />}
-
-          {frame >= replyDelay && (() => {
-            const e = spring({ frame: frame - replyDelay, fps, config: { damping: 18, stiffness: 220 } });
-            const op = interpolate(e, [0, 1], [0, 1]);
-            const y = interpolate(e, [0, 1], [16, 0]);
-            const sc = interpolate(e, [0, 1], [0.95, 1]);
-            return <Bubble msg={{ from: "in", text: reply, t: time }} opacity={op} transform={`translateY(${y}px) scale(${sc})`} />;
-          })()}
-        </>
-      }
-    />
-  );
-};
-
-// ============= Call scene =============
+// ============= Call scene (unchanged) =============
 
 type Caption = { at: number; text: string };
 
@@ -660,7 +385,6 @@ const SceneCall: React.FC<{
   const opacity = interpolate(intro, [0, 1], [0, 1]);
   const scale = interpolate(intro, [0, 1], [0.94, 1]);
 
-  // pick current caption (whichever has the latest `at` <= frame)
   const active = captions.reduce<Caption | null>(
     (acc, c) => (frame >= c.at ? c : acc),
     null,
@@ -669,7 +393,6 @@ const SceneCall: React.FC<{
     ? spring({ frame: frame - active.at, fps, config: { damping: 16, stiffness: 180 } })
     : 0;
 
-  // call timer
   const sec = Math.floor(frame / fps);
   const mm = Math.floor(sec / 60).toString().padStart(1, "0");
   const ss = (sec % 60).toString().padStart(2, "0");
@@ -757,7 +480,6 @@ const SceneCall: React.FC<{
 
         <Waveform accent={accent} />
 
-        {/* live caption */}
         <div
           style={{
             marginTop: 36,
@@ -931,81 +653,53 @@ const SceneDone: React.FC = () => {
         done.
       </div>
       {chip("Dr. Weng · Jonathan", "Tuesday · 10:00 AM", TERRACOTTA, 6)}
-      {chip("Pacific HVAC · Marco", "Saturday · 9:00 AM · $150", SAGE, 30)}
-      {chip("Abuelo · Sevilla", "took medicine · feeling OK", CLAY, 54)}
+      {chip("Pacific HVAC · Marco", "Saturday · 9:00 AM · $150", SAGE, 24)}
+      {chip("Abuelo · Sevilla", "took medicine · feeling OK", CLAY, 42)}
     </AbsoluteFill>
   );
 };
 
-// ============= Outro =============
+// ============= Outro (brand bookend) =============
 
 const Outro: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const opacity = interpolate(frame, [0, 14, 80, 90], [0, 1, 1, 0]);
-
-  // Three lines reveal sequentially with springs
-  const lines = [
-    { text: "AI That Handles",       delay: 0  },
-    { text: "Your Personal Chores",  delay: 14 },
-    { text: "In The Physical World", delay: 28, accent: true },
-  ];
-
+  const s = spring({ frame, fps, config: { damping: 22, stiffness: 220 } });
+  const tag = spring({ frame: frame - 10, fps, config: { damping: 26, stiffness: 180 } });
+  const opacity = interpolate(frame, [0, 10, D.outro - 18, D.outro], [0, 1, 1, 0]);
+  const y = interpolate(s, [0, 1], [28, 0]);
+  const tagY = interpolate(tag, [0, 1], [18, 0]);
+  const tagOp = interpolate(tag, [0, 1], [0, 1]);
   return (
-    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", opacity, padding: 80 }}>
-      {/* tiny wordmark */}
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", opacity }}>
       <div
         style={{
           fontFamily: serif,
-          fontStyle: "italic",
-          fontSize: 56,
-          color: STONE,
-          marginBottom: 36,
-          letterSpacing: -1,
+          fontSize: 360,
+          color: ESPRESSO,
+          letterSpacing: -6,
+          lineHeight: 1,
+          transform: `translateY(${y}px)`,
         }}
       >
         asmi
       </div>
-
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-        {lines.map((l, i) => {
-          const s = spring({ frame: frame - l.delay, fps, config: { damping: 18, stiffness: 140 } });
-          const op = interpolate(s, [0, 1], [0, 1]);
-          const y = interpolate(s, [0, 1], [30, 0]);
-          return (
-            <div
-              key={i}
-              style={{
-                fontFamily: serif,
-                fontStyle: "italic",
-                fontSize: 112,
-                lineHeight: 1.05,
-                color: l.accent ? TERRACOTTA : ESPRESSO,
-                textAlign: "center",
-                opacity: op,
-                transform: `translateY(${y}px)`,
-                letterSpacing: -2,
-              }}
-            >
-              {l.text}
-            </div>
-          );
-        })}
-      </div>
-
       <div
         style={{
-          marginTop: 50,
-          fontSize: 26,
-          letterSpacing: 8,
-          textTransform: "uppercase",
-          color: STONE,
-          fontWeight: 500,
+          marginTop: 36,
+          fontFamily: serif,
+          fontStyle: "italic",
+          fontSize: 64,
+          color: STONE_DARK,
+          letterSpacing: 0.5,
+          opacity: tagOp,
+          transform: `translateY(${tagY}px)`,
         }}
       >
-        you text · asmi calls · it's done
+        building personal intelligence
       </div>
     </AbsoluteFill>
   );
 };
 
+export { TOTAL };
