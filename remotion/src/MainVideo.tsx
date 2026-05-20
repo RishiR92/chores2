@@ -30,8 +30,8 @@ const STONE = "#7A6F64";
 const TERRACOTTA = "#C25B3F";
 const CLAY = "#D4A574";
 const SAGE = "#5F8365";
-const WA_GREEN_HI = "#00A884";
-const WA_GREEN_LO = "#008F72";
+const WA_GREEN_HI = "#25D366";
+const WA_GREEN_LO = "#128C7E";
 
 // Tightened, launch-trailer pacing @ 30fps
 const D = {
