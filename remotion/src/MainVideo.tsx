@@ -379,34 +379,34 @@ const Bubble: React.FC<{ msg: Msg; opacity?: number; transform?: string; tail?: 
     <div style={{ display: "flex", justifyContent: isOut ? "flex-end" : "flex-start", opacity, transform }}>
       <div
         style={{
-          maxWidth: "78%",
-          padding: "14px 18px 12px",
-          borderRadius: 18,
-          ...(isOut ? { borderTopRightRadius: 4 } : { borderTopLeftRadius: 4 }),
+          maxWidth: "86%",
+          padding: "28px 34px 24px",
+          borderRadius: 34,
+          ...(isOut ? { borderTopRightRadius: 8 } : { borderTopLeftRadius: 8 }),
           background: isOut ? WA_OUT : WA_IN,
           color: WA_INK,
-          fontSize: 30,
-          lineHeight: 1.28,
-          letterSpacing: -0.2,
+          fontSize: 56,
+          lineHeight: 1.24,
+          letterSpacing: -0.4,
           fontFamily: EMOJI_STACK,
           fontWeight: 400,
-          boxShadow: "0 1px 0 rgba(0,0,0,0.25)",
+          boxShadow: "0 18px 40px -18px rgba(0,0,0,0.55), 0 1px 0 rgba(0,0,0,0.25)",
           position: "relative",
           display: "inline-flex",
           flexDirection: "column",
         }}
       >
-        <div style={{ paddingRight: isOut ? 100 : 70, paddingBottom: 4 }}>{msg.text}</div>
+        <div style={{ paddingRight: isOut ? 150 : 110, paddingBottom: 8 }}>{msg.text}</div>
         <div
           style={{
             position: "absolute",
-            right: 14,
-            bottom: 8,
+            right: 24,
+            bottom: 14,
             display: "flex",
             alignItems: "center",
-            gap: 6,
-            color: "rgba(233,237,239,0.55)",
-            fontSize: 18,
+            gap: 8,
+            color: "rgba(233,237,239,0.6)",
+            fontSize: 26,
             fontVariantNumeric: "tabular-nums",
           }}
         >
