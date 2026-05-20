@@ -710,7 +710,7 @@ const SceneWhatsAppThread: React.FC<{
           </ChatBackground>
           <WAComposerIdle />
         </PhoneFrame>
-      </div>
+      </AbsoluteFill>
     </AbsoluteFill>
   );
 };
