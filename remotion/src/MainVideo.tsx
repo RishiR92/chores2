@@ -665,39 +665,66 @@ const SceneDone: React.FC = () => {
 const Outro: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const s = spring({ frame, fps, config: { damping: 22, stiffness: 220 } });
-  const tag = spring({ frame: frame - 10, fps, config: { damping: 26, stiffness: 180 } });
-  const opacity = interpolate(frame, [0, 10, D.outro - 18, D.outro], [0, 1, 1, 0]);
-  const y = interpolate(s, [0, 1], [28, 0]);
-  const tagY = interpolate(tag, [0, 1], [18, 0]);
-  const tagOp = interpolate(tag, [0, 1], [0, 1]);
+  const opacity = interpolate(frame, [0, 12, D.outro - 16, D.outro], [0, 1, 1, 0]);
+
+  const lines = [
+    { text: "AI That Handles",       delay: 0,  accent: false },
+    { text: "Your Personal Chores",  delay: 12, accent: false },
+    { text: "In The Physical World", delay: 24, accent: true  },
+  ];
+
   return (
-    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", opacity }}>
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", opacity, padding: 80 }}>
       <div
         style={{
           fontFamily: serif,
-          fontSize: 360,
-          color: ESPRESSO,
-          letterSpacing: -6,
-          lineHeight: 1,
-          transform: `translateY(${y}px)`,
+          fontStyle: "italic",
+          fontSize: 56,
+          color: STONE_DARK,
+          marginBottom: 36,
+          letterSpacing: -1,
         }}
       >
         asmi
       </div>
+
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+        {lines.map((l, i) => {
+          const s = spring({ frame: frame - l.delay, fps, config: { damping: 22, stiffness: 180 } });
+          const op = interpolate(s, [0, 1], [0, 1]);
+          const y = interpolate(s, [0, 1], [28, 0]);
+          return (
+            <div
+              key={i}
+              style={{
+                fontFamily: serif,
+                fontStyle: "italic",
+                fontSize: 112,
+                lineHeight: 1.05,
+                color: l.accent ? TERRACOTTA : ESPRESSO,
+                textAlign: "center",
+                opacity: op,
+                transform: `translateY(${y}px)`,
+                letterSpacing: -2,
+              }}
+            >
+              {l.text}
+            </div>
+          );
+        })}
+      </div>
+
       <div
         style={{
-          marginTop: 36,
-          fontFamily: serif,
-          fontStyle: "italic",
-          fontSize: 64,
+          marginTop: 50,
+          fontSize: 26,
+          letterSpacing: 8,
+          textTransform: "uppercase",
           color: STONE_DARK,
-          letterSpacing: 0.5,
-          opacity: tagOp,
-          transform: `translateY(${tagY}px)`,
+          fontWeight: 500,
         }}
       >
-        building personal intelligence
+        you text · asmi calls · it's done
       </div>
     </AbsoluteFill>
   );
