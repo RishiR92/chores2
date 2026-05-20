@@ -1,83 +1,62 @@
-# Asmi Demo v9 — QA Fixes + Top-1% Launch Video Polish
+# Asmi Demo v9 — Recovery Pass
 
-Content (script, scene order, voice snippets, durations) stays **identical to v8**. This pass only fixes the quality issues called out plus a craft pass benchmarked against current top AI-startup launch videos (Granola, Cursor, Cognition/Devin, Perplexity, Cluely, Arc, Linear). No new scenes, no rewrites.
+Baseline: **v7 text, scene order, timings, and flow** are the source of truth. The current `MainVideo.tsx` (v8) drifted from that — extra emoji, "Yesterday" history block, periwinkle/orange accent text, decorative atmospherics. Roll the **content** back to v7 verbatim, then upgrade only the **execution and finish**.
 
-## Reference study (what "top 1%" looks like right now)
+Goal: same story v7 told, but rendered at a top 1% AI-launch-video level of craft.
 
-Common traits across the best 2025-2026 AI launch films:
+## 1. Content rollback (back to v7 exactly)
+- Voice script: unchanged (already v7 lines).
+- Scene order: Intro → WA(task 1) → Call 1 → WA(task 2) → Call 2 → WA(task 3) → Call 3 → Done → Outro.
+- Durations: same as v7 (3/4/8/4/8/4/8/8/3 s, 50s total, 1500 frames).
+- WhatsApp threads: only the v7 lines — no "Yesterday" history block, no extra ack pairs. Each WA scene shows past chats from other tasks (so it reads like a real ongoing thread) plus the one new task message, then Asmi's one-line ack. This matches v7 and the "real user, not first-time" note from earlier.
+- Flow rule (locked): every task starts on WhatsApp, then Asmi calls. Unchanged.
 
-- **Restraint in color.** One ink, one paper, one accent. No rainbow. Granola/Linear/Cursor never put more than one saturated hue on screen at a time.
-- **One typeface family, one weight shift.** Not three fonts. Either a single grotesk (Inter / Söhne / GT America) or a single editorial serif (Tiempos / Söhne Mono pairing). Never serif + sans + mono all visible at once.
-- **Product-real UI, not stylized.** The phone/app shown is pixel-accurate, not a "designy" reinterpretation. Bubbles, spacing, status bar, keyboard all match the real thing.
-- **Audio is the hero.** Voice is dry, loud, untouched. Music ducks aggressively (-18 dB) so dialogue never fights it.
-- **Cuts are invisible.** Hard cut on a beat, or a 6-frame dip-to-black. No fancy wipes.
+## 2. Audio fixes (call quality regression)
+- Drop call `Audio volume` from `2.4` → `1.0`. Values >1 clip in Remotion's WebAudio mix and produce the crunch heard in v8.
+- BGM envelope: base `0.55`, duck to `0.06` under calls with the existing 22-frame eased ramp. Net perceived voice loudness matches v7 without clipping.
+- Add a hard cap at `0.9` on the BGM curve so the mix never peaks into the limiter.
 
-v8 violated all five. v9 fixes all five.
+## 3. Typography — one family, one accent
+- Remove **Instrument Serif** and **JetBrains Mono** imports entirely.
+- Single family: **Inter Tight** (400 / 500 / 700).
+- Single accent color: lime `#E8FF5A`. Used only on the wordmark, one keyword per title card, the "online" dot, and the call tag. Nothing else.
+- Body / captions / labels: warm off-white `#F5F2EA` on near-black. No periwinkle text, no orange text.
+- Color emoji (Noto Color Emoji) stays scoped to **chat bubbles only**. Titles and labels use no emoji.
 
-## Fixes
+## 4. WhatsApp UI rebuild (extracted to its own component)
+The current shell breaks on header spacing, bubble tails, timestamp clipping, status bar realism, and avatar. Rebuild as `WhatsAppShell.tsx`, real WhatsApp dark theme:
 
-### 1. Call audio quality (regression)
-- Root cause: each call `<Audio volume={2.4} />` — values >1 clip in the WebAudio mix and produce the crunchy distortion you heard.
-- Fix: drop call volume to **1.0** (source files are already loud; they were re-trimmed in v7).
-- Re-tune BGM ducking: base **0.55**, duck to **0.06** under calls with the existing 22-frame eased ramp. This gives the same perceived voice loudness without clipping.
-- Add a true `-1 dB` peak limit by capping max combined volume in the bgm envelope.
+- iPhone 15 frame, 393×852 logical, 55px corner radius, Dynamic Island.
+- Real iOS status bar (9:41, signal, 5G, battery).
+- Header `#0B141A`, 56px, back chevron + 32px circular avatar (generated PNG, not initials) + "Asmi" 17px semibold + "online" 13px `#8696A0` + video/voice icons.
+- Chat area `#0B141A` with 4% doodle pattern, pinned to bottom.
+- Incoming bubble `#1F2C34`, outgoing `#005C4B`, 7.5px radius, SVG tail on first bubble of group, 15px Inter 400 / 20px line-height, timestamp 11px `#8696A099` bottom-right with reserved 6px gap, blue double-tick on outgoing.
+- Typing indicator inside an incoming bubble, three dots scale 1.0→1.3 on 30-frame loop with 10-frame stagger.
+- Composer 52px, `#2A3942` pill input, mic `#00A884` swapping to send arrow when typing.
+- Frame-driven bubble arrivals: spring damping 18 / stiffness 220, 6px Y rise, 0.95→1 scale, pop SFX on each.
 
-### 2. Typography — kill the multicolor look
-- Root cause: three font families (Instrument Serif + Inter Tight + JetBrains Mono) plus Noto Color Emoji rendering colored glyphs inside body text. The serif italics + lime accent words + orange mono labels read as "multicolor / messy".
-- Fix:
-  - **Drop to ONE family: Inter Tight.** Weights 400 / 500 / 700 only. Remove Instrument Serif and JetBrains Mono entirely.
-  - Remove all colored words inside paragraphs. Accent color (single lime `#E8FF5A`) is used **only** on: the wordmark, one keyword per title card, and the "online" dot. Nothing else.
-  - Replace Noto Color Emoji with **monochrome** emoji rendering inside titles/labels (use text-only fallback). Color emoji stays **only inside chat bubbles** where it belongs (real WhatsApp shows color emoji there).
-  - All non-chat text becomes warm off-white `#F5F2EA` on near-black. No periwinkle text, no orange text.
+Chat content per scene is the v7 content, no additions.
 
-### 3. WhatsApp UI — rebuild for pixel accuracy
-Current UI has multiple breakages: header overlapping messages, bubble tails wrong side, "Today" divider styled wrong, composer height inconsistent, status bar fake, avatar monogram instead of image, message timestamps clipping bubble corners, typing indicator floating outside a bubble.
+## 5. Call scene polish
+- CallKit-style caller card: avatar, name, "mobile", static green answer button. Removes the current "designy" caller card.
+- Captions: single Inter 500 line, fades in/out per cue, no italics, no mono.
+- Subtle waveform stays but desaturated to ink-on-near-black with only lime on the active peak.
 
-Rebuild as a self-contained `WhatsAppShell.tsx` component matching real WhatsApp dark theme exactly:
+## 6. Scene transitions and atmosphere
+- Replace wipe/blur transitions with **hard cuts on the beat** plus an occasional 6-frame dip-to-black. Matches Cursor / Granola / Linear style.
+- Remove floating gradient orbs and grain overlay. Replace with one static, very subtle vignette.
+- Title cards: Inter 700, tracking -0.02em, left-aligned at 8% margin, one keyword in lime.
+- End card: wordmark only, lime, centered, held 60 frames; BGM crescendo lands on the cut.
 
-- **Device**: iPhone 15 frame, 393×852 logical px, 55px corner radius, thin titanium bezel, Dynamic Island (not notch).
-- **Status bar**: real iOS — 9:41, full signal bars (SVG), 5G, 87% battery icon. Sits ABOVE the app chrome, not overlapping.
-- **App header** (WhatsApp dark `#0B141A`):
-  - back chevron (left), circular avatar (32px) using a generated Asmi avatar image (not initials), name "Asmi" 17px semibold, "online" 13px `#8696A0` under it, video + voice call icons (right).
-  - Header height 56px, hairline border-bottom `#1F2C34`.
-- **Chat area** (background `#0B141A` with subtle doodle pattern at 4% opacity):
-  - Scroll pinned to **bottom** (newest message at bottom, real WhatsApp behavior).
-  - "Today" divider: centered pill `#1F2C34`, 11px uppercase tracking, no lines.
-  - Faded history (yesterday) shown above with `opacity: 0.55` and a "Yesterday" pill.
-- **Bubbles**:
-  - Incoming (Asmi): `#1F2C34`, left-aligned, tail on first bubble of group (SVG path, not a CSS triangle), 7.5px corner radius, max-width 75%.
-  - Outgoing (user): `#005C4B`, right-aligned, tail on first bubble of group, same radius.
-  - Padding `6px 9px 8px 12px`. Text 15px / line-height 20px Inter 400. Timestamp 11px `#8696A099` bottom-right inside bubble (with 6px reserved gap so it never overlaps text).
-  - Double-tick read receipt SVG (blue `#53BDEB`) on outgoing.
-- **Typing indicator**: real WhatsApp bubble (incoming style) with three dots animated frame-by-frame (each dot scales 1.0 → 1.3 on a 30-frame loop, 10-frame stagger).
-- **Composer**:
-  - Height 52px, background `#1F2C34`, top hairline.
-  - Pill input `#2A3942` 36px tall with emoji icon (left), placeholder "Message", attach + camera icons (right).
-  - Outside the pill: mic button (circular `#00A884` 36px). Swaps to send arrow when user is "typing".
-- **Frame-driven message arrivals**: each new bubble springs in (damping 18, stiffness 220) with a 6px Y rise and 0.95→1 scale. Pop SFX on each.
+## Out of scope (locked)
+- Voice script, call audio content, scene order, durations, WhatsApp flow, BGM track. All identical to v7.
 
-Same chat content as v8 (history lines + current task line + Asmi ack) — only the rendering changes.
+## Files
+- `remotion/src/MainVideo.tsx` — rollback chat content to v7, drop serif/mono, fix audio volumes, swap transitions, remove orbs/grain.
+- `remotion/src/components/WhatsAppShell.tsx` (new) — phone + chat rebuild.
+- `remotion/src/components/CallCard.tsx` (new) — CallKit-style card.
+- `remotion/public/images/asmi-avatar.png` (new) — generated 256×256 avatar.
 
-### 4. Scene polish (no content change)
-- Replace all wipe/blur transitions with **hard cuts on the beat** + occasional 6-frame dip-to-black. Matches Cursor / Granola style.
-- Remove floating gradient orbs and grain overlay. Replace with a single static very-subtle vignette. The orbs read as "AI slop background".
-- Title cards: large Inter 700, tight tracking (-0.02em), single keyword in lime. Asymmetric left-aligned at 8% margin. No serif italic.
-- Caller card during calls: simplified to a real iOS CallKit-style card (avatar, name, "mobile", green answer button visible but static). Replaces current "designy" caller card.
-- End card: wordmark only, lime, centered, held 60 frames, BGM crescendo lands on the cut.
-
-## Out of scope (explicitly unchanged)
-- Voice script and call audio content
-- Scene order and durations (still 50s total, same offsets as v8)
-- WhatsApp flow (task on WhatsApp → call) — unchanged
-- BGM track (`Asmi_Demo_-_2-3.mp3`) — unchanged
-
-## Technical scope
-Files touched:
-- `remotion/src/MainVideo.tsx` — drop serif/mono fonts, fix audio volumes, swap transitions, remove orbs/grain
-- `remotion/src/components/WhatsAppShell.tsx` (new) — full rebuild of phone + chat
-- `remotion/src/components/CallCard.tsx` (new) — CallKit-style card
-- `remotion/public/images/asmi-avatar.png` (new) — generated 256×256 avatar
-
-Render: `asmi-demo-v9.mp4` → `/mnt/documents/`, 1080×1920, 30fps, h264 + aac, 50s.
-
-QA pass after render: still frames at 30, 150, 300, 500, 700, 900, 1100, 1300, 1450 reviewed before delivery.
+## Render and QA
+- Output: `/mnt/documents/asmi-demo-v9.mp4`, 1080×1920, 30fps, h264 + aac, 50s.
+- QA before delivery: still frames at 30, 150, 300, 500, 700, 900, 1100, 1300, 1450, plus audio loudness check (no >0 dBFS peaks, voice ≥ -16 LUFS, music ducks ≥ 18 dB under voice).
