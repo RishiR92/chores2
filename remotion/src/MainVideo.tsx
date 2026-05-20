@@ -367,9 +367,9 @@ const WhatsAppShell: React.FC<{
 );
 
 const WATick: React.FC = () => (
-  <svg width="26" height="16" viewBox="0 0 22 14" fill="none">
-    <path d="M1 7 L5 11 L12 3" stroke="#53BDEB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M8 7 L12 11 L19 3" stroke="#53BDEB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+  <svg width="40" height="22" viewBox="0 0 22 14" fill="none">
+    <path d="M1 7 L5 11 L12 3" stroke="#53BDEB" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8 7 L12 11 L19 3" stroke="#53BDEB" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
