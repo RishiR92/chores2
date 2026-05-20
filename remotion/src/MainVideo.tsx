@@ -79,7 +79,7 @@ const bgmVolume = (f: number) => {
   }
   const eased = duckAmt * duckAmt * (3 - 2 * duckAmt);
   // Louder base, deeper duck under calls
-  const base = 0.6 * (1 - eased) + 0.025 * eased;
+  const base = 0.5 * (1 - eased) + 0.02 * eased;
   return Math.max(0, base * fadeIn * fadeOut);
 };
 
