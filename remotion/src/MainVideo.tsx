@@ -68,8 +68,11 @@ const callRanges: Array<[number, number]> = [
 ];
 const bgmVolume = (f: number) => {
   const fadeIn = Math.min(1, f / 45);
-  // Short fade-out only at the very end so the music lands on its climax
-  const fadeOut = Math.min(1, (TOTAL - f) / 18);
+  // Long, smooth tail — starts pulling down ~3.5s before end so it doesn't cut.
+  const FADE_OUT_FRAMES = 105;
+  const t = Math.max(0, Math.min(1, (TOTAL - f) / FADE_OUT_FRAMES));
+  // Ease-in-out cubic for a musical decay
+  const fadeOut = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   const RAMP = 22;
   let duckAmt = 0;
   for (const [a, b] of callRanges) {
@@ -78,7 +81,6 @@ const bgmVolume = (f: number) => {
     duckAmt = Math.max(duckAmt, Math.min(into, outOf));
   }
   const eased = duckAmt * duckAmt * (3 - 2 * duckAmt);
-  // Louder base, deeper duck under calls
   const base = 0.42 * (1 - eased) + 0.018 * eased;
   return Math.max(0, base * fadeIn * fadeOut);
 };
