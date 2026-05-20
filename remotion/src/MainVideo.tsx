@@ -776,7 +776,7 @@ const SceneWhatsAppTyping: React.FC<{
           </ChatBackground>
           <WAComposerTyping text={typedMessage.slice(0, typeChars)} sent={isSent} />
         </PhoneFrame>
-      </div>
+      </AbsoluteFill>
     </AbsoluteFill>
   );
 };
