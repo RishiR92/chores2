@@ -30,8 +30,8 @@ const STONE = "#7A6F64";
 const TERRACOTTA = "#C25B3F";
 const CLAY = "#D4A574";
 const SAGE = "#5F8365";
-const WA_GREEN_HI = "#00A884";
-const WA_GREEN_LO = "#008F72";
+const WA_GREEN_HI = "#25D366";
+const WA_GREEN_LO = "#128C7E";
 
 // Tightened, launch-trailer pacing @ 30fps
 const D = {
@@ -43,7 +43,7 @@ const D = {
   imGp: 75,
   gp: 240,
   done: 180,    // 6.0s
-  outro: 75,    // 2.5s
+  outro: 105,   // 3.5s
 };
 
 const O = {
@@ -233,9 +233,10 @@ const Intro: React.FC = () => {
       <div
         style={{
           fontFamily: serif,
-          fontSize: 360,
+          fontStyle: "italic",
+          fontSize: 260,
           color: ESPRESSO,
-          letterSpacing: -6,
+          letterSpacing: -2,
           lineHeight: 1,
           transform: `translateY(${y}px)`,
         }}
@@ -245,16 +246,16 @@ const Intro: React.FC = () => {
       <div
         style={{
           marginTop: 36,
-          fontFamily: serif,
-          fontStyle: "italic",
-          fontSize: 64,
+          fontSize: 30,
+          letterSpacing: 8,
+          textTransform: "uppercase",
           color: STONE_DARK,
-          letterSpacing: 0.5,
+          fontWeight: 500,
           opacity: tagOp,
           transform: `translateY(${tagY}px)`,
         }}
       >
-        building personal intelligence
+        handles the real world
       </div>
     </AbsoluteFill>
   );
@@ -302,7 +303,7 @@ const HeroBubble: React.FC<{ text: string; time: string }> = ({ text, time }) =>
           width: 1200,
           height: 1200,
           borderRadius: 9999,
-          background: "radial-gradient(closest-side, rgba(0,168,132,0.22), rgba(0,168,132,0) 70%)",
+          background: "radial-gradient(closest-side, rgba(37,211,102,0.22), rgba(37,211,102,0) 70%)",
           filter: "blur(20px)",
           opacity: enter * (1 - exitT * 0.6),
           transform: `translateY(${float * 4}px)`,
@@ -312,13 +313,13 @@ const HeroBubble: React.FC<{ text: string; time: string }> = ({ text, time }) =>
       <div
         style={{
           position: "relative",
-          maxWidth: 820,
-          padding: "64px 72px 56px",
-          borderRadius: 60,
+          maxWidth: 900,
+          padding: "48px 56px 44px",
+          borderRadius: 56,
           borderBottomRightRadius: 14,
           background: `linear-gradient(155deg, ${WA_GREEN_HI} 0%, ${WA_GREEN_LO} 100%)`,
           boxShadow: [
-            "0 60px 140px -40px rgba(0,143,114,0.55)",
+            "0 60px 140px -40px rgba(18,140,126,0.55)",
             "0 30px 70px -30px rgba(0,0,0,0.35)",
             "inset 0 1px 0 rgba(255,255,255,0.22)",
             "inset 0 -1px 0 rgba(0,0,0,0.12)",
@@ -326,9 +327,9 @@ const HeroBubble: React.FC<{ text: string; time: string }> = ({ text, time }) =>
           color: "#fff",
           fontFamily: EMOJI_STACK,
           fontWeight: 600,
-          fontSize: 84,
-          lineHeight: 1.18,
-          letterSpacing: -1,
+          fontSize: 60,
+          lineHeight: 1.22,
+          letterSpacing: -0.5,
           opacity,
           transform: `translateY(${enterY + float}px) scale(${sc})`,
           filter: blur > 0.1 ? `blur(${blur}px)` : undefined,
@@ -345,17 +346,17 @@ const HeroBubble: React.FC<{ text: string; time: string }> = ({ text, time }) =>
             pointerEvents: "none",
           }}
         />
-        <div style={{ paddingRight: 180, paddingBottom: 22 }}>{text}</div>
+        <div style={{ paddingBottom: 28 }}>{text}</div>
         <div
           style={{
             position: "absolute",
-            right: 36,
-            bottom: 28,
+            right: 28,
+            bottom: 22,
             display: "flex",
             alignItems: "center",
-            gap: 12,
-            color: "rgba(255,255,255,0.78)",
-            fontSize: 32,
+            gap: 10,
+            color: "rgba(255,255,255,0.82)",
+            fontSize: 24,
             fontWeight: 500,
             fontVariantNumeric: "tabular-nums",
             letterSpacing: 0,
@@ -664,39 +665,66 @@ const SceneDone: React.FC = () => {
 const Outro: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const s = spring({ frame, fps, config: { damping: 22, stiffness: 220 } });
-  const tag = spring({ frame: frame - 10, fps, config: { damping: 26, stiffness: 180 } });
-  const opacity = interpolate(frame, [0, 10, D.outro - 18, D.outro], [0, 1, 1, 0]);
-  const y = interpolate(s, [0, 1], [28, 0]);
-  const tagY = interpolate(tag, [0, 1], [18, 0]);
-  const tagOp = interpolate(tag, [0, 1], [0, 1]);
+  const opacity = interpolate(frame, [0, 12, D.outro - 16, D.outro], [0, 1, 1, 0]);
+
+  const lines = [
+    { text: "AI That Handles",       delay: 0,  accent: false },
+    { text: "Your Personal Chores",  delay: 12, accent: false },
+    { text: "In The Physical World", delay: 24, accent: true  },
+  ];
+
   return (
-    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", opacity }}>
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", opacity, padding: 80 }}>
       <div
         style={{
           fontFamily: serif,
-          fontSize: 360,
-          color: ESPRESSO,
-          letterSpacing: -6,
-          lineHeight: 1,
-          transform: `translateY(${y}px)`,
+          fontStyle: "italic",
+          fontSize: 56,
+          color: STONE_DARK,
+          marginBottom: 36,
+          letterSpacing: -1,
         }}
       >
         asmi
       </div>
+
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+        {lines.map((l, i) => {
+          const s = spring({ frame: frame - l.delay, fps, config: { damping: 22, stiffness: 180 } });
+          const op = interpolate(s, [0, 1], [0, 1]);
+          const y = interpolate(s, [0, 1], [28, 0]);
+          return (
+            <div
+              key={i}
+              style={{
+                fontFamily: serif,
+                fontStyle: "italic",
+                fontSize: 112,
+                lineHeight: 1.05,
+                color: l.accent ? TERRACOTTA : ESPRESSO,
+                textAlign: "center",
+                opacity: op,
+                transform: `translateY(${y}px)`,
+                letterSpacing: -2,
+              }}
+            >
+              {l.text}
+            </div>
+          );
+        })}
+      </div>
+
       <div
         style={{
-          marginTop: 36,
-          fontFamily: serif,
-          fontStyle: "italic",
-          fontSize: 64,
+          marginTop: 50,
+          fontSize: 26,
+          letterSpacing: 8,
+          textTransform: "uppercase",
           color: STONE_DARK,
-          letterSpacing: 0.5,
-          opacity: tagOp,
-          transform: `translateY(${tagY}px)`,
+          fontWeight: 500,
         }}
       >
-        building personal intelligence
+        you text · asmi calls · it's done
       </div>
     </AbsoluteFill>
   );
