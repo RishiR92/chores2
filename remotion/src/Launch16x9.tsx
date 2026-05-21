@@ -298,7 +298,8 @@ export const Launch16x9: React.FC = () => {
             filter: `drop-shadow(0 60px 80px ${rgba(ESPRESSO, 0.35)})`,
           }}
         >
-          {/* Render the existing 1080x1920 demo, scaled down */}
+          {/* Render the existing 1080x1920 demo, scaled down. Clip to phone body shape
+              so MainVideo's dark backdrop doesn't show as a rectangle. */}
           <div
             style={{
               position: "absolute",
@@ -308,10 +309,12 @@ export const Launch16x9: React.FC = () => {
               top: 0,
               transform: `scale(${phoneScale})`,
               transformOrigin: "top left",
+              clipPath: "inset(110px 90px 110px 90px round 130px)",
             }}
           >
             <MainVideo />
           </div>
+
         </div>
       </div>
 
