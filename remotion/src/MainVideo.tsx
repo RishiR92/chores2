@@ -97,11 +97,11 @@ const LINE_GP = "check on grandpa in Sevilla — in Spanish 🙏";
 
 // Phone frame geometry (1080x1920 canvas)
 const PHONE = {
-  bodyInsetX: 40,
-  bodyInsetY: 56,
-  bodyRadius: 150,
-  bezel: 22,
-  screenRadius: 124,
+  bodyInsetX: 90,
+  bodyInsetY: 110,
+  bodyRadius: 130,
+  bezel: 20,
+  screenRadius: 108,
 };
 const SCREEN_INSET = {
   x: PHONE.bodyInsetX + PHONE.bezel,
