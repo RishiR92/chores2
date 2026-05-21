@@ -1,32 +1,33 @@
-# Asmi Demo v13 — Restore bookend content, fix bubbles
+# Asmi Demo v16 — Fix phone frame clipping on the right
 
-## 1. Bookend content — revert to v11, keep new font style
-Keep the serif typography style from v12 (Instrument Serif, italic tagline). Restore the original copy:
+## Goal
+Keep the current content and styling, but stop the iPhone mockup and inner scene from getting cropped on the right side.
 
-- **Intro**: word "asmi" (serif, large) + small uppercase tracked label "HANDLES THE REAL WORLD"
-  - Use Instrument Serif italic for "asmi" (v11 styling), not roman.
-- **Outro**: small "asmi" wordmark, then three big serif italic lines:
-  - "AI That Handles"
-  - "Your Personal Chores"
-  - "In The Physical World" (terracotta accent)
-  - Bottom uppercase tracked label: "you text · asmi calls · it's done"
+## 1. Rework phone fitting
+- Update the phone body and screen geometry in `remotion/src/MainVideo.tsx` so the full device fits inside the 1080×1920 canvas with safe outer margins.
+- Remove the fragile width-only content scaling and use a consistent fit strategy so the inner 1080×1920 scene is centered within the screen without horizontal spill.
+- Keep the dynamic island, status bar, side buttons, and glare aligned to the revised frame.
 
-Both screens keep the v12 cream background and atmosphere.
+## 2. Preserve existing content
+- Do not change the restored intro/outro copy.
+- Do not change the current font styling.
+- Do not change the WhatsApp bubble copy or pacing unless needed strictly for fitting inside the phone screen.
 
-## 2. Hero bubble fixes
-- **Text fit**: shrink type 84 → 60px, widen bubble max-width 820 → 900px, reduce padding (48 / 56), reserve less right-padding for the timestamp. The Jonathan line must sit on 2 lines max, balanced.
-- **Color**: current `#00A884 → #008F72` reads teal. Switch to the real WhatsApp outgoing-bubble green: `#25D366 → #128C7E` (or `#1FAE5C → #075E54` for dark variant). Use the brighter pair so it pops on cream.
-- Keep tick + timestamp, soft glow, entry/exit animation, micro-float — unchanged.
-
-## 3. Files
-- `remotion/src/MainVideo.tsx` — Intro + Outro components, HeroBubble styling/color.
-- Output: `/mnt/documents/asmi-demo-v13.mp4`
+## 3. Output
+- Re-render a new version: `/mnt/documents/asmi-demo-v16.mp4`
 
 ## QA
-Stills at intro, outro, all 3 bubble peaks. Confirm:
-- Jonathan bubble: text fits cleanly, no awkward wrap.
-- Green reads as WhatsApp green, not teal.
-- Outro 3-line layout matches v11.
+Check stills from the rendered video at multiple moments:
+- Intro
+- First green bubble
+- A call-card scene where the right edge was visibly cut
+- Outro
 
-## Out of scope
-Audio, pacing, call scenes, done scene.
+Confirm:
+- No right-edge clipping on the phone body or screen content
+- Screen content stays centered inside the iPhone frame
+- Status bar and island remain properly positioned
+
+## Technical notes
+- The current issue appears to come from mixed coordinate systems: the phone screen is inset, but the inner stage is rendered at full size and scaled only from width.
+- The fix should use one coherent layout calculation for both the screen rect and its content fit.
