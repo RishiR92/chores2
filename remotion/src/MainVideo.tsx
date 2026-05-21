@@ -97,11 +97,11 @@ const LINE_GP = "check on grandpa in Sevilla — in Spanish 🙏";
 
 // Phone frame geometry (1080x1920 canvas)
 const PHONE = {
-  bodyInsetX: 40,
-  bodyInsetY: 56,
-  bodyRadius: 150,
-  bezel: 22,
-  screenRadius: 124,
+  bodyInsetX: 90,
+  bodyInsetY: 110,
+  bodyRadius: 130,
+  bezel: 20,
+  screenRadius: 108,
 };
 const SCREEN_INSET = {
   x: PHONE.bodyInsetX + PHONE.bezel,
@@ -171,8 +171,21 @@ export const MainVideo: React.FC = () => {
           boxShadow: "inset 0 0 0 2px rgba(0,0,0,0.85)",
         }}
       >
-        <DriftingBloom />
-        <Grain />
+        {/* Inner stage rendered at full 1080x1920, scaled to fit screen rect */}
+        <div
+          style={{
+            position: "absolute",
+            width: 1080,
+            height: 1920,
+            left: "50%",
+            top: "50%",
+            transform: `translate(-50%, -50%) scale(${(1080 - 2 * PHONE.bodyInsetX - 2 * PHONE.bezel) / 1080})`,
+            transformOrigin: "center center",
+          }}
+        >
+          <DriftingBloom />
+          <Grain />
+
 
         <Sequence from={O.intro} durationInFrames={D.intro}><Intro /></Sequence>
 
@@ -229,8 +242,9 @@ export const MainVideo: React.FC = () => {
 
         <Sequence from={O.done} durationInFrames={D.done}><SceneDone /></Sequence>
         <Sequence from={O.outro} durationInFrames={D.outro}><Outro /></Sequence>
+        </div>
 
-        {/* On-screen chrome (status bar + dynamic island) */}
+        {/* On-screen chrome (status bar + dynamic island) — unscaled */}
         <StatusBar />
         <DynamicIsland />
       </AbsoluteFill>
