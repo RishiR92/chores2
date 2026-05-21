@@ -242,8 +242,9 @@ export const MainVideo: React.FC = () => {
 
         <Sequence from={O.done} durationInFrames={D.done}><SceneDone /></Sequence>
         <Sequence from={O.outro} durationInFrames={D.outro}><Outro /></Sequence>
+        </div>
 
-        {/* On-screen chrome (status bar + dynamic island) */}
+        {/* On-screen chrome (status bar + dynamic island) — unscaled */}
         <StatusBar />
         <DynamicIsland />
       </AbsoluteFill>
