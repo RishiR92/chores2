@@ -171,8 +171,21 @@ export const MainVideo: React.FC = () => {
           boxShadow: "inset 0 0 0 2px rgba(0,0,0,0.85)",
         }}
       >
-        <DriftingBloom />
-        <Grain />
+        {/* Inner stage rendered at full 1080x1920, scaled to fit screen rect */}
+        <div
+          style={{
+            position: "absolute",
+            width: 1080,
+            height: 1920,
+            left: "50%",
+            top: "50%",
+            transform: `translate(-50%, -50%) scale(${(1080 - 2 * PHONE.bodyInsetX - 2 * PHONE.bezel) / 1080})`,
+            transformOrigin: "center center",
+          }}
+        >
+          <DriftingBloom />
+          <Grain />
+
 
         <Sequence from={O.intro} durationInFrames={D.intro}><Intro /></Sequence>
 
