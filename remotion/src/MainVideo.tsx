@@ -95,67 +95,165 @@ const LINE_DOC = "book Jonathan a checkup with Dr. Weng";
 const LINE_HVAC = "AC is dead. Need a tech ASAP 🥵";
 const LINE_GP = "check on grandpa in Sevilla — in Spanish 🙏";
 
+// Phone frame geometry (1080x1920 canvas)
+const PHONE = {
+  bodyInsetX: 40,
+  bodyInsetY: 56,
+  bodyRadius: 150,
+  bezel: 22,
+  screenRadius: 124,
+};
+const SCREEN_INSET = {
+  x: PHONE.bodyInsetX + PHONE.bezel,
+  y: PHONE.bodyInsetY + PHONE.bezel,
+};
+
 export const MainVideo: React.FC = () => {
   return (
-    <AbsoluteFill style={{ background: CREAM, fontFamily: sans }}>
-      <DriftingBloom />
-      <Grain />
+    <AbsoluteFill style={{ fontFamily: sans }}>
+      {/* Outer stage — moody backdrop so the phone reads as an object */}
+      <AbsoluteFill
+        style={{
+          background:
+            "radial-gradient(60% 50% at 50% 35%, #1c1a18 0%, #0c0b0a 65%, #060504 100%)",
+        }}
+      />
+      <AbsoluteFill
+        style={{
+          background:
+            "radial-gradient(45% 30% at 50% 30%, rgba(194,91,63,0.18), transparent 70%), radial-gradient(40% 28% at 50% 80%, rgba(95,131,101,0.10), transparent 70%)",
+          mixBlendMode: "screen",
+        }}
+      />
 
-      <Sequence from={O.intro} durationInFrames={D.intro}><Intro /></Sequence>
+      {/* Phone body (titanium edge) */}
+      <div
+        style={{
+          position: "absolute",
+          left: PHONE.bodyInsetX,
+          top: PHONE.bodyInsetY,
+          right: PHONE.bodyInsetX,
+          bottom: PHONE.bodyInsetY,
+          borderRadius: PHONE.bodyRadius,
+          background:
+            "linear-gradient(160deg, #2a2723 0%, #15120f 40%, #1f1c19 60%, #0a0807 100%)",
+          boxShadow: [
+            "0 80px 160px -40px rgba(0,0,0,0.85)",
+            "0 30px 60px -20px rgba(0,0,0,0.6)",
+            "inset 0 2px 0 rgba(255,255,255,0.08)",
+            "inset 0 -2px 0 rgba(0,0,0,0.6)",
+          ].join(", "),
+        }}
+      />
+      {/* Inner bezel ring */}
+      <div
+        style={{
+          position: "absolute",
+          left: PHONE.bodyInsetX + 8,
+          top: PHONE.bodyInsetY + 8,
+          right: PHONE.bodyInsetX + 8,
+          bottom: PHONE.bodyInsetY + 8,
+          borderRadius: PHONE.bodyRadius - 6,
+          border: "1px solid rgba(255,255,255,0.06)",
+        }}
+      />
 
-      <Sequence from={O.imDoc} durationInFrames={D.imDoc}>
-        <HeroBubble text={LINE_DOC} time="9:03" />
-      </Sequence>
-      <Sequence from={O.doc} durationInFrames={D.doc}>
-        <SceneCall
-          label="Asmi → Dr. Weng's office"
-          name="Dr. Weng — Front Desk"
-          accent={TERRACOTTA}
-          captions={[
-            { at: 0,   text: "Hi, I'm calling on behalf of Sarah Kim." },
-            { at: 60,  text: "I'd like to book a checkup for her son Jonathan." },
-            { at: 130, text: "Insurance is Blue Cross, ID on file." },
-            { at: 195, text: "Tuesday at 10am works — confirmed." },
-          ]}
-        />
-      </Sequence>
+      {/* Screen (clipped) */}
+      <AbsoluteFill
+        style={{
+          left: SCREEN_INSET.x,
+          top: SCREEN_INSET.y,
+          right: SCREEN_INSET.x,
+          bottom: SCREEN_INSET.y,
+          borderRadius: PHONE.screenRadius,
+          overflow: "hidden",
+          background: CREAM,
+          boxShadow: "inset 0 0 0 2px rgba(0,0,0,0.85)",
+        }}
+      >
+        <DriftingBloom />
+        <Grain />
 
-      <Sequence from={O.imHvac} durationInFrames={D.imHvac}>
-        <HeroBubble text={LINE_HVAC} time="11:18" />
-      </Sequence>
-      <Sequence from={O.hvac} durationInFrames={D.hvac}>
-        <SceneCall
-          label="Asmi → Pacific HVAC"
-          name="Pacific HVAC"
-          accent={SAGE}
-          captions={[
-            { at: 0,   text: "Hi, calling for Marco — AC stopped working." },
-            { at: 60,  text: "Two-story home in Oakland, central system." },
-            { at: 130, text: "What's your earliest diagnostic visit?" },
-            { at: 195, text: "Saturday 9am, $150 diagnostic — booked." },
-          ]}
-        />
-      </Sequence>
+        <Sequence from={O.intro} durationInFrames={D.intro}><Intro /></Sequence>
 
-      <Sequence from={O.imGp} durationInFrames={D.imGp}>
-        <HeroBubble text={LINE_GP} time="6:42" />
-      </Sequence>
-      <Sequence from={O.gp} durationInFrames={D.gp}>
-        <SceneCall
-          label="Asmi → Abuelo · Sevilla"
-          name="Abuelo"
-          accent={CLAY}
-          captions={[
-            { at: 0,   text: "Hola abuelo, soy Asmi. ¿Cómo estás hoy?" },
-            { at: 60,  text: "¿Tomaste tu medicina esta mañana?" },
-            { at: 130, text: "¿Cómo va el dolor de espalda?" },
-            { at: 195, text: "Perfecto — le aviso a Sarah. Te quiero." },
-          ]}
-        />
-      </Sequence>
+        <Sequence from={O.imDoc} durationInFrames={D.imDoc}>
+          <HeroBubble text={LINE_DOC} time="9:03" />
+        </Sequence>
+        <Sequence from={O.doc} durationInFrames={D.doc}>
+          <SceneCall
+            label="Asmi → Dr. Weng's office"
+            name="Dr. Weng — Front Desk"
+            accent={TERRACOTTA}
+            captions={[
+              { at: 0,   text: "Hi, I'm calling on behalf of Sarah Kim." },
+              { at: 60,  text: "I'd like to book a checkup for her son Jonathan." },
+              { at: 130, text: "Insurance is Blue Cross, ID on file." },
+              { at: 195, text: "Tuesday at 10am works — confirmed." },
+            ]}
+          />
+        </Sequence>
 
-      <Sequence from={O.done} durationInFrames={D.done}><SceneDone /></Sequence>
-      <Sequence from={O.outro} durationInFrames={D.outro}><Outro /></Sequence>
+        <Sequence from={O.imHvac} durationInFrames={D.imHvac}>
+          <HeroBubble text={LINE_HVAC} time="11:18" />
+        </Sequence>
+        <Sequence from={O.hvac} durationInFrames={D.hvac}>
+          <SceneCall
+            label="Asmi → Pacific HVAC"
+            name="Pacific HVAC"
+            accent={SAGE}
+            captions={[
+              { at: 0,   text: "Hi, calling for Marco — AC stopped working." },
+              { at: 60,  text: "Two-story home in Oakland, central system." },
+              { at: 130, text: "What's your earliest diagnostic visit?" },
+              { at: 195, text: "Saturday 9am, $150 diagnostic — booked." },
+            ]}
+          />
+        </Sequence>
+
+        <Sequence from={O.imGp} durationInFrames={D.imGp}>
+          <HeroBubble text={LINE_GP} time="6:42" />
+        </Sequence>
+        <Sequence from={O.gp} durationInFrames={D.gp}>
+          <SceneCall
+            label="Asmi → Abuelo · Sevilla"
+            name="Abuelo"
+            accent={CLAY}
+            captions={[
+              { at: 0,   text: "Hola abuelo, soy Asmi. ¿Cómo estás hoy?" },
+              { at: 60,  text: "¿Tomaste tu medicina esta mañana?" },
+              { at: 130, text: "¿Cómo va el dolor de espalda?" },
+              { at: 195, text: "Perfecto — le aviso a Sarah. Te quiero." },
+            ]}
+          />
+        </Sequence>
+
+        <Sequence from={O.done} durationInFrames={D.done}><SceneDone /></Sequence>
+        <Sequence from={O.outro} durationInFrames={D.outro}><Outro /></Sequence>
+
+        {/* On-screen chrome (status bar + dynamic island) */}
+        <StatusBar />
+        <DynamicIsland />
+      </AbsoluteFill>
+
+      {/* Side buttons */}
+      <div style={{ position: "absolute", left: PHONE.bodyInsetX - 4, top: 380, width: 6, height: 60,  borderRadius: 3, background: "#0a0807" }} />
+      <div style={{ position: "absolute", left: PHONE.bodyInsetX - 4, top: 520, width: 6, height: 110, borderRadius: 3, background: "#0a0807" }} />
+      <div style={{ position: "absolute", left: PHONE.bodyInsetX - 4, top: 660, width: 6, height: 110, borderRadius: 3, background: "#0a0807" }} />
+      <div style={{ position: "absolute", right: PHONE.bodyInsetX - 4, top: 540, width: 6, height: 160, borderRadius: 3, background: "#0a0807" }} />
+
+      {/* Glass glare overlay across the screen */}
+      <AbsoluteFill
+        style={{
+          left: SCREEN_INSET.x,
+          top: SCREEN_INSET.y,
+          right: SCREEN_INSET.x,
+          bottom: SCREEN_INSET.y,
+          borderRadius: PHONE.screenRadius,
+          background:
+            "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 35%, rgba(255,255,255,0) 65%, rgba(255,255,255,0.04) 100%)",
+          pointerEvents: "none",
+        }}
+      />
 
       {/* Call voice tracks */}
       <Sequence from={O.doc} durationInFrames={D.doc}>
@@ -168,7 +266,7 @@ export const MainVideo: React.FC = () => {
         <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={1.4} />
       </Sequence>
 
-      {/* Bubble pop on each chat beat — bubble enters at frame ~8 */}
+      {/* Bubble pop on each chat beat */}
       <Sequence from={O.imDoc + 6} durationInFrames={20}>
         <Audio src={staticFile(POP)} volume={0.7} />
       </Sequence>
@@ -183,6 +281,63 @@ export const MainVideo: React.FC = () => {
     </AbsoluteFill>
   );
 };
+
+const DynamicIsland: React.FC = () => (
+  <div
+    style={{
+      position: "absolute",
+      top: 38,
+      left: "50%",
+      transform: "translateX(-50%)",
+      width: 340,
+      height: 78,
+      borderRadius: 999,
+      background: "#000",
+      boxShadow: "0 4px 16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)",
+    }}
+  />
+);
+
+const StatusBar: React.FC = () => (
+  <div
+    style={{
+      position: "absolute",
+      top: 46,
+      left: 60,
+      right: 60,
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      color: ESPRESSO,
+      fontFamily: sans,
+      fontWeight: 600,
+      fontSize: 28,
+      fontVariantNumeric: "tabular-nums",
+      zIndex: 2,
+    }}
+  >
+    <span>9:41</span>
+    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+      {/* signal */}
+      <div style={{ display: "flex", alignItems: "flex-end", gap: 3 }}>
+        {[6, 10, 14, 18].map((h, i) => (
+          <div key={i} style={{ width: 5, height: h, borderRadius: 1, background: ESPRESSO }} />
+        ))}
+      </div>
+      {/* wifi */}
+      <svg width="30" height="22" viewBox="0 0 24 18" fill="none">
+        <path d="M12 14 L13.5 15.5 L15 14 A2 2 0 0 0 12 14 Z" fill={ESPRESSO} />
+        <path d="M5 9 A10 10 0 0 1 19 9" stroke={ESPRESSO} strokeWidth="2.2" fill="none" strokeLinecap="round" />
+        <path d="M8 12 A6 6 0 0 1 16 12" stroke={ESPRESSO} strokeWidth="2.2" fill="none" strokeLinecap="round" />
+      </svg>
+      {/* battery */}
+      <div style={{ width: 44, height: 22, borderRadius: 6, border: `2px solid ${ESPRESSO}`, padding: 2, position: "relative" }}>
+        <div style={{ width: "82%", height: "100%", background: ESPRESSO, borderRadius: 2 }} />
+        <div style={{ position: "absolute", right: -5, top: 6, width: 3, height: 8, borderRadius: 1, background: ESPRESSO }} />
+      </div>
+    </div>
+  </div>
+);
 
 // ============= Atmosphere =============
 
