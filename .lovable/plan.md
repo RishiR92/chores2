@@ -1,59 +1,42 @@
-# Asmi Launch Video — 16:9 Cinematic Cut
+# Asmi Launch Video — 16:9 Cinematic Cut (Hybrid)
 
-Goal: Take the existing 9:16 phone demo and rebuild it as a 1920×1080 launch film. The inner phone screen content stays exactly the same (intro, WhatsApp bubbles, call card, doc, outro). What changes is the **world around the phone** — a designed environment that makes the device feel like a hero product, not a screenshot in a frame.
+Goal: A 1920×1080, ~43s launch film. The existing 9:16 phone demo (intro, WhatsApp bubbles, call card, doc, outro) is preserved exactly — only the world around the phone changes.
 
-## Research notes — what current AI launches do
+## Direction: "Asmi OS, on your desk" (C × B hybrid)
 
-- **Rabbit r1 / rabbitOS 2** — orange-on-black, device floating on infinite seamless backdrop, slow turntable, hard product-shot lighting.
-- **Humane Ai Pin** — soft studio gradient, macro close-ups, light beams cutting across the device, almost jewelry-ad framing.
-- **Apple Intelligence** — frosted glass surfaces, Siri rainbow halo bleeding off the phone edges into the canvas, UI elements physically leaving the screen.
-- **Friend pendant** — moody cinematic environments (rain, neon, intimate rooms) with device as quiet anchor.
-- **Arc Search / Granola** — playful 3D objects floating around a phone, kinetic typography, oversized punctuation as scenery.
+A bold, branded kinetic stage (C) with the warmth and "UI escapes the bezel" intimacy of a founder's desk (B). Confident enough to stop a scroll, human enough to feel like real life.
 
-Common winning move: the phone is **not** centered on a flat wall. The world reacts to what's on screen — light spills out, UI fragments escape the bezel, the camera drifts.
+### The look
+- **Canvas:** painterly warm gradient backdrop — linen/sand/morning tones from the brand palette, with a soft top-down light pool and a subtle vignette. Feels like a sunlit desk surface without being a photo.
+- **Phone:** enters from below with a spring, locks into a 3D tilt (`perspective(2400px) rotateX(6deg) rotateY(-9deg)`), levitates slightly above an implied desk plane with a soft contact shadow. Gentle bob + ±2° drift throughout.
+- **Accent wash:** a single hot accent (terracotta) lives in the rim light and floor glow; it **shifts hue per scene** to match what's on screen (sage for WhatsApp, sky-blue for the call card, clay for the doc, terracotta for intro/outro). The whole room subtly repaints between scenes via a soft color sweep, not a hard wipe.
+- **Kinetic editorial type (left third):** big serif lockups occluded by the phone — "MEET ASMI", "TEXTS YOUR CONTACTS.", "JOINS YOUR CALLS.", "REMEMBERS EVERYTHING.", "ALWAYS ON." One headline per scene, slow rise + fade.
+- **UI escapes the bezel (the B moment):** at peak of each scene, one element from inside the phone — a WhatsApp bubble, the call card, a doc snippet — detaches as a translucent floating card, drifts out beside the device for ~30 frames, then snaps back in. Soft drop shadow, slight parallax.
+- **Ambient props (sparse, painted, not photo):** a faint coffee-cup silhouette and a notebook edge live in the bottom corners as low-contrast painterly shapes — desk warmth without realism risk.
+- **Dust motes / light particles:** a few drifting specks in the key light beam for atmosphere.
 
-## Three concept directions (pick one)
+### Vibe
+Premium consumer-AI launch. Confident, warm, scroll-stopping. Reads as "this is my actual life, and it's beautifully designed."
 
-### A. "Levitating Glass" — Apple-grade product film
-- Charcoal seamless studio with a soft top-down key light and a colored rim light that shifts with each scene (warm amber → cool teal → soft magenta).
-- iPhone floats dead-center, slow Y-axis rotation (±8°) and gentle bob. Subtle contact shadow on an implied floor.
-- Behind the phone: huge, slow-moving kinetic typography — "MEET ASMI" / "YOUR CHIEF OF STAFF" / "ALWAYS ON" — set in a refined display serif, partially occluded by the device.
-- Light from the phone screen spills onto the backdrop (the rim color picks up whatever's on screen — green for WhatsApp, blue for the call card).
-- Vibe: premium, confident, quiet. Closest to Apple / Humane.
+## Plan of work
 
-### B. "Desk of a Founder" — lived-in cinematic
-- Top-down + 3/4 angle of a warm wooden desk: open notebook, coffee cup, AirPods, soft window light, a plant out of focus.
-- iPhone lies on the desk, then lifts into frame and tilts toward camera as the demo begins.
-- Notifications, call cards, and doc fragments **escape the screen** and float above the desk as translucent cards before snapping back in.
-- Soft parallax camera drift, shallow depth of field, dust motes in the light beam.
-- Vibe: human, founder-friendly, "this is actually my life." Closest to Granola / Friend.
-
-### C. "Asmi OS" — bold, branded, kinetic  *(recommended)*
-- Full-bleed brand-color canvas (deep ink navy with a single hot accent — e.g. electric lime or coral) that **changes hue per scene** to match the demo content.
-- Phone enters from below with a spring, locks into a slight 3D tilt (perspective, not flat), levitates with a soft floor glow.
-- Around the phone: oversized supporting elements — a giant ⌘ key, a massive quotation mark, a 3D pill that says "9:41 AM", a circular waveform pulsing to the call card.
-- Between scenes the whole canvas does a hard color-wipe transition; the phone stays locked while the world repaints around it.
-- Big editorial type lockups on the left, phone on the right (rule-of-thirds), captions narrate the value props: "Texts your contacts." "Joins your calls." "Remembers everything."
-- Vibe: confident consumer-AI launch, scroll-stopping, social-ready. Closest to Rabbit / Arc.
-
-All three keep the existing inner phone demo 100% untouched — only the outer 1920×1080 stage changes.
-
-## Plan of work (after you pick A / B / C)
-
-1. **New composition** `launch16x9` registered in `remotion/src/Root.tsx` at 1920×1080, 30fps, same duration as current demo (~43s). Existing 9:16 `main` composition stays as-is.
-2. **New file** `remotion/src/Launch16x9.tsx` that:
-   - Renders the chosen environment (background, lights, kinetic type, floating props).
-   - Embeds the existing phone frame + inner stage from `MainVideo.tsx` as a reusable `<PhoneStage />` component, scaled to fit ~85% of canvas height and positioned per the chosen concept.
-   - Drives all motion from `useCurrentFrame()` + `spring()` / `interpolate()`.
-3. **Refactor** `MainVideo.tsx` minimally: extract the phone frame + inner scene sequence into `<PhoneStage />` so both the 9:16 and 16:9 comps share one source of truth. No content changes.
-4. **Per-scene world reactions**: the outer environment reads which inner scene is active (by frame range) and shifts rim light / accent color / supporting type to match.
-5. **Render** `/mnt/documents/asmi-launch-16x9-v1.mp4` via the existing `scripts/render-remotion.mjs` (add a `--composition launch16x9` switch or a second script).
-6. **QA**: pull stills at intro, first WhatsApp bubble, call card, doc, outro — confirm phone is uncut, environment reads cleanly, type is legible, no element clips the 1920×1080 frame.
+1. **New composition** `launch16x9` in `remotion/src/Root.tsx` at 1920×1080, 30fps, same duration as `main` (1290 frames). Keep `main` (9:16) untouched.
+2. **Refactor minimally:** extract the phone frame + inner scene sequence from `MainVideo.tsx` into a reusable `<PhoneStage />` component. No content changes to the inner demo.
+3. **New file** `remotion/src/Launch16x9.tsx`:
+   - Painterly gradient backdrop + light pool + vignette + drifting motes.
+   - Per-scene accent driver: reads current frame, maps to scene index, interpolates accent hue + headline.
+   - Editorial type slot (left third) with spring-in headlines.
+   - `<PhoneStage />` placed right-third, scaled to ~88% canvas height, with 3D tilt and bob.
+   - "Escape the bezel" overlay: 4–5 floating card cameos timed to each scene's peak.
+   - Painterly coffee/notebook silhouettes in corners.
+4. **Render script:** add `remotion/scripts/render-launch.mjs` (copy of existing, composition `launch16x9`, output `/mnt/documents/asmi-launch-16x9-v1.mp4`).
+5. **QA stills** at intro, first WhatsApp bubble, call-card peak (with escaped card), doc, outro. Verify: phone uncut, type legible, accent matches scene, no element clips 1920×1080.
+6. **Render full MP4** and report path + size.
 
 ## Technical notes
-- Reuse `PHONE` / `PHONE_BODY` / `SCREEN` geometry already in `MainVideo.tsx`; just wrap it and apply a parent `transform: perspective(2400px) rotateY(...) rotateX(...) scale(...)` for the 3D tilt in concepts A and C.
-- No WebGL / Three.js needed — CSS 3D transforms + layered gradients + SVG are enough and stay safe inside the sandbox renderer (no `backdropFilter`).
-- Fonts: keep current body font; add one display face for the kinetic type (e.g. `@remotion/google-fonts/Instrument_Serif` for A/B, `Space_Grotesk` for C).
-
-## Question for you
-Which concept should I build — **A (Levitating Glass)**, **B (Founder's Desk)**, or **C (Asmi OS, recommended)**? Or mix elements from two?
+- All motion via `useCurrentFrame()` + `spring()`/`interpolate()`. No CSS animations.
+- 3D phone tilt via parent CSS `transform: perspective(...) rotateX/Y(...) scale(...)`. No WebGL.
+- No `backdropFilter` (sandbox renderer constraint). Use layered gradients + `filter: blur()` sparingly.
+- Reuse existing `PHONE` / `PHONE_BODY` / `SCREEN` geometry from `MainVideo.tsx`.
+- Add one display font for editorial type: `@remotion/google-fonts/Instrument_Serif` (matches the warm brand palette).
+- Floating "escape" cards reuse the same JSX building blocks as the inner scenes (WhatsApp bubble, call-card chrome) at a smaller scale, so visual language stays consistent.
