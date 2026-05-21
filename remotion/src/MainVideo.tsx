@@ -103,10 +103,19 @@ const PHONE = {
   bezel: 20,
   screenRadius: 108,
 };
+const PHONE_BODY = {
+  width: 1080 - PHONE.bodyInsetX * 2,
+  height: 1920 - PHONE.bodyInsetY * 2,
+};
 const SCREEN_INSET = {
   x: PHONE.bodyInsetX + PHONE.bezel,
   y: PHONE.bodyInsetY + PHONE.bezel,
 };
+const SCREEN = {
+  width: PHONE_BODY.width - PHONE.bezel * 2,
+  height: PHONE_BODY.height - PHONE.bezel * 2,
+};
+const SCREEN_CONTENT_SCALE = Math.min(SCREEN.width / 1080, SCREEN.height / 1920);
 
 export const MainVideo: React.FC = () => {
   return (
@@ -159,12 +168,13 @@ export const MainVideo: React.FC = () => {
       />
 
       {/* Screen (clipped) */}
-      <AbsoluteFill
+      <div
         style={{
+          position: "absolute",
           left: SCREEN_INSET.x,
           top: SCREEN_INSET.y,
-          right: SCREEN_INSET.x,
-          bottom: SCREEN_INSET.y,
+          width: SCREEN.width,
+          height: SCREEN.height,
           borderRadius: PHONE.screenRadius,
           overflow: "hidden",
           background: CREAM,
@@ -179,7 +189,7 @@ export const MainVideo: React.FC = () => {
             height: 1920,
             left: "50%",
             top: "50%",
-            transform: `translate(-50%, -50%) scale(${(1080 - 2 * PHONE.bodyInsetX - 2 * PHONE.bezel) / 1080})`,
+            transform: `translate(-50%, -50%) scale(${SCREEN_CONTENT_SCALE})`,
             transformOrigin: "center center",
           }}
         >
@@ -247,7 +257,7 @@ export const MainVideo: React.FC = () => {
         {/* On-screen chrome (status bar + dynamic island) — unscaled */}
         <StatusBar />
         <DynamicIsland />
-      </AbsoluteFill>
+      </div>
 
       {/* Side buttons */}
       <div style={{ position: "absolute", left: PHONE.bodyInsetX - 4, top: 380, width: 6, height: 60,  borderRadius: 3, background: "#0a0807" }} />
@@ -256,12 +266,13 @@ export const MainVideo: React.FC = () => {
       <div style={{ position: "absolute", right: PHONE.bodyInsetX - 4, top: 540, width: 6, height: 160, borderRadius: 3, background: "#0a0807" }} />
 
       {/* Glass glare overlay across the screen */}
-      <AbsoluteFill
+      <div
         style={{
+          position: "absolute",
           left: SCREEN_INSET.x,
           top: SCREEN_INSET.y,
-          right: SCREEN_INSET.x,
-          bottom: SCREEN_INSET.y,
+          width: SCREEN.width,
+          height: SCREEN.height,
           borderRadius: PHONE.screenRadius,
           background:
             "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 35%, rgba(255,255,255,0) 65%, rgba(255,255,255,0.04) 100%)",
