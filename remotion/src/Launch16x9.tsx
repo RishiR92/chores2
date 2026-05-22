@@ -212,7 +212,7 @@ export const Launch16x9: React.FC = () => {
       )}
 
       {/* === PHONE — fixed center-right (hidden during scene beats) === */}
-      {!beat.scene && (!isOutro || dissolveOp > 0.02) && (
+      {!beat.scene && !isOutro && (
         <div
           style={{
             position: "absolute",
