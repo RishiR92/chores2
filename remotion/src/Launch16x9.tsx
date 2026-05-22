@@ -339,7 +339,7 @@ const HeadlineColumn: React.FC<{
         }}
       >
         <span style={{ color: accent, fontSize: 22 }}>●</span>
-        <span>asmi · personal AI</span>
+        <span>personal AI</span>
       </div>
 
       {wordmark ? (
