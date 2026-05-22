@@ -876,6 +876,8 @@ const RotatingReel: React.FC<{
         width: stageW, height: stageH,
         zIndex: 4, pointerEvents: "none",
         opacity: outOp * inOp,
+        transform: `scale(${reelScale})`,
+        transformOrigin: "50% 50%",
       }}
     >
       {/* Render current + next hero so exit/entry can overlap cleanly */}
