@@ -1,69 +1,44 @@
-# Asmi Launch Video — 16:9 Cinematic Cut (v2)
+# Asmi Launch Video — v3 fix pass
 
-Revising the existing `launch16x9` composition only. Inner phone demo (`MainVideo`) stays byte-for-byte unchanged. Same duration (1290f / 30fps / 1920×1080). Same scene order and timing.
+Goal: presentable and clear first, jazzy second. No content or sequence changes.
 
-## What changes
+## Problems in v2
+1. Headlines sat behind the phone and got occluded — unreadable.
+2. A dark oval kept appearing under/behind the phone (contact shadow + rim glow read as a random blob).
+3. Phone jumped left / right / back / forward between beats — felt random, not choreographed.
 
-### 1. Copy updates
-- Eyebrow `chief of staff` → **`personal AI`**
-- Wordmark: replace uppercase `MEET ASMI` text with the **asmi wordmark** rendered as a styled lockup (lowercase italic Instrument Serif, oversized, with a small dot accent — matches the rest of the brand). Used in intro + outro beats.
-- Headlines updated:
-  - intro → `meet asmi` (wordmark treatment)
-  - calls beat → `book appointments.`
-  - hvac beat → `find vendors.`
-  - gp beat → `check in on loved ones.`
-  - done beat → `remembers everything.`
-  - outro → final hero line (see #4)
+## Fixes
 
-(Sequence + per-beat timing untouched.)
+### Layout — clear two-column stage
+- Phone locked **center-right** (around x = +280 from center), vertically centered. No per-beat x/y drift.
+- Headlines live in a **dedicated left column** (x: 96, width: ~900) — never behind the phone. Big serif, left-aligned, word-stagger reveal.
+- Eyebrow `● asmi · personal AI` sits above the headline, accent dot only.
+- Lower-third progress line stays at bottom-left.
 
-### 2. Phone treatment — make it the hero, not a sidebar
-Today: phone parked right edge, static tilt, minor bob. Replace with a choreographed phone performance:
+### Phone — stable hero, subtle motion only
+- One fixed pose for all product beats: `rotateY(-8deg) rotateX(4deg) scale(1)`.
+- Entrance: spring up from below + slight rotate-in (kept).
+- Idle: tiny vertical bob (±4px) and ±0.01 scale breath. No x drift, no per-beat camera moves.
+- Per beat, only the **accent rim color** and **glow tint** change (so it still feels alive without moving).
 
-- **Center-stage by default.** Phone sits roughly centered horizontally, slightly above middle. Headlines move to a stacked layout that flows *around* it (top-left eyebrow + headline, bottom-left support line) instead of competing in the left third.
-- **Cinematic entrance:** flies in from below with a strong spring, rotates from `rotateX(35deg) rotateY(-20deg) scale(0.6)` settling to a hero pose `rotateX(4deg) rotateY(-6deg) scale(1)`. ~30f.
-- **Per-scene camera moves** (parent transform on the phone wrapper, driven by `useCurrentFrame`):
-  - intro: hero center, slow push-in
-  - calls: drifts left, tilts toward camera (`rotateY(-10deg)`), accent rim brightens
-  - vendors: dolly right, slight `rotateY(+8deg)` for opposite angle
-  - loved ones: pulls back, soft sway
-  - remembers: tilts forward (`rotateX(8deg)`), as if leaning in
-  - done/outro handled in #4
-- **Levitation polish:** stronger contact shadow that scales/blurs with bob; subtle accent-tinted rim light on the phone edge via layered `box-shadow`; soft parallax glow behind phone matching the scene accent.
-- **Floating "escape the bezel" cameo** kept and tied to the camera move so it reads as the same object (drifts in the direction the phone is tilting away from).
+### Remove the "random oval"
+- Delete the elliptical contact shadow under the phone.
+- Replace with a soft, **rectangular** drop-shadow under the phone via `filter: drop-shadow` only — no separate ellipse div.
+- Inner rim light: drop the `inset box-shadow` (it was reading as an oval at corners). Replace with a thin 1px accent border on the clipped screen rect.
 
-### 3. Dynamic, jazzy stage
-- Headlines get **kinetic treatment**: word-by-word stagger, slight per-word scale + rotateX, italic Instrument Serif at 140–180px, paired with a small caps support line in Inter.
-- **Accent sweep between beats** becomes a moving color band (diagonal gradient that wipes across the canvas in 18f), not just opacity crossfade.
-- **Light pool tracks the phone** (radial highlight follows phone X position) so the stage feels alive.
-- More motes, varied sizes, faster drift during high-energy beats (calls / vendors), calmer during loved-ones / remembers.
-- Lower-third brand mark gets a thin animated progress line that fills across the video duration.
+### Intro
+- `meet asmi` wordmark stays, but **smaller** (fontSize ~280) and positioned in the left column so it doesn't collide with the phone. Phone fades in slightly delayed so the wordmark reads first.
 
-### 4. New final shot (replaces phone in the outro beat)
-During the existing outro window (`O.outro` → `TOTAL`, ~105f):
-- Phone scales up + dissolves outward into light particles (`scale → 1.15`, `opacity → 0`, blur ramp, particles burst from its silhouette).
-- Stage clears to a near-black warm gradient (espresso → terracotta wash).
-- Hero line types/reveals center-screen with strong kinetic typography:
-  > **"AI that handles your personal chores in the real world."**
-- Treatment: Instrument Serif italic, mixed weights, 2–3 line break, each line springs in with overshoot and a thin accent underline that draws across. Words `personal chores` and `real world` highlighted in terracotta.
-- Closes with the **asmi wordmark** + `launches soon` fading in beneath.
+### Outro — unchanged behavior, cleaner execution
+- Phone dissolves outward, then the hero line "AI that handles your personal chores in the real world." appears center-screen, then asmi wordmark + `launches soon` fades in. Same as v2 — only the dissolve uses scale + blur + opacity, no particle ring (the particles also read as oval). Replace particle ring with a soft expanding warm flare.
 
-## Plan of work
+### Jazz that stays
+- Word-by-word kinetic stagger on headlines.
+- Accent sweep band wipes across at each beat change.
+- Stationary light pool top-center.
+- Dust motes with per-beat energy.
+- Animated progress line in the lower-third.
 
-1. Edit `remotion/src/Launch16x9.tsx`:
-   - Update `BEATS` array (headlines + add `outroHero` flag on last beat).
-   - Replace phone wrapper with a `<PhoneStage />` that takes a per-beat camera prop and runs the entrance + camera choreography.
-   - Add `AsmiWordmark` component (styled lockup, reused for intro + outro).
-   - Rework headline renderer to do word-stagger kinetic type.
-   - Add accent sweep band + phone-tracking light pool.
-   - Add `<OutroHero />` component for the final shot, gated on the outro beat (phone dissolves, hero line reveals).
-2. No changes to `MainVideo.tsx`, `Root.tsx`, or the render script.
-3. QA stills at: intro hero pose, calls (phone left, "book appointments"), vendors (phone right), loved ones, remembers, outro mid-dissolve, outro final hero line.
-4. Re-render to `/mnt/documents/asmi-launch-16x9-v2.mp4`.
-
-## Technical notes
-- All motion frame-based (`useCurrentFrame` + `spring`/`interpolate`). No CSS transitions.
-- Camera moves applied as a single `transform` on the phone wrapper, interpolated between per-beat target poses via crossfade on `localFrame`.
-- Phone dissolve in outro: layered `filter: blur()` + `opacity` + scale, plus ~40 small divs spawned from cached positions for the particle burst (deterministic seed, no randomness per frame).
-- Hero outro text uses the existing `InstrumentSerif` font already loaded — no new deps.
-- No `backdropFilter`, no WebGL.
+## Files
+- Edit `remotion/src/Launch16x9.tsx` only. `MainVideo.tsx`, `Root.tsx`, render script unchanged.
+- Re-render to `/mnt/documents/asmi-launch-16x9-v3.mp4`.
