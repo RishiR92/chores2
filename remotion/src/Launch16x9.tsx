@@ -266,7 +266,7 @@ export const Launch16x9: React.FC = () => {
               <MainVideo />
             </div>
 
-            {/* Thin titanium bezel hugging only the screen rect */}
+            {/* Thin titanium bezel ring hugging only the screen rect */}
             <div
               style={{
                 position: "absolute",
@@ -276,44 +276,35 @@ export const Launch16x9: React.FC = () => {
                 pointerEvents: "none",
               }}
             >
-              <div
-                style={{
-                  position: "absolute",
-                  inset: "102px 82px 102px 82px",
-                  borderRadius: 138,
-                  padding: 8,
-                  background: `linear-gradient(180deg, #3a3a3e 0%, #242427 50%, #1a1a1c 100%)`,
-                  boxShadow: `
-                    inset 0 1.5px 0 rgba(255,255,255,0.18),
-                    inset 0 -1.5px 0 rgba(0,0,0,0.55),
-                    0 0 0 1px rgba(0,0,0,0.4)
-                  `,
-                  WebkitMaskImage:
-                    "radial-gradient(white, white)",
-                }}
-              >
-                {/* Cut the screen hole so only the ring shows */}
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 8,
-                    borderRadius: 130,
-                    background: "transparent",
-                    boxShadow: `inset 0 0 0 1px ${rgba(accent, 0.35)}`,
-                  }}
-                />
-              </div>
-              {/* Accent rim-light on bezel */}
+              {/* Outer bezel rectangle (slightly larger than screen) with dark border */}
               <div
                 style={{
                   position: "absolute",
                   inset: "100px 80px 100px 80px",
                   borderRadius: 140,
-                  boxShadow: `0 0 24px ${rgba(accent, 0.28)}`,
-                  pointerEvents: "none",
+                  border: "10px solid transparent",
+                  backgroundImage: `linear-gradient(transparent, transparent), linear-gradient(180deg, #3a3a3e 0%, #242427 50%, #141416 100%)`,
+                  backgroundOrigin: "border-box",
+                  backgroundClip: "padding-box, border-box",
+                  boxShadow: `
+                    inset 0 1.5px 0 rgba(255,255,255,0.16),
+                    inset 0 -1.5px 0 rgba(0,0,0,0.55),
+                    0 0 24px ${rgba(accent, 0.22)}
+                  `,
+                }}
+              />
+              {/* Screen edge accent hairline */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: "110px 90px 110px 90px",
+                  borderRadius: 130,
+                  boxShadow: `inset 0 0 0 1px ${rgba(accent, 0.35)}, inset 0 0 0 3px rgba(0,0,0,0.55)`,
                 }}
               />
             </div>
+
+
 
           </div>
         </div>
