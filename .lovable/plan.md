@@ -1,6 +1,10 @@
 # Asmi Launch Video — v3 fix pass
 
-Goal: presentable and clear first, jazzy second. No content or sequence changes.
+Goal: presentable and clear first, jazzy second. No sequence changes.
+
+## Copy removals
+- Remove `launches soon` tagline from the outro.
+- Remove the `remembers everything.` headline beat — keep the beat's duration and phone choreography (so timing and MainVideo stay synced), but render no headline text during that window (phone-only moment).
 
 ## Problems in v2
 1. Headlines sat behind the phone and got occluded — unreadable.
