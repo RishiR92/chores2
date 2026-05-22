@@ -1,12 +1,22 @@
 ## Plan
 
-Make the three call voice tracks louder in the launch render.
+### 1. Fix phone-call audio balance
+- Rebalance the three call snippets so the caller side reads at the same perceived level as Asmi (current flat 2.2x boost preserves the imbalance — tune per clip with gentle limiting).
+- Keep background music almost silent during call windows in both `MainVideo` and `Launch16x9` so dialogue dominates.
+- Match all three calls to consistent loudness.
 
-### What I'll change
-1. In `remotion/src/MainVideo.tsx`, raise the `<Audio>` volume on the three call sequences (doc, hvac, grandpa) from `1.0` to `1.4` (~40% louder — within the 30–50% range you asked for).
-2. Leave background music ducking, call audio content, timings, layout, and the small ASMI logo untouched.
-3. Render a new versioned export `asmi-launch-16x9-v13.mp4` so you can compare against v12.
+### 2. Rebuild the language cloud (centered, website-style)
+- **Center anchor (large)**: `50+ languages.` in serif italic, espresso, centered — modest size (not the giant top headline).
+- **Subtitle under it (smaller, but bold/highlighted, not muted)**: `your accent. your way.` in serif italic, in the **terracotta family** (`#C25B3F`, same as outro), at roughly 55–60% the size of the anchor — visible and confident, just smaller.
+- **Cloud around the anchor**: ~40 language names in a tight ellipse around the center, denser in the middle, thinning toward the edges. No corner outliers.
+- **Subtle base state**: low-opacity espresso/stone, small/medium sizes — feels like the website screenshot.
+- **One-at-a-time pop**: every ~22 frames a single language bubbles up — scales, brightens, shifts to terracotta, then settles. Only one prominent pop at a time.
+- **Hide the top headline** during this beat so the centered cluster is the only focus.
 
-### Notes
-- Remotion accepts `volume > 1` for amplification. 1.4 is the target; if a quick peak check shows clipping I'll back off slightly before delivering.
-- BGM duck floor stays at 0.10, so the music won't fight the louder voice.
+### 3. Render and verify
+- Export `asmi-launch-16x9-v15.mp4`.
+- Spot-check frames: centered anchor + highlighted subtitle, terracotta pops, tight cluster, and call voice clarity.
+
+### Files
+- `remotion/src/MainVideo.tsx` — call audio levels + BGM duck floor.
+- `remotion/src/Launch16x9.tsx` — wrapper BGM duck + full rewrite of `LangCloud`.

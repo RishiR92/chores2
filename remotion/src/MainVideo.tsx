@@ -281,15 +281,15 @@ export const MainVideo: React.FC = () => {
         }}
       />
 
-      {/* Call voice tracks — boosted for intelligibility */}
+      {/* Call voice tracks — dynamically normalized so caller + Asmi sit equal */}
       <Sequence from={O.doc} durationInFrames={D.doc}>
-        <Audio src={staticFile("audio/trimmed/doc.mp3")} volume={2.2} />
+        <Audio src={staticFile("audio/trimmed/doc.mp3")} volume={1.3} />
       </Sequence>
       <Sequence from={O.hvac} durationInFrames={D.hvac}>
-        <Audio src={staticFile("audio/trimmed/hvac.mp3")} volume={2.2} />
+        <Audio src={staticFile("audio/trimmed/hvac.mp3")} volume={1.3} />
       </Sequence>
       <Sequence from={O.gp} durationInFrames={D.gp}>
-        <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={2.2} />
+        <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={1.3} />
       </Sequence>
 
 
