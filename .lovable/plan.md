@@ -1,5 +1,7 @@
 # Launch video — v10
 
+Three targeted fixes on top of v9.
+
 Two targeted fixes on top of v9.
 
 ## 1. Restore v7 audio portions, just cleaner
