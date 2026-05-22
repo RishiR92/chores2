@@ -1,5 +1,7 @@
 import {
   AbsoluteFill,
+  Audio,
+  staticFile,
   useCurrentFrame,
   useVideoConfig,
   interpolate,
@@ -210,7 +212,7 @@ export const Launch16x9: React.FC = () => {
       )}
 
       {/* === PHONE — fixed center-right (hidden during scene beats) === */}
-      {!beat.scene && (!isOutro || dissolveOp > 0.02) && (
+      {!beat.scene && !isOutro && (
         <div
           style={{
             position: "absolute",
@@ -335,6 +337,18 @@ export const Launch16x9: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Global background music spanning the full 16:9 cut.
+          Fades out across the last ~30 frames of the outro. */}
+      <Audio
+        src={staticFile("audio/bgm.mp3")}
+        volume={(f) =>
+          interpolate(f, [0, 20, TOTAL - 30, TOTAL - 2], [0, 0.55, 0.55, 0], {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+          })
+        }
+      />
     </AbsoluteFill>
   );
 };
@@ -348,9 +362,6 @@ const HeadlineColumn: React.FC<{
   const outOp = interpolate(localFrame, [Math.max(0, beatLen - 18), beatLen], [1, 0], {
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
-  const eyebrowOp = interpolate(localFrame, [0, 14], [0, 1], {
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  }) * outOp;
 
   return (
     <div
@@ -363,17 +374,6 @@ const HeadlineColumn: React.FC<{
         zIndex: 3,
       }}
     >
-      {/* Eyebrow */}
-      <div
-        style={{
-          fontSize: 18, letterSpacing: 6, textTransform: "uppercase",
-          color: STONE, fontWeight: 500, opacity: eyebrowOp,
-          display: "flex", alignItems: "center", gap: 14,
-        }}
-      >
-        <span style={{ color: accent, fontSize: 22 }}>●</span>
-        <span>personal AI</span>
-      </div>
 
       {wordmark ? (
         <WordmarkHeadline accent={accent} localFrame={localFrame} outOp={outOp} />
@@ -662,18 +662,32 @@ const DustMotes: React.FC<{ energy: number; darken: number }> = ({ energy, darke
   );
 };
 
-// ============= Task pill cloud (right side, fast-paced) =============
+// ============= Rotating reel (shared by tasks + langs scenes) =============
+// One hero word at a time, large italic serif. Two soft secondary words
+// drift in above and below, lagging the hero. ~14 frames per beat.
+const I18N_FONT_STACK = `${serif}, ${notoDeva}, ${notoBengali}, ${notoTamil}, ${notoArabic}, ${notoHebrew}, ${notoGurmukhi}, ${notoSC}, ${notoJP}, ${notoKR}, serif`;
+
 const TASK_LIST = [
   "book dentist", "dispute charge", "call plumber", "check on mom",
-  "cancel subscription", "moving quotes", "refill prescription", "book salon",
-  "insurance claim", "phone bill", "find electrician", "book movers",
-  "car service", "compare flights", "call landlord", "reverse bank fee",
-  "schedule vet", "parking ticket", "order supplies", "restaurant reservation",
+  "refill prescription", "moving quotes", "insurance claim", "find electrician",
+  "schedule vet", "compare flights", "reverse bank fee", "restaurant reservation",
 ];
 
-const TaskCloud: React.FC<{ localFrame: number; beatLen: number; accent: string }> = ({
-  localFrame, beatLen, accent,
-}) => {
+const LANG_LIST = [
+  "Español", "हिन्दी", "中文", "Français", "العربية", "日本語",
+  "Português", "Deutsch", "한국어", "Italiano", "বাংলা", "Türkçe",
+];
+
+const RotatingReel: React.FC<{
+  localFrame: number;
+  beatLen: number;
+  accent: string;
+  items: string[];
+  fontFamily: string;
+  italic?: boolean;
+  heroSize: number;
+  secondarySize: number;
+}> = ({ localFrame, beatLen, accent, items, fontFamily, italic, heroSize, secondarySize }) => {
   const { fps } = useVideoConfig();
   const stageX = 940;
   const stageY = 90;
@@ -683,117 +697,115 @@ const TaskCloud: React.FC<{ localFrame: number; beatLen: number; accent: string 
   const outOp = interpolate(localFrame, [Math.max(0, beatLen - 16), beatLen], [1, 0], {
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
-
-  return (
-    <div
-      style={{
-        position: "absolute",
-        left: stageX, top: stageY,
-        width: stageW, height: stageH,
-        zIndex: 4, pointerEvents: "none",
-        opacity: outOp,
-        display: "flex",
-        flexWrap: "wrap",
-        alignContent: "center",
-        justifyContent: "center",
-        gap: 18,
-      }}
-    >
-      {TASK_LIST.map((label, i) => {
-        const delay = 2 + i * 2.0;
-        const sp = spring({
-          frame: localFrame - delay, fps,
-          config: { damping: 14, stiffness: 200, mass: 0.6 },
-        });
-        const op = interpolate(sp, [0, 1], [0, 1]);
-        const s = interpolate(sp, [0, 1], [0.55, 1]);
-        const ty = interpolate(sp, [0, 1], [14, 0]);
-        const drift = Math.sin((localFrame + i * 9) / 32) * 2;
-        const isAccent = i % 5 === 2;
-        const size = 28;
-        return (
-          <div
-            key={i}
-            style={{
-              transform: `translateY(${ty + drift}px) scale(${s})`,
-              opacity: op,
-              fontFamily: sans,
-              fontSize: size,
-              fontWeight: 500,
-              padding: "12px 26px",
-              borderRadius: 999,
-              background: isAccent ? accent : "rgba(255,252,247,0.95)",
-              color: isAccent ? "#FFF8F0" : ESPRESSO,
-              border: `1px solid ${isAccent ? rgba(accent, 1) : rgba(ESPRESSO, 0.10)}`,
-              boxShadow: `0 6px 18px ${rgba(ESPRESSO, 0.08)}`,
-              whiteSpace: "nowrap",
-              letterSpacing: -0.2,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 10,
-            }}
-          >
-            <span
-              style={{
-                width: 8, height: 8, borderRadius: "50%",
-                background: isAccent ? "#FFF8F0" : accent,
-                display: "inline-block",
-              }}
-            />
-            {label}
-          </div>
-        );
-      })}
-    </div>
-  );
-};
-
-// ============= Language cloud (right side, fast-paced) =============
-// Use a font stack with broad Unicode coverage. The serif handles Latin;
-// Noto fallbacks render Devanagari / Arabic / CJK / Hebrew / etc.
-const I18N_FONT_STACK = `${serif}, ${notoDeva}, ${notoBengali}, ${notoTamil}, ${notoArabic}, ${notoHebrew}, ${notoGurmukhi}, ${notoSC}, ${notoJP}, ${notoKR}, serif`;
-
-const LANGS: { word: string; weight: number }[] = [
-  { word: "English", weight: 1.0 },
-  { word: "Español", weight: 1.0 },
-  { word: "Français", weight: 1.15 },
-  { word: "हिन्दी", weight: 1.1 },
-  { word: "中文", weight: 1.25 },
-  { word: "العربية", weight: 1.0 },
-  { word: "Italiano", weight: 0.9 },
-  { word: "Deutsch", weight: 0.9 },
-  { word: "Português", weight: 0.95 },
-  { word: "日本語", weight: 1.15 },
-  { word: "한국어", weight: 1.05 },
-  { word: "Русский", weight: 0.95 },
-  { word: "Türkçe", weight: 0.85 },
-  { word: "Tiếng Việt", weight: 0.9 },
-  { word: "தமிழ்", weight: 1.0 },
-  { word: "বাংলা", weight: 1.0 },
-  { word: "Nederlands", weight: 0.8 },
-  { word: "Polski", weight: 0.85 },
-  { word: "Українська", weight: 0.85 },
-  { word: "ελληνικά", weight: 0.9 },
-  { word: "עברית", weight: 1.0 },
-  { word: "Filipino", weight: 0.85 },
-  { word: "Magyar", weight: 0.85 },
-  { word: "Română", weight: 0.85 },
-  { word: "Punjabi", weight: 0.95 },
-];
-
-const LangCloud: React.FC<{ localFrame: number; beatLen: number; accent: string }> = ({
-  localFrame, beatLen, accent,
-}) => {
-  const { fps } = useVideoConfig();
-  const stageX = 940;
-  const stageY = 80;
-  const stageW = 920;
-  const stageH = 920;
-
-  const outOp = interpolate(localFrame, [Math.max(0, beatLen - 16), beatLen], [1, 0], {
+  const inOp = interpolate(localFrame, [0, 10], [0, 1], {
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
 
+  // Per-beat cycling. First reveal at frame 6, then every BEAT frames.
+  const BEAT = 16;
+  const startOffset = 6;
+  const elapsed = Math.max(0, localFrame - startOffset);
+  const beatIdx = Math.floor(elapsed / BEAT);
+  const beatLocal = elapsed - beatIdx * BEAT;
+
+  const renderHero = (idx: number, localT: number) => {
+    const word = items[((idx % items.length) + items.length) % items.length];
+    // localT: 0 → fresh, BEAT → next
+    const inSp = spring({
+      frame: localT, fps,
+      config: { damping: 18, stiffness: 220, mass: 0.7 },
+    });
+    const exitT = Math.max(0, localT - (BEAT - 5));
+    const exitSp = spring({
+      frame: exitT, fps,
+      config: { damping: 20, stiffness: 200, mass: 0.6 },
+    });
+    const op = interpolate(inSp, [0, 1], [0, 1]) * (1 - exitSp);
+    const ty = interpolate(inSp, [0, 1], [28, 0]) + interpolate(exitSp, [0, 1], [0, -34]);
+    const blur = interpolate(inSp, [0, 1], [10, 0]) + interpolate(exitSp, [0, 1], [0, 6]);
+    const scale = interpolate(inSp, [0, 1], [0.92, 1]);
+    return (
+      <div
+        key={`hero-${idx}`}
+        style={{
+          position: "absolute",
+          inset: 0,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontFamily,
+          fontStyle: italic ? "italic" : "normal",
+          fontWeight: 500,
+          fontSize: heroSize,
+          color: ESPRESSO,
+          letterSpacing: -1.5,
+          textAlign: "center",
+          padding: "0 40px",
+          lineHeight: 1.02,
+          opacity: op,
+          transform: `translateY(${ty}px) scale(${scale})`,
+          filter: `blur(${blur}px)`,
+          whiteSpace: "nowrap",
+        }}
+      >
+        {word}
+      </div>
+    );
+  };
+
+  const renderSecondary = (idx: number, localT: number, side: "top" | "bottom") => {
+    const word = items[((idx % items.length) + items.length) % items.length];
+    const t = localT - 3; // lag
+    const inSp = spring({
+      frame: t, fps,
+      config: { damping: 22, stiffness: 180, mass: 0.7 },
+    });
+    const exitT = Math.max(0, localT - (BEAT - 7));
+    const exitSp = spring({
+      frame: exitT, fps,
+      config: { damping: 22, stiffness: 180, mass: 0.6 },
+    });
+    const op = interpolate(inSp, [0, 1], [0, 0.32]) * (1 - exitSp);
+    const tx = side === "top" ? -120 : 140;
+    const tyBase = side === "top" ? -heroSize * 0.7 : heroSize * 0.7;
+    const ty = tyBase + interpolate(inSp, [0, 1], [18, 0]);
+    return (
+      <div
+        key={`sec-${side}-${idx}`}
+        style={{
+          position: "absolute",
+          inset: 0,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontFamily,
+          fontStyle: italic ? "italic" : "normal",
+          fontSize: secondarySize,
+          color: ESPRESSO,
+          letterSpacing: -0.8,
+          textAlign: "center",
+          opacity: op,
+          transform: `translate(${tx}px, ${ty}px)`,
+          whiteSpace: "nowrap",
+          filter: "blur(0.4px)",
+        }}
+      >
+        {word}
+      </div>
+    );
+  };
+
+  // Hairline rule under hero, breathes with the beat.
+  const ruleSp = spring({
+    frame: beatLocal - 2, fps,
+    config: { damping: 22, stiffness: 200, mass: 0.6 },
+  });
+  const ruleExit = spring({
+    frame: Math.max(0, beatLocal - (BEAT - 5)), fps,
+    config: { damping: 22, stiffness: 200, mass: 0.6 },
+  });
+  const ruleW = interpolate(ruleSp, [0, 1], [0, 220]) * (1 - ruleExit);
+
+  // Counter "01 / 12" style — gives editorial pacing cue.
+  const totalShown = Math.min(items.length, Math.floor(beatLen / BEAT));
+  const counter = `${String(Math.min(beatIdx + 1, totalShown)).padStart(2, "0")} / ${String(totalShown).padStart(2, "0")}`;
+
   return (
     <div
       style={{
@@ -801,46 +813,68 @@ const LangCloud: React.FC<{ localFrame: number; beatLen: number; accent: string 
         left: stageX, top: stageY,
         width: stageW, height: stageH,
         zIndex: 4, pointerEvents: "none",
-        opacity: outOp,
-        fontFamily: I18N_FONT_STACK,
-        display: "flex",
-        flexWrap: "wrap",
-        alignContent: "center",
-        justifyContent: "center",
-        gap: "18px 28px",
+        opacity: outOp * inOp,
       }}
     >
-      {LANGS.map((p, i) => {
-        const delay = 2 + i * 1.8;
-        const sp = spring({
-          frame: localFrame - delay, fps,
-          config: { damping: 16, stiffness: 180, mass: 0.7 },
-        });
-        const op = interpolate(sp, [0, 1], [0, 1]);
-        const s = interpolate(sp, [0, 1], [0.7, 1]);
-        const ty = interpolate(sp, [0, 1], [16, 0]);
-        const drift = Math.cos((localFrame + i * 11) / 36) * 2;
-        const isAccent = i % 5 === 1;
-        const size = Math.round(48 + p.weight * 24);
-        return (
-          <span
-            key={i}
-            style={{
-              transform: `translateY(${ty + drift}px) scale(${s})`,
-              opacity: op,
-              fontStyle: "italic",
-              fontSize: size,
-              color: isAccent ? accent : ESPRESSO,
-              letterSpacing: -1,
-              lineHeight: 1.05,
-              whiteSpace: "nowrap",
-              display: "inline-block",
-            }}
-          >
-            {p.word}
-          </span>
-        );
-      })}
+      {/* Render current + next hero so exit/entry can overlap cleanly */}
+      {renderHero(beatIdx, beatLocal)}
+      {renderHero(beatIdx + 1, beatLocal - BEAT)}
+
+      {/* Secondary words offset by ±2 in the cycle */}
+      {renderSecondary(beatIdx + 2, beatLocal, "top")}
+      {renderSecondary(beatIdx - 1, beatLocal, "bottom")}
+
+      {/* Hairline rule */}
+      <div
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: stageH / 2 + heroSize * 0.55,
+          width: ruleW,
+          height: 2,
+          background: accent,
+          transform: "translateX(-50%)",
+          borderRadius: 2,
+        }}
+      />
+
+      {/* Counter — top-right of stage */}
+      <div
+        style={{
+          position: "absolute",
+          right: 36, top: 28,
+          fontFamily: sans,
+          fontSize: 14,
+          letterSpacing: 4,
+          color: STONE,
+          fontWeight: 500,
+          opacity: 0.7,
+        }}
+      >
+        {counter}
+      </div>
     </div>
   );
 };
+
+const TaskCloud: React.FC<{ localFrame: number; beatLen: number; accent: string }> = (p) => (
+  <RotatingReel
+    {...p}
+    items={TASK_LIST}
+    fontFamily={serif}
+    italic
+    heroSize={132}
+    secondarySize={42}
+  />
+);
+
+const LangCloud: React.FC<{ localFrame: number; beatLen: number; accent: string }> = (p) => (
+  <RotatingReel
+    {...p}
+    items={LANG_LIST}
+    fontFamily={I18N_FONT_STACK}
+    italic
+    heroSize={148}
+    secondarySize={48}
+  />
+);
