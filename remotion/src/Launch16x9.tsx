@@ -53,7 +53,7 @@ const BEATS: Beat[] = [
   { start: O.imDoc,  end: O.imHvac, headline: "book\nappointments.",      accent: TERRACOTTA, energy: 0.95 },
   { start: O.imHvac, end: O.imGp,   headline: "find\nvendors.",           accent: SAGE,       energy: 0.95 },
   { start: O.imGp,   end: O.done,   headline: "check in on\nloved ones.", accent: CLAY,       energy: 0.5 },
-  { start: O.done,   end: O.outro,  headline: "",                         accent: SKY,        energy: 0.7, hideHeadline: true },
+  { start: O.done,   end: O.outro,  headline: "handles\nyour day.",       accent: SKY,        energy: 0.7 },
   { start: O.outro,  end: TOTAL,    headline: "",                         accent: TERRACOTTA, energy: 0.4, outro: true },
 ];
 
