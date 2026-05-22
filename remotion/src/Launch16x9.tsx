@@ -163,7 +163,7 @@ export const Launch16x9: React.FC = () => {
       {isOutro && (
         <AbsoluteFill
           style={{
-            background: `radial-gradient(60% 60% at 50% 50%, ${rgba(TERRACOTTA, 0.18)}, ${rgba(ESPRESSO, 0.92)} 70%)`,
+            background: `radial-gradient(70% 65% at 50% 45%, ${rgba(MORNING, 0.0)} 0%, ${rgba(SAND, 0.55)} 80%, ${rgba(ESPRESSO, 0.18)} 100%)`,
             opacity: stageDarken,
             pointerEvents: "none",
           }}
