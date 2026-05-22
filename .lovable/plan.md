@@ -1,48 +1,41 @@
-# Asmi Launch Video — v3 fix pass
+# Asmi Launch Video — v4 polish
 
-Goal: presentable and clear first, jazzy second. No sequence changes.
+Scope: visual polish only. Sequence, timing, and MainVideo untouched.
 
-## Copy removals
-- Remove `launches soon` tagline from the outro.
-- Remove the `remembers everything.` headline beat — keep the beat's duration and phone choreography (so timing and MainVideo stay synced), but render no headline text during that window (phone-only moment).
+## Changes
 
-## Problems in v2
-1. Headlines sat behind the phone and got occluded — unreadable.
-2. A dark oval kept appearing under/behind the phone (contact shadow + rim glow read as a random blob).
-3. Phone jumped left / right / back / forward between beats — felt random, not choreographed.
+### 1. New beat copy (was hidden)
+- Second-to-last beat (the `done` window where MainVideo shows the 3 completed tasks):
+  show headline **`completes tasks in background.`** using the same left-column kinetic
+  serif treatment as the other product beats. Accent stays sky-blue.
 
-## Fixes
+### 2. Outro — classy editorial statement
+Current outro reads dated (dark slab + colored words + thick underline). Replace with a
+restrained editorial layout:
 
-### Layout — clear two-column stage
-- Phone locked **center-right** (around x = +280 from center), vertically centered. No per-beat x/y drift.
-- Headlines live in a **dedicated left column** (x: 96, width: ~900) — never behind the phone. Big serif, left-aligned, word-stagger reveal.
-- Eyebrow `● asmi · personal AI` sits above the headline, accent dot only.
-- Lower-third progress line stays at bottom-left.
+- **Background**: stay in the warm linen world — soft cream gradient with a faint warm
+  vignette (no espresso/dark wash, no terracotta flood).
+- **Top stamp**: small `asmi` wordmark + dot, centered ~18% from top, hairline below it.
+- **Hero line** centered mid-screen, Instrument Serif italic, ~118px, espresso color:
 
-### Phone — stable hero, subtle motion only
-- One fixed pose for all product beats: `rotateY(-8deg) rotateX(4deg) scale(1)`.
-- Entrance: spring up from below + slight rotate-in (kept).
-- Idle: tiny vertical bob (±4px) and ±0.01 scale breath. No x drift, no per-beat camera moves.
-- Per beat, only the **accent rim color** and **glow tint** change (so it still feels alive without moving).
+  > AI that handles your personal chores
+  > in the real world.
 
-### Remove the "random oval"
-- Delete the elliptical contact shadow under the phone.
-- Replace with a soft, **rectangular** drop-shadow under the phone via `filter: drop-shadow` only — no separate ellipse div.
-- Inner rim light: drop the `inset box-shadow` (it was reading as an oval at corners). Replace with a thin 1px accent border on the clipped screen rect.
+  - Two lines, balanced. `personal chores` and `real world` rendered in **terracotta italic**
+    inline (no boldface, no separate spans that break spacing). Use a single span per line
+    with inline highlight spans — no `display:inline-block` on the highlights so word
+    spacing collapses correctly (fixes the missing space between "handles" and "your").
+  - Slow line-by-line fade + 14px rise. No bounce.
+- **Hairline rule** under the second line, ~80px wide, terracotta, draws across in 18f.
+- **Bottom caption**: a small all-caps tagline in stone gray:
+  `personal AI · launches soon` — same eyebrow style as the rest of the video, sits low.
+  (Replaces the giant trailing wordmark.)
 
-### Intro
-- `meet asmi` wordmark stays, but **smaller** (fontSize ~280) and positioned in the left column so it doesn't collide with the phone. Phone fades in slightly delayed so the wordmark reads first.
-
-### Outro — unchanged behavior, cleaner execution
-- Phone dissolves outward, then the hero line "AI that handles your personal chores in the real world." appears center-screen, then asmi wordmark + `launches soon` fades in. Same as v2 — only the dissolve uses scale + blur + opacity, no particle ring (the particles also read as oval). Replace particle ring with a soft expanding warm flare.
-
-### Jazz that stays
-- Word-by-word kinetic stagger on headlines.
-- Accent sweep band wipes across at each beat change.
-- Stationary light pool top-center.
-- Dust motes with per-beat energy.
-- Animated progress line in the lower-third.
+### 3. Spacing fix
+- Root cause: hero line wrapped words inside `display:inline-block` spans, which strips
+  the natural whitespace between them. Re-author as plain text strings with inline
+  `<span>` only for the highlighted words; no inline-block.
 
 ## Files
-- Edit `remotion/src/Launch16x9.tsx` only. `MainVideo.tsx`, `Root.tsx`, render script unchanged.
-- Re-render to `/mnt/documents/asmi-launch-16x9-v3.mp4`.
+- Edit `remotion/src/Launch16x9.tsx` only.
+- Re-render to `/mnt/documents/asmi-launch-16x9-v4.mp4`.
