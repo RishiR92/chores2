@@ -1,5 +1,7 @@
 import {
   AbsoluteFill,
+  Audio,
+  staticFile,
   useCurrentFrame,
   useVideoConfig,
   interpolate,
