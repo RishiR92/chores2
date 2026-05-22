@@ -485,16 +485,16 @@ const WordmarkHeadline: React.FC<{ accent: string; localFrame: number; outOp: nu
 };
 
 const KineticLines: React.FC<{
-  headline: string; localFrame: number; fps: number; outOp: number;
-}> = ({ headline, localFrame, fps, outOp }) => {
+  headline: string; localFrame: number; fps: number; outOp: number; centered?: boolean;
+}> = ({ headline, localFrame, fps, outOp, centered }) => {
   const lines = headline.split("\n");
   return (
     <div
       style={{
         fontFamily: serif, fontStyle: "italic",
-        fontSize: 180, lineHeight: 0.94,
+        fontSize: centered ? 132 : 180, lineHeight: 0.96,
         color: ESPRESSO, letterSpacing: -6,
-        textAlign: "left", opacity: outOp,
+        textAlign: centered ? "center" : "left", opacity: outOp,
       }}
     >
       {lines.map((line, li) => (
