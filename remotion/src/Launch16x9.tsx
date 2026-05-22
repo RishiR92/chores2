@@ -946,13 +946,180 @@ const TaskCloud: React.FC<{ localFrame: number; beatLen: number; accent: string 
   />
 );
 
-const LangCloud: React.FC<{ localFrame: number; beatLen: number; accent: string }> = (p) => (
-  <RotatingReel
-    {...p}
-    items={LANG_LIST}
-    fontFamily={I18N_FONT_STACK}
-    italic
-    heroSize={148}
-    secondarySize={48}
-  />
-);
+// ============= Language scene — ambient cloud + bubble-up pops =============
+const LANG_CLOUD = [
+  "English", "Español", "Français", "Deutsch", "Italiano", "Português",
+  "Nederlands", "Polski", "Svenska", "Norsk", "Dansk", "Suomi",
+  "Čeština", "Magyar", "Română", "ελληνικά", "Türkçe", "Русский",
+  "Українська", "हिन्दी", "বাংলা", "தமிழ்", "ਪੰਜਾਬੀ", "मराठी",
+  "اردو", "العربية", "עברית", "فارسی", "中文", "日本語",
+  "한국어", "Tiếng Việt", "ภาษาไทย", "Filipino", "Bahasa", "Melayu",
+  "Kiswahili", "Yorùbá", "isiZulu", "Català", "Euskara", "Gaeilge",
+  "Íslenska", "Lietuvių", "Latviešu", "Eesti", "Hrvatski", "Srpski",
+  "Български", "Slovenčina", "Slovenščina", "ខ្មែរ",
+];
+
+// Pseudo-random helpers (deterministic by index so positions stay stable)
+const rand = (seed: number) => {
+  const x = Math.sin(seed * 9301 + 49297) * 233280;
+  return x - Math.floor(x);
+};
+
+type LangPlacement = {
+  word: string;
+  x: number;        // %
+  y: number;        // %
+  size: number;     // px
+  baseOp: number;
+  font: string;
+};
+
+const FONT_FOR_LANG = (w: string): string => {
+  if (/[\u4E00-\u9FFF]/.test(w)) return I18N_FONT_STACK;
+  if (/[\u3040-\u30FF]/.test(w)) return I18N_FONT_STACK;
+  if (/[\uAC00-\uD7AF]/.test(w)) return I18N_FONT_STACK;
+  if (/[\u0900-\u097F]/.test(w)) return I18N_FONT_STACK;
+  if (/[\u0980-\u09FF]/.test(w)) return I18N_FONT_STACK;
+  if (/[\u0B80-\u0BFF]/.test(w)) return I18N_FONT_STACK;
+  if (/[\u0A00-\u0A7F]/.test(w)) return I18N_FONT_STACK;
+  if (/[\u0600-\u06FF\u0750-\u077F]/.test(w)) return I18N_FONT_STACK;
+  if (/[\u0590-\u05FF]/.test(w)) return I18N_FONT_STACK;
+  if (/[\u1780-\u17FF]/.test(w)) return I18N_FONT_STACK;
+  return serif;
+};
+
+const PLACEMENTS: LangPlacement[] = (() => {
+  // Poisson-ish jittered grid so words don't overlap badly.
+  const cols = 9;
+  const rows = 6;
+  const items: LangPlacement[] = [];
+  const shuffled = LANG_CLOUD.slice().sort((a, b) => rand(a.length + a.charCodeAt(0)) - rand(b.length + b.charCodeAt(0)));
+  let i = 0;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (i >= shuffled.length) break;
+      const jx = (rand(i * 3.1) - 0.5) * 6;
+      const jy = (rand(i * 7.7) - 0.5) * 4;
+      const x = 6 + (c / (cols - 1)) * 88 + jx;
+      const y = 14 + (r / (rows - 1)) * 72 + jy;
+      const sizeRoll = rand(i * 2.3);
+      const size = sizeRoll < 0.15 ? 46 : sizeRoll < 0.55 ? 34 : 26;
+      const baseOp = 0.16 + rand(i * 1.7) * 0.10;
+      items.push({ word: shuffled[i], x, y, size, baseOp, font: FONT_FOR_LANG(shuffled[i]) });
+      i++;
+    }
+  }
+  return items;
+})();
+
+// Pre-pick which indices will "pop" and in what order.
+const POP_SCHEDULE: { idx: number; at: number }[] = (() => {
+  // Want ~7 pops across the beat (180 frames). One every ~22 frames.
+  const picks: number[] = [];
+  const used = new Set<number>();
+  let seed = 11;
+  while (picks.length < 8) {
+    const k = Math.floor(rand(seed++) * PLACEMENTS.length);
+    if (!used.has(k)) {
+      used.add(k);
+      picks.push(k);
+    }
+  }
+  return picks.map((idx, n) => ({ idx, at: 14 + n * 20 }));
+})();
+
+const LangCloud: React.FC<{ localFrame: number; beatLen: number; accent: string }> = ({
+  localFrame, beatLen, accent,
+}) => {
+  const { fps } = useVideoConfig();
+
+  const inOp = interpolate(localFrame, [0, 18], [0, 1], {
+    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  });
+  const outOp = interpolate(localFrame, [Math.max(0, beatLen - 18), beatLen], [1, 0], {
+    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  });
+  const fade = inOp * outOp;
+
+  // Final supporting caption fades in after the last pop.
+  const captionOp = interpolate(localFrame, [120, 150], [0, 1], {
+    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  }) * outOp;
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        zIndex: 4,
+        pointerEvents: "none",
+        opacity: fade,
+      }}
+    >
+      {PLACEMENTS.map((p, i) => {
+        // Find if/when this index pops.
+        const pop = POP_SCHEDULE.find((q) => q.idx === i);
+        let popAmt = 0;
+        if (pop) {
+          const t = localFrame - pop.at;
+          const inSp = spring({ frame: t, fps, config: { damping: 14, stiffness: 180, mass: 0.7 } });
+          const outSp = spring({ frame: t - 22, fps, config: { damping: 22, stiffness: 140, mass: 0.8 } });
+          popAmt = Math.max(0, inSp - outSp);
+        }
+        // Idle drift so the field feels alive.
+        const drift = Math.sin((localFrame + i * 9) / 70) * 2.2;
+        const opacity = p.baseOp + popAmt * (1 - p.baseOp);
+        const scale = 1 + popAmt * 1.55;
+        const color = popAmt > 0.05
+          ? accent
+          : ESPRESSO;
+        const fontWeight = popAmt > 0.4 ? 600 : 400;
+        const blur = popAmt > 0.1 ? 0 : 0.3;
+        return (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              left: `${p.x}%`,
+              top: `${p.y}%`,
+              transform: `translate(-50%, -50%) translateY(${drift}px) scale(${scale})`,
+              fontFamily: p.font,
+              fontStyle: "italic",
+              fontWeight,
+              fontSize: p.size,
+              color,
+              opacity,
+              whiteSpace: "nowrap",
+              letterSpacing: -0.5,
+              filter: `blur(${blur}px)`,
+              transition: "color 120ms linear",
+              textShadow: popAmt > 0.2 ? `0 6px 30px ${rgba(accent, 0.35)}` : "none",
+              zIndex: popAmt > 0.05 ? 6 : 4,
+            }}
+          >
+            {p.word}
+          </div>
+        );
+      })}
+
+      {/* Supporting caption — appears after the pops have played */}
+      <div
+        style={{
+          position: "absolute",
+          left: 0, right: 0, bottom: "8%",
+          textAlign: "center",
+          fontFamily: sans,
+          fontSize: 22,
+          letterSpacing: 6,
+          textTransform: "uppercase",
+          color: STONE,
+          fontWeight: 500,
+          opacity: captionOp,
+        }}
+      >
+        50+ languages · your accent · your way
+      </div>
+    </div>
+  );
+};
+
