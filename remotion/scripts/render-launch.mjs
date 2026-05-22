@@ -36,7 +36,9 @@ if (STILLS) {
     { name: "hvac",    frame: 500 },
     { name: "gp",      frame: 820 },
     { name: "done",    frame: 1080 },
-    { name: "outro",   frame: 1240 },
+    { name: "tasks",   frame: 1260 },
+    { name: "langs",   frame: 1390 },
+    { name: "outro",   frame: 1500 },
   ];
   for (const c of checks) {
     const p = `/tmp/launch-${c.name}.png`;

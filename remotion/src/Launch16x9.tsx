@@ -7,15 +7,35 @@ import {
 } from "remotion";
 import { loadFont as loadSerif } from "@remotion/google-fonts/InstrumentSerif";
 import { loadFont as loadInter } from "@remotion/google-fonts/Inter";
+import { loadFont as loadNotoSC } from "@remotion/google-fonts/NotoSansSC";
+import { loadFont as loadNotoJP } from "@remotion/google-fonts/NotoSansJP";
+import { loadFont as loadNotoKR } from "@remotion/google-fonts/NotoSansKR";
+import { loadFont as loadNotoDeva } from "@remotion/google-fonts/NotoSansDevanagari";
+import { loadFont as loadNotoTamil } from "@remotion/google-fonts/NotoSansTamil";
+import { loadFont as loadNotoBengali } from "@remotion/google-fonts/NotoSansBengali";
+import { loadFont as loadNotoArabic } from "@remotion/google-fonts/NotoSansArabic";
+import { loadFont as loadNotoHebrew } from "@remotion/google-fonts/NotoSansHebrew";
+import { loadFont as loadNotoGurmukhi } from "@remotion/google-fonts/NotoSansGurmukhi";
 import { MainVideo } from "./MainVideo";
 
 const { fontFamily: serif } = loadSerif("normal", { weights: ["400"], subsets: ["latin"] });
 const { fontFamily: sans } = loadInter("normal", { weights: ["400", "500", "600"], subsets: ["latin"] });
+const { fontFamily: notoSC } = loadNotoSC("normal", { weights: ["500"] });
+const { fontFamily: notoJP } = loadNotoJP("normal", { weights: ["500"] });
+const { fontFamily: notoKR } = loadNotoKR("normal", { weights: ["500"] });
+const { fontFamily: notoDeva } = loadNotoDeva("normal", { weights: ["500"] });
+const { fontFamily: notoTamil } = loadNotoTamil("normal", { weights: ["500"] });
+const { fontFamily: notoBengali } = loadNotoBengali("normal", { weights: ["500"] });
+const { fontFamily: notoArabic } = loadNotoArabic("normal", { weights: ["500"] });
+const { fontFamily: notoHebrew } = loadNotoHebrew("normal", { weights: ["500"] });
+const { fontFamily: notoGurmukhi } = loadNotoGurmukhi("normal", { weights: ["500"] });
 
-// Mirror MainVideo timing (30fps)
+// Mirror MainVideo timing (30fps). New fast-paced beats added after `done`.
 const D = {
   intro: 60, imDoc: 75, doc: 240, imHvac: 75, hvac: 240,
-  imGp: 75, gp: 240, done: 180, outro: 105,
+  imGp: 75, gp: 240, done: 180,
+  tasks: 130, langs: 130,
+  outro: 105,
 };
 const O = {
   intro: 0,
@@ -26,10 +46,12 @@ const O = {
   imGp: D.intro + D.imDoc + D.doc + D.imHvac + D.hvac,
   gp: D.intro + D.imDoc + D.doc + D.imHvac + D.hvac + D.imGp,
   done: D.intro + D.imDoc + D.doc + D.imHvac + D.hvac + D.imGp + D.gp,
-  outro: D.intro + D.imDoc + D.doc + D.imHvac + D.hvac + D.imGp + D.gp + D.done,
+  tasks: D.intro + D.imDoc + D.doc + D.imHvac + D.hvac + D.imGp + D.gp + D.done,
+  langs: D.intro + D.imDoc + D.doc + D.imHvac + D.hvac + D.imGp + D.gp + D.done + D.tasks,
+  outro: D.intro + D.imDoc + D.doc + D.imHvac + D.hvac + D.imGp + D.gp + D.done + D.tasks + D.langs,
 };
 const TOTAL =
-  D.intro + D.imDoc + D.doc + D.imHvac + D.hvac + D.imGp + D.gp + D.done + D.outro;
+  D.intro + D.imDoc + D.doc + D.imHvac + D.hvac + D.imGp + D.gp + D.done + D.tasks + D.langs + D.outro;
 
 const LINEN = "#F6F1EB";
 const SAND = "#EDE6DC";
@@ -46,6 +68,7 @@ type Beat = {
   headline: string; wordmark?: boolean;
   accent: string; energy: number; outro?: boolean;
   hideHeadline?: boolean;
+  scene?: "tasks" | "langs";
 };
 
 const BEATS: Beat[] = [
@@ -53,7 +76,9 @@ const BEATS: Beat[] = [
   { start: O.imDoc,  end: O.imHvac, headline: "book\nappointments.",      accent: TERRACOTTA, energy: 0.95 },
   { start: O.imHvac, end: O.imGp,   headline: "find\nvendors.",           accent: SAGE,       energy: 0.95 },
   { start: O.imGp,   end: O.done,   headline: "check in on\nloved ones.", accent: CLAY,       energy: 0.5 },
-  { start: O.done,   end: O.outro,  headline: "handles\nyour day.",       accent: SKY,        energy: 0.7 },
+  { start: O.done,   end: O.tasks,  headline: "handles\nyour day.",       accent: SKY,        energy: 0.7 },
+  { start: O.tasks,  end: O.langs,  headline: "from plumbers\nto prescriptions.", accent: CLAY,    energy: 1.0, scene: "tasks" },
+  { start: O.langs,  end: O.outro,  headline: "50+ languages.\nyour way.",        accent: SAGE,    energy: 1.0, scene: "langs" },
   { start: O.outro,  end: TOTAL,    headline: "",                         accent: TERRACOTTA, energy: 0.4, outro: true },
 ];
 
@@ -184,8 +209,8 @@ export const Launch16x9: React.FC = () => {
         />
       )}
 
-      {/* === PHONE — fixed center-right === */}
-      {(!isOutro || dissolveOp > 0.02) && (
+      {/* === PHONE — fixed center-right (hidden during scene beats) === */}
+      {!beat.scene && (!isOutro || dissolveOp > 0.02) && (
         <div
           style={{
             position: "absolute",
@@ -236,6 +261,14 @@ export const Launch16x9: React.FC = () => {
             />
           </div>
         </div>
+      )}
+
+      {/* === SCENE — task cloud === */}
+      {beat.scene === "tasks" && (
+        <TaskCloud localFrame={localFrame} beatLen={beat.end - beat.start} accent={accent} />
+      )}
+      {beat.scene === "langs" && (
+        <LangCloud localFrame={localFrame} beatLen={beat.end - beat.start} accent={accent} />
       )}
 
       {/* Outro warm flare in place of where phone was */}
@@ -626,5 +659,188 @@ const DustMotes: React.FC<{ energy: number; darken: number }> = ({ energy, darke
     <AbsoluteFill style={{ pointerEvents: "none", mixBlendMode: "screen" }}>
       {motes}
     </AbsoluteFill>
+  );
+};
+
+// ============= Task pill cloud (right side, fast-paced) =============
+const TASK_LIST = [
+  "book dentist", "dispute charge", "call plumber", "check on mom",
+  "cancel subscription", "moving quotes", "refill prescription", "book salon",
+  "insurance claim", "phone bill", "find electrician", "book movers",
+  "car service", "compare flights", "call landlord", "reverse bank fee",
+  "schedule vet", "parking ticket", "order supplies", "restaurant reservation",
+];
+
+const TaskCloud: React.FC<{ localFrame: number; beatLen: number; accent: string }> = ({
+  localFrame, beatLen, accent,
+}) => {
+  const { fps } = useVideoConfig();
+  const stageX = 940;
+  const stageY = 90;
+  const stageW = 920;
+  const stageH = 900;
+
+  const outOp = interpolate(localFrame, [Math.max(0, beatLen - 16), beatLen], [1, 0], {
+    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  });
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: stageX, top: stageY,
+        width: stageW, height: stageH,
+        zIndex: 4, pointerEvents: "none",
+        opacity: outOp,
+        display: "flex",
+        flexWrap: "wrap",
+        alignContent: "center",
+        justifyContent: "center",
+        gap: 18,
+      }}
+    >
+      {TASK_LIST.map((label, i) => {
+        const delay = 2 + i * 2.0;
+        const sp = spring({
+          frame: localFrame - delay, fps,
+          config: { damping: 14, stiffness: 200, mass: 0.6 },
+        });
+        const op = interpolate(sp, [0, 1], [0, 1]);
+        const s = interpolate(sp, [0, 1], [0.55, 1]);
+        const ty = interpolate(sp, [0, 1], [14, 0]);
+        const drift = Math.sin((localFrame + i * 9) / 32) * 2;
+        const isAccent = i % 5 === 2;
+        const size = 28;
+        return (
+          <div
+            key={i}
+            style={{
+              transform: `translateY(${ty + drift}px) scale(${s})`,
+              opacity: op,
+              fontFamily: sans,
+              fontSize: size,
+              fontWeight: 500,
+              padding: "12px 26px",
+              borderRadius: 999,
+              background: isAccent ? accent : "rgba(255,252,247,0.95)",
+              color: isAccent ? "#FFF8F0" : ESPRESSO,
+              border: `1px solid ${isAccent ? rgba(accent, 1) : rgba(ESPRESSO, 0.10)}`,
+              boxShadow: `0 6px 18px ${rgba(ESPRESSO, 0.08)}`,
+              whiteSpace: "nowrap",
+              letterSpacing: -0.2,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
+            <span
+              style={{
+                width: 8, height: 8, borderRadius: "50%",
+                background: isAccent ? "#FFF8F0" : accent,
+                display: "inline-block",
+              }}
+            />
+            {label}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+// ============= Language cloud (right side, fast-paced) =============
+// Use a font stack with broad Unicode coverage. The serif handles Latin;
+// Noto fallbacks render Devanagari / Arabic / CJK / Hebrew / etc.
+const I18N_FONT_STACK = `${serif}, ${notoDeva}, ${notoBengali}, ${notoTamil}, ${notoArabic}, ${notoHebrew}, ${notoGurmukhi}, ${notoSC}, ${notoJP}, ${notoKR}, serif`;
+
+const LANGS: { word: string; weight: number }[] = [
+  { word: "English", weight: 1.0 },
+  { word: "Español", weight: 1.0 },
+  { word: "Français", weight: 1.15 },
+  { word: "हिन्दी", weight: 1.1 },
+  { word: "中文", weight: 1.25 },
+  { word: "العربية", weight: 1.0 },
+  { word: "Italiano", weight: 0.9 },
+  { word: "Deutsch", weight: 0.9 },
+  { word: "Português", weight: 0.95 },
+  { word: "日本語", weight: 1.15 },
+  { word: "한국어", weight: 1.05 },
+  { word: "Русский", weight: 0.95 },
+  { word: "Türkçe", weight: 0.85 },
+  { word: "Tiếng Việt", weight: 0.9 },
+  { word: "தமிழ்", weight: 1.0 },
+  { word: "বাংলা", weight: 1.0 },
+  { word: "Nederlands", weight: 0.8 },
+  { word: "Polski", weight: 0.85 },
+  { word: "Українська", weight: 0.85 },
+  { word: "ελληνικά", weight: 0.9 },
+  { word: "עברית", weight: 1.0 },
+  { word: "Filipino", weight: 0.85 },
+  { word: "Magyar", weight: 0.85 },
+  { word: "Română", weight: 0.85 },
+  { word: "Punjabi", weight: 0.95 },
+];
+
+const LangCloud: React.FC<{ localFrame: number; beatLen: number; accent: string }> = ({
+  localFrame, beatLen, accent,
+}) => {
+  const { fps } = useVideoConfig();
+  const stageX = 940;
+  const stageY = 80;
+  const stageW = 920;
+  const stageH = 920;
+
+  const outOp = interpolate(localFrame, [Math.max(0, beatLen - 16), beatLen], [1, 0], {
+    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  });
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: stageX, top: stageY,
+        width: stageW, height: stageH,
+        zIndex: 4, pointerEvents: "none",
+        opacity: outOp,
+        fontFamily: I18N_FONT_STACK,
+        display: "flex",
+        flexWrap: "wrap",
+        alignContent: "center",
+        justifyContent: "center",
+        gap: "18px 28px",
+      }}
+    >
+      {LANGS.map((p, i) => {
+        const delay = 2 + i * 1.8;
+        const sp = spring({
+          frame: localFrame - delay, fps,
+          config: { damping: 16, stiffness: 180, mass: 0.7 },
+        });
+        const op = interpolate(sp, [0, 1], [0, 1]);
+        const s = interpolate(sp, [0, 1], [0.7, 1]);
+        const ty = interpolate(sp, [0, 1], [16, 0]);
+        const drift = Math.cos((localFrame + i * 11) / 36) * 2;
+        const isAccent = i % 5 === 1;
+        const size = Math.round(48 + p.weight * 24);
+        return (
+          <span
+            key={i}
+            style={{
+              transform: `translateY(${ty + drift}px) scale(${s})`,
+              opacity: op,
+              fontStyle: "italic",
+              fontSize: size,
+              color: isAccent ? accent : ESPRESSO,
+              letterSpacing: -1,
+              lineHeight: 1.05,
+              whiteSpace: "nowrap",
+              display: "inline-block",
+            }}
+          >
+            {p.word}
+          </span>
+        );
+      })}
+    </div>
   );
 };
