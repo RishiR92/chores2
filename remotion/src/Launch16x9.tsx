@@ -79,7 +79,7 @@ const BEATS: Beat[] = [
   { start: O.imHvac, end: O.imGp,   headline: "find\nvendors.",           accent: SAGE,       energy: 0.95 },
   { start: O.imGp,   end: O.done,   headline: "check in on\nloved ones.", accent: CLAY,       energy: 0.5 },
   { start: O.done,   end: O.tasks,  headline: "handles\nyour day.",       accent: SKY,        energy: 0.7 },
-  { start: O.tasks,  end: O.langs,  headline: "from plumbers\nto prescriptions.", accent: CLAY,    energy: 1.0, scene: "tasks" },
+  { start: O.tasks,  end: O.langs,  headline: "your personal\nchores handled.", accent: CLAY,    energy: 1.0, scene: "tasks" },
   { start: O.langs,  end: O.outro,  headline: "50+ languages.\nyour way.",        accent: SAGE,    energy: 1.0, scene: "langs" },
   { start: O.outro,  end: TOTAL,    headline: "",                         accent: TERRACOTTA, energy: 0.4, outro: true },
 ];
@@ -119,9 +119,16 @@ export const Launch16x9: React.FC = () => {
   const entryScale = interpolate(phoneIn, [0, 1], [0.7, 1]);
   const entryOp = interpolate(phoneIn, [0, 1], [0, 1]);
 
-  // Subtle idle motion only
-  const bob = Math.sin(frame / 60) * 4;
-  const breath = 1 + Math.sin(frame / 90) * 0.008;
+  // Continuous levitation — kicks in after entry spring resolves.
+  const settle = interpolate(phoneIn, [0.7, 1], [0, 1], {
+    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  });
+  const floatY = Math.sin(frame / 55) * 14 * settle;
+  const yawDeg = Math.sin(frame / 90) * 2.5 * settle;
+  const pitchDeg = Math.sin(frame / 110 + 1.2) * 1.5 * settle;
+  const breath = 1 + Math.sin(frame / 75) * 0.012 * settle;
+  // Sheen offset for the glass/metal highlight.
+  const sheen = ((frame / 4) % 200) - 100;
 
   const PHONE_FIT_HEIGHT = 980;
   const phoneScale = PHONE_FIT_HEIGHT / 1920;
@@ -141,8 +148,15 @@ export const Launch16x9: React.FC = () => {
   const phoneH = 1920 * phoneScale;
 
   const totalScale = entryScale * breath * dissolveScale;
-  const totalRotX = entryRotX + 4;
-  const totalRotY = entryRotY + -8;
+  const totalRotX = entryRotX + pitchDeg;
+  const totalRotY = entryRotY + yawDeg;
+
+  // Shadow breathes with the float — grows when phone rises.
+  const liftN = (floatY + 14) / 28; // 0..1 ish
+  const shadowY = 50 + (1 - liftN) * 30;
+  const shadowBlur = 70 + liftN * 30;
+  const shadowAlpha = 0.22 + (1 - liftN) * 0.18;
+
 
   const stageDarken = isOutro
     ? interpolate(localFrame, [0, 30], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
@@ -220,14 +234,14 @@ export const Launch16x9: React.FC = () => {
             top: 1080 / 2 - phoneH / 2,
             width: phoneW,
             height: phoneH,
-            transform: `translateY(${entryY + bob}px)`,
+            transform: `translateY(${entryY + floatY}px)`,
             opacity: entryOp * dissolveOp,
             perspective: 2600,
             perspectiveOrigin: "50% 50%",
             zIndex: 5,
             filter: isOutro
-              ? `blur(${dissolveBlur}px) drop-shadow(0 50px 70px ${rgba(ESPRESSO, 0.32)})`
-              : `drop-shadow(0 50px 70px ${rgba(ESPRESSO, 0.32)}) drop-shadow(0 0 36px ${rgba(accent, 0.22)})`,
+              ? `blur(${dissolveBlur}px) drop-shadow(0 ${shadowY}px ${shadowBlur}px ${rgba(ESPRESSO, shadowAlpha)})`
+              : `drop-shadow(0 ${shadowY}px ${shadowBlur}px ${rgba(ESPRESSO, shadowAlpha)}) drop-shadow(0 0 36px ${rgba(accent, 0.22)})`,
           }}
         >
           <div
@@ -239,6 +253,60 @@ export const Launch16x9: React.FC = () => {
               transformOrigin: "50% 50%",
             }}
           >
+            {/* Titanium phone shell */}
+            <div
+              style={{
+                position: "absolute",
+                width: 1080, height: 1920, left: 0, top: 0,
+                transform: `scale(${phoneScale})`,
+                transformOrigin: "top left",
+                borderRadius: 168,
+                background: `linear-gradient(180deg, #3a3a3e 0%, #2a2a2e 32%, #1c1c1f 62%, #2a2a2e 100%)`,
+                boxShadow: `
+                  inset 0 2px 0 rgba(255,255,255,0.18),
+                  inset 0 -2px 0 rgba(0,0,0,0.55),
+                  inset 3px 0 4px rgba(0,0,0,0.4),
+                  inset -3px 0 4px rgba(0,0,0,0.4)
+                `,
+              }}
+            />
+
+            {/* Accent rim-light on the shell */}
+            <div
+              style={{
+                position: "absolute",
+                width: 1080, height: 1920, left: 0, top: 0,
+                transform: `scale(${phoneScale})`,
+                transformOrigin: "top left",
+                borderRadius: 168,
+                boxShadow: `0 0 0 2px ${rgba(accent, 0.22)} inset`,
+                pointerEvents: "none",
+              }}
+            />
+
+            {/* Diagonal glass sheen — slowly moving */}
+            <div
+              style={{
+                position: "absolute",
+                width: 1080, height: 1920, left: 0, top: 0,
+                transform: `scale(${phoneScale})`,
+                transformOrigin: "top left",
+                borderRadius: 168,
+                overflow: "hidden",
+                pointerEvents: "none",
+                opacity: 0.5,
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: `linear-gradient(115deg, transparent ${30 + sheen * 0.2}%, rgba(255,255,255,0.08) ${50 + sheen * 0.2}%, transparent ${70 + sheen * 0.2}%)`,
+                }}
+              />
+            </div>
+
+            {/* Screen content */}
             <div
               style={{
                 position: "absolute",
@@ -255,15 +323,26 @@ export const Launch16x9: React.FC = () => {
             <div
               style={{
                 position: "absolute",
-                inset: "110px 90px 110px 90px",
-                borderRadius: 130,
-                border: `1px solid ${rgba(accent, 0.35)}`,
+                width: 1080, height: 1920, left: 0, top: 0,
+                transform: `scale(${phoneScale})`,
+                transformOrigin: "top left",
                 pointerEvents: "none",
               }}
-            />
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  inset: "110px 90px 110px 90px",
+                  borderRadius: 130,
+                  border: `1px solid ${rgba(accent, 0.35)}`,
+                  boxShadow: `inset 0 0 0 4px rgba(0,0,0,0.6)`,
+                }}
+              />
+            </div>
           </div>
         </div>
       )}
+
 
       {/* === SCENE — task cloud === */}
       {beat.scene === "tasks" && (
@@ -735,7 +814,7 @@ const RotatingReel: React.FC<{
           fontStyle: italic ? "italic" : "normal",
           fontWeight: 500,
           fontSize: heroSize,
-          color: ESPRESSO,
+          color: TERRACOTTA,
           letterSpacing: -1.5,
           textAlign: "center",
           padding: "0 40px",
