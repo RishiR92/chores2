@@ -282,10 +282,7 @@ export const Launch16x9: React.FC = () => {
                   position: "absolute",
                   inset: "100px 80px 100px 80px",
                   borderRadius: 140,
-                  border: "10px solid transparent",
-                  backgroundImage: `linear-gradient(transparent, transparent), linear-gradient(180deg, #3a3a3e 0%, #242427 50%, #141416 100%)`,
-                  backgroundOrigin: "border-box",
-                  backgroundClip: "padding-box, border-box",
+                  border: "10px solid #242427",
                   boxShadow: `
                     inset 0 1.5px 0 rgba(255,255,255,0.16),
                     inset 0 -1.5px 0 rgba(0,0,0,0.55),
