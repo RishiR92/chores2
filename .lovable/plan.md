@@ -1,5 +1,7 @@
 # Launch video — v10
 
+Three targeted fixes on top of v9.
+
 Two targeted fixes on top of v9.
 
 ## 1. Restore v7 audio portions, just cleaner
@@ -59,8 +61,18 @@ Concretely in `Launch16x9.tsx`:
 
 Net effect: reel stays anchored center stage (no lateral slide), word, word, word, word, word, then it gracefully lifts and shrinks while "your personal chores handled." rises into view below it, holds for a clear ~2.5s beat, then cuts.
 
+## 3. Outro — keep the asmi logo small
+
+v9 promoted the "asmi" wordmark in the outro to 180px with a 26px circle — too dominant. Revert to a discreet stamp at the top so the "AI that handles your personal chores in the real world." line is the hero.
+
+In `OutroHero` (`Launch16x9.tsx`):
+
+- Wordmark `fontSize: 180 → 64`, `letterSpacing: -7 → -2`, accent circle `26×26 → 12×12` with `border: 2px solid accent` and `marginBottom: 32 → 12`.
+- Stamp container `top: 12% → 9%`, `gap: 20 → 10`, hairline rule width `120 → 80`.
+- Hero line (`fontSize: 118`) and bottom caption stay as-is — they remain the visual focus.
+
 ## Files
 
-- `remotion/src/Launch16x9.tsx` — reel slide replaced with lift+scale; headline gated at 90 with new centered layout; `D.tasks` and `D.langs` bumped to 180.
+- `remotion/src/Launch16x9.tsx` — reel slide replaced with lift+scale; headline gated at 90 with new centered layout; `D.tasks` and `D.langs` bumped to 180; outro wordmark shrunk back to small stamp.
 - `remotion/public/audio/trimmed/{doc,hvac,grandpa}.mp3` — regenerated from `-ss 0 -t 8` of the original sources with the cleanup chain above.
 - Render to `/mnt/documents/asmi-launch-16x9-v10.mp4`.
