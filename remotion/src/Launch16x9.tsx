@@ -253,59 +253,6 @@ export const Launch16x9: React.FC = () => {
               transformOrigin: "50% 50%",
             }}
           >
-            {/* Titanium phone shell */}
-            <div
-              style={{
-                position: "absolute",
-                width: 1080, height: 1920, left: 0, top: 0,
-                transform: `scale(${phoneScale})`,
-                transformOrigin: "top left",
-                borderRadius: 168,
-                background: `linear-gradient(180deg, #3a3a3e 0%, #2a2a2e 32%, #1c1c1f 62%, #2a2a2e 100%)`,
-                boxShadow: `
-                  inset 0 2px 0 rgba(255,255,255,0.18),
-                  inset 0 -2px 0 rgba(0,0,0,0.55),
-                  inset 3px 0 4px rgba(0,0,0,0.4),
-                  inset -3px 0 4px rgba(0,0,0,0.4)
-                `,
-              }}
-            />
-
-            {/* Accent rim-light on the shell */}
-            <div
-              style={{
-                position: "absolute",
-                width: 1080, height: 1920, left: 0, top: 0,
-                transform: `scale(${phoneScale})`,
-                transformOrigin: "top left",
-                borderRadius: 168,
-                boxShadow: `0 0 0 2px ${rgba(accent, 0.22)} inset`,
-                pointerEvents: "none",
-              }}
-            />
-
-            {/* Diagonal glass sheen — slowly moving */}
-            <div
-              style={{
-                position: "absolute",
-                width: 1080, height: 1920, left: 0, top: 0,
-                transform: `scale(${phoneScale})`,
-                transformOrigin: "top left",
-                borderRadius: 168,
-                overflow: "hidden",
-                pointerEvents: "none",
-                opacity: 0.5,
-              }}
-            >
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background: `linear-gradient(115deg, transparent ${30 + sheen * 0.2}%, rgba(255,255,255,0.08) ${50 + sheen * 0.2}%, transparent ${70 + sheen * 0.2}%)`,
-                }}
-              />
-            </div>
-
             {/* Screen content */}
             <div
               style={{
@@ -319,7 +266,7 @@ export const Launch16x9: React.FC = () => {
               <MainVideo />
             </div>
 
-            {/* Thin accent border on the screen rect */}
+            {/* Thin titanium bezel hugging only the screen rect */}
             <div
               style={{
                 position: "absolute",
@@ -332,13 +279,42 @@ export const Launch16x9: React.FC = () => {
               <div
                 style={{
                   position: "absolute",
-                  inset: "110px 90px 110px 90px",
-                  borderRadius: 130,
-                  border: `1px solid ${rgba(accent, 0.35)}`,
-                  boxShadow: `inset 0 0 0 4px rgba(0,0,0,0.6)`,
+                  inset: "102px 82px 102px 82px",
+                  borderRadius: 138,
+                  padding: 8,
+                  background: `linear-gradient(180deg, #3a3a3e 0%, #242427 50%, #1a1a1c 100%)`,
+                  boxShadow: `
+                    inset 0 1.5px 0 rgba(255,255,255,0.18),
+                    inset 0 -1.5px 0 rgba(0,0,0,0.55),
+                    0 0 0 1px rgba(0,0,0,0.4)
+                  `,
+                  WebkitMaskImage:
+                    "radial-gradient(white, white)",
+                }}
+              >
+                {/* Cut the screen hole so only the ring shows */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 8,
+                    borderRadius: 130,
+                    background: "transparent",
+                    boxShadow: `inset 0 0 0 1px ${rgba(accent, 0.35)}`,
+                  }}
+                />
+              </div>
+              {/* Accent rim-light on bezel */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: "100px 80px 100px 80px",
+                  borderRadius: 140,
+                  boxShadow: `0 0 24px ${rgba(accent, 0.28)}`,
+                  pointerEvents: "none",
                 }}
               />
             </div>
+
           </div>
         </div>
       )}
