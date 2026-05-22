@@ -41,28 +41,20 @@ const SAGE = "#5F8365";
 const CLAY = "#D4A574";
 const SKY = "#7EADC2";
 
-type Pose = { px: number; py: number; rx: number; ry: number; sc: number };
 type Beat = {
   start: number; end: number;
   headline: string; wordmark?: boolean;
-  accent: string; pose: Pose; energy: number; outro?: boolean;
-};
-
-const POSES = {
-  hero:  { px:    0, py: -10, rx: 4, ry:  -6, sc: 1.02 } as Pose,
-  left:  { px: -320, py:  10, rx: 5, ry: -13, sc: 0.96 } as Pose,
-  right: { px:  320, py:  10, rx: 5, ry:  11, sc: 0.96 } as Pose,
-  back:  { px:    0, py: -30, rx: 2, ry:  -4, sc: 0.90 } as Pose,
-  lean:  { px: -120, py:  20, rx: 9, ry:  -9, sc: 1.04 } as Pose,
+  accent: string; energy: number; outro?: boolean;
+  hideHeadline?: boolean;
 };
 
 const BEATS: Beat[] = [
-  { start: O.intro,  end: O.imDoc,  headline: "meet asmi",                wordmark: true, accent: TERRACOTTA, pose: POSES.hero,  energy: 0.6 },
-  { start: O.imDoc,  end: O.imHvac, headline: "book appointments.",       accent: TERRACOTTA, pose: POSES.left,  energy: 0.95 },
-  { start: O.imHvac, end: O.imGp,   headline: "find vendors.",            accent: SAGE,       pose: POSES.right, energy: 0.95 },
-  { start: O.imGp,   end: O.done,   headline: "check in on\nloved ones.", accent: CLAY,       pose: POSES.back,  energy: 0.5 },
-  { start: O.done,   end: O.outro,  headline: "remembers\neverything.",   accent: SKY,        pose: POSES.lean,  energy: 0.7 },
-  { start: O.outro,  end: TOTAL,    headline: "",                         accent: TERRACOTTA, pose: POSES.hero,  energy: 0.4, outro: true },
+  { start: O.intro,  end: O.imDoc,  headline: "meet asmi",                wordmark: true, accent: TERRACOTTA, energy: 0.6 },
+  { start: O.imDoc,  end: O.imHvac, headline: "book\nappointments.",      accent: TERRACOTTA, energy: 0.95 },
+  { start: O.imHvac, end: O.imGp,   headline: "find\nvendors.",           accent: SAGE,       energy: 0.95 },
+  { start: O.imGp,   end: O.done,   headline: "check in on\nloved ones.", accent: CLAY,       energy: 0.5 },
+  { start: O.done,   end: O.outro,  headline: "",                         accent: SKY,        energy: 0.7, hideHeadline: true },
+  { start: O.outro,  end: TOTAL,    headline: "",                         accent: TERRACOTTA, energy: 0.4, outro: true },
 ];
 
 const findBeatIdx = (f: number) => {
@@ -75,11 +67,6 @@ const rgba = (hex: string, a: number) => {
   return `rgba(${parseInt(h.slice(0,2),16)}, ${parseInt(h.slice(2,4),16)}, ${parseInt(h.slice(4,6),16)}, ${a})`;
 };
 
-const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-const lerpPose = (a: Pose, b: Pose, t: number): Pose => ({
-  px: lerp(a.px,b.px,t), py: lerp(a.py,b.py,t),
-  rx: lerp(a.rx,b.rx,t), ry: lerp(a.ry,b.ry,t), sc: lerp(a.sc,b.sc,t),
-});
 const easeInOut = (t: number) => (t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2);
 
 export const Launch16x9: React.FC = () => {
@@ -94,57 +81,64 @@ export const Launch16x9: React.FC = () => {
   const blend = easeInOut(
     interpolate(localFrame, [0, 26], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
   );
-  const pose = lerpPose(prev.pose, beat.pose, blend);
   const accent = beat.accent;
   const accentPrev = prev.accent;
 
-  const phoneIn = spring({ frame, fps, config: { damping: 16, stiffness: 80, mass: 1.1 } });
-  const entryY = interpolate(phoneIn, [0, 1], [260, 0]);
-  const entryRotX = interpolate(phoneIn, [0, 1], [30, 0]);
-  const entryRotY = interpolate(phoneIn, [0, 1], [-22, 0]);
-  const entryScale = interpolate(phoneIn, [0, 1], [0.6, 1]);
+  // Phone entrance — delayed a touch so wordmark reads first
+  const phoneIn = spring({ frame: frame - 10, fps, config: { damping: 16, stiffness: 80, mass: 1.1 } });
+  const entryY = interpolate(phoneIn, [0, 1], [240, 0]);
+  const entryRotX = interpolate(phoneIn, [0, 1], [22, 0]);
+  const entryRotY = interpolate(phoneIn, [0, 1], [-18, 0]);
+  const entryScale = interpolate(phoneIn, [0, 1], [0.7, 1]);
   const entryOp = interpolate(phoneIn, [0, 1], [0, 1]);
 
-  const bob = Math.sin(frame / 50) * 6;
-  const drift = Math.cos(frame / 90) * 4;
+  // Subtle idle motion only
+  const bob = Math.sin(frame / 60) * 4;
+  const breath = 1 + Math.sin(frame / 90) * 0.008;
 
-  const PHONE_FIT_HEIGHT = 1010;
+  const PHONE_FIT_HEIGHT = 980;
   const phoneScale = PHONE_FIT_HEIGHT / 1920;
 
+  // Outro dissolve
   const isOutro = !!beat.outro;
   const dissolveT = isOutro
-    ? interpolate(localFrame, [0, 26], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
+    ? interpolate(localFrame, [0, 28], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
     : 0;
-  const dissolveScale = 1 + dissolveT * 0.18;
-  const dissolveBlur = dissolveT * 18;
+  const dissolveScale = 1 + dissolveT * 0.16;
+  const dissolveBlur = dissolveT * 16;
   const dissolveOp = 1 - dissolveT;
 
-  const totalScale = entryScale * pose.sc * dissolveScale;
-  const totalRotX = entryRotX + pose.rx;
-  const totalRotY = entryRotY + pose.ry;
-  const totalX = pose.px + drift;
-  const totalY = pose.py + entryY + bob;
+  // Phone fixed center-right
+  const phoneCenterX = 1920 * 0.68; // ~1305
+  const phoneW = 1080 * phoneScale;
+  const phoneH = 1920 * phoneScale;
 
-  const lightX = 50 + (pose.px / 1920) * 100;
+  const totalScale = entryScale * breath * dissolveScale;
+  const totalRotX = entryRotX + 4;
+  const totalRotY = entryRotY + -8;
+
   const stageDarken = isOutro
     ? interpolate(localFrame, [0, 30], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
     : 0;
 
   return (
     <AbsoluteFill style={{ fontFamily: sans, background: LINEN, overflow: "hidden" }}>
+      {/* Painterly warm backdrop */}
       <AbsoluteFill
         style={{ background: `radial-gradient(70% 60% at 50% 30%, ${MORNING} 0%, ${LINEN} 55%, ${SAND} 100%)` }}
       />
 
+      {/* Stationary top light pool */}
       <AbsoluteFill
         style={{
-          background: `radial-gradient(38% 42% at ${lightX}% 38%, rgba(255,247,232,0.9), transparent 70%)`,
+          background: `radial-gradient(38% 42% at 55% 28%, rgba(255,247,232,0.9), transparent 70%)`,
           mixBlendMode: "screen",
           pointerEvents: "none",
           opacity: 1 - stageDarken * 0.7,
         }}
       />
 
+      {/* Accent washes — crossfade */}
       <AbsoluteFill
         style={{
           background: `radial-gradient(55% 45% at 70% 80%, ${rgba(accentPrev, 0.22)}, transparent 70%),
@@ -178,8 +172,9 @@ export const Launch16x9: React.FC = () => {
 
       <DustMotes energy={beat.energy} darken={stageDarken} />
 
-      {!isOutro && (
-        <KineticHeadline
+      {/* === LEFT COLUMN — headline === */}
+      {!isOutro && !beat.hideHeadline && (
+        <HeadlineColumn
           key={`hl-${idx}`}
           headline={beat.headline}
           wordmark={!!beat.wordmark}
@@ -189,38 +184,25 @@ export const Launch16x9: React.FC = () => {
         />
       )}
 
+      {/* === PHONE — fixed center-right === */}
       {(!isOutro || dissolveOp > 0.02) && (
         <div
           style={{
             position: "absolute",
-            left: "50%",
-            top: "50%",
-            width: 1080 * phoneScale,
-            height: 1920 * phoneScale,
-            marginLeft: -(1080 * phoneScale) / 2,
-            marginTop: -(1920 * phoneScale) / 2,
-            transform: `translate(${totalX}px, ${totalY}px)`,
+            left: phoneCenterX - phoneW / 2,
+            top: 1080 / 2 - phoneH / 2,
+            width: phoneW,
+            height: phoneH,
+            transform: `translateY(${entryY + bob}px)`,
             opacity: entryOp * dissolveOp,
             perspective: 2600,
             perspectiveOrigin: "50% 50%",
             zIndex: 5,
-            filter: isOutro ? `blur(${dissolveBlur}px)` : undefined,
+            filter: isOutro
+              ? `blur(${dissolveBlur}px) drop-shadow(0 50px 70px ${rgba(ESPRESSO, 0.32)})`
+              : `drop-shadow(0 50px 70px ${rgba(ESPRESSO, 0.32)}) drop-shadow(0 0 36px ${rgba(accent, 0.22)})`,
           }}
         >
-          <div
-            style={{
-              position: "absolute",
-              left: "50%",
-              bottom: -50 - bob * 0.4,
-              width: `${82 + bob * 0.3}%`,
-              height: 96,
-              transform: "translateX(-50%)",
-              background: `radial-gradient(ellipse at center, ${rgba(ESPRESSO, 0.5)} 0%, ${rgba(accent, 0.22)} 35%, transparent 70%)`,
-              filter: "blur(32px)",
-              pointerEvents: "none",
-            }}
-          />
-
           <div
             style={{
               position: "absolute",
@@ -228,7 +210,6 @@ export const Launch16x9: React.FC = () => {
               transform: `scale(${totalScale}) rotateY(${totalRotY}deg) rotateX(${totalRotX}deg)`,
               transformStyle: "preserve-3d",
               transformOrigin: "50% 50%",
-              filter: `drop-shadow(0 60px 80px ${rgba(ESPRESSO, 0.38)}) drop-shadow(0 0 40px ${rgba(accent, 0.25)})`,
             }}
           >
             <div
@@ -243,12 +224,13 @@ export const Launch16x9: React.FC = () => {
               <MainVideo />
             </div>
 
+            {/* Thin accent border on the screen rect */}
             <div
               style={{
                 position: "absolute",
                 inset: "110px 90px 110px 90px",
                 borderRadius: 130,
-                boxShadow: `inset 0 0 0 2px ${rgba(accent, 0.35)}, inset 0 0 80px ${rgba(accent, 0.18)}`,
+                border: `1px solid ${rgba(accent, 0.35)}`,
                 pointerEvents: "none",
               }}
             />
@@ -256,12 +238,37 @@ export const Launch16x9: React.FC = () => {
         </div>
       )}
 
-      {isOutro && dissolveT > 0.05 && dissolveT < 0.95 && (
-        <ParticleBurst accent={accent} t={dissolveT} />
+      {/* Outro warm flare in place of where phone was */}
+      {isOutro && dissolveT > 0.1 && dissolveT < 0.95 && (
+        <div
+          style={{
+            position: "absolute",
+            left: phoneCenterX,
+            top: 1080 / 2,
+            width: 1, height: 1,
+            zIndex: 6,
+            pointerEvents: "none",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              left: -400, top: -400,
+              width: 800, height: 800,
+              borderRadius: "50%",
+              background: `radial-gradient(circle, ${rgba(accent, 0.5)} 0%, ${rgba(accent, 0.18)} 30%, transparent 70%)`,
+              transform: `scale(${0.6 + dissolveT * 1.4})`,
+              opacity: interpolate(dissolveT, [0.1, 0.4, 1], [0, 0.8, 0]),
+              filter: "blur(20px)",
+              mixBlendMode: "screen",
+            }}
+          />
+        </div>
       )}
 
       {isOutro && <OutroHero localFrame={localFrame} accent={TERRACOTTA} />}
 
+      {/* Vignette */}
       <AbsoluteFill
         style={{
           background: "radial-gradient(80% 80% at 50% 50%, transparent 55%, rgba(44,37,32,0.18) 100%)",
@@ -269,20 +276,15 @@ export const Launch16x9: React.FC = () => {
         }}
       />
 
+      {/* Lower-third progress mark */}
       {!isOutro && (
         <div
           style={{
             position: "absolute",
-            left: 80,
-            bottom: 56,
-            display: "flex",
-            alignItems: "center",
-            gap: 16,
-            color: STONE,
-            fontSize: 15,
-            letterSpacing: 5,
-            textTransform: "uppercase",
-            fontWeight: 500,
+            left: 96, bottom: 56,
+            display: "flex", alignItems: "center", gap: 16,
+            color: STONE, fontSize: 15,
+            letterSpacing: 5, textTransform: "uppercase", fontWeight: 500,
             zIndex: 6,
           }}
         >
@@ -304,90 +306,137 @@ export const Launch16x9: React.FC = () => {
   );
 };
 
-const KineticHeadline: React.FC<{
+// ============= Headline column (left) =============
+const HeadlineColumn: React.FC<{
   headline: string; wordmark: boolean; accent: string;
   localFrame: number; beatLen: number;
 }> = ({ headline, wordmark, accent, localFrame, beatLen }) => {
   const { fps } = useVideoConfig();
-  const lines = headline.split("\n");
   const outOp = interpolate(localFrame, [Math.max(0, beatLen - 18), beatLen], [1, 0], {
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
-
-  if (wordmark) {
-    const sp = spring({ frame: localFrame, fps, config: { damping: 22, stiffness: 110 } });
-    const op = interpolate(sp, [0, 1], [0, 1]) * outOp;
-    const y = interpolate(sp, [0, 1], [50, 0]);
-    return (
-      <div
-        style={{
-          position: "absolute", inset: 0,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          zIndex: 2, opacity: op, transform: `translateY(${y}px)`,
-        }}
-      >
-        <div
-          style={{
-            fontFamily: serif, fontStyle: "italic",
-            fontSize: 460, lineHeight: 0.9, color: ESPRESSO,
-            letterSpacing: -14, display: "flex", alignItems: "flex-end",
-          }}
-        >
-          <span>asmi</span>
-          <span
-            style={{
-              width: 28, height: 28, borderRadius: "50%",
-              background: accent, marginLeft: 18, marginBottom: 60,
-              display: "inline-block",
-            }}
-          />
-        </div>
-      </div>
-    );
-  }
+  const eyebrowOp = interpolate(localFrame, [0, 14], [0, 1], {
+    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  }) * outOp;
 
   return (
     <div
       style={{
-        position: "absolute", inset: 0,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        zIndex: 2, pointerEvents: "none",
+        position: "absolute",
+        left: 96, top: 0, bottom: 0,
+        width: 820,
+        display: "flex", flexDirection: "column", justifyContent: "center",
+        gap: 28,
+        zIndex: 3,
       }}
     >
+      {/* Eyebrow */}
       <div
         style={{
-          fontFamily: serif, fontStyle: "italic",
-          fontSize: 230, lineHeight: 0.92, color: ESPRESSO,
-          letterSpacing: -8, textAlign: "center", opacity: outOp,
+          fontSize: 18, letterSpacing: 6, textTransform: "uppercase",
+          color: STONE, fontWeight: 500, opacity: eyebrowOp,
+          display: "flex", alignItems: "center", gap: 14,
         }}
       >
-        {lines.map((line, li) => (
-          <div key={li} style={{ display: "block", whiteSpace: "nowrap" }}>
-            {line.split(" ").map((word, wi) => {
-              const delay = li * 6 + wi * 5;
-              const sp = spring({
-                frame: localFrame - delay, fps,
-                config: { damping: 20, stiffness: 120 },
-              });
-              const y = interpolate(sp, [0, 1], [60, 0]);
-              const s = interpolate(sp, [0, 1], [0.92, 1]);
-              const op = interpolate(sp, [0, 1], [0, 1]);
-              return (
-                <span
-                  key={wi}
-                  style={{
-                    display: "inline-block",
-                    transform: `translateY(${y}px) scale(${s})`,
-                    opacity: op, marginRight: 28,
-                  }}
-                >
-                  {word}
-                </span>
-              );
-            })}
-          </div>
-        ))}
+        <span style={{ color: accent, fontSize: 22 }}>●</span>
+        <span>asmi · personal AI</span>
       </div>
+
+      {wordmark ? (
+        <WordmarkHeadline accent={accent} localFrame={localFrame} outOp={outOp} />
+      ) : (
+        <KineticLines
+          headline={headline}
+          localFrame={localFrame}
+          fps={fps}
+          outOp={outOp}
+        />
+      )}
+
+      {/* Underline accent grows in */}
+      <div
+        style={{
+          marginTop: 8,
+          width: interpolate(
+            spring({ frame: localFrame, fps, config: { damping: 22, stiffness: 110 } }),
+            [0, 1], [0, 260]
+          ),
+          height: 4, borderRadius: 2, background: accent,
+          opacity: outOp,
+        }}
+      />
+    </div>
+  );
+};
+
+const WordmarkHeadline: React.FC<{ accent: string; localFrame: number; outOp: number }> = ({
+  accent, localFrame, outOp,
+}) => {
+  const { fps } = useVideoConfig();
+  const sp = spring({ frame: localFrame, fps, config: { damping: 22, stiffness: 110 } });
+  const op = interpolate(sp, [0, 1], [0, 1]) * outOp;
+  const y = interpolate(sp, [0, 1], [40, 0]);
+  return (
+    <div
+      style={{
+        fontFamily: serif, fontStyle: "italic",
+        fontSize: 260, lineHeight: 0.95,
+        color: ESPRESSO, letterSpacing: -8,
+        display: "flex", alignItems: "flex-end",
+        opacity: op, transform: `translateY(${y}px)`,
+      }}
+    >
+      <span>meet asmi</span>
+      <span
+        style={{
+          width: 18, height: 18, borderRadius: "50%",
+          background: accent, marginLeft: 14, marginBottom: 36,
+          display: "inline-block",
+        }}
+      />
+    </div>
+  );
+};
+
+const KineticLines: React.FC<{
+  headline: string; localFrame: number; fps: number; outOp: number;
+}> = ({ headline, localFrame, fps, outOp }) => {
+  const lines = headline.split("\n");
+  return (
+    <div
+      style={{
+        fontFamily: serif, fontStyle: "italic",
+        fontSize: 180, lineHeight: 0.94,
+        color: ESPRESSO, letterSpacing: -6,
+        textAlign: "left", opacity: outOp,
+      }}
+    >
+      {lines.map((line, li) => (
+        <div key={li} style={{ display: "block", whiteSpace: "nowrap" }}>
+          {line.split(" ").map((word, wi) => {
+            const delay = li * 6 + wi * 5;
+            const sp = spring({
+              frame: localFrame - delay, fps,
+              config: { damping: 20, stiffness: 120 },
+            });
+            const y = interpolate(sp, [0, 1], [50, 0]);
+            const s = interpolate(sp, [0, 1], [0.94, 1]);
+            const op = interpolate(sp, [0, 1], [0, 1]);
+            return (
+              <span
+                key={wi}
+                style={{
+                  display: "inline-block",
+                  transform: `translateY(${y}px) scale(${s})`,
+                  opacity: op, marginRight: 24,
+                }}
+              >
+                {word}
+              </span>
+            );
+          })}
+        </div>
+      ))}
     </div>
   );
 };
@@ -402,7 +451,7 @@ const AccentSweep: React.FC<{ accent: string; localFrame: number }> = ({ accent,
       style={{
         position: "absolute", inset: 0,
         pointerEvents: "none", zIndex: 4,
-        background: `linear-gradient(110deg, transparent ${x - 30}%, ${rgba(accent, 0.35)} ${x}%, transparent ${x + 30}%)`,
+        background: `linear-gradient(110deg, transparent ${x - 30}%, ${rgba(accent, 0.32)} ${x}%, transparent ${x + 30}%)`,
         opacity: op, mixBlendMode: "soft-light",
       }}
     />
@@ -430,7 +479,7 @@ const OutroHero: React.FC<{ localFrame: number; accent: string }> = ({ localFram
       <div
         style={{
           fontFamily: serif, fontStyle: "italic",
-          fontSize: 108, lineHeight: 1.04,
+          fontSize: 112, lineHeight: 1.04,
           color: "#F7EFE6", letterSpacing: -3,
           textAlign: "center", maxWidth: 1500,
         }}
@@ -475,69 +524,25 @@ const OutroHero: React.FC<{ localFrame: number; accent: string }> = ({ localFram
         })}
       </div>
 
+      {/* asmi wordmark fades in near end (no tagline) */}
       <div
         style={{
-          marginTop: 56,
+          marginTop: 48,
           opacity: interpolate(localFrame, [60, 78], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
-          display: "flex", flexDirection: "column", alignItems: "center", gap: 14,
+          display: "flex", alignItems: "flex-end",
+          fontFamily: serif, fontStyle: "italic",
+          fontSize: 88, color: "#F7EFE6", letterSpacing: -3, lineHeight: 0.9,
         }}
       >
-        <div
+        <span>asmi</span>
+        <span
           style={{
-            fontFamily: serif, fontStyle: "italic",
-            fontSize: 96, color: "#F7EFE6", letterSpacing: -3,
-            display: "flex", alignItems: "flex-end", lineHeight: 0.9,
+            width: 12, height: 12, borderRadius: "50%",
+            background: accent, marginLeft: 6, marginBottom: 12,
           }}
-        >
-          <span>asmi</span>
-          <span
-            style={{
-              width: 12, height: 12, borderRadius: "50%",
-              background: accent, marginLeft: 6, marginBottom: 14,
-            }}
-          />
-        </div>
-        <div
-          style={{
-            color: "#D9CFC2", fontSize: 14,
-            letterSpacing: 6, textTransform: "uppercase", fontWeight: 500,
-          }}
-        >
-          launches soon
-        </div>
+        />
       </div>
     </div>
-  );
-};
-
-const ParticleBurst: React.FC<{ accent: string; t: number }> = ({ accent, t }) => {
-  const N = 44;
-  const particles = Array.from({ length: N }, (_, i) => {
-    const angle = (i / N) * Math.PI * 2 + (i % 3) * 0.4;
-    const dist = 200 + (i % 7) * 60 + t * 220;
-    const x = Math.cos(angle) * dist;
-    const y = Math.sin(angle) * dist * 1.1;
-    const size = 4 + (i % 5);
-    const op = interpolate(t, [0, 0.5, 1], [0.9, 0.7, 0]);
-    return (
-      <div
-        key={i}
-        style={{
-          position: "absolute", left: "50%", top: "50%",
-          width: size, height: size, borderRadius: "50%",
-          background: i % 3 === 0 ? accent : "rgba(255,240,215,1)",
-          opacity: op,
-          transform: `translate(${x}px, ${y}px)`,
-          filter: "blur(1px)",
-          boxShadow: `0 0 12px ${rgba(accent, 0.6)}`,
-        }}
-      />
-    );
-  });
-  return (
-    <AbsoluteFill style={{ pointerEvents: "none", zIndex: 6, mixBlendMode: "screen" }}>
-      {particles}
-    </AbsoluteFill>
   );
 };
 
