@@ -397,28 +397,36 @@ export const Launch16x9: React.FC = () => {
   );
 };
 
-// ============= Headline column (left) =============
+// ============= Headline column (left rail, or centered for scene beats) =============
 const HeadlineColumn: React.FC<{
   headline: string; wordmark: boolean; accent: string;
-  localFrame: number; beatLen: number;
-}> = ({ headline, wordmark, accent, localFrame, beatLen }) => {
+  localFrame: number; beatLen: number; centered?: boolean;
+}> = ({ headline, wordmark, accent, localFrame, beatLen, centered }) => {
   const { fps } = useVideoConfig();
   const outOp = interpolate(localFrame, [Math.max(0, beatLen - 18), beatLen], [1, 0], {
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
 
-  return (
-    <div
-      style={{
+  const containerStyle: React.CSSProperties = centered
+    ? {
+        position: "absolute",
+        left: 0, right: 0, top: "48%",
+        display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "flex-start",
+        gap: 24, textAlign: "center",
+        zIndex: 3, padding: "0 120px",
+      }
+    : {
         position: "absolute",
         left: 96, top: 0, bottom: 0,
         width: 820,
         display: "flex", flexDirection: "column", justifyContent: "center",
         gap: 28,
         zIndex: 3,
-      }}
-    >
+      };
 
+  return (
+    <div style={containerStyle}>
       {wordmark ? (
         <WordmarkHeadline accent={accent} localFrame={localFrame} outOp={outOp} />
       ) : (
@@ -427,6 +435,7 @@ const HeadlineColumn: React.FC<{
           localFrame={localFrame}
           fps={fps}
           outOp={outOp}
+          centered={centered}
         />
       )}
 
