@@ -350,9 +350,6 @@ const HeadlineColumn: React.FC<{
   const outOp = interpolate(localFrame, [Math.max(0, beatLen - 18), beatLen], [1, 0], {
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
-  const eyebrowOp = interpolate(localFrame, [0, 14], [0, 1], {
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  }) * outOp;
 
   return (
     <div
@@ -365,17 +362,6 @@ const HeadlineColumn: React.FC<{
         zIndex: 3,
       }}
     >
-      {/* Eyebrow */}
-      <div
-        style={{
-          fontSize: 18, letterSpacing: 6, textTransform: "uppercase",
-          color: STONE, fontWeight: 500, opacity: eyebrowOp,
-          display: "flex", alignItems: "center", gap: 14,
-        }}
-      >
-        <span style={{ color: accent, fontSize: 22 }}>●</span>
-        <span>personal AI</span>
-      </div>
 
       {wordmark ? (
         <WordmarkHeadline accent={accent} localFrame={localFrame} outOp={outOp} />
