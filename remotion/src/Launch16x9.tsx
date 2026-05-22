@@ -234,14 +234,14 @@ export const Launch16x9: React.FC = () => {
             top: 1080 / 2 - phoneH / 2,
             width: phoneW,
             height: phoneH,
-            transform: `translateY(${entryY + bob}px)`,
+            transform: `translateY(${entryY + floatY}px)`,
             opacity: entryOp * dissolveOp,
             perspective: 2600,
             perspectiveOrigin: "50% 50%",
             zIndex: 5,
             filter: isOutro
-              ? `blur(${dissolveBlur}px) drop-shadow(0 50px 70px ${rgba(ESPRESSO, 0.32)})`
-              : `drop-shadow(0 50px 70px ${rgba(ESPRESSO, 0.32)}) drop-shadow(0 0 36px ${rgba(accent, 0.22)})`,
+              ? `blur(${dissolveBlur}px) drop-shadow(0 ${shadowY}px ${shadowBlur}px ${rgba(ESPRESSO, shadowAlpha)})`
+              : `drop-shadow(0 ${shadowY}px ${shadowBlur}px ${rgba(ESPRESSO, shadowAlpha)}) drop-shadow(0 0 36px ${rgba(accent, 0.22)})`,
           }}
         >
           <div
@@ -253,6 +253,60 @@ export const Launch16x9: React.FC = () => {
               transformOrigin: "50% 50%",
             }}
           >
+            {/* Titanium phone shell */}
+            <div
+              style={{
+                position: "absolute",
+                width: 1080, height: 1920, left: 0, top: 0,
+                transform: `scale(${phoneScale})`,
+                transformOrigin: "top left",
+                borderRadius: 168,
+                background: `linear-gradient(180deg, #3a3a3e 0%, #2a2a2e 32%, #1c1c1f 62%, #2a2a2e 100%)`,
+                boxShadow: `
+                  inset 0 2px 0 rgba(255,255,255,0.18),
+                  inset 0 -2px 0 rgba(0,0,0,0.55),
+                  inset 3px 0 4px rgba(0,0,0,0.4),
+                  inset -3px 0 4px rgba(0,0,0,0.4)
+                `,
+              }}
+            />
+
+            {/* Accent rim-light on the shell */}
+            <div
+              style={{
+                position: "absolute",
+                width: 1080, height: 1920, left: 0, top: 0,
+                transform: `scale(${phoneScale})`,
+                transformOrigin: "top left",
+                borderRadius: 168,
+                boxShadow: `0 0 0 2px ${rgba(accent, 0.22)} inset`,
+                pointerEvents: "none",
+              }}
+            />
+
+            {/* Diagonal glass sheen — slowly moving */}
+            <div
+              style={{
+                position: "absolute",
+                width: 1080, height: 1920, left: 0, top: 0,
+                transform: `scale(${phoneScale})`,
+                transformOrigin: "top left",
+                borderRadius: 168,
+                overflow: "hidden",
+                pointerEvents: "none",
+                opacity: 0.5,
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: `linear-gradient(115deg, transparent ${30 + sheen * 0.2}%, rgba(255,255,255,0.08) ${50 + sheen * 0.2}%, transparent ${70 + sheen * 0.2}%)`,
+                }}
+              />
+            </div>
+
+            {/* Screen content */}
             <div
               style={{
                 position: "absolute",
@@ -269,15 +323,26 @@ export const Launch16x9: React.FC = () => {
             <div
               style={{
                 position: "absolute",
-                inset: "110px 90px 110px 90px",
-                borderRadius: 130,
-                border: `1px solid ${rgba(accent, 0.35)}`,
+                width: 1080, height: 1920, left: 0, top: 0,
+                transform: `scale(${phoneScale})`,
+                transformOrigin: "top left",
                 pointerEvents: "none",
               }}
-            />
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  inset: "110px 90px 110px 90px",
+                  borderRadius: 130,
+                  border: `1px solid ${rgba(accent, 0.35)}`,
+                  boxShadow: `inset 0 0 0 4px rgba(0,0,0,0.6)`,
+                }}
+              />
+            </div>
           </div>
         </div>
       )}
+
 
       {/* === SCENE — task cloud === */}
       {beat.scene === "tasks" && (
