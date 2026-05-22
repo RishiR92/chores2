@@ -119,9 +119,16 @@ export const Launch16x9: React.FC = () => {
   const entryScale = interpolate(phoneIn, [0, 1], [0.7, 1]);
   const entryOp = interpolate(phoneIn, [0, 1], [0, 1]);
 
-  // Subtle idle motion only
-  const bob = Math.sin(frame / 60) * 4;
-  const breath = 1 + Math.sin(frame / 90) * 0.008;
+  // Continuous levitation — kicks in after entry spring resolves.
+  const settle = interpolate(phoneIn, [0.7, 1], [0, 1], {
+    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  });
+  const floatY = Math.sin(frame / 55) * 14 * settle;
+  const yawDeg = Math.sin(frame / 90) * 2.5 * settle;
+  const pitchDeg = Math.sin(frame / 110 + 1.2) * 1.5 * settle;
+  const breath = 1 + Math.sin(frame / 75) * 0.012 * settle;
+  // Sheen offset for the glass/metal highlight.
+  const sheen = ((frame / 4) % 200) - 100;
 
   const PHONE_FIT_HEIGHT = 980;
   const phoneScale = PHONE_FIT_HEIGHT / 1920;
@@ -141,8 +148,15 @@ export const Launch16x9: React.FC = () => {
   const phoneH = 1920 * phoneScale;
 
   const totalScale = entryScale * breath * dissolveScale;
-  const totalRotX = entryRotX + 4;
-  const totalRotY = entryRotY + -8;
+  const totalRotX = entryRotX + pitchDeg;
+  const totalRotY = entryRotY + yawDeg;
+
+  // Shadow breathes with the float — grows when phone rises.
+  const liftN = (floatY + 14) / 28; // 0..1 ish
+  const shadowY = 50 + (1 - liftN) * 30;
+  const shadowBlur = 70 + liftN * 30;
+  const shadowAlpha = 0.22 + (1 - liftN) * 0.18;
+
 
   const stageDarken = isOutro
     ? interpolate(localFrame, [0, 30], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
