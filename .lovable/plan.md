@@ -1,42 +1,69 @@
-# Asmi Launch Video — 16:9 Cinematic Cut (Hybrid)
+# Asmi Launch Video — 16:9 Cinematic Cut (v2)
 
-Goal: A 1920×1080, ~43s launch film. The existing 9:16 phone demo (intro, WhatsApp bubbles, call card, doc, outro) is preserved exactly — only the world around the phone changes.
+Revising the existing `launch16x9` composition only. Inner phone demo (`MainVideo`) stays byte-for-byte unchanged. Same duration (1290f / 30fps / 1920×1080). Same scene order and timing.
 
-## Direction: "Asmi OS, on your desk" (C × B hybrid)
+## What changes
 
-A bold, branded kinetic stage (C) with the warmth and "UI escapes the bezel" intimacy of a founder's desk (B). Confident enough to stop a scroll, human enough to feel like real life.
+### 1. Copy updates
+- Eyebrow `chief of staff` → **`personal AI`**
+- Wordmark: replace uppercase `MEET ASMI` text with the **asmi wordmark** rendered as a styled lockup (lowercase italic Instrument Serif, oversized, with a small dot accent — matches the rest of the brand). Used in intro + outro beats.
+- Headlines updated:
+  - intro → `meet asmi` (wordmark treatment)
+  - calls beat → `book appointments.`
+  - hvac beat → `find vendors.`
+  - gp beat → `check in on loved ones.`
+  - done beat → `remembers everything.`
+  - outro → final hero line (see #4)
 
-### The look
-- **Canvas:** painterly warm gradient backdrop — linen/sand/morning tones from the brand palette, with a soft top-down light pool and a subtle vignette. Feels like a sunlit desk surface without being a photo.
-- **Phone:** enters from below with a spring, locks into a 3D tilt (`perspective(2400px) rotateX(6deg) rotateY(-9deg)`), levitates slightly above an implied desk plane with a soft contact shadow. Gentle bob + ±2° drift throughout.
-- **Accent wash:** a single hot accent (terracotta) lives in the rim light and floor glow; it **shifts hue per scene** to match what's on screen (sage for WhatsApp, sky-blue for the call card, clay for the doc, terracotta for intro/outro). The whole room subtly repaints between scenes via a soft color sweep, not a hard wipe.
-- **Kinetic editorial type (left third):** big serif lockups occluded by the phone — "MEET ASMI", "MAKE CALLS.", "GET THINGS DONE IN REAL WORLD.", "REMEMBERS EVERYTHING.", "WORKS IN BACKGROUND." One headline per scene, slow rise + fade.
-- **UI escapes the bezel (the B moment):** at peak of each scene, one element from inside the phone — a WhatsApp bubble, the call card, a doc snippet — detaches as a translucent floating card, drifts out beside the device for ~30 frames, then snaps back in. Soft drop shadow, slight parallax.
-- **Ambient props (sparse, painted, not photo):** a faint coffee-cup silhouette and a notebook edge live in the bottom corners as low-contrast painterly shapes — desk warmth without realism risk.
-- **Dust motes / light particles:** a few drifting specks in the key light beam for atmosphere.
+(Sequence + per-beat timing untouched.)
 
-### Vibe
-Premium consumer-AI launch. Confident, warm, scroll-stopping. Reads as "this is my actual life, and it's beautifully designed."
+### 2. Phone treatment — make it the hero, not a sidebar
+Today: phone parked right edge, static tilt, minor bob. Replace with a choreographed phone performance:
+
+- **Center-stage by default.** Phone sits roughly centered horizontally, slightly above middle. Headlines move to a stacked layout that flows *around* it (top-left eyebrow + headline, bottom-left support line) instead of competing in the left third.
+- **Cinematic entrance:** flies in from below with a strong spring, rotates from `rotateX(35deg) rotateY(-20deg) scale(0.6)` settling to a hero pose `rotateX(4deg) rotateY(-6deg) scale(1)`. ~30f.
+- **Per-scene camera moves** (parent transform on the phone wrapper, driven by `useCurrentFrame`):
+  - intro: hero center, slow push-in
+  - calls: drifts left, tilts toward camera (`rotateY(-10deg)`), accent rim brightens
+  - vendors: dolly right, slight `rotateY(+8deg)` for opposite angle
+  - loved ones: pulls back, soft sway
+  - remembers: tilts forward (`rotateX(8deg)`), as if leaning in
+  - done/outro handled in #4
+- **Levitation polish:** stronger contact shadow that scales/blurs with bob; subtle accent-tinted rim light on the phone edge via layered `box-shadow`; soft parallax glow behind phone matching the scene accent.
+- **Floating "escape the bezel" cameo** kept and tied to the camera move so it reads as the same object (drifts in the direction the phone is tilting away from).
+
+### 3. Dynamic, jazzy stage
+- Headlines get **kinetic treatment**: word-by-word stagger, slight per-word scale + rotateX, italic Instrument Serif at 140–180px, paired with a small caps support line in Inter.
+- **Accent sweep between beats** becomes a moving color band (diagonal gradient that wipes across the canvas in 18f), not just opacity crossfade.
+- **Light pool tracks the phone** (radial highlight follows phone X position) so the stage feels alive.
+- More motes, varied sizes, faster drift during high-energy beats (calls / vendors), calmer during loved-ones / remembers.
+- Lower-third brand mark gets a thin animated progress line that fills across the video duration.
+
+### 4. New final shot (replaces phone in the outro beat)
+During the existing outro window (`O.outro` → `TOTAL`, ~105f):
+- Phone scales up + dissolves outward into light particles (`scale → 1.15`, `opacity → 0`, blur ramp, particles burst from its silhouette).
+- Stage clears to a near-black warm gradient (espresso → terracotta wash).
+- Hero line types/reveals center-screen with strong kinetic typography:
+  > **"AI that handles your personal chores in the real world."**
+- Treatment: Instrument Serif italic, mixed weights, 2–3 line break, each line springs in with overshoot and a thin accent underline that draws across. Words `personal chores` and `real world` highlighted in terracotta.
+- Closes with the **asmi wordmark** + `launches soon` fading in beneath.
 
 ## Plan of work
 
-1. **New composition** `launch16x9` in `remotion/src/Root.tsx` at 1920×1080, 30fps, same duration as `main` (1290 frames). Keep `main` (9:16) untouched.
-2. **Refactor minimally:** extract the phone frame + inner scene sequence from `MainVideo.tsx` into a reusable `<PhoneStage />` component. No content changes to the inner demo.
-3. **New file** `remotion/src/Launch16x9.tsx`:
-   - Painterly gradient backdrop + light pool + vignette + drifting motes.
-   - Per-scene accent driver: reads current frame, maps to scene index, interpolates accent hue + headline.
-   - Editorial type slot (left third) with spring-in headlines.
-   - `<PhoneStage />` placed right-third, scaled to ~88% canvas height, with 3D tilt and bob.
-   - "Escape the bezel" overlay: 4–5 floating card cameos timed to each scene's peak.
-   - Painterly coffee/notebook silhouettes in corners.
-4. **Render script:** add `remotion/scripts/render-launch.mjs` (copy of existing, composition `launch16x9`, output `/mnt/documents/asmi-launch-16x9-v1.mp4`).
-5. **QA stills** at intro, first WhatsApp bubble, call-card peak (with escaped card), doc, outro. Verify: phone uncut, type legible, accent matches scene, no element clips 1920×1080.
-6. **Render full MP4** and report path + size.
+1. Edit `remotion/src/Launch16x9.tsx`:
+   - Update `BEATS` array (headlines + add `outroHero` flag on last beat).
+   - Replace phone wrapper with a `<PhoneStage />` that takes a per-beat camera prop and runs the entrance + camera choreography.
+   - Add `AsmiWordmark` component (styled lockup, reused for intro + outro).
+   - Rework headline renderer to do word-stagger kinetic type.
+   - Add accent sweep band + phone-tracking light pool.
+   - Add `<OutroHero />` component for the final shot, gated on the outro beat (phone dissolves, hero line reveals).
+2. No changes to `MainVideo.tsx`, `Root.tsx`, or the render script.
+3. QA stills at: intro hero pose, calls (phone left, "book appointments"), vendors (phone right), loved ones, remembers, outro mid-dissolve, outro final hero line.
+4. Re-render to `/mnt/documents/asmi-launch-16x9-v2.mp4`.
 
 ## Technical notes
-- All motion via `useCurrentFrame()` + `spring()`/`interpolate()`. No CSS animations.
-- 3D phone tilt via parent CSS `transform: perspective(...) rotateX/Y(...) scale(...)`. No WebGL.
-- No `backdropFilter` (sandbox renderer constraint). Use layered gradients + `filter: blur()` sparingly.
-- Reuse existing `PHONE` / `PHONE_BODY` / `SCREEN` geometry from `MainVideo.tsx`.
-- Add one display font for editorial type: `@remotion/google-fonts/Instrument_Serif` (matches the warm brand palette).
-- Floating "escape" cards reuse the same JSX building blocks as the inner scenes (WhatsApp bubble, call-card chrome) at a smaller scale, so visual language stays consistent.
+- All motion frame-based (`useCurrentFrame` + `spring`/`interpolate`). No CSS transitions.
+- Camera moves applied as a single `transform` on the phone wrapper, interpolated between per-beat target poses via crossfade on `localFrame`.
+- Phone dissolve in outro: layered `filter: blur()` + `opacity` + scale, plus ~40 small divs spawned from cached positions for the particle burst (deterministic seed, no randomness per frame).
+- Hero outro text uses the existing `InstrumentSerif` font already loaded — no new deps.
+- No `backdropFilter`, no WebGL.
