@@ -1,12 +1,14 @@
-# Asmi Launch Video — v4 polish
+# asmi Launch Video — v4 polish
 
 Scope: visual polish only. Sequence, timing, and MainVideo untouched.
+
+Branding rule: in the video itself, never write "Asmi" with a capital A. Use lowercase `asmi` wordmark or the logo only.
 
 ## Changes
 
 ### 1. New beat copy (was hidden)
 - Second-to-last beat (the `done` window where MainVideo shows the 3 completed tasks):
-  show headline **`completes tasks in background.`** using the same left-column kinetic
+  show headline **`handles your day.`** using the same left-column kinetic
   serif treatment as the other product beats. Accent stays sky-blue.
 
 ### 2. Outro — classy editorial statement
