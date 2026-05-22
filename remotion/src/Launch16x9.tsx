@@ -988,50 +988,71 @@ const FONT_FOR_LANG = (w: string): string => {
   return serif;
 };
 
+// Tight elliptical cluster around a centered "50+ languages." anchor.
+// Reserved center rect (in % of 1920x1080) where text won't be placed.
+const CENTER_RECT = { x: 32, y: 38, w: 36, h: 24 };
+
+const inCenterRect = (x: number, y: number) =>
+  x > CENTER_RECT.x && x < CENTER_RECT.x + CENTER_RECT.w &&
+  y > CENTER_RECT.y && y < CENTER_RECT.y + CENTER_RECT.h;
+
 const PLACEMENTS: LangPlacement[] = (() => {
-  // Poisson-ish jittered grid so words don't overlap badly.
-  const cols = 9;
-  const rows = 6;
+  // Sample points inside an ellipse centered on the screen, denser near middle,
+  // skipping the reserved center text rect. Rejection-sample with min distance.
   const items: LangPlacement[] = [];
-  const shuffled = LANG_CLOUD.slice().sort((a, b) => rand(a.length + a.charCodeAt(0)) - rand(b.length + b.charCodeAt(0)));
-  let i = 0;
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      if (i >= shuffled.length) break;
-      const jx = (rand(i * 3.1) - 0.5) * 6;
-      const jy = (rand(i * 7.7) - 0.5) * 4;
-      const x = 6 + (c / (cols - 1)) * 88 + jx;
-      const y = 14 + (r / (rows - 1)) * 72 + jy;
-      const sizeRoll = rand(i * 2.3);
-      const size = sizeRoll < 0.15 ? 46 : sizeRoll < 0.55 ? 34 : 26;
-      const baseOp = 0.16 + rand(i * 1.7) * 0.10;
-      items.push({ word: shuffled[i], x, y, size, baseOp, font: FONT_FOR_LANG(shuffled[i]) });
-      i++;
-    }
+  const shuffled = LANG_CLOUD.slice().sort(
+    (a, b) => rand(a.length + a.charCodeAt(0)) - rand(b.length + b.charCodeAt(0))
+  );
+  const cx = 50, cy = 50;
+  const rx = 34, ry = 32; // ellipse radii (% units, tight cluster)
+  const minDist = 7.5;
+  let seed = 1;
+  const target = Math.min(42, shuffled.length);
+  let placed = 0;
+  let tries = 0;
+  while (placed < target && tries < 4000) {
+    tries++;
+    // Bias toward center: take min of two radii samples.
+    const u1 = rand(seed++);
+    const u2 = rand(seed++);
+    const r = Math.min(u1, u2);
+    const theta = rand(seed++) * Math.PI * 2;
+    const x = cx + Math.cos(theta) * r * rx;
+    const y = cy + Math.sin(theta) * r * ry * 0.95;
+    if (inCenterRect(x, y)) continue;
+    if (items.some((p) => Math.hypot(p.x - x, p.y - y) < minDist)) continue;
+    const word = shuffled[placed];
+    // Smaller, more uniform sizes — feels like the website cloud.
+    const sizeRoll = rand(seed++);
+    const size = sizeRoll < 0.18 ? 36 : sizeRoll < 0.6 ? 28 : 22;
+    const baseOp = 0.18 + rand(seed++) * 0.10;
+    items.push({ word, x, y, size, baseOp, font: FONT_FOR_LANG(word) });
+    placed++;
   }
   return items;
 })();
 
 // Pre-pick which indices will "pop" and in what order.
 const POP_SCHEDULE: { idx: number; at: number }[] = (() => {
-  // Want ~7 pops across the beat (180 frames). One every ~22 frames.
   const picks: number[] = [];
   const used = new Set<number>();
   let seed = 11;
-  while (picks.length < 8) {
+  while (picks.length < 8 && PLACEMENTS.length > 0) {
     const k = Math.floor(rand(seed++) * PLACEMENTS.length);
     if (!used.has(k)) {
       used.add(k);
       picks.push(k);
     }
   }
-  return picks.map((idx, n) => ({ idx, at: 14 + n * 20 }));
+  return picks.map((idx, n) => ({ idx, at: 30 + n * 20 }));
 })();
 
 const LangCloud: React.FC<{ localFrame: number; beatLen: number; accent: string }> = ({
-  localFrame, beatLen, accent,
+  localFrame, beatLen,
 }) => {
   const { fps } = useVideoConfig();
+  // Force terracotta for pops regardless of beat accent — matches outro family.
+  const POP_COLOR = TERRACOTTA;
 
   const inOp = interpolate(localFrame, [0, 18], [0, 1], {
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
@@ -1041,10 +1062,14 @@ const LangCloud: React.FC<{ localFrame: number; beatLen: number; accent: string 
   });
   const fade = inOp * outOp;
 
-  // Final supporting caption fades in after the last pop.
-  const captionOp = interpolate(localFrame, [120, 150], [0, 1], {
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  }) * outOp;
+  // Center anchor enters with a gentle spring.
+  const anchorSp = spring({ frame: localFrame - 4, fps, config: { damping: 22, stiffness: 110 } });
+  const anchorOp = interpolate(anchorSp, [0, 1], [0, 1]) * outOp;
+  const anchorY = interpolate(anchorSp, [0, 1], [16, 0]);
+
+  const subtitleSp = spring({ frame: localFrame - 16, fps, config: { damping: 24, stiffness: 120 } });
+  const subtitleOp = interpolate(subtitleSp, [0, 1], [0, 1]) * outOp;
+  const subtitleY = interpolate(subtitleSp, [0, 1], [10, 0]);
 
   return (
     <div
@@ -1057,7 +1082,6 @@ const LangCloud: React.FC<{ localFrame: number; beatLen: number; accent: string 
       }}
     >
       {PLACEMENTS.map((p, i) => {
-        // Find if/when this index pops.
         const pop = POP_SCHEDULE.find((q) => q.idx === i);
         let popAmt = 0;
         if (pop) {
@@ -1066,15 +1090,11 @@ const LangCloud: React.FC<{ localFrame: number; beatLen: number; accent: string 
           const outSp = spring({ frame: t - 22, fps, config: { damping: 22, stiffness: 140, mass: 0.8 } });
           popAmt = Math.max(0, inSp - outSp);
         }
-        // Idle drift so the field feels alive.
-        const drift = Math.sin((localFrame + i * 9) / 70) * 2.2;
+        const drift = Math.sin((localFrame + i * 9) / 70) * 1.8;
         const opacity = p.baseOp + popAmt * (1 - p.baseOp);
-        const scale = 1 + popAmt * 1.55;
-        const color = popAmt > 0.05
-          ? accent
-          : ESPRESSO;
+        const scale = 1 + popAmt * 1.45;
+        const color = popAmt > 0.05 ? POP_COLOR : ESPRESSO;
         const fontWeight = popAmt > 0.4 ? 600 : 400;
-        const blur = popAmt > 0.1 ? 0 : 0.3;
         return (
           <div
             key={i}
@@ -1090,10 +1110,8 @@ const LangCloud: React.FC<{ localFrame: number; beatLen: number; accent: string 
               color,
               opacity,
               whiteSpace: "nowrap",
-              letterSpacing: -0.5,
-              filter: `blur(${blur}px)`,
-              transition: "color 120ms linear",
-              textShadow: popAmt > 0.2 ? `0 6px 30px ${rgba(accent, 0.35)}` : "none",
+              letterSpacing: -0.3,
+              textShadow: popAmt > 0.2 ? `0 6px 30px ${rgba(POP_COLOR, 0.35)}` : "none",
               zIndex: popAmt > 0.05 ? 6 : 4,
             }}
           >
@@ -1102,24 +1120,47 @@ const LangCloud: React.FC<{ localFrame: number; beatLen: number; accent: string 
         );
       })}
 
-      {/* Supporting caption — appears after the pops have played */}
+      {/* Centered anchor: 50+ languages. */}
       <div
         style={{
           position: "absolute",
-          left: 0, right: 0, bottom: "8%",
+          left: 0, right: 0, top: "44%",
           textAlign: "center",
-          fontFamily: sans,
-          fontSize: 22,
-          letterSpacing: 6,
-          textTransform: "uppercase",
-          color: STONE,
-          fontWeight: 500,
-          opacity: captionOp,
+          fontFamily: serif,
+          fontStyle: "italic",
+          fontSize: 116,
+          lineHeight: 1,
+          letterSpacing: -3,
+          color: ESPRESSO,
+          opacity: anchorOp,
+          transform: `translateY(${anchorY}px)`,
+          zIndex: 7,
         }}
       >
-        50+ languages · your accent · your way
+        50+ languages.
+      </div>
+
+      {/* Subtitle: your accent. your way. — highlighted in terracotta */}
+      <div
+        style={{
+          position: "absolute",
+          left: 0, right: 0, top: "56%",
+          textAlign: "center",
+          fontFamily: serif,
+          fontStyle: "italic",
+          fontSize: 64,
+          lineHeight: 1,
+          letterSpacing: -1.5,
+          color: TERRACOTTA,
+          opacity: subtitleOp,
+          transform: `translateY(${subtitleY}px)`,
+          zIndex: 7,
+        }}
+      >
+        your accent. your way.
       </div>
     </div>
   );
 };
+
 
