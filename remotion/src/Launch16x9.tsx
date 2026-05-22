@@ -735,9 +735,9 @@ const RotatingReel: React.FC<{
   const stageRightX = 940;
   const stageW = 920;
   const stageCenterX = 1920 / 2 - stageW / 2;
-  // Hero lands center first (0..22), then slides to right (22..40), then rests.
+  // Hero lands center first (0..80, ~5 turns), then slides to right (80..94), then rests.
   const slideT = easeInOut(
-    interpolate(localFrame, [22, 40], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
+    interpolate(localFrame, [80, 94], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
   );
   const stageX = stageCenterX + (stageRightX - stageCenterX) * slideT;
   const stageY = 90;
