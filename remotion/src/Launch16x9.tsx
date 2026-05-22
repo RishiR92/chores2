@@ -80,7 +80,7 @@ const BEATS: Beat[] = [
   { start: O.imGp,   end: O.done,   headline: "check in on\nloved ones.", accent: CLAY,       energy: 0.5 },
   { start: O.done,   end: O.tasks,  headline: "handles\nyour day.",       accent: SKY,        energy: 0.7 },
   { start: O.tasks,  end: O.langs,  headline: "your personal\nchores handled.", accent: CLAY,    energy: 1.0, scene: "tasks" },
-  { start: O.langs,  end: O.outro,  headline: "50+ languages.\nyour way.",        accent: SAGE,    energy: 1.0, scene: "langs" },
+  { start: O.langs,  end: O.outro,  headline: "",                                  accent: SAGE,    energy: 1.0, scene: "langs", hideHeadline: true },
   { start: O.outro,  end: TOTAL,    headline: "",                         accent: TERRACOTTA, energy: 0.4, outro: true },
 ];
 
