@@ -1,47 +1,55 @@
-# Launch video — v7 polish
+# Launch video — v8 polish
 
-Four targeted changes to `remotion/src/Launch16x9.tsx`. No timing changes.
+Three focused fixes addressing the three issues raised. No timing changes to the overall video.
 
-## 1. New headline on the tasks beat
+## 1. Remove the black "container" — just a levitating iPhone
 
-Replace the headline `"from plumbers\nto prescriptions."` with `"your personal\nchores handled."` on the `tasks` beat (BEATS[5]). Matches the outro's "personal chores" highlight and ties the two screens together. Sequence and duration stay the same.
+The current shell renders a 1080×1920 dark-gradient slab around a clipped screen rectangle. Outside the screen cutout (90px sides, 110px top/bottom) it reads as a chunky black box, not a phone.
 
-## 2. Recolor tasks + languages hero words to match the outro highlight
+Replace with a true floating-screen treatment in `Launch16x9.tsx`:
 
-The outro renders "personal chores" and "real world" in TERRACOTTA (`#C25B3F`) on linen — that's the warm accent the user wants echoed.
+- Delete the titanium gradient slab, the accent rim-light layer, and the diagonal sheen overlay.
+- Keep the `MainVideo` clip exactly as is (same `clipPath: inset(110px 90px 110px 90px round 130px)`) so the screen content stays untouched.
+- Replace the surrounding shell with a thin, realistic iPhone bezel:
+  - A 6–8px dark titanium ring (`#2a2a2e → #1a1a1c` vertical gradient) hugging the screen rect only — drawn as a frame around `inset(110px 90px ...)`, not the whole 1080×1920 wrapper.
+  - 1px inner highlight (white 0.18) on top edge, 1px inner shadow (black 0.55) on bottom edge.
+  - Subtle accent rim-light (`accent` at 0.18) on that thin ring only.
+- Soft drop-shadow continues to breathe with the float — it sells the levitation now that the slab is gone.
+- The phone wrapper background outside the screen rect becomes fully transparent — no more black rectangle behind the device.
 
-- In `RotatingReel`, paint the large hero word in TERRACOTTA instead of ESPRESSO, for both `tasks` and `langs` scenes.
-- Secondary drifting words stay in muted ESPRESSO/STONE so the hero word leads the eye.
-- The hairline rule under the hero stays on the beat's `accent` (CLAY for tasks, SAGE for langs) so the scene still has its own color signature in the backdrop and counter.
+Net effect: only the screen + a thin bezel hovers in the warm linen scene.
 
-Net effect: the hero verbs / language words feel like the same family as the closing card.
+## 2. Tasks + Languages: hero enters center, then slides right while left headline appears
 
-## 3. Realistic phone shell — less flat black
+Currently the left headline and the right-side reel hero animate in simultaneously. The user wants a beat-driven reveal: hero word lands in the visual center first, then slides to the right and the left-side headline arrives.
 
-Today the phone body is rendered by the `MainVideo` chrome and reads as a solid black slab. Upgrade only the outer shell in `Launch16x9.tsx`:
+In `Launch16x9.tsx`:
 
-- Replace the single drop-shadow on the phone wrapper with a layered titanium-style frame: a subtle vertical gradient body (`#3a3a3e → #1c1c1f → #2a2a2e`), a 1px inner highlight on the top edge (rgba white 0.18), a 1px inner shadow on the bottom edge (rgba black 0.5), and a soft accent rim-light using the current beat's `accent` at ~0.25 opacity.
-- Keep the screen cutout (`clipPath: inset(110px 90px 110px 90px round 130px)`) exactly as is so `MainVideo` content is untouched.
-- Add a faint reflective sheen — a diagonal linear-gradient highlight at ~8% opacity moving very slowly with `frame` — to sell the glass/metal read without distracting from the screen.
+- For `tasks` and `langs` beats, gate the left `HeadlineColumn` so it only mounts after `localFrame ≥ 28` (after the first hero word has landed center-stage). Re-use the existing `outOp` logic for exit.
+- In `RotatingReel`, add a `centerHold` phase tied to `localFrame`:
+  - `localFrame 0 → 22`: stage origin is `centerX = 1920/2 - stageW/2`, stage Y unchanged. Hero word springs in at full visual center.
+  - `localFrame 22 → 40`: stage `left` interpolates from center to the current right-side `stageX = 940` with an `easeInOut`. Hero word travels with the stage.
+  - `localFrame ≥ 40`: stage rests at the right-side position; subsequent reel cycling continues as today.
+- The counter and hairline rule travel with the stage, so the whole reel block migrates as one composition.
+- Left `HeadlineColumn` fade-in starts at `localFrame ≈ 32` (just as the stage finishes settling on the right). Same serif treatment as other beats.
 
-The user keeps seeing real app footage inside; only the bezel reads as a premium device instead of a black rectangle.
+Result: the eye is led by the word at center, then handed off to the headline as the word slots to the right — feels more directed and editorial than the current side-by-side reveal.
 
-## 4. Make the phone feel alive — levitate + remove the awkward tilt
+## 3. Call-snippet audio quality
 
-Current state: `totalRotX = entryRotX + 4`, `totalRotY = entryRotY + -8`, and a tiny `bob` of ±4px. Reads as static and tilted oddly.
+The three trimmed snippets (`doc.mp3`, `hvac.mp3`, `grandpa.mp3`) are 8s 192kbps mp3 stems, but each `<Audio volume={1.4}>` boosts past unity and clips on loud syllables — that's the "bad quality" read. Source `.mp4`s are 84–100kbps AAC so we cannot exceed their fidelity, but we can stop the clipping and even out perceived loudness.
 
-Replace with a continuous, gentle levitation loop once the entry spring resolves:
+Steps:
 
-- Vertical float: `sin(frame / 55) * 14` px (bigger, smoother bob).
-- Subtle yaw: `sin(frame / 90) * 2.5` deg added to rotateY (settles around 0, no constant left lean).
-- Subtle pitch: `sin(frame / 110 + 1.2) * 1.5` deg on rotateX.
-- Breath scale: `1 + sin(frame / 75) * 0.012` (slightly more pronounced than today).
-- Drop-shadow Y offset and blur also breathe with the float so the shadow grows when the phone rises — sells the levitation.
-- Remove the fixed `+4` / `-8` resting tilt so the phone hovers roughly upright with only the live micro-motion.
+1. Re-extract the three trimmed clips from the originals using `ffmpeg` with `loudnorm` (target `I=-16 LUFS, TP=-1.5, LRA=11`) plus a gentle `highpass=f=80` to clean phone-line rumble. Output 192kbps mp3, 48kHz stereo.
+2. Overwrite the existing files in `remotion/public/audio/trimmed/` (same filenames so `MainVideo.tsx` paths stay valid).
+3. Drop the `volume={1.4}` boost on all three `<Audio>` tags in `MainVideo.tsx` to `volume={1.0}` — loudnorm now handles the gain headroom without clipping.
 
-Entry spring is unchanged (still drops in from below and settles); the new motion just takes over once `phoneIn` ≈ 1.
+Verification: re-render `/mnt/documents/asmi-launch-16x9-v8.mp4`, listen to the three call beats — voices should sit louder than v7 but without the harsh crunch on consonants.
 
 ## Files
 
-- `remotion/src/Launch16x9.tsx` only.
-- Re-render to `/mnt/documents/asmi-launch-16x9-v7.mp4`.
+- `remotion/src/Launch16x9.tsx` — fixes 1 and 2.
+- `remotion/src/MainVideo.tsx` — fix 3 (volume drops only).
+- `remotion/public/audio/trimmed/{doc,hvac,grandpa}.mp3` — regenerated assets.
+- Render to `/mnt/documents/asmi-launch-16x9-v8.mp4`.
