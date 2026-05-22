@@ -1,55 +1,68 @@
-# Launch video — v8 polish
+# Launch video — v9 polish
 
-Three focused fixes addressing the three issues raised. No timing changes to the overall video.
+Four fixes addressing the v8 review.
 
-## 1. Remove the black "container" — just a levitating iPhone
+## 1. Mobile screen is blacked out — restore the screen
 
-The current shell renders a 1080×1920 dark-gradient slab around a clipped screen rectangle. Outside the screen cutout (90px sides, 110px top/bottom) it reads as a chunky black box, not a phone.
+The v8 bezel uses `border: 10px solid transparent` + `background-image: linear-gradient(transparent,transparent), linear-gradient(...)` + `background-clip: padding-box, border-box`. In the Remotion Chromium render the padding-box layer is rendering opaque (covering the screen) instead of transparent.
 
-Replace with a true floating-screen treatment in `Launch16x9.tsx`:
+Swap to a proven, simple pattern that cannot fill the interior:
 
-- Delete the titanium gradient slab, the accent rim-light layer, and the diagonal sheen overlay.
-- Keep the `MainVideo` clip exactly as is (same `clipPath: inset(110px 90px 110px 90px round 130px)`) so the screen content stays untouched.
-- Replace the surrounding shell with a thin, realistic iPhone bezel:
-  - A 6–8px dark titanium ring (`#2a2a2e → #1a1a1c` vertical gradient) hugging the screen rect only — drawn as a frame around `inset(110px 90px ...)`, not the whole 1080×1920 wrapper.
-  - 1px inner highlight (white 0.18) on top edge, 1px inner shadow (black 0.55) on bottom edge.
-  - Subtle accent rim-light (`accent` at 0.18) on that thin ring only.
-- Soft drop-shadow continues to breathe with the float — it sells the levitation now that the slab is gone.
-- The phone wrapper background outside the screen rect becomes fully transparent — no more black rectangle behind the device.
+- Replace the border-image trick with a single div using a real CSS `border` of solid dark color (no background, no background-clip lists). The interior is naturally transparent because no `background` is set.
 
-Net effect: only the screen + a thin bezel hovers in the warm linen scene.
+```text
+{
+  position: 'absolute',
+  inset: '100px 80px 100px 80px',
+  borderRadius: 140,
+  border: '10px solid #242427',
+  boxShadow: 'inset 0 1.5px 0 rgba(255,255,255,0.16),
+              inset 0 -1.5px 0 rgba(0,0,0,0.55),
+              0 0 24px rgba(accent, 0.22)',
+}
+```
 
-## 2. Tasks + Languages: hero enters center, then slides right while left headline appears
+- Keep the inner hairline div (1px accent + 3px inset black) so the screen rim still reads premium.
+- Verify MainVideo is the first child inside the transformed phone wrapper so subsequent siblings (the bezel ring) overlay only the bezel area, not the screen.
 
-Currently the left headline and the right-side reel hero animate in simultaneously. The user wants a beat-driven reveal: hero word lands in the visual center first, then slides to the right and the left-side headline arrives.
+## 2. Spanish call audio gets cut at the end
 
-In `Launch16x9.tsx`:
+`D.gp = 240` frames = 8.0s. The current trimmed `grandpa.mp3` is `-ss 0 -t 8` which cuts the speaker mid-sentence at 8.0s with no fade. The user wants it to end naturally.
 
-- For `tasks` and `langs` beats, gate the left `HeadlineColumn` so it only mounts after `localFrame ≥ 28` (after the first hero word has landed center-stage). Re-use the existing `outOp` logic for exit.
-- In `RotatingReel`, add a `centerHold` phase tied to `localFrame`:
-  - `localFrame 0 → 22`: stage origin is `centerX = 1920/2 - stageW/2`, stage Y unchanged. Hero word springs in at full visual center.
-  - `localFrame 22 → 40`: stage `left` interpolates from center to the current right-side `stageX = 940` with an `easeInOut`. Hero word travels with the stage.
-  - `localFrame ≥ 40`: stage rests at the right-side position; subsequent reel cycling continues as today.
-- The counter and hairline rule travel with the stage, so the whole reel block migrates as one composition.
-- Left `HeadlineColumn` fade-in starts at `localFrame ≈ 32` (just as the stage finishes settling on the right). Same serif treatment as other beats.
+- Re-extract `grandpa.mp3` starting from a point in the call where a clean 7.5s phrase exists. Use `-ss 3 -t 7.6` from the original `spanish-grandpa-call.mp4` so the snippet ends on a natural pause, then add `afade=t=out:st=7.0:d=0.6` to ensure a soft tail within the 8.0s window.
+- For consistency also re-extract `doc.mp3` (`-ss 0 -t 7.6`, fade out 7.0..7.6) and `hvac.mp3` (`-ss 0 -t 7.6`, fade out 7.0..7.6) with the same loudnorm chain plus a `highpass=f=80,lowpass=f=8000,acompressor=threshold=-18dB:ratio=3:attack=10:release=120` chain — gentle compression evens out perceived loudness without clipping. Final mp3 at 192kbps stereo 48kHz.
+- Audio volume in `MainVideo.tsx` stays at `1.0` (no further boosting).
 
-Result: the eye is led by the word at center, then handed off to the headline as the word slots to the right — feels more directed and editorial than the current side-by-side reveal.
+Result: all three call snippets feel finished, with even loudness and clean tails. Spanish in particular ends on a phrase, not a cut.
 
-## 3. Call-snippet audio quality
+## 3. Tasks + Languages — 4–6 turns at center, then slide right, then headline
 
-The three trimmed snippets (`doc.mp3`, `hvac.mp3`, `grandpa.mp3`) are 8s 192kbps mp3 stems, but each `<Audio volume={1.4}>` boosts past unity and clips on loud syllables — that's the "bad quality" read. Source `.mp4`s are 84–100kbps AAC so we cannot exceed their fidelity, but we can stop the clipping and even out perceived loudness.
+Beat length is 130 frames; each reel turn is `BEAT = 16` frames. Five turns at center = 80 frames. Then a quick slide to the right (~14 frames), then the left headline arrives for the remainder.
 
-Steps:
+In `RotatingReel`:
 
-1. Re-extract the three trimmed clips from the originals using `ffmpeg` with `loudnorm` (target `I=-16 LUFS, TP=-1.5, LRA=11`) plus a gentle `highpass=f=80` to clean phone-line rumble. Output 192kbps mp3, 48kHz stereo.
-2. Overwrite the existing files in `remotion/public/audio/trimmed/` (same filenames so `MainVideo.tsx` paths stay valid).
-3. Drop the `volume={1.4}` boost on all three `<Audio>` tags in `MainVideo.tsx` to `volume={1.0}` — loudnorm now handles the gain headroom without clipping.
+- Change the slide interpolation from `[22, 40]` to `[80, 94]`, so the reel stays centered for the first ~5 turns, then migrates to `stageRightX = 940` in 14 frames.
 
-Verification: re-render `/mnt/documents/asmi-launch-16x9-v8.mp4`, listen to the three call beats — voices should sit louder than v7 but without the harsh crunch on consonants.
+In the headline gate (`Launch16x9.tsx`):
+
+- For scene beats, mount `HeadlineColumn` only when `localFrame ≥ 94` (just after the slide finishes).
+- Pass `localFrame - 94` and `beatLen - 94` so its entrance spring and exit fade animate over the remaining ~36 frames.
+
+Net effect: word, word, word, word, word lands center stage → reel slides right → "your personal chores handled." enters from the left → cut to next beat.
+
+## 4. ASMI logo at the end
+
+No logo asset exists in the repo (`remotion/public/` has no images). The current outro builds an italic serif "asmi" wordmark + colored dot inline. Two options:
+
+A. **Stylized inline logomark (no upload required, ship now).** Promote the existing serif "asmi" wordmark in the outro from the small top stamp (56px) to a centered hero logomark sized at ~180px, sitting just above the "AI that handles your personal chores" line. Add a thin terracotta circle around it (or replace the dot with an outlined ring) so it reads as a finished brand mark rather than just text. Keep the small top stamp as a corner-mark.
+
+B. **Use a user-supplied logo asset.** If the user has an SVG/PNG logo file, drop it into `remotion/public/logo.svg` and replace the inline wordmark with `<Img src={staticFile('logo.svg')} />` at the outro hero position.
+
+**Default to option A** for this iteration since no asset exists. Render the larger outlined wordmark in the outro hero stack and re-render. If the user later provides a logo file, we swap it in.
 
 ## Files
 
-- `remotion/src/Launch16x9.tsx` — fixes 1 and 2.
-- `remotion/src/MainVideo.tsx` — fix 3 (volume drops only).
-- `remotion/public/audio/trimmed/{doc,hvac,grandpa}.mp3` — regenerated assets.
-- Render to `/mnt/documents/asmi-launch-16x9-v8.mp4`.
+- `remotion/src/Launch16x9.tsx` — bezel fix, reel timing, headline gate, outro logo treatment.
+- `remotion/src/MainVideo.tsx` — no code changes (volumes already 1.0).
+- `remotion/public/audio/trimmed/{doc,hvac,grandpa}.mp3` — regenerated with better trim points + fade-out + compression.
+- Render to `/mnt/documents/asmi-launch-16x9-v9.mp4`.
