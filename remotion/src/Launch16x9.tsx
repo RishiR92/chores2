@@ -735,7 +735,7 @@ const RotatingReel: React.FC<{
           fontStyle: italic ? "italic" : "normal",
           fontWeight: 500,
           fontSize: heroSize,
-          color: ESPRESSO,
+          color: TERRACOTTA,
           letterSpacing: -1.5,
           textAlign: "center",
           padding: "0 40px",
