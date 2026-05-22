@@ -460,12 +460,39 @@ const AccentSweep: React.FC<{ accent: string; localFrame: number }> = ({ accent,
 
 const OutroHero: React.FC<{ localFrame: number; accent: string }> = ({ localFrame, accent }) => {
   const { fps } = useVideoConfig();
-  const lines: { text: string; highlight?: boolean }[][] = [
-    [{ text: "AI that handles" }],
-    [{ text: "your " }, { text: "personal chores", highlight: true }],
-    [{ text: "in the " }, { text: "real world", highlight: true }, { text: "." }],
+
+  // Two balanced lines. Highlights are inline <span> with NO inline-block,
+  // so natural whitespace between words is preserved.
+  type Seg = { text: string; highlight?: boolean };
+  const lines: Seg[][] = [
+    [
+      { text: "AI that handles your " },
+      { text: "personal chores", highlight: true },
+    ],
+    [
+      { text: "in the " },
+      { text: "real world", highlight: true },
+      { text: "." },
+    ],
   ];
-  const startAt = 22;
+
+  const heroStart = 18;
+
+  // Top asmi stamp
+  const stampOp = interpolate(localFrame, [6, 22], [0, 1], {
+    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  });
+
+  // Hairline rule under second line
+  const ruleW = interpolate(
+    localFrame - (heroStart + 2 * 10 + 14), [0, 18], [0, 220],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+
+  // Bottom caption
+  const captionOp = interpolate(localFrame, [60, 82], [0, 1], {
+    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  });
 
   return (
     <div
@@ -473,74 +500,97 @@ const OutroHero: React.FC<{ localFrame: number; accent: string }> = ({ localFram
         position: "absolute", inset: 0,
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        zIndex: 7, gap: 6,
+        zIndex: 7,
       }}
     >
+      {/* Top stamp: asmi wordmark + dot, hairline below */}
+      <div
+        style={{
+          position: "absolute", top: "16%", left: 0, right: 0,
+          display: "flex", flexDirection: "column", alignItems: "center",
+          gap: 14, opacity: stampOp,
+        }}
+      >
+        <div
+          style={{
+            display: "flex", alignItems: "flex-end",
+            fontFamily: serif, fontStyle: "italic",
+            fontSize: 56, color: ESPRESSO, letterSpacing: -2, lineHeight: 0.9,
+          }}
+        >
+          <span>asmi</span>
+          <span
+            style={{
+              width: 8, height: 8, borderRadius: "50%",
+              background: accent, marginLeft: 5, marginBottom: 10,
+              display: "inline-block",
+            }}
+          />
+        </div>
+        <div style={{ width: 64, height: 1, background: rgba(ESPRESSO, 0.25) }} />
+      </div>
+
+      {/* Hero line */}
       <div
         style={{
           fontFamily: serif, fontStyle: "italic",
-          fontSize: 112, lineHeight: 1.04,
-          color: "#F7EFE6", letterSpacing: -3,
+          fontSize: 118, lineHeight: 1.12,
+          color: ESPRESSO, letterSpacing: -3,
           textAlign: "center", maxWidth: 1500,
         }}
       >
         {lines.map((segs, li) => {
-          const delay = startAt + li * 8;
+          const delay = heroStart + li * 10;
           const sp = spring({
             frame: localFrame - delay, fps,
-            config: { damping: 18, stiffness: 95 },
+            config: { damping: 24, stiffness: 80 },
           });
-          const y = interpolate(sp, [0, 1], [50, 0]);
+          const y = interpolate(sp, [0, 1], [14, 0]);
           const op = interpolate(sp, [0, 1], [0, 1]);
-          const underlineW = interpolate(
-            localFrame - delay - 8, [0, 14], [0, 100],
-            { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
-          );
           return (
             <div
               key={li}
               style={{
                 transform: `translateY(${y}px)`,
-                opacity: op, position: "relative",
-                display: "inline-block",
+                opacity: op,
               }}
             >
               {segs.map((seg, si) => (
-                <span key={si} style={{ color: seg.highlight ? accent : "#F7EFE6" }}>
+                <span
+                  key={si}
+                  style={{
+                    color: seg.highlight ? accent : ESPRESSO,
+                    fontStyle: "italic",
+                  }}
+                >
                   {seg.text}
                 </span>
               ))}
-              {li === 2 && (
-                <div
-                  style={{
-                    height: 3, background: accent,
-                    width: `${underlineW}%`,
-                    margin: "8px auto 0", borderRadius: 2, opacity: 0.7,
-                  }}
-                />
-              )}
             </div>
           );
         })}
-      </div>
 
-      {/* asmi wordmark fades in near end (no tagline) */}
-      <div
-        style={{
-          marginTop: 48,
-          opacity: interpolate(localFrame, [60, 78], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
-          display: "flex", alignItems: "flex-end",
-          fontFamily: serif, fontStyle: "italic",
-          fontSize: 88, color: "#F7EFE6", letterSpacing: -3, lineHeight: 0.9,
-        }}
-      >
-        <span>asmi</span>
-        <span
+        {/* Hairline rule under the hero */}
+        <div
           style={{
-            width: 12, height: 12, borderRadius: "50%",
-            background: accent, marginLeft: 6, marginBottom: 12,
+            margin: "28px auto 0",
+            width: `${ruleW}px`,
+            height: 1, background: accent, opacity: 0.85,
           }}
         />
+      </div>
+
+      {/* Bottom caption */}
+      <div
+        style={{
+          position: "absolute", bottom: "10%", left: 0, right: 0,
+          textAlign: "center",
+          fontSize: 14, letterSpacing: 6, textTransform: "uppercase",
+          color: STONE, fontWeight: 500,
+          opacity: captionOp,
+        }}
+      >
+        personal AI · launches soon
       </div>
     </div>
   );
