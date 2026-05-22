@@ -382,17 +382,31 @@ export const Launch16x9: React.FC = () => {
         </div>
       )}
 
-      {/* Global background music spanning the full 16:9 cut.
-          Fades out across the last ~30 frames of the outro. */}
+      {/* Global background music. Ducks hard under the three call windows
+          so the voice snippets read clearly. */}
       <Audio
         src={staticFile("audio/bgm.mp3")}
-        volume={(f) =>
-          interpolate(f, [0, 20, TOTAL - 30, TOTAL - 2], [0, 0.55, 0.55, 0], {
-            extrapolateLeft: "clamp",
-            extrapolateRight: "clamp",
-          })
-        }
+        volume={(f) => {
+          const fadeIn = interpolate(f, [0, 20], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+          const fadeOut = interpolate(f, [TOTAL - 30, TOTAL - 2], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+          const RAMP = 22;
+          const calls: Array<[number, number]> = [
+            [O.doc, O.imHvac],
+            [O.hvac, O.imGp],
+            [O.gp, O.done],
+          ];
+          let duck = 0;
+          for (const [a, b] of calls) {
+            const into = Math.max(0, Math.min(1, (f - a) / RAMP));
+            const outOf = Math.max(0, Math.min(1, (b - f) / RAMP));
+            duck = Math.max(duck, Math.min(into, outOf));
+          }
+          const eased = duck * duck * (3 - 2 * duck);
+          const base = 0.55 * (1 - eased) + 0.05 * eased;
+          return Math.max(0, base * fadeIn * fadeOut);
+        }}
       />
+
     </AbsoluteFill>
   );
 };
