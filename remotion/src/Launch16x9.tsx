@@ -214,14 +214,14 @@ export const Launch16x9: React.FC = () => {
       <DustMotes energy={beat.energy} darken={stageDarken} />
 
       {/* === LEFT COLUMN — headline. On scene beats, delay until reel has slid right === */}
-      {!isOutro && !beat.hideHeadline && (!beat.scene || localFrame >= 32) && (
+      {!isOutro && !beat.hideHeadline && (!beat.scene || localFrame >= 94) && (
         <HeadlineColumn
           key={`hl-${idx}`}
           headline={beat.headline}
           wordmark={!!beat.wordmark}
           accent={accent}
-          localFrame={beat.scene ? localFrame - 32 : localFrame}
-          beatLen={beat.scene ? (beat.end - beat.start) - 32 : beat.end - beat.start}
+          localFrame={beat.scene ? localFrame - 94 : localFrame}
+          beatLen={beat.scene ? (beat.end - beat.start) - 94 : beat.end - beat.start}
         />
       )}
 
@@ -282,10 +282,7 @@ export const Launch16x9: React.FC = () => {
                   position: "absolute",
                   inset: "100px 80px 100px 80px",
                   borderRadius: 140,
-                  border: "10px solid transparent",
-                  backgroundImage: `linear-gradient(transparent, transparent), linear-gradient(180deg, #3a3a3e 0%, #242427 50%, #141416 100%)`,
-                  backgroundOrigin: "border-box",
-                  backgroundClip: "padding-box, border-box",
+                  border: "10px solid #242427",
                   boxShadow: `
                     inset 0 1.5px 0 rgba(255,255,255,0.16),
                     inset 0 -1.5px 0 rgba(0,0,0,0.55),
@@ -585,28 +582,29 @@ const OutroHero: React.FC<{ localFrame: number; accent: string }> = ({ localFram
       {/* Top stamp: asmi wordmark + dot, hairline below */}
       <div
         style={{
-          position: "absolute", top: "16%", left: 0, right: 0,
+          position: "absolute", top: "12%", left: 0, right: 0,
           display: "flex", flexDirection: "column", alignItems: "center",
-          gap: 14, opacity: stampOp,
+          gap: 20, opacity: stampOp,
         }}
       >
         <div
           style={{
             display: "flex", alignItems: "flex-end",
             fontFamily: serif, fontStyle: "italic",
-            fontSize: 56, color: ESPRESSO, letterSpacing: -2, lineHeight: 0.9,
+            fontSize: 180, color: ESPRESSO, letterSpacing: -7, lineHeight: 0.9,
           }}
         >
           <span>asmi</span>
           <span
             style={{
-              width: 8, height: 8, borderRadius: "50%",
-              background: accent, marginLeft: 5, marginBottom: 10,
+              width: 26, height: 26, borderRadius: "50%",
+              border: `3px solid ${accent}`,
+              marginLeft: 14, marginBottom: 32,
               display: "inline-block",
             }}
           />
         </div>
-        <div style={{ width: 64, height: 1, background: rgba(ESPRESSO, 0.25) }} />
+        <div style={{ width: 120, height: 1, background: rgba(ESPRESSO, 0.3) }} />
       </div>
 
       {/* Hero line */}
@@ -738,9 +736,9 @@ const RotatingReel: React.FC<{
   const stageRightX = 940;
   const stageW = 920;
   const stageCenterX = 1920 / 2 - stageW / 2;
-  // Hero lands center first (0..22), then slides to right (22..40), then rests.
+  // Hero lands center first (0..80, ~5 turns), then slides to right (80..94), then rests.
   const slideT = easeInOut(
-    interpolate(localFrame, [22, 40], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
+    interpolate(localFrame, [80, 94], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
   );
   const stageX = stageCenterX + (stageRightX - stageCenterX) * slideT;
   const stageY = 90;
