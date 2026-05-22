@@ -46,6 +46,12 @@ to
 
 The phone is fully owned by product beats; outro never shows it.
 
+## 4. Background music must play to the end
+
+`audio/bgm.mp3` is currently mounted inside `MainVideo`, which is embedded inside the phone frame. When the phone unmounts for the `tasks`, `langs`, and `outro` beats, the bgm cuts — that's why the video sounds like it ends on "handles your day."
+
+Fix: in `Launch16x9.tsx`, render a top-level `<Audio src={staticFile("audio/bgm.mp3")} />` spanning the full 1550 frames, outside the phone subtree. Apply a volume curve that holds steady through `tasks` + `langs` and fades out across the last ~30 frames of the outro. The existing bgm tag inside `MainVideo` stays (it's used when MainVideo renders standalone in the 9:16 cut) — mute or duck the embedded MainVideo bgm here by wrapping the phone's MainVideo in a context that zeroes its volume, OR simpler: leave it; both copies overlap only during product beats where they're identical and additive volume is fine. Pick the simpler path unless it sounds bad on review.
+
 ## Files
 
 - `remotion/src/Launch16x9.tsx` only.
