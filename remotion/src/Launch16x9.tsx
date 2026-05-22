@@ -213,15 +213,15 @@ export const Launch16x9: React.FC = () => {
 
       <DustMotes energy={beat.energy} darken={stageDarken} />
 
-      {/* === LEFT COLUMN — headline === */}
-      {!isOutro && !beat.hideHeadline && (
+      {/* === LEFT COLUMN — headline. On scene beats, delay until reel has slid right === */}
+      {!isOutro && !beat.hideHeadline && (!beat.scene || localFrame >= 32) && (
         <HeadlineColumn
           key={`hl-${idx}`}
           headline={beat.headline}
           wordmark={!!beat.wordmark}
           accent={accent}
-          localFrame={localFrame}
-          beatLen={beat.end - beat.start}
+          localFrame={beat.scene ? localFrame - 32 : localFrame}
+          beatLen={beat.scene ? (beat.end - beat.start) - 32 : beat.end - beat.start}
         />
       )}
 
