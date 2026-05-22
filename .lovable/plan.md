@@ -1,68 +1,66 @@
-# Launch video — v9 polish
+# Launch video — v10
 
-Four fixes addressing the v8 review.
+Two targeted fixes on top of v9.
 
-## 1. Mobile screen is blacked out — restore the screen
+## 1. Restore v7 audio portions, just cleaner
 
-The v8 bezel uses `border: 10px solid transparent` + `background-image: linear-gradient(transparent,transparent), linear-gradient(...)` + `background-clip: padding-box, border-box`. In the Remotion Chromium render the padding-box layer is rendering opaque (covering the screen) instead of transparent.
+v7 used the simplest trim of each source — `-ss 0 -t 8` straight from the call mp4s, no fade, no compression. The user liked those snippets (content + length). v8 added a 1.4× boost that clipped; v9 changed the trim points and ended Spanish on a different phrase.
 
-Swap to a proven, simple pattern that cannot fill the interior:
+Go back to the v7 portions exactly, and apply only a transparent quality pass:
 
-- Replace the border-image trick with a single div using a real CSS `border` of solid dark color (no background, no background-clip lists). The interior is naturally transparent because no `background` is set.
+- `doc.mp3` ← `doc-sandra-call.mp4` `-ss 0 -t 8`
+- `hvac.mp3` ← `hvac-call.mp4` `-ss 0 -t 8`
+- `grandpa.mp3` ← `spanish-grandpa-call.mp4` `-ss 0 -t 8`
+
+ffmpeg chain on each (no level boost, no re-trim of the speech window):
 
 ```text
-{
-  position: 'absolute',
-  inset: '100px 80px 100px 80px',
-  borderRadius: 140,
-  border: '10px solid #242427',
-  boxShadow: 'inset 0 1.5px 0 rgba(255,255,255,0.16),
-              inset 0 -1.5px 0 rgba(0,0,0,0.55),
-              0 0 24px rgba(accent, 0.22)',
-}
+-af "highpass=f=85,lowpass=f=9000,
+     afftdn=nr=12:nf=-28,
+     acompressor=threshold=-20dB:ratio=2.5:attack=8:release=140,
+     loudnorm=I=-17:TP=-1.8:LRA=11,
+     afade=t=in:st=0:d=0.05,
+     afade=t=out:st=7.9:d=0.1"
+-ac 2 -ar 48000 -b:a 192k
 ```
 
-- Keep the inner hairline div (1px accent + 3px inset black) so the screen rim still reads premium.
-- Verify MainVideo is the first child inside the transformed phone wrapper so subsequent siblings (the bezel ring) overlay only the bezel area, not the screen.
+What this does and does not do:
 
-## 2. Spanish call audio gets cut at the end
+- `highpass/lowpass` removes phone-line rumble and hiss without touching speech band.
+- `afftdn` does light spectral denoise (NR 12 dB) — cleans hum, leaves voice natural.
+- Gentle compressor evens dynamics; `loudnorm` normalizes perceived loudness across all three so no snippet is louder than the others.
+- 50 ms head fade-in / 100 ms tail fade-out only — prevents click/pop at the edit point but does NOT shorten the heard content (the speech itself is unchanged from v7).
+- No 1.4× boost (that was the v8 clipping cause). Volume in `MainVideo.tsx` stays at 1.0.
 
-`D.gp = 240` frames = 8.0s. The current trimmed `grandpa.mp3` is `-ss 0 -t 8` which cuts the speaker mid-sentence at 8.0s with no fade. The user wants it to end naturally.
+Result: same words, same length, same cut points as v7 — just cleaner and level-matched.
 
-- Re-extract `grandpa.mp3` starting from a point in the call where a clean 7.5s phrase exists. Use `-ss 3 -t 7.6` from the original `spanish-grandpa-call.mp4` so the snippet ends on a natural pause, then add `afade=t=out:st=7.0:d=0.6` to ensure a soft tail within the 8.0s window.
-- For consistency also re-extract `doc.mp3` (`-ss 0 -t 7.6`, fade out 7.0..7.6) and `hvac.mp3` (`-ss 0 -t 7.6`, fade out 7.0..7.6) with the same loudnorm chain plus a `highpass=f=80,lowpass=f=8000,acompressor=threshold=-18dB:ratio=3:attack=10:release=120` chain — gentle compression evens out perceived loudness without clipping. Final mp3 at 192kbps stereo 48kHz.
-- Audio volume in `MainVideo.tsx` stays at `1.0` (no further boosting).
+## 2. Tasks + Languages — drop the center→right slide, give the left text room
 
-Result: all three call snippets feel finished, with even loudness and clean tails. Spanish in particular ends on a phrase, not a cut.
+The current v9 motion is: reel turns at center for ~5 beats, slides to the right rail (frames 80→94), headline enters on the left (frame 94+), beat ends at 130. The user doesn't like the slide-right move and feels the left headline gets clipped by the cut.
 
-## 3. Tasks + Languages — 4–6 turns at center, then slide right, then headline
+New motion — keep the reel centered the whole time, let the headline arrive underneath, and hold longer:
 
-Beat length is 130 frames; each reel turn is `BEAT = 16` frames. Five turns at center = 80 frames. Then a quick slide to the right (~14 frames), then the left headline arrives for the remainder.
+```text
+beat starts
+  └─ 0–80f   reel rotates at center stage, ~5 turns       (unchanged)
+  └─ 80–96f  reel scales down slightly and slides UP      (no horizontal move)
+  └─ 90f     headline fades in BELOW the reel, centered   (caption-style)
+  └─ 96–170f reel keeps cycling small at the top,
+             headline holds large at center               (~2.5s dwell)
+  └─ 170–180f everything fades out for the cut
+```
 
-In `RotatingReel`:
+Concretely in `Launch16x9.tsx`:
 
-- Change the slide interpolation from `[22, 40]` to `[80, 94]`, so the reel stays centered for the first ~5 turns, then migrates to `stageRightX = 940` in 14 frames.
+- In `RotatingReel`, replace the horizontal slide (`stageCenterX → stageRightX`) with a vertical lift + scale-down. From frame 80→96, the reel translates ~280px upward and scales from 1.0 → 0.72. `stageX` stays at `stageCenterX` (no left/right movement at all).
+- In the main render, change the headline gate for scene beats from `localFrame >= 94` to `localFrame >= 90`. Pass `localFrame - 90` and `beatLen - 90`.
+- Move the headline column for scene beats from the left rail (`left: 96, width: 820`) to a centered band beneath the lifted reel (`left: 0, right: 0, top: ~55%`, `text-align: center`, slightly smaller `fontSize: 132` so two lines fit comfortably below the smaller reel). This is a scoped layout override inside `HeadlineColumn` when a `centered` prop is passed; the existing left-rail layout for the non-scene beats is unchanged.
+- Extend the scene beats so the headline has room to land: `D.tasks: 130 → 180`, `D.langs: 130 → 180` (+1.66s each, total +3.3s on the cut). `D.outro` and earlier beats unchanged. `TOTAL` recomputes automatically.
 
-In the headline gate (`Launch16x9.tsx`):
-
-- For scene beats, mount `HeadlineColumn` only when `localFrame ≥ 94` (just after the slide finishes).
-- Pass `localFrame - 94` and `beatLen - 94` so its entrance spring and exit fade animate over the remaining ~36 frames.
-
-Net effect: word, word, word, word, word lands center stage → reel slides right → "your personal chores handled." enters from the left → cut to next beat.
-
-## 4. ASMI logo at the end
-
-No logo asset exists in the repo (`remotion/public/` has no images). The current outro builds an italic serif "asmi" wordmark + colored dot inline. Two options:
-
-A. **Stylized inline logomark (no upload required, ship now).** Promote the existing serif "asmi" wordmark in the outro from the small top stamp (56px) to a centered hero logomark sized at ~180px, sitting just above the "AI that handles your personal chores" line. Add a thin terracotta circle around it (or replace the dot with an outlined ring) so it reads as a finished brand mark rather than just text. Keep the small top stamp as a corner-mark.
-
-B. **Use a user-supplied logo asset.** If the user has an SVG/PNG logo file, drop it into `remotion/public/logo.svg` and replace the inline wordmark with `<Img src={staticFile('logo.svg')} />` at the outro hero position.
-
-**Default to option A** for this iteration since no asset exists. Render the larger outlined wordmark in the outro hero stack and re-render. If the user later provides a logo file, we swap it in.
+Net effect: reel stays anchored center stage (no lateral slide), word, word, word, word, word, then it gracefully lifts and shrinks while "your personal chores handled." rises into view below it, holds for a clear ~2.5s beat, then cuts.
 
 ## Files
 
-- `remotion/src/Launch16x9.tsx` — bezel fix, reel timing, headline gate, outro logo treatment.
-- `remotion/src/MainVideo.tsx` — no code changes (volumes already 1.0).
-- `remotion/public/audio/trimmed/{doc,hvac,grandpa}.mp3` — regenerated with better trim points + fade-out + compression.
-- Render to `/mnt/documents/asmi-launch-16x9-v9.mp4`.
+- `remotion/src/Launch16x9.tsx` — reel slide replaced with lift+scale; headline gated at 90 with new centered layout; `D.tasks` and `D.langs` bumped to 180.
+- `remotion/public/audio/trimmed/{doc,hvac,grandpa}.mp3` — regenerated from `-ss 0 -t 8` of the original sources with the cleanup chain above.
+- Render to `/mnt/documents/asmi-launch-16x9-v10.mp4`.
