@@ -743,15 +743,17 @@ const RotatingReel: React.FC<{
   secondarySize: number;
 }> = ({ localFrame, beatLen, accent, items, fontFamily, italic, heroSize, secondarySize }) => {
   const { fps } = useVideoConfig();
-  const stageRightX = 940;
   const stageW = 920;
   const stageCenterX = 1920 / 2 - stageW / 2;
-  // Hero lands center first (0..80, ~5 turns), then slides to right (80..94), then rests.
-  const slideT = easeInOut(
-    interpolate(localFrame, [80, 94], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
+  // Reel stays centered horizontally the entire beat.
+  // After ~5 turns (frame 80), it lifts up and scales down to make room
+  // for the headline that fades in below.
+  const liftT = easeInOut(
+    interpolate(localFrame, [80, 96], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
   );
-  const stageX = stageCenterX + (stageRightX - stageCenterX) * slideT;
-  const stageY = 90;
+  const stageX = stageCenterX;
+  const stageY = 90 - liftT * 280;
+  const reelScale = 1 - liftT * 0.28;
   const stageH = 900;
 
   const outOp = interpolate(localFrame, [Math.max(0, beatLen - 16), beatLen], [1, 0], {
