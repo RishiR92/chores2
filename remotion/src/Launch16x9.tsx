@@ -735,9 +735,15 @@ const RotatingReel: React.FC<{
   secondarySize: number;
 }> = ({ localFrame, beatLen, accent, items, fontFamily, italic, heroSize, secondarySize }) => {
   const { fps } = useVideoConfig();
-  const stageX = 940;
-  const stageY = 90;
+  const stageRightX = 940;
   const stageW = 920;
+  const stageCenterX = 1920 / 2 - stageW / 2;
+  // Hero lands center first (0..22), then slides to right (22..40), then rests.
+  const slideT = easeInOut(
+    interpolate(localFrame, [22, 40], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
+  );
+  const stageX = stageCenterX + (stageRightX - stageCenterX) * slideT;
+  const stageY = 90;
   const stageH = 900;
 
   const outOp = interpolate(localFrame, [Math.max(0, beatLen - 16), beatLen], [1, 0], {
