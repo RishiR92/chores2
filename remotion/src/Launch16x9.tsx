@@ -36,7 +36,7 @@ const { fontFamily: notoGurmukhi } = loadNotoGurmukhi("normal", { weights: ["500
 const D = {
   intro: 60, imDoc: 75, doc: 240, imHvac: 75, hvac: 240,
   imGp: 75, gp: 240, done: 180,
-  tasks: 130, langs: 130,
+  tasks: 180, langs: 180,
   outro: 105,
 };
 const O = {
@@ -213,15 +213,16 @@ export const Launch16x9: React.FC = () => {
 
       <DustMotes energy={beat.energy} darken={stageDarken} />
 
-      {/* === LEFT COLUMN — headline. On scene beats, delay until reel has slid right === */}
-      {!isOutro && !beat.hideHeadline && (!beat.scene || localFrame >= 94) && (
+      {/* === LEFT COLUMN — headline. On scene beats, delay until reel has lifted === */}
+      {!isOutro && !beat.hideHeadline && (!beat.scene || localFrame >= 90) && (
         <HeadlineColumn
           key={`hl-${idx}`}
           headline={beat.headline}
           wordmark={!!beat.wordmark}
           accent={accent}
-          localFrame={beat.scene ? localFrame - 94 : localFrame}
-          beatLen={beat.scene ? (beat.end - beat.start) - 94 : beat.end - beat.start}
+          localFrame={beat.scene ? localFrame - 90 : localFrame}
+          beatLen={beat.scene ? (beat.end - beat.start) - 90 : beat.end - beat.start}
+          centered={!!beat.scene}
         />
       )}
 
@@ -396,28 +397,36 @@ export const Launch16x9: React.FC = () => {
   );
 };
 
-// ============= Headline column (left) =============
+// ============= Headline column (left rail, or centered for scene beats) =============
 const HeadlineColumn: React.FC<{
   headline: string; wordmark: boolean; accent: string;
-  localFrame: number; beatLen: number;
-}> = ({ headline, wordmark, accent, localFrame, beatLen }) => {
+  localFrame: number; beatLen: number; centered?: boolean;
+}> = ({ headline, wordmark, accent, localFrame, beatLen, centered }) => {
   const { fps } = useVideoConfig();
   const outOp = interpolate(localFrame, [Math.max(0, beatLen - 18), beatLen], [1, 0], {
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
 
-  return (
-    <div
-      style={{
+  const containerStyle: React.CSSProperties = centered
+    ? {
+        position: "absolute",
+        left: 0, right: 0, top: "48%",
+        display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "flex-start",
+        gap: 24, textAlign: "center",
+        zIndex: 3, padding: "0 120px",
+      }
+    : {
         position: "absolute",
         left: 96, top: 0, bottom: 0,
         width: 820,
         display: "flex", flexDirection: "column", justifyContent: "center",
         gap: 28,
         zIndex: 3,
-      }}
-    >
+      };
 
+  return (
+    <div style={containerStyle}>
       {wordmark ? (
         <WordmarkHeadline accent={accent} localFrame={localFrame} outOp={outOp} />
       ) : (
@@ -426,6 +435,7 @@ const HeadlineColumn: React.FC<{
           localFrame={localFrame}
           fps={fps}
           outOp={outOp}
+          centered={centered}
         />
       )}
 
@@ -475,16 +485,16 @@ const WordmarkHeadline: React.FC<{ accent: string; localFrame: number; outOp: nu
 };
 
 const KineticLines: React.FC<{
-  headline: string; localFrame: number; fps: number; outOp: number;
-}> = ({ headline, localFrame, fps, outOp }) => {
+  headline: string; localFrame: number; fps: number; outOp: number; centered?: boolean;
+}> = ({ headline, localFrame, fps, outOp, centered }) => {
   const lines = headline.split("\n");
   return (
     <div
       style={{
         fontFamily: serif, fontStyle: "italic",
-        fontSize: 180, lineHeight: 0.94,
+        fontSize: centered ? 132 : 180, lineHeight: 0.96,
         color: ESPRESSO, letterSpacing: -6,
-        textAlign: "left", opacity: outOp,
+        textAlign: centered ? "center" : "left", opacity: outOp,
       }}
     >
       {lines.map((line, li) => (
@@ -582,29 +592,29 @@ const OutroHero: React.FC<{ localFrame: number; accent: string }> = ({ localFram
       {/* Top stamp: asmi wordmark + dot, hairline below */}
       <div
         style={{
-          position: "absolute", top: "12%", left: 0, right: 0,
+          position: "absolute", top: "9%", left: 0, right: 0,
           display: "flex", flexDirection: "column", alignItems: "center",
-          gap: 20, opacity: stampOp,
+          gap: 10, opacity: stampOp,
         }}
       >
         <div
           style={{
             display: "flex", alignItems: "flex-end",
             fontFamily: serif, fontStyle: "italic",
-            fontSize: 180, color: ESPRESSO, letterSpacing: -7, lineHeight: 0.9,
+            fontSize: 64, color: ESPRESSO, letterSpacing: -2, lineHeight: 0.9,
           }}
         >
           <span>asmi</span>
           <span
             style={{
-              width: 26, height: 26, borderRadius: "50%",
-              border: `3px solid ${accent}`,
-              marginLeft: 14, marginBottom: 32,
+              width: 12, height: 12, borderRadius: "50%",
+              border: `2px solid ${accent}`,
+              marginLeft: 8, marginBottom: 12,
               display: "inline-block",
             }}
           />
         </div>
-        <div style={{ width: 120, height: 1, background: rgba(ESPRESSO, 0.3) }} />
+        <div style={{ width: 80, height: 1, background: rgba(ESPRESSO, 0.3) }} />
       </div>
 
       {/* Hero line */}
@@ -733,15 +743,17 @@ const RotatingReel: React.FC<{
   secondarySize: number;
 }> = ({ localFrame, beatLen, accent, items, fontFamily, italic, heroSize, secondarySize }) => {
   const { fps } = useVideoConfig();
-  const stageRightX = 940;
   const stageW = 920;
   const stageCenterX = 1920 / 2 - stageW / 2;
-  // Hero lands center first (0..80, ~5 turns), then slides to right (80..94), then rests.
-  const slideT = easeInOut(
-    interpolate(localFrame, [80, 94], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
+  // Reel stays centered horizontally the entire beat.
+  // After ~5 turns (frame 80), it lifts up and scales down to make room
+  // for the headline that fades in below.
+  const liftT = easeInOut(
+    interpolate(localFrame, [80, 96], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
   );
-  const stageX = stageCenterX + (stageRightX - stageCenterX) * slideT;
-  const stageY = 90;
+  const stageX = stageCenterX;
+  const stageY = 90 - liftT * 280;
+  const reelScale = 1 - liftT * 0.28;
   const stageH = 900;
 
   const outOp = interpolate(localFrame, [Math.max(0, beatLen - 16), beatLen], [1, 0], {
@@ -864,6 +876,8 @@ const RotatingReel: React.FC<{
         width: stageW, height: stageH,
         zIndex: 4, pointerEvents: "none",
         opacity: outOp * inOp,
+        transform: `scale(${reelScale})`,
+        transformOrigin: "50% 50%",
       }}
     >
       {/* Render current + next hero so exit/entry can overlap cleanly */}
