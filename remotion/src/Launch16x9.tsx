@@ -36,7 +36,7 @@ const { fontFamily: notoGurmukhi } = loadNotoGurmukhi("normal", { weights: ["500
 const D = {
   intro: 60, imDoc: 75, doc: 240, imHvac: 75, hvac: 240,
   imGp: 75, gp: 240, done: 180,
-  tasks: 130, langs: 130,
+  tasks: 180, langs: 180,
   outro: 105,
 };
 const O = {
