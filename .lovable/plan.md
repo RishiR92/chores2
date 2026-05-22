@@ -1,58 +1,47 @@
-# Launch video — v6 polish
+# Launch video — v7 polish
 
-Three targeted fixes to `remotion/src/Launch16x9.tsx`. No timing or sequence changes.
+Four targeted changes to `remotion/src/Launch16x9.tsx`. No timing changes.
 
-## 1. Remove the "PERSONAL AI" eyebrow above every headline
+## 1. New headline on the tasks beat
 
-The lower-left progress mark already reads `● PERSONAL AI`. The duplicate eyebrow at the top of every left-column headline is redundant.
+Replace the headline `"from plumbers\nto prescriptions."` with `"your personal\nchores handled."` on the `tasks` beat (BEATS[5]). Matches the outro's "personal chores" highlight and ties the two screens together. Sequence and duration stay the same.
 
-- In `HeadlineColumn`, delete the eyebrow block (the dot + "personal AI" row) and the `eyebrowOp` it uses.
-- Keep the kinetic headline + underline accent. Add a touch more top breathing room so the headline still feels anchored.
-- Do **not** touch the bottom progress mark — that's the one the user wants to keep.
+## 2. Recolor tasks + languages hero words to match the outro highlight
 
-## 2. Redesign the two cloud scenes — "plumbers → prescriptions" and "50+ languages"
+The outro renders "personal chores" and "real world" in TERRACOTTA (`#C25B3F`) on linen — that's the warm accent the user wants echoed.
 
-Current behavior dumps ~26 pills / language words into a flex-wrap grid all at once. Reads as a wall of text. Replace both with a **focused, fast-paced rotating reveal** so only a few items are on screen at any moment.
+- In `RotatingReel`, paint the large hero word in TERRACOTTA instead of ESPRESSO, for both `tasks` and `langs` scenes.
+- Secondary drifting words stay in muted ESPRESSO/STONE so the hero word leads the eye.
+- The hairline rule under the hero stays on the beat's `accent` (CLAY for tasks, SAGE for langs) so the scene still has its own color signature in the backdrop and counter.
 
-### Shared pattern (one component, two data sources)
+Net effect: the hero verbs / language words feel like the same family as the closing card.
 
-A `RotatingReel` that, over the beat's ~130 frames, cycles through the full list in **rapid beats of ~14 frames each**:
+## 3. Realistic phone shell — less flat black
 
-- One **hero word** centered in the right stage, large italic serif, drops in with a spring + slight blur-to-sharp, holds ~8 frames, then slides up + fades as the next hero takes over.
-- Two **secondary words** drift in below and above the hero at smaller size, slightly off-axis, lower opacity. They lag the hero by 4 frames and exit 4 frames earlier — so each "beat" has a clear focal point but feels alive.
-- A thin accent hairline grows under the hero word each beat, then retracts.
-- Items cycle through the full list (no repeats within the beat). For tasks, hero gets the verb phrase ("book dentist"); for languages, hero gets the script word ("中文", "हिन्दी", "Español").
-- Total of ~8 hero reveals per beat. The eye reads each one cleanly.
+Today the phone body is rendered by the `MainVideo` chrome and reads as a solid black slab. Upgrade only the outer shell in `Launch16x9.tsx`:
 
-Tone: still warm linen world, still terracotta/sage accents — just dynamic and editorial, not a tag cloud.
+- Replace the single drop-shadow on the phone wrapper with a layered titanium-style frame: a subtle vertical gradient body (`#3a3a3e → #1c1c1f → #2a2a2e`), a 1px inner highlight on the top edge (rgba white 0.18), a 1px inner shadow on the bottom edge (rgba black 0.5), and a soft accent rim-light using the current beat's `accent` at ~0.25 opacity.
+- Keep the screen cutout (`clipPath: inset(110px 90px 110px 90px round 130px)`) exactly as is so `MainVideo` content is untouched.
+- Add a faint reflective sheen — a diagonal linear-gradient highlight at ~8% opacity moving very slowly with `frame` — to sell the glass/metal read without distracting from the screen.
 
-Both `TaskCloud` and `LangCloud` are replaced by this single approach with different `items[]` and font stacks. The right-stage geometry (`stageX/Y/W/H`) stays so it sits where the phone used to.
+The user keeps seeing real app footage inside; only the bezel reads as a premium device instead of a black rectangle.
 
-## 3. Phone bug right before the outro
+## 4. Make the phone feel alive — levitate + remove the awkward tilt
 
-At the boundary `langs → outro`, the phone briefly re-renders for the first ~28 frames of the outro (until `dissolveOp` drops below the 0.02 gate) because `beat.scene` is no longer set on the outro beat. Visible as a flash of the mobile MainVideo before the final card.
+Current state: `totalRotX = entryRotX + 4`, `totalRotY = entryRotY + -8`, and a tiny `bob` of ±4px. Reads as static and tilted oddly.
 
-Fix: change the phone visibility condition from
+Replace with a continuous, gentle levitation loop once the entry spring resolves:
 
-```text
-!beat.scene && (!isOutro || dissolveOp > 0.02)
-```
+- Vertical float: `sin(frame / 55) * 14` px (bigger, smoother bob).
+- Subtle yaw: `sin(frame / 90) * 2.5` deg added to rotateY (settles around 0, no constant left lean).
+- Subtle pitch: `sin(frame / 110 + 1.2) * 1.5` deg on rotateX.
+- Breath scale: `1 + sin(frame / 75) * 0.012` (slightly more pronounced than today).
+- Drop-shadow Y offset and blur also breathe with the float so the shadow grows when the phone rises — sells the levitation.
+- Remove the fixed `+4` / `-8` resting tilt so the phone hovers roughly upright with only the live micro-motion.
 
-to
-
-```text
-!beat.scene && !isOutro
-```
-
-The phone is fully owned by product beats; outro never shows it.
-
-## 4. Background music must play to the end
-
-`audio/bgm.mp3` is currently mounted inside `MainVideo`, which is embedded inside the phone frame. When the phone unmounts for the `tasks`, `langs`, and `outro` beats, the bgm cuts — that's why the video sounds like it ends on "handles your day."
-
-Fix: in `Launch16x9.tsx`, render a top-level `<Audio src={staticFile("audio/bgm.mp3")} />` spanning the full 1550 frames, outside the phone subtree. Apply a volume curve that holds steady through `tasks` + `langs` and fades out across the last ~30 frames of the outro. The existing bgm tag inside `MainVideo` stays (it's used when MainVideo renders standalone in the 9:16 cut) — mute or duck the embedded MainVideo bgm here by wrapping the phone's MainVideo in a context that zeroes its volume, OR simpler: leave it; both copies overlap only during product beats where they're identical and additive volume is fine. Pick the simpler path unless it sounds bad on review.
+Entry spring is unchanged (still drops in from below and settles); the new motion just takes over once `phoneIn` ≈ 1.
 
 ## Files
 
 - `remotion/src/Launch16x9.tsx` only.
-- Re-render to `/mnt/documents/asmi-launch-16x9-v6.mp4`.
+- Re-render to `/mnt/documents/asmi-launch-16x9-v7.mp4`.
