@@ -83,9 +83,10 @@ const bgmVolume = (f: number) => {
     duckAmt = Math.max(duckAmt, Math.min(into, outOf));
   }
   const eased = duckAmt * duckAmt * (3 - 2 * duckAmt);
-  // Gentler duck — keep music present (0.10 floor instead of 0.018).
-  const base = 0.42 * (1 - eased) + 0.10 * eased;
+  // Hard duck under voice — keep music barely present so calls are clear.
+  const base = 0.42 * (1 - eased) + 0.04 * eased;
   return Math.max(0, base * fadeIn * fadeOut);
+
 };
 
 const POP = "audio/sfx/imessage-receive.mp3";
@@ -280,16 +281,17 @@ export const MainVideo: React.FC = () => {
         }}
       />
 
-      {/* Call voice tracks */}
+      {/* Call voice tracks — boosted for intelligibility */}
       <Sequence from={O.doc} durationInFrames={D.doc}>
-        <Audio src={staticFile("audio/trimmed/doc.mp3")} volume={1.4} />
+        <Audio src={staticFile("audio/trimmed/doc.mp3")} volume={2.2} />
       </Sequence>
       <Sequence from={O.hvac} durationInFrames={D.hvac}>
-        <Audio src={staticFile("audio/trimmed/hvac.mp3")} volume={1.4} />
+        <Audio src={staticFile("audio/trimmed/hvac.mp3")} volume={2.2} />
       </Sequence>
       <Sequence from={O.gp} durationInFrames={D.gp}>
-        <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={1.4} />
+        <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={2.2} />
       </Sequence>
+
 
       {/* Bubble pop on each chat beat */}
       <Sequence from={O.imDoc + 6} durationInFrames={20}>
