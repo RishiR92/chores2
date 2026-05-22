@@ -337,6 +337,18 @@ export const Launch16x9: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Global background music spanning the full 16:9 cut.
+          Fades out across the last ~30 frames of the outro. */}
+      <Audio
+        src={staticFile("audio/bgm.mp3")}
+        volume={(f) =>
+          interpolate(f, [0, 20, TOTAL - 30, TOTAL - 2], [0, 0.55, 0.55, 0], {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+          })
+        }
+      />
     </AbsoluteFill>
   );
 };
