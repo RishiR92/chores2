@@ -282,13 +282,13 @@ export const MainVideo: React.FC = () => {
 
       {/* Call voice tracks */}
       <Sequence from={O.doc} durationInFrames={D.doc}>
-        <Audio src={staticFile("audio/trimmed/doc.mp3")} volume={1.4} />
+        <Audio src={staticFile("audio/trimmed/doc.mp3")} volume={1.0} />
       </Sequence>
       <Sequence from={O.hvac} durationInFrames={D.hvac}>
-        <Audio src={staticFile("audio/trimmed/hvac.mp3")} volume={1.4} />
+        <Audio src={staticFile("audio/trimmed/hvac.mp3")} volume={1.0} />
       </Sequence>
       <Sequence from={O.gp} durationInFrames={D.gp}>
-        <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={1.4} />
+        <Audio src={staticFile("audio/trimmed/grandpa.mp3")} volume={1.0} />
       </Sequence>
 
       {/* Bubble pop on each chat beat */}
