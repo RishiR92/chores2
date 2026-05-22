@@ -289,7 +289,7 @@ export const Launch16x9: React.FC = () => {
           }}
         >
           <span style={{ color: accent }}>●</span>
-          <span>asmi · personal AI</span>
+          <span>personal AI</span>
           <div style={{ width: 240, height: 1, background: rgba(ESPRESSO, 0.15), position: "relative", marginLeft: 12 }}>
             <div
               style={{
