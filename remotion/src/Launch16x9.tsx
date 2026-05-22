@@ -592,29 +592,29 @@ const OutroHero: React.FC<{ localFrame: number; accent: string }> = ({ localFram
       {/* Top stamp: asmi wordmark + dot, hairline below */}
       <div
         style={{
-          position: "absolute", top: "12%", left: 0, right: 0,
+          position: "absolute", top: "9%", left: 0, right: 0,
           display: "flex", flexDirection: "column", alignItems: "center",
-          gap: 20, opacity: stampOp,
+          gap: 10, opacity: stampOp,
         }}
       >
         <div
           style={{
             display: "flex", alignItems: "flex-end",
             fontFamily: serif, fontStyle: "italic",
-            fontSize: 180, color: ESPRESSO, letterSpacing: -7, lineHeight: 0.9,
+            fontSize: 64, color: ESPRESSO, letterSpacing: -2, lineHeight: 0.9,
           }}
         >
           <span>asmi</span>
           <span
             style={{
-              width: 26, height: 26, borderRadius: "50%",
-              border: `3px solid ${accent}`,
-              marginLeft: 14, marginBottom: 32,
+              width: 12, height: 12, borderRadius: "50%",
+              border: `2px solid ${accent}`,
+              marginLeft: 8, marginBottom: 12,
               display: "inline-block",
             }}
           />
         </div>
-        <div style={{ width: 120, height: 1, background: rgba(ESPRESSO, 0.3) }} />
+        <div style={{ width: 80, height: 1, background: rgba(ESPRESSO, 0.3) }} />
       </div>
 
       {/* Hero line */}
