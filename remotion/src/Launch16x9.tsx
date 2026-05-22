@@ -213,15 +213,15 @@ export const Launch16x9: React.FC = () => {
 
       <DustMotes energy={beat.energy} darken={stageDarken} />
 
-      {/* === LEFT COLUMN — headline === */}
-      {!isOutro && !beat.hideHeadline && (
+      {/* === LEFT COLUMN — headline. On scene beats, delay until reel has slid right === */}
+      {!isOutro && !beat.hideHeadline && (!beat.scene || localFrame >= 32) && (
         <HeadlineColumn
           key={`hl-${idx}`}
           headline={beat.headline}
           wordmark={!!beat.wordmark}
           accent={accent}
-          localFrame={localFrame}
-          beatLen={beat.end - beat.start}
+          localFrame={beat.scene ? localFrame - 32 : localFrame}
+          beatLen={beat.scene ? (beat.end - beat.start) - 32 : beat.end - beat.start}
         />
       )}
 
@@ -253,59 +253,6 @@ export const Launch16x9: React.FC = () => {
               transformOrigin: "50% 50%",
             }}
           >
-            {/* Titanium phone shell */}
-            <div
-              style={{
-                position: "absolute",
-                width: 1080, height: 1920, left: 0, top: 0,
-                transform: `scale(${phoneScale})`,
-                transformOrigin: "top left",
-                borderRadius: 168,
-                background: `linear-gradient(180deg, #3a3a3e 0%, #2a2a2e 32%, #1c1c1f 62%, #2a2a2e 100%)`,
-                boxShadow: `
-                  inset 0 2px 0 rgba(255,255,255,0.18),
-                  inset 0 -2px 0 rgba(0,0,0,0.55),
-                  inset 3px 0 4px rgba(0,0,0,0.4),
-                  inset -3px 0 4px rgba(0,0,0,0.4)
-                `,
-              }}
-            />
-
-            {/* Accent rim-light on the shell */}
-            <div
-              style={{
-                position: "absolute",
-                width: 1080, height: 1920, left: 0, top: 0,
-                transform: `scale(${phoneScale})`,
-                transformOrigin: "top left",
-                borderRadius: 168,
-                boxShadow: `0 0 0 2px ${rgba(accent, 0.22)} inset`,
-                pointerEvents: "none",
-              }}
-            />
-
-            {/* Diagonal glass sheen — slowly moving */}
-            <div
-              style={{
-                position: "absolute",
-                width: 1080, height: 1920, left: 0, top: 0,
-                transform: `scale(${phoneScale})`,
-                transformOrigin: "top left",
-                borderRadius: 168,
-                overflow: "hidden",
-                pointerEvents: "none",
-                opacity: 0.5,
-              }}
-            >
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background: `linear-gradient(115deg, transparent ${30 + sheen * 0.2}%, rgba(255,255,255,0.08) ${50 + sheen * 0.2}%, transparent ${70 + sheen * 0.2}%)`,
-                }}
-              />
-            </div>
-
             {/* Screen content */}
             <div
               style={{
@@ -319,7 +266,7 @@ export const Launch16x9: React.FC = () => {
               <MainVideo />
             </div>
 
-            {/* Thin accent border on the screen rect */}
+            {/* Thin titanium bezel ring hugging only the screen rect */}
             <div
               style={{
                 position: "absolute",
@@ -329,16 +276,36 @@ export const Launch16x9: React.FC = () => {
                 pointerEvents: "none",
               }}
             >
+              {/* Outer bezel rectangle (slightly larger than screen) with dark border */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: "100px 80px 100px 80px",
+                  borderRadius: 140,
+                  border: "10px solid transparent",
+                  backgroundImage: `linear-gradient(transparent, transparent), linear-gradient(180deg, #3a3a3e 0%, #242427 50%, #141416 100%)`,
+                  backgroundOrigin: "border-box",
+                  backgroundClip: "padding-box, border-box",
+                  boxShadow: `
+                    inset 0 1.5px 0 rgba(255,255,255,0.16),
+                    inset 0 -1.5px 0 rgba(0,0,0,0.55),
+                    0 0 24px ${rgba(accent, 0.22)}
+                  `,
+                }}
+              />
+              {/* Screen edge accent hairline */}
               <div
                 style={{
                   position: "absolute",
                   inset: "110px 90px 110px 90px",
                   borderRadius: 130,
-                  border: `1px solid ${rgba(accent, 0.35)}`,
-                  boxShadow: `inset 0 0 0 4px rgba(0,0,0,0.6)`,
+                  boxShadow: `inset 0 0 0 1px ${rgba(accent, 0.35)}, inset 0 0 0 3px rgba(0,0,0,0.55)`,
                 }}
               />
             </div>
+
+
+
           </div>
         </div>
       )}
@@ -768,9 +735,15 @@ const RotatingReel: React.FC<{
   secondarySize: number;
 }> = ({ localFrame, beatLen, accent, items, fontFamily, italic, heroSize, secondarySize }) => {
   const { fps } = useVideoConfig();
-  const stageX = 940;
-  const stageY = 90;
+  const stageRightX = 940;
   const stageW = 920;
+  const stageCenterX = 1920 / 2 - stageW / 2;
+  // Hero lands center first (0..22), then slides to right (22..40), then rests.
+  const slideT = easeInOut(
+    interpolate(localFrame, [22, 40], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
+  );
+  const stageX = stageCenterX + (stageRightX - stageCenterX) * slideT;
+  const stageY = 90;
   const stageH = 900;
 
   const outOp = interpolate(localFrame, [Math.max(0, beatLen - 16), beatLen], [1, 0], {
