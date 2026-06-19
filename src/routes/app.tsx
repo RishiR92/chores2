@@ -30,7 +30,7 @@ function Workspace() {
   const [composerOpen, setComposerOpen] = useState(false);
   const live = canvases.filter((c) => c.status !== "done");
   const past = canvases.filter((c) => c.status === "done");
-  const active = canvases.find((c) => c.id === activeId) ?? live[0];
+  const active = canvases.find((c) => c.id === activeId) ?? live[0] ?? past[0];
 
   return (
     <main className="app-wash relative min-h-screen w-full overflow-hidden">
@@ -39,18 +39,20 @@ function Workspace() {
         <div className="orb orb-peach" />
         <div className="orb orb-sage" />
         <div className="orb orb-clay" />
+        <div className="absolute inset-0 dot-grid opacity-40" />
       </div>
 
       {/* Top bar */}
-      <header className="relative z-20 flex items-center gap-3 px-6 pt-5">
-        <a
-          href="/"
-          className="font-serif italic text-[20px]"
-          style={{ color: "var(--color-espresso)" }}
-        >
-          asmi
-        </a>
-        <div className="flex-1">
+      <header className="sticky top-0 z-30 flex flex-col gap-2 px-4 pb-2 pt-4 sm:flex-row sm:items-center sm:gap-4 sm:px-6 sm:pt-5">
+        <div className="flex items-baseline gap-2">
+          <a href="/" className="font-serif italic text-[22px] leading-none" style={{ color: "var(--color-espresso)" }}>
+            asmi
+          </a>
+          <span className="label-mono hidden sm:inline" style={{ color: "var(--color-stone-dim)", fontSize: 9 }}>
+            workspace
+          </span>
+        </div>
+        <div className="min-w-0 flex-1">
           <TabStrip
             canvases={live}
             activeId={active?.id}
@@ -62,12 +64,12 @@ function Workspace() {
       </header>
 
       {/* Stage */}
-      <section className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-stretch px-6 pt-6 pb-24">
+      <section className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-stretch px-3 pb-24 pt-3 sm:px-6 sm:pt-6">
         <AnimatePresence mode="wait">
           {active ? (
             <motion.div
               key={active.id}
-              initial={{ opacity: 0, scale: 0.96, filter: "blur(16px)" }}
+              initial={{ opacity: 0, scale: 0.97, filter: "blur(14px)" }}
               animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
               exit={{ opacity: 0, scale: 0.98, filter: "blur(10px)" }}
               transition={{ duration: 0.42, ease: [0.2, 0.8, 0.2, 1] }}
@@ -79,9 +81,7 @@ function Workspace() {
           )}
         </AnimatePresence>
 
-        {past.length > 0 && (
-          <HistoryRail canvases={past} onReopen={setActive} />
-        )}
+        {past.length > 0 && <HistoryRail canvases={past} onReopen={setActive} />}
       </section>
 
       <AnimatePresence>
@@ -102,7 +102,7 @@ function Workspace() {
 
 function EmptyState({ onNew }: { onNew: () => void }) {
   return (
-    <div className="glass-card flex flex-col items-center justify-center gap-5 px-10 py-24 text-center">
+    <div className="canvas-card flex flex-col items-center justify-center gap-5 px-10 py-24 text-center">
       <p className="font-serif italic text-[28px]" style={{ color: "var(--color-espresso)" }}>
         nothing on your plate.
       </p>
