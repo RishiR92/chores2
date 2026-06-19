@@ -1,12 +1,12 @@
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Phone, Search, Bell, Wrench } from "lucide-react";
 
 const SUGGESTIONS = [
-  "call my plumber and book a Saturday visit",
-  "remind dad about his appointment Friday",
-  "refill my prescription at Walgreens",
-  "find a dog walker near Mission for Thursday",
+  { icon: Phone, text: "call my plumber and book Saturday morning" },
+  { icon: Search, text: "find best ramen near Mission for dinner" },
+  { icon: Bell, text: "remind dad sunday about his appointment" },
+  { icon: Wrench, text: "get 3 quotes to fix the garage door" },
 ];
 
 export function NewTaskComposer({
@@ -35,24 +35,21 @@ export function NewTaskComposer({
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
       onClick={onClose}
-      className="fixed inset-0 z-50 grid place-items-center px-6"
-      style={{ background: "rgba(44,37,32,0.18)", backdropFilter: "blur(8px)" }}
+      className="fixed inset-0 z-50 grid place-items-center px-4"
+      style={{ background: "rgba(44,37,32,0.22)", backdropFilter: "blur(10px)" }}
     >
       <motion.div
         onClick={(e) => e.stopPropagation()}
-        initial={{ opacity: 0, scale: 0.96, y: 8, filter: "blur(12px)" }}
+        initial={{ opacity: 0, scale: 0.96, y: 12, filter: "blur(12px)" }}
         animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
         exit={{ opacity: 0, scale: 0.98, filter: "blur(8px)" }}
         transition={{ duration: 0.32, ease: [0.2, 0.8, 0.2, 1] }}
-        className="glass-card w-full max-w-xl p-6"
+        className="canvas-card w-full max-w-xl p-6"
       >
-        <p
-          className="font-serif italic text-[22px]"
-          style={{ color: "var(--color-espresso)" }}
-        >
-          what should asmi handle?
+        <p className="font-serif italic text-[24px]" style={{ color: "var(--color-espresso)" }}>
+          what should <span className="ink-underline">asmi</span> handle?
         </p>
-        <div className="mt-4 rounded-2xl border border-[color:var(--glass-border)] bg-white/55 p-3 backdrop-blur-xl">
+        <div className="mt-4 rounded-2xl border border-[color:var(--glass-border)] bg-white/65 p-3 backdrop-blur-xl">
           <textarea
             ref={inputRef}
             value={text}
@@ -65,7 +62,7 @@ export function NewTaskComposer({
               if (e.key === "Escape") onClose();
             }}
             rows={3}
-            placeholder="a call, a booking, a check-in…"
+            placeholder="a call, a research, a check-in…"
             className="w-full resize-none bg-transparent text-[15px] outline-none placeholder:italic"
             style={{ color: "var(--color-espresso)" }}
           />
@@ -84,17 +81,21 @@ export function NewTaskComposer({
           </div>
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-1.5">
-          {SUGGESTIONS.map((s) => (
-            <button
-              key={s}
-              onClick={() => setText(s)}
-              className="rounded-full border border-[color:var(--glass-border)] bg-white/30 px-3 py-1 text-[12px] transition-all hover:bg-white/55"
-              style={{ color: "var(--color-stone)" }}
-            >
-              {s}
-            </button>
-          ))}
+        <div className="mt-4 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+          {SUGGESTIONS.map((s) => {
+            const Icon = s.icon;
+            return (
+              <button
+                key={s.text}
+                onClick={() => setText(s.text)}
+                className="flex items-center gap-2 rounded-xl border border-[color:var(--glass-border)] bg-white/40 px-3 py-2 text-left text-[12.5px] transition-all hover:bg-white/70"
+                style={{ color: "var(--color-stone)" }}
+              >
+                <Icon size={12} style={{ color: "var(--color-terracotta)" }} />
+                <span className="flex-1">{s.text}</span>
+              </button>
+            );
+          })}
         </div>
       </motion.div>
     </motion.div>
