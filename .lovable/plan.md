@@ -1,124 +1,117 @@
-# Asmi Web App — Liquid Linen Redesign (Final Plan)
+# Asmi — "Violet Pulse" Energy + Iconography Pass
 
-Mobile-first reset of `/app`. Wabi-inspired liquid glass, a single living orb, a physical card stack, zero clutter. Decisions are locked — no more open questions.
+A vibrant rewrite of the visual + motion system, plus a proper icon language. Keep the card-stack architecture and 15 use cases. Replace the linen/amber world with a living purple universe, and give every surface real iconography so it reads like a 2026 consumer app (Airbnb / Arc / Linear / Things 3 / Cash App level), not a wireframe.
 
-## 1. North star
+## 1. Palette — purple-led, status-driven
 
-Asmi is a quiet operator. Three jobs for the UI:
+Move off amber entirely.
 
-1. Show what Asmi is doing right now in one glance.
-2. Let the user steer by tapping and swiping — never by typing.
-3. Get out of the way.
+- **Background base:** soft white `#F7F4FF` with a permanent animated mesh.
+- **Mesh blobs (drifting):** violet `#7C3AED`, magenta `#E64BFF`, indigo `#5B5BFF`, sky `#A5D8FF`, peach `#FFC4E1`. 4 blobs, 24–40s loops, blur 120px, opacity 55%.
+- **Ink:** `#1A0B2E` deep aubergine. Secondary `#6B5B8A`.
+- **Status (the only color language):**
+  - **live** → electric violet `#7C3AED` + pulsing halo
+  - **queued** → soft lilac `#C9B8FF`
+  - **needs you** → magenta `#E64BFF` shimmer
+  - **done** → mint `#5EEAD4` single flash → ghost
+  - **paused** → slate `#9CA3B8`
+- **No orange. No amber.** Strip from tokens.
 
-If a pixel doesn't serve one of those three, it's cut.
+## 2. Iconography — the new layer
 
-## 2. Visual system — "Liquid Linen"
+This is what's missing. Every meaningful noun and verb gets an icon. Reference bar: Airbnb (rounded duotone), Arc (precise line), Things 3 (warm geometric), Linear (1.5px line).
 
-- **Page**: flat warm linen `#EFECE7`. No gradients, no orbs, no dot grid, no paper texture.
-- **Card surface**: pure white `#FFFFFF`, 28px radius, shadow `0 2px 0 rgba(0,0,0,0.02), 0 24px 48px -28px rgba(40,30,20,0.18)`.
-- **Liquid glass**: `backdrop-filter: blur(32px) saturate(180%)`, white @ 55%, inner highlight `inset 0 1px 0 rgba(255,255,255,0.7)`. Used for the dock and the orb only.
-- **Ink**: text `#1A1814`, secondary `#7A6F66`, hairlines ink @ 6%.
-- **Accent (one)**: **Asmi Amber** `#D67341`. Used only for the orb's live state and the primary action chip. Nothing else is colored.
-- **Status**: live = amber breathing dot, queued = ink @ 25% steady, done = thin ink check. That's the whole status vocabulary.
-- **Typography**: one face — **General Sans** (Fontshare), three weights (400/500/600). Mono **JetBrains Mono** 10px only for timestamps. No serif, no italics, no display font.
-- **Motion**: spring `{stiffness: 420, damping: 36}` for layout; 180ms ease-out for opacity. Orb breathes scale 1 → 1.04 → 1 over 3.2s.
+### Icon system
+- **Library:** `lucide-react` (already installed) at 1.5px stroke, plus a small custom set for Asmi-specific things (orb, call-wave, transcript-bars).
+- **Sizes:** 14 / 16 / 20 / 24. Always paired with text at matching baseline.
+- **Two treatments:**
+  - **Line** (default) — `strokeWidth: 1.5`, currentColor, used inline.
+  - **Tinted tile** — 28×28 or 32×32 rounded-[10px] tile, status-tinted bg (12% alpha), icon in full status color. Used for category, channel, action.
+- **Motion:** icons inherit parent transitions; status icons pulse with the dot; success uses a quick scale+rotate (CheckCircle 0→1.1→1, 280ms).
 
-## 3. Layout — three zones
+### Where icons go (concrete map)
+- **App header:** `Sparkles` (asmi mark), `Bell` (notifications), `Clock` (history).
+- **CanvasHeader:** category icon in a tinted tile to the left of the title (Plumber→`Wrench`, Restaurant→`UtensilsCrossed`, Gift→`Gift`, Barber→`Scissors`, Dentist→`Stethoscope`, Travel→`Plane`, Ride→`Car`, Reminder→`Bell`, Shopping→`ShoppingBag`, Email→`Mail`, Quotes→`FileText`, Schedule→`CalendarDays`, Map→`MapPin`, Checklist→`ListChecks`, Message→`MessageCircle`). Channel chip becomes icon+label (`Phone`, `MessageSquare`, `Mail`).
+- **Status dot:** replaced with **status glyph** — `Radio` (live, animated rings), `Clock3` (queued), `AlertCircle` (needs you), `CheckCircle2` (done), `Pause` (paused).
+- **OptionsList rows:** leading tinted tile with `MapPin` + distance, `Star` rating, `DollarSign` price; trailing `Check` when selected, `ChevronUp`/`ChevronDown` priority, `X` dismissed. Swipe reveals colored action panels with icons (right→`Star` magenta, left→`Trash2` slate).
+- **GlassDock idle:** `Sparkles` placeholder icon left of "ask asmi…", `ArrowUp` send, `Mic` voice (decorative).
+- **Dock action mode:** each action chip leads with an icon — `PhoneCall` (call top 3), `ListOrdered` (call by priority), `MessageSquare` (message all), `Wand2` (let asmi pick).
+- **Dock composer suggestions:** each chip prefixed with its category icon.
+- **ParallelCalls:** per-lane `Phone` icon, live lane shows animated wave bars (custom), outcome icons (`Voicemail`, `CheckCircle2`, `XCircle`, `RotateCw` for retry, `Calendar` for booked).
+- **CallStepper:** dialing `PhoneOutgoing` → talking `Radio` → done `CheckCircle2` → next `ArrowRight`.
+- **TimelineFeed:** every event gets a leading icon by type (`Phone`, `Mail`, `MessageSquare`, `Calendar`, `MapPin`, `DollarSign`, `User`, `Sparkles`).
+- **MapView:** `MapPin` markers with status tint, `Navigation` recenter button, `Route` directions chip.
+- **SchedulingView:** `CalendarDays` header, `Clock` slot rows, `Users` party size, `Check`/`X` slot state.
+- **QuotesTable:** column headers with `DollarSign`, `Star`, `Clock`, `MapPin`; cheapest row gets a `Sparkles` ribbon.
+- **MessageThread:** sender avatars circle with initial, `Check`/`CheckCheck` read receipts, `Paperclip` attachments.
+- **Checklist:** `Circle`/`CheckCircle2` toggle, drag handle `GripVertical`.
+- **Artifacts:** file-type icons (`FileText`, `Image`, `Receipt`, `Ticket`), `Download`, `Share2`, `Eye`.
+- **CardStack peek rows:** category icon left, status glyph right.
+- **"More past tasks" card:** `Archive` + `ChevronRight`.
+- **app.history.tsx:** every row gets category tile + status glyph + outcome icon.
+- **Empty states:** large 40px line icon in lilac, one-line caption.
 
-```text
-┌──────────────────────────────┐
-│ asmi              ◐ 3 active │  44px header
-├──────────────────────────────┤
-│                              │
-│   ╭────────────────────╮     │
-│   │  ACTIVE CANVAS     │  ← front card
-│   │  (full content)    │     │
-│   ╰────────────────────╯     │
-│    ░░░░░░░░░░░░░░░░░░        │  card 2 peek (8px down, 96% scale)
-│     ░░░░░░░░░░░░░░░          │  card 3 peek
-│      [ more · 12 past ]      │  last card → /app/history
-│                              │
-├──────────────────────────────┤
-│  ╭─────────────────────╮     │
-│  │ ask asmi…       ◉   │  ← liquid glass dock + orb
-│  ╰─────────────────────╯     │
-└──────────────────────────────┘
-```
+### Custom icons (`src/components/app/icons/`)
+- `OrbMark.tsx` — the conic-gradient sphere, reusable at any size.
+- `CallWave.tsx` — 4-bar animated equalizer for live calls.
+- `SparkleBurst.tsx` — 6-dot burst for success moments.
+- `PriorityFlame.tsx` — small flame mark for high-priority rows.
 
-### Card stack — vertical swipe, locked
+## 3. Cards — status as identity
 
-After weighing both: **vertical (up/down)** wins.
+- White surface with a **status-tinted aura** (24px soft outer glow) and a **3px top gradient bar** in the status hue.
+- Category tile in header gives instant recognition.
+- On drag: tilt 4°, scale 1.02, glow intensifies, leading edge shows a faint motion blur streak.
+- On release-to-back: spring fling with overshoot, `SparkleBurst` at landing point.
+- Peek cards tinted 8% with their status hue → the stack reads as a colorful deck.
 
-- Horizontal is already the user's mental model for "tabs / months" elsewhere. Vertical reads as "stack of cards on a desk" — matches Wabi, matches the physical metaphor, and frees horizontal swipe for in-card gestures (option rows, transcript scrub).
-- **Swipe up** on the front card → it lifts and tucks to the back of the stack (round-robin through active canvases). Spring physics, rubber-band at the edges.
-- **Swipe down** on the front card → previous card returns to front.
-- **Long-press** on the front card → "archive" / "close" sheet (one button each, glass).
-- Behind the front card: up to 2 peeks rendered (96% and 92% scale, 8px and 16px offset down, dimmed 6%/12%). Anything older collapses into a static **"more · N past"** card sitting at the bottom of the stack → tap routes to `/app/history`.
-- Window: today + last 2 days live in the stack. Older = history route.
+## 4. Background — living mesh
 
-Horizontal swipe inside a card is reserved for **option rows** (see §5) and for transcript/timeline scrub. Two axes, two purposes, no conflict.
+New `MeshBackdrop.tsx` fixed behind everything: 4 blurred radial blobs animated via framer-motion + 1.5% noise SVG. Static fallback on `prefers-reduced-motion`.
 
-### Glass dock — one chrome, three modes
+## 5. Motion — dynamic & playful
 
-The dock is a single liquid-glass pill at the bottom. It morphs in place:
+- **bouncy:** `{stiffness: 500, damping: 22}` for card swaps and dock morphs.
+- **squish:** `whileTap={{ scale: 0.94 }}` on every tappable.
+- **fling:** `{stiffness: 280, damping: 18, mass: 0.8}` for card-to-back overshoot.
+- **Sparkles:** on action fired, call ended, option selected, task done.
+- **Tickers:** counts roll up with stagger.
+- **Status glyph:** layered SVG with scaling ring + opacity fade.
+- **Orb:** conic-gradient sphere with a slow rotating ring; live speeds the ring and adds a magenta halo pulse.
 
-- **Idle**: `ask asmi…` placeholder + small breathing orb on the right. Typing here routes to the active canvas as a chat message.
-- **Tap the orb**: dock expands upward into a composer sheet with 4 suggestion chips ("call my plumber", "book a table", "find a gift", "remind dad") → sending spawns a new canvas, dock collapses back.
-- **≥1 option selected in the active canvas**: dock morphs into an action row — `Call top 3 · Call by priority · Message all · Let asmi pick`. No new bar pops up; the dock IS the action surface.
+## 6. Orb + dock
 
-Result: no FAB, no nav, no tab strip. One pill does composer, chat, and bulk actions.
+- Orb 40px, conic-gradient `#7C3AED → #E64BFF → #5B5BFF → #7C3AED`, rotates 8s, inner radial highlight, tap squish-bounce.
+- Glass dock: liquid blur tinted `rgba(124,58,237,0.06)`, 1px inner stroke white@70.
+- Primary action chip: violet→magenta gradient, white icon+text, soft violet shadow.
+- Composer pills: pastel tints from palette, hover lifts and saturates.
 
-## 4. Canvas content — clutter rules
+## 7. Typography
 
-Every canvas, no exceptions:
+Keep **General Sans** (already loaded). Titles 600 / -0.02em tracking. Swap JetBrains Mono → **Space Mono** for status lines (more playful tick). Header counts use tabular 500.
 
-- Header: title (General Sans 500, 19px) + one mono status line (`live · 2:14` or `queued · 4pm` or `done · cvs main st`). No big "live" badge, no channel logos shouting — channel chip is a 12px ghost mark next to the title.
-- **Max 3 blocks visible** below the header. Anything else collapses into a single `details ›` chip that expands inline.
-- Block default = the one thing that matters next (current call, current decision, current artifact). Everything else collapsed.
-- Empty fields hidden, never shimmer-lined.
-- Timeline collapsed to the latest event with a chevron.
-- Artifacts shown only when status = done or paused.
-- No inline chat inside the card. Chat lives in the dock.
+## 8. Per-component restyle
 
-A canvas should read like one thought, not a dashboard.
+`CanvasHeader`, `OptionsList`, `ParallelCalls`, `CallStepper`, `TimelineFeed`, `MapView`, `SchedulingView`, `QuotesTable`, `Checklist`, `MessageThread`, `Artifacts`, `ChannelChip`, `TaskState`, `CardStack`, `app.tsx`, `app.history.tsx` — all restyled via tokens + icons per §2 map. No structural changes.
 
-## 5. Multi-select options flow
+## 9. New / changed files
 
-Used in 5 of the 15 seeded canvases: plumber, barber, birthday gift, Saturday dinner, dentist.
+- **New:** `MeshBackdrop.tsx`, `Sparkle.tsx`, `StatusGlyph.tsx`, `Ticker.tsx`, `CategoryTile.tsx`, `icons/OrbMark.tsx`, `icons/CallWave.tsx`, `icons/SparkleBurst.tsx`, `icons/PriorityFlame.tsx`, `lib/categoryIcon.ts` (maps canvas.kind → lucide icon + tint).
+- **Rewrite:** `src/styles.css` (purge amber/linen, add violet palette, status tokens, mesh keyframes, glow/shadow tokens, dock tint, icon tile utility `.tile-status`), `AsmiOrb.tsx` (conic gradient ring), `GlassDock.tsx` (violet tint, icon chips), `CanvasHeader.tsx` (category tile + status glyph + Space Mono).
+- **Restyle via tokens + icons:** every component in §8.
+- **Mock:** add `kind` field per canvas (plumber/restaurant/gift/…) used by `categoryIcon.ts`.
+- **Install:** `bun add @fontsource/space-mono`. Remove JetBrains Mono link from `__root.tsx`.
 
-- Options render as a **vertical list of soft glass rows** inside the card. Each row: name, one-line meta, price.
-- Top of list: one chip — **"any works"** — selects all, clears priorities, instantly enables the dock action row.
-- Per-row gestures:
-  - **Tap row** → toggle selection (amber check appears right).
-  - **Swipe right** → mark high priority (amber bar on the left edge).
-  - **Swipe left** → dismiss (slide-out + 3s undo toast).
-- Sticky chip near the top: `2 selected · 1 high` — tap to clear.
-- The moment ≥1 row is selected, the dock becomes the action row (see §3). Fire an action → list collapses into a summary chip ("calling 3 plumbers"), canvas swaps to the live calls block.
+## 10. Out of scope
 
-## 6. Orb states (the only place color speaks)
+Architecture changes (card stack stays vertical), new use cases, auth, real calls, persistence, desktop redesign beyond reusing tokens.
 
-The orb is the AI's presence and the only living color in the system:
+## 11. Acceptance check
 
-- **Idle**: pale glass, no glow, slow breath.
-- **Working**: amber inner gradient, faster breath, soft outer halo.
-- **Has news**: amber pulse + small dot badge.
-- **Done**: a single bright pulse, fades to idle within 2s.
-
-Color appears nowhere else. Everything else is ink on linen.
-
-## 7. History route
-
-`src/routes/app.history.tsx` — same Liquid Linen system. Chronological list grouped by day. Row = title + outcome + tap-to-reopen. No new ideas.
-
-## 8. Files
-
-- **New**: `src/routes/app.history.tsx`, `src/components/app/CardStack.tsx`, `src/components/app/GlassDock.tsx`, `src/components/app/AsmiOrb.tsx`, `src/components/app/OptionsList.tsx`.
-- **Rewrite**: `src/styles.css` (Liquid Linen tokens, `.glass-pill`, `.card-surface`, orb keyframes, kill orbs/dot-grid/ink-underline/paper noise), `src/routes/app.tsx` (three-zone shell), `src/components/app/Canvas.tsx` (3-block max, collapsed details, no inline chat), `src/components/app/CanvasHeader.tsx` (one status line, no italic, ghost channel mark).
-- **Restyle via tokens only**: ParallelCalls, MapView, SchedulingView, QuotesTable, MessageThread, Checklist, TimelineFeed, Artifacts, ChannelChip, TaskState. Hide empty fields, collapse by default.
-- **Mock**: add `multiSelect: true` plus a couple of pre-selected/priority defaults on the 5 canvases so the flow demos on load.
-- **Delete**: `TabStrip.tsx`, `NewTaskComposer.tsx`, `HistoryRail.tsx`, `InlineChat.tsx`, `OptionsGrid.tsx` (replaced by GlassDock + OptionsList).
-- **Fonts**: load General Sans + JetBrains Mono via Fontshare/Google `<link>` in `src/routes/__root.tsx`.
-
-## 9. Out of scope
-
-Auth, real calls, persistence, dark mode, desktop redesign beyond reusing the mobile system at wider widths.
+- `rg -i "amber|orange|#D67341|f59e|fb923"` returns nothing in `src/`.
+- Mesh visibly drifts behind cards.
+- Every canvas shows a category tile icon + status glyph + channel icon in the header.
+- Every options row, timeline event, action chip, dock state, history row has an icon.
+- Front card tilts on drag, lands with a sparkle burst.
+- Orb has a rotating conic ring; tap squishes and bounces.
+- `prefers-reduced-motion` collapses mesh + sparkles to static.
