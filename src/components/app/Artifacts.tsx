@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { useState } from "react";
-import { ChevronDown, FileText, Calendar, CheckCircle2, Receipt, PiggyBank, MessageSquare, Mail } from "lucide-react";
+import { ChevronDown, FileText, Calendar, CheckCircle2, Receipt, Sparkles, MessageSquare, Mail, TrendingDown } from "lucide-react";
 import type { Artifact } from "./useCanvases";
 
 const ICONS: Record<Artifact["kind"], typeof FileText> = {
@@ -8,7 +8,7 @@ const ICONS: Record<Artifact["kind"], typeof FileText> = {
   confirmation: CheckCircle2,
   calendar: Calendar,
   receipt: Receipt,
-  savings: PiggyBank,
+  savings: TrendingDown,
   message: MessageSquare,
   email: Mail,
 };
@@ -16,13 +16,9 @@ const ICONS: Record<Artifact["kind"], typeof FileText> = {
 export function Artifacts({ artifacts }: { artifacts: Artifact[] }) {
   return (
     <div className="space-y-2">
-      <div className="label-mono" style={{ color: "var(--color-stone-dim)", fontSize: 9.5 }}>
-        artifacts
-      </div>
+      <div className="label-mono" style={{ color: "var(--color-ink-muted)", fontSize: 9.5 }}>artifacts</div>
       <div className="grid gap-2">
-        {artifacts.map((a) => (
-          <ArtifactCard key={a.id} artifact={a} />
-        ))}
+        {artifacts.map((a) => <ArtifactCard key={a.id} artifact={a} />)}
       </div>
     </div>
   );
@@ -35,30 +31,38 @@ function ArtifactCard({ artifact }: { artifact: Artifact }) {
   return (
     <motion.button
       layout
+      whileTap={{ scale: 0.99 }}
       onClick={() => setOpen((v) => !v)}
-      className="group flex w-full flex-col items-start gap-1.5 rounded-2xl border border-[color:var(--glass-border)] bg-white/45 p-3.5 text-left backdrop-blur-xl transition-all hover:bg-white/65"
-      style={isSavings ? { background: "linear-gradient(135deg, rgba(139,168,136,0.18), rgba(212,165,116,0.16))" } : undefined}
+      className="group flex w-full flex-col items-start gap-1.5 rounded-2xl bg-white/65 p-3.5 text-left backdrop-blur-xl transition-all hover:bg-white/85"
+      style={{
+        border: "1px solid rgba(124,58,237,0.10)",
+        background: isSavings ? "linear-gradient(135deg, rgba(94,234,212,0.22), rgba(124,58,237,0.10))" : undefined,
+      }}
     >
       <div className="flex w-full items-center gap-2.5">
         <span
-          className="grid h-7 w-7 place-items-center rounded-full"
-          style={{ background: "rgba(139,168,136,0.18)", color: "var(--color-sage-deep)" }}
+          className="grid h-8 w-8 place-items-center rounded-xl"
+          style={{
+            background: isSavings ? "rgba(94,234,212,0.30)" : "rgba(124,58,237,0.12)",
+            color: isSavings ? "#0F766E" : "#7C3AED",
+          }}
         >
-          <Icon size={14} />
+          <Icon size={15} strokeWidth={1.8} />
         </span>
         <span
-          className="flex-1 font-serif italic text-[15px]"
-          style={{ color: "var(--color-espresso)" }}
+          className="flex-1 text-[15px] font-semibold tracking-[-0.01em]"
+          style={{ color: "var(--color-ink)", fontFamily: "var(--font-display)" }}
         >
           {artifact.title}
         </span>
+        {isSavings && <Sparkles size={13} strokeWidth={2} style={{ color: "#0F766E" }} />}
         {artifact.meta && (
-          <span className="label-mono" style={{ color: "var(--color-stone)", fontSize: 8.5 }}>{artifact.meta}</span>
+          <span className="label-mono" style={{ color: "var(--color-ink-soft)", fontSize: 8.5 }}>{artifact.meta}</span>
         )}
         <ChevronDown
           size={14}
           style={{
-            color: "var(--color-stone-dim)",
+            color: "var(--color-ink-muted)",
             transform: open ? "rotate(180deg)" : "rotate(0deg)",
             transition: "transform 240ms ease",
           }}
@@ -70,7 +74,7 @@ function ArtifactCard({ artifact }: { artifact: Artifact }) {
         transition={{ duration: 0.28 }}
         className="w-full overflow-hidden"
       >
-        <p className="pl-9 pt-1 text-[12.5px] leading-relaxed" style={{ color: "var(--color-stone)" }}>
+        <p className="pl-10 pt-1 text-[12.5px] leading-relaxed" style={{ color: "var(--color-ink-soft)" }}>
           {artifact.body}
         </p>
       </motion.div>

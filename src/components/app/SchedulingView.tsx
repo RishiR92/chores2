@@ -1,29 +1,42 @@
 import type { SchedulingGrid } from "./useCanvases";
-import { Check, X } from "lucide-react";
+import { Check, X, CalendarDays, Clock } from "lucide-react";
 
 export function SchedulingView({ grid }: { grid: SchedulingGrid }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-[color:var(--glass-border)] bg-white/40 backdrop-blur-xl">
-      <div className="grid grid-cols-[1fr_repeat(var(--n),minmax(0,0.6fr))_auto] items-center gap-2 border-b border-[color:var(--glass-border)] px-3 py-2" style={{ ["--n" as never]: grid.people.length }}>
-        <span className="label-mono" style={{ color: "var(--color-stone-dim)", fontSize: 9 }}>slot</span>
+    <div className="overflow-hidden rounded-2xl bg-white/60 backdrop-blur-xl" style={{ border: "1px solid rgba(124,58,237,0.10)" }}>
+      <div className="flex items-center gap-2 border-b px-3 py-2.5" style={{ borderColor: "rgba(124,58,237,0.08)" }}>
+        <CalendarDays size={13} strokeWidth={1.8} style={{ color: "#7C3AED" }} />
+        <span className="label-mono" style={{ color: "var(--color-ink-soft)", fontSize: 10 }}>
+          slots · {grid.people.join(" · ")}
+        </span>
+      </div>
+      <div
+        className="grid items-center gap-2 border-b px-3 py-2"
+        style={{
+          gridTemplateColumns: `1fr repeat(${grid.people.length}, minmax(0, 0.6fr)) auto`,
+          borderColor: "rgba(124,58,237,0.06)",
+        }}
+      >
+        <span className="label-mono" style={{ color: "var(--color-ink-muted)", fontSize: 9 }}>slot</span>
         {grid.people.map((p) => (
-          <span key={p} className="label-mono text-center" style={{ color: "var(--color-stone-dim)", fontSize: 9 }}>{p}</span>
+          <span key={p} className="label-mono text-center" style={{ color: "var(--color-ink-muted)", fontSize: 9 }}>{p}</span>
         ))}
         <span />
       </div>
-      <div className="divide-y divide-[color:var(--glass-border)]">
+      <div className="divide-y" style={{ borderColor: "rgba(124,58,237,0.06)" }}>
         {grid.slots.map((s) => {
           const allOk = s.available.every(Boolean);
           return (
             <div
               key={s.id}
-              className="grid grid-cols-[1fr_repeat(var(--n),minmax(0,0.6fr))_auto] items-center gap-2 px-3 py-2"
+              className="grid items-center gap-2 px-3 py-2.5"
               style={{
-                ["--n" as never]: grid.people.length,
-                background: s.chosen ? "rgba(139,168,136,0.14)" : undefined,
+                gridTemplateColumns: `1fr repeat(${grid.people.length}, minmax(0, 0.6fr)) auto`,
+                background: s.chosen ? "rgba(94,234,212,0.14)" : undefined,
               }}
             >
-              <div className="font-serif italic text-[14px]" style={{ color: "var(--color-espresso)" }}>
+              <div className="flex items-center gap-1.5 text-[13px]" style={{ color: "var(--color-ink)" }}>
+                <Clock size={11} strokeWidth={1.8} style={{ color: "var(--color-ink-soft)" }} />
                 {s.label}
               </div>
               {s.available.map((ok, i) => (
@@ -31,17 +44,24 @@ export function SchedulingView({ grid }: { grid: SchedulingGrid }) {
                   <span
                     className="grid h-5 w-5 place-items-center rounded-full"
                     style={{
-                      background: ok ? "rgba(139,168,136,0.22)" : "rgba(181,75,63,0.10)",
-                      color: ok ? "var(--color-sage-deep)" : "#B54B3F",
+                      background: ok ? "rgba(94,234,212,0.22)" : "rgba(230,75,110,0.10)",
+                      color: ok ? "#0F766E" : "#E64B6E",
                     }}
                   >
-                    {ok ? <Check size={11} /> : <X size={11} />}
+                    {ok ? <Check size={11} strokeWidth={2.5} /> : <X size={11} strokeWidth={2.5} />}
                   </span>
                 </div>
               ))}
               <div>
                 {allOk && (
-                  <span className="label-mono rounded-full px-2 py-0.5" style={{ background: s.chosen ? "var(--color-sage-strong)" : "rgba(139,168,136,0.18)", color: s.chosen ? "white" : "var(--color-sage-deep)", fontSize: 8.5 }}>
+                  <span
+                    className="label-mono rounded-full px-2 py-0.5"
+                    style={{
+                      background: s.chosen ? "#0F766E" : "rgba(94,234,212,0.20)",
+                      color: s.chosen ? "white" : "#0F766E",
+                      fontSize: 8.5,
+                    }}
+                  >
                     {s.chosen ? "picked" : "all clear"}
                   </span>
                 )}
