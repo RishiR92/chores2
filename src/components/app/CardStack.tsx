@@ -9,11 +9,13 @@ export function CardStack({
   pastCount,
   onArchive,
   onMore,
+  onFrontChange,
 }: {
   canvases: Canvas[];
   pastCount: number;
   onArchive: (id: string) => void;
   onMore: () => void;
+  onFrontChange?: (id: string) => void;
 }) {
   // index 0 = front card
   const [order, setOrder] = useState<string[]>(canvases.map((c) => c.id));
