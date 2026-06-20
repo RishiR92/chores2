@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence, PanInfo } from "motion/react";
 import type { Canvas } from "./useCanvases";
 import { CanvasView } from "./Canvas";
@@ -17,30 +17,28 @@ export function CardStack({
   onMore: () => void;
   onFrontChange?: (id: string) => void;
 }) {
-  // index 0 = front card
   const [order, setOrder] = useState<string[]>(canvases.map((c) => c.id));
-  // re-sync if canvases change shape
-  if (order.length !== canvases.length || !canvases.every((c) => order.includes(c.id))) {
+
+  useEffect(() => {
     const next = canvases.map((c) => c.id);
-    if (next.join("|") !== order.join("|")) {
-      // keep previous order for ids that survive
-      const surviving = order.filter((id) => next.includes(id));
+    setOrder((prev) => {
+      const surviving = prev.filter((id) => next.includes(id));
       const newOnes = next.filter((id) => !surviving.includes(id));
       const merged = [...newOnes, ...surviving];
-      setOrder(merged);
-    }
-  }
+      return merged.join("|") === prev.join("|") ? prev : merged;
+    });
+  }, [canvases]);
+
+  useEffect(() => {
+    if (order[0] && onFrontChange) onFrontChange(order[0]);
+  }, [order, onFrontChange]);
 
   const stacked = order
     .map((id) => canvases.find((c) => c.id === id))
     .filter((c): c is Canvas => !!c);
 
-  const sendToBack = () => {
-    setOrder((o) => [...o.slice(1), o[0]]);
-  };
-  const bringBack = () => {
-    setOrder((o) => [o[o.length - 1], ...o.slice(0, -1)]);
-  };
+  const sendToBack = () => setOrder((o) => (o.length > 1 ? [...o.slice(1), o[0]] : o));
+  const bringBack = () => setOrder((o) => (o.length > 1 ? [o[o.length - 1], ...o.slice(0, -1)] : o));
 
   return (
     <div className="relative mx-auto w-full max-w-xl px-4">
