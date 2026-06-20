@@ -39,6 +39,7 @@ export function CardStack({
 
   const sendToBack = () => setOrder((o) => (o.length > 1 ? [...o.slice(1), o[0]] : o));
   const bringBack = () => setOrder((o) => (o.length > 1 ? [o[o.length - 1], ...o.slice(0, -1)] : o));
+  const promote = (id: string) => setOrder((o) => [id, ...o.filter((x) => x !== id)]);
 
   const front = stacked[0];
   const peeks = stacked.slice(1, 3);
@@ -59,7 +60,7 @@ export function CardStack({
       <div className="relative -mt-4 space-y-2 px-2">
         <AnimatePresence initial={false}>
           {peeks.map((c, i) => (
-            <PeekCard key={c.id} canvas={c} depth={i + 1} onTap={bringBack} />
+            <PeekCard key={c.id} canvas={c} depth={i + 1} onTap={() => promote(c.id)} />
           ))}
         </AnimatePresence>
       </div>
