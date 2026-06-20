@@ -87,12 +87,19 @@ export function seedCanvases(): Canvas[] {
       title: "Plumber for Saturday",
       origin: "web",
       status: "live",
-      mode: "action",
-      subtitle: "3 plumbers · in parallel",
+      mode: "research",
+      subtitle: "5 picks · choose who to call",
       parallel: true,
       fields: [
         { label: "issue", value: "kitchen sink slow drain" },
         { label: "window", value: "Sat 9am–1pm" },
+      ],
+      options: [
+        { id: "pl-1", title: "Mike's Plumbing", subtitle: "4.8 · Mission · same-day", price: "$95 visit", badge: "open now", priority: "high", selected: true },
+        { id: "pl-2", title: "Bay Drain Pros", subtitle: "4.6 · SoMa", price: "$110 visit", badge: "weekends" },
+        { id: "pl-3", title: "RotoFlow SF", subtitle: "4.7 · Bernal", price: "$85 visit", badge: "fast", priority: "med", selected: true },
+        { id: "pl-4", title: "ACE Plumbing", subtitle: "4.5 · citywide", price: "$120 visit" },
+        { id: "pl-5", title: "Bernie's Drains", subtitle: "4.9 · indie", price: "$90 visit", badge: "trusted", priority: "low" },
       ],
       calls: [
         { id: "p-a", person: "Mike's Plumbing", role: "(415) 555-0188", status: "connected", durationSec: 28 },
@@ -100,12 +107,9 @@ export function seedCanvases(): Canvas[] {
         { id: "p-c", person: "RotoFlow SF", role: "(415) 555-0249", status: "ringing" },
       ],
       timeline: [
-        t("spawned", "Spawned 3 parallel calls", "3m ago"),
-        t("dialed", "Dialed all three within 8s", "3m ago"),
-        t("voicemail", "Bay Drain Pros → voicemail, callback queued", "2m ago"),
-        t("connected", "Mike's Plumbing picked up", "1m ago"),
+        t("spawned", "Found 5 plumbers nearby", "3m ago"),
       ],
-      chat: [asmi("first who locks saturday morning wins. i'll close the others gracefully.")],
+      chat: [asmi("tap the ones worth calling. swipe right to mark high priority. tap 'any works' if you don't care who.")],
     }),
 
     // 4 ─ Done (history)
@@ -376,22 +380,20 @@ export function seedCanvases(): Canvas[] {
       title: "Haircut today",
       origin: "whatsapp",
       status: "live",
-      mode: "action",
-      subtitle: "trying 3 salons in order",
+      mode: "research",
+      subtitle: "4 salons · pick a few to try",
       fields: [
         { label: "window", value: "today 4–7pm" },
         { label: "stylist", value: "anyone good" },
       ],
-      calls: [
-        { id: "hc-1", person: "Edo Salon", status: "failed", result: "fully booked" },
-        { id: "hc-2", person: "Public Barber", status: "connected", durationSec: 18 },
-        { id: "hc-3", person: "Peoples Barber", status: "queued" },
+      options: [
+        { id: "hc-1", title: "Edo Salon", subtitle: "Hayes · 4.7", price: "$65", badge: "stylist mid", priority: "high" },
+        { id: "hc-2", title: "Public Barber", subtitle: "Mission · 4.6", price: "$45", badge: "walk-in", selected: true },
+        { id: "hc-3", title: "Peoples Barber", subtitle: "Pac Heights · 4.8", price: "$55" },
+        { id: "hc-4", title: "Fellow Barber", subtitle: "Lower Haight · 4.5", price: "$50", badge: "today only" },
       ],
-      timeline: [
-        t("dialed", "Edo Salon — booked, moving on", "2m ago"),
-        t("dialed", "Public Barber — currently on", "now"),
-      ],
-      chat: [asmi("edo's full. public just picked up — checking 5:30.")],
+      timeline: [t("spawned", "Pulled 4 nearby salons", "1m ago")],
+      chat: [asmi("tap any to add. i'll call them in priority order until one says yes for tonight.")],
     }),
   ];
 }
