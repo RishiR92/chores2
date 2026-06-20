@@ -1,35 +1,64 @@
-import { Star } from "lucide-react";
+import { Star, DollarSign, Sparkles } from "lucide-react";
 import type { Quote } from "./useCanvases";
 
 export function QuotesTable({ quotes }: { quotes: Quote[] }) {
+  // mark cheapest with the sparkle ribbon
+  const numericPrice = (p: string) => parseFloat(p.replace(/[^\d.]/g, "")) || Infinity;
+  const cheapestId = quotes
+    .filter((q) => q.price && q.price !== "—")
+    .sort((a, b) => numericPrice(a.price) - numericPrice(b.price))[0]?.id;
+
   return (
-    <div className="overflow-hidden rounded-2xl border border-[color:var(--glass-border)] bg-white/40 backdrop-blur-xl">
-      <div className="label-mono grid grid-cols-[1.6fr_0.6fr_0.9fr_0.9fr_0.5fr] gap-2 border-b border-[color:var(--glass-border)] px-3 py-2" style={{ color: "var(--color-stone-dim)", fontSize: 9 }}>
+    <div className="overflow-hidden rounded-2xl bg-white/60 backdrop-blur-xl" style={{ border: "1px solid rgba(124,58,237,0.10)" }}>
+      <div
+        className="label-mono grid gap-2 border-b px-3 py-2"
+        style={{
+          gridTemplateColumns: "1.6fr 0.6fr 0.9fr 0.9fr 0.5fr",
+          color: "var(--color-ink-muted)",
+          fontSize: 9,
+          borderColor: "rgba(124,58,237,0.08)",
+        }}
+      >
         <span>vendor</span>
-        <span>rating</span>
-        <span>price</span>
+        <span className="inline-flex items-center gap-1"><Star size={9} /> rating</span>
+        <span className="inline-flex items-center gap-1"><DollarSign size={9} /> price</span>
         <span>start</span>
         <span>status</span>
       </div>
-      <div className="divide-y divide-[color:var(--glass-border)]">
+      <div className="divide-y" style={{ borderColor: "rgba(124,58,237,0.06)" }}>
         {quotes.map((q) => (
-          <div key={q.id} className="grid grid-cols-[1.6fr_0.6fr_0.9fr_0.9fr_0.5fr] items-center gap-2 px-3 py-2.5">
+          <div
+            key={q.id}
+            className="grid items-center gap-2 px-3 py-2.5"
+            style={{ gridTemplateColumns: "1.6fr 0.6fr 0.9fr 0.9fr 0.5fr" }}
+          >
             <div className="min-w-0">
-              <div className="truncate text-[13px]" style={{ color: "var(--color-espresso)" }}>{q.vendor}</div>
-              {q.note && <div className="truncate text-[10.5px]" style={{ color: "var(--color-stone)" }}>{q.note}</div>}
+              <div className="flex items-center gap-1.5">
+                <span className="truncate text-[13px]" style={{ color: "var(--color-ink)" }}>{q.vendor}</span>
+                {q.id === cheapestId && (
+                  <Sparkles size={10} strokeWidth={2} style={{ color: "#E64BFF" }} />
+                )}
+              </div>
+              {q.note && <div className="truncate text-[10.5px]" style={{ color: "var(--color-ink-soft)" }}>{q.note}</div>}
             </div>
-            <div className="flex items-center gap-1 text-[11.5px]" style={{ color: "var(--color-stone)" }}>
-              {q.rating ? (<><Star size={10} className="fill-current" style={{ color: "var(--color-clay)" }} />{q.rating}</>) : "—"}
+            <div className="flex items-center gap-1 text-[11.5px]" style={{ color: "var(--color-ink-soft)" }}>
+              {q.rating ? (<><Star size={10} className="fill-current" style={{ color: "#E64BFF" }} />{q.rating}</>) : "—"}
             </div>
-            <div className="font-mono text-[11.5px]" style={{ color: "var(--color-ink)" }}>{q.price}</div>
-            <div className="text-[11.5px]" style={{ color: "var(--color-stone)" }}>{q.availability}</div>
+            <div className="font-mono text-[11.5px]" style={{ color: "#6D28D9" }}>{q.price}</div>
+            <div className="text-[11.5px]" style={{ color: "var(--color-ink-soft)" }}>{q.availability}</div>
             <div>
               <span
                 className="label-mono rounded-full px-1.5 py-0.5"
                 style={{
                   fontSize: 8.5,
-                  background: q.status === "received" ? "rgba(139,168,136,0.2)" : q.status === "declined" ? "rgba(181,75,63,0.12)" : "rgba(44,37,32,0.06)",
-                  color: q.status === "received" ? "var(--color-sage-deep)" : q.status === "declined" ? "#B54B3F" : "var(--color-stone)",
+                  background:
+                    q.status === "received" ? "rgba(94,234,212,0.22)"
+                    : q.status === "declined" ? "rgba(230,75,110,0.12)"
+                    : "rgba(124,58,237,0.07)",
+                  color:
+                    q.status === "received" ? "#0F766E"
+                    : q.status === "declined" ? "#E64B6E"
+                    : "var(--color-ink-soft)",
                 }}
               >
                 {q.status === "received" ? "in" : q.status === "declined" ? "no" : "…"}
