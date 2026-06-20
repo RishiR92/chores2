@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { CanvasesProvider, useCanvases, type OptionsAction } from "@/components/app/useCanvases";
 import { CardStack } from "@/components/app/CardStack";
 import { GlassDock } from "@/components/app/GlassDock";
@@ -26,15 +26,10 @@ function Workspace() {
   const { canvases, activeId, setActive, close, spawn, sendChat, runOptionsAction } = useCanvases();
   const navigate = useNavigate();
 
-  // window: today + last 2 days = live + waiting
   const live = useMemo(() => canvases.filter((c) => c.status !== "done"), [canvases]);
   const past = useMemo(() => canvases.filter((c) => c.status === "done"), [canvases]);
 
-  // The front of the stack drives the active id (for dock context).
-  // We let CardStack handle ordering internally and report the front via state.
-  const [frontId, setFrontId] = useState<string | undefined>(live[0]?.id);
-  const active = canvases.find((c) => c.id === (activeId ?? frontId)) ?? live[0];
-
+  const active = canvases.find((c) => c.id === activeId) ?? live[0];
   const liveCount = live.filter((c) => c.status === "live").length;
 
   const orbState: "idle" | "live" | "news" | "done" =
@@ -42,7 +37,6 @@ function Workspace() {
 
   return (
     <main className="app-shell relative w-full pb-32">
-      {/* Header */}
       <header className="sticky top-0 z-30 flex items-center justify-between px-5 pb-2 pt-4 sm:px-8 sm:pt-5">
         <a
           href="/"
@@ -57,7 +51,6 @@ function Workspace() {
         </div>
       </header>
 
-      {/* Stack */}
       <section className="relative z-10 pt-3">
         {live.length > 0 ? (
           <CardStack
@@ -65,17 +58,19 @@ function Workspace() {
             pastCount={past.length}
             onArchive={(id) => {
               close(id);
-              setActive(live.find((c) => c.id !== id)?.id ?? "");
+              const next = live.find((c) => c.id !== id);
+              if (next) setActive(next.id);
             }}
-            onMore={() => navigate({ to: "/app/history" })}
-            onFrontChange={setFrontId}
+            onMore={() => {
+              void navigate({ to: "/app/history" });
+            }}
+            onFrontChange={(id) => setActive(id)}
           />
         ) : (
           <Empty />
         )}
       </section>
 
-      {/* Liquid glass dock */}
       <GlassDock
         active={active}
         onSend={(text) => active && sendChat(active.id, text)}
