@@ -35,7 +35,6 @@ export type Call = {
   durationSec?: number;
   result?: string;
   nextAction?: NextAction;
-  // recording metadata (we never show transcript live)
   recordingAvailableAfter?: boolean;
 };
 
@@ -45,7 +44,6 @@ export type Place = {
   cuisine?: string;
   rating?: number;
   price?: string;
-  // normalized 0..1 coords on the canvas map
   x: number;
   y: number;
   distance?: string;
@@ -66,7 +64,7 @@ export type Option = {
 
 export type TimelineEvent = {
   id: string;
-  ts: string; // human label like "now", "2m ago"
+  ts: string;
   kind:
     | "spawned"
     | "researching"
@@ -117,6 +115,8 @@ export type MessageThreadT = {
   lines: { id: string; role: "asmi" | "them"; text: string; ts?: string }[];
 };
 
+export type OptionsAction = "call_top" | "call_priority" | "message_all" | "asmi_pick";
+
 export type Canvas = {
   id: string;
   title: string;
@@ -126,12 +126,12 @@ export type Canvas = {
   subtitle: string;
   createdAt: number;
 
-  // optional block payloads — UI renders a block iff its data is present
   fields?: CanvasField[];
   calls?: Call[];
-  parallel?: boolean; // when there are >1 calls
+  parallel?: boolean;
   places?: Place[];
   options?: Option[];
+  optionsSummary?: string;
   decisionPrompt?: string;
   checklist?: ChecklistItem[];
   quotes?: Quote[];
@@ -153,6 +153,10 @@ type Ctx = {
   callPlace: (canvasId: string, placeId: string) => void;
   setOptionPriority: (canvasId: string, optionId: string, priority: Option["priority"]) => void;
   toggleOptionSelected: (canvasId: string, optionId: string) => void;
+  dismissOption: (canvasId: string, optionId: string) => void;
+  anyWorks: (canvasId: string) => void;
+  clearOptionsState: (canvasId: string) => void;
+  runOptionsAction: (canvasId: string, action: OptionsAction) => void;
 };
 
 const CanvasesCtx = createContext<Ctx | null>(null);
@@ -161,7 +165,6 @@ export function CanvasesProvider({ children }: { children: React.ReactNode }) {
   const [canvases, setCanvases] = useState<Canvas[]>(() => seedCanvases());
   const [activeId, setActiveId] = useState<string | undefined>(() => seedCanvases()[0]?.id);
 
-  // gentle world tick — only advances live call durations + a small pulse
   useEffect(() => {
     const t = setInterval(() => setCanvases((cs) => cs.map(tickWorld)), 1500);
     return () => clearInterval(t);
@@ -170,13 +173,8 @@ export function CanvasesProvider({ children }: { children: React.ReactNode }) {
   const setActive = useCallback((id: string) => setActiveId(id), []);
 
   const close = useCallback((id: string) => {
-    setCanvases((cs) =>
-      cs.map((c) => (c.id === id ? { ...c, status: "done", mode: "done" } : c)),
-    );
-    setActiveId((cur) => {
-      if (cur !== id) return cur;
-      return undefined;
-    });
+    setCanvases((cs) => cs.map((c) => (c.id === id ? { ...c, status: "done", mode: "done" } : c)));
+    setActiveId((cur) => (cur === id ? undefined : cur));
   }, []);
 
   const spawn = useCallback((prompt: string) => {
@@ -205,7 +203,7 @@ export function CanvasesProvider({ children }: { children: React.ReactNode }) {
           };
         }),
       );
-    }, 950);
+    }, 850);
   }, []);
 
   const togglePlaceShortlist = useCallback((canvasId: string, placeId: string) => {
@@ -267,9 +265,112 @@ export function CanvasesProvider({ children }: { children: React.ReactNode }) {
     );
   }, []);
 
+  const dismissOption: Ctx["dismissOption"] = useCallback((canvasId, optionId) => {
+    setCanvases((cs) =>
+      cs.map((c) =>
+        c.id !== canvasId || !c.options ? c : {
+          ...c,
+          options: c.options.filter((o) => o.id !== optionId),
+        }
+      )
+    );
+  }, []);
+
+  const anyWorks: Ctx["anyWorks"] = useCallback((canvasId) => {
+    setCanvases((cs) =>
+      cs.map((c) =>
+        c.id !== canvasId || !c.options ? c : {
+          ...c,
+          options: c.options.map((o) => ({ ...o, selected: true, priority: null })),
+        }
+      )
+    );
+  }, []);
+
+  const clearOptionsState: Ctx["clearOptionsState"] = useCallback((canvasId) => {
+    setCanvases((cs) =>
+      cs.map((c) => {
+        if (c.id !== canvasId) return c;
+        if (c.optionsSummary) {
+          // restore from summary mode → can't recover originals without storage,
+          // so just clear the summary. This is a prototype; restoring originals
+          // would need a stash. For now, nudge user with chat.
+          return { ...c, optionsSummary: undefined };
+        }
+        if (!c.options) return c;
+        return { ...c, options: c.options.map((o) => ({ ...o, selected: false, priority: null })) };
+      })
+    );
+  }, []);
+
+  const runOptionsAction: Ctx["runOptionsAction"] = useCallback((canvasId, action) => {
+    setCanvases((cs) =>
+      cs.map((c) => {
+        if (c.id !== canvasId || !c.options) return c;
+        const selected = c.options.filter((o) => o.selected);
+        const summary =
+          action === "call_top"
+            ? `calling top ${Math.min(3, selected.length)} now`
+            : action === "call_priority"
+            ? "calling in priority order"
+            : action === "message_all"
+            ? `messaging ${selected.length} options`
+            : "asmi is picking one for you";
+        const ackByAction: Record<OptionsAction, string> = {
+          call_top: "on it — dialing the top picks in parallel. i'll bring back the first yes.",
+          call_priority: "going in priority order. i'll skip past the no's.",
+          message_all: "messages going out now. i'll show replies as they come.",
+          asmi_pick: "i'll weigh ratings, price, and your tags. back in a minute.",
+        };
+        return {
+          ...c,
+          mode: "action",
+          status: "live",
+          options: undefined,
+          optionsSummary: summary,
+          timeline: [
+            ...(c.timeline ?? []),
+            { id: crypto.randomUUID(), ts: "now", kind: "spawned", text: summary },
+          ],
+          chat: [...c.chat, { id: crypto.randomUUID(), role: "asmi", text: ackByAction[action] }],
+        };
+      })
+    );
+  }, []);
+
   const value = useMemo<Ctx>(
-    () => ({ canvases, activeId, setActive, close, spawn, sendChat, togglePlaceShortlist, callPlace, setOptionPriority, toggleOptionSelected }),
-    [canvases, activeId, setActive, close, spawn, sendChat, togglePlaceShortlist, callPlace, setOptionPriority, toggleOptionSelected],
+    () => ({
+      canvases,
+      activeId,
+      setActive,
+      close,
+      spawn,
+      sendChat,
+      togglePlaceShortlist,
+      callPlace,
+      setOptionPriority,
+      toggleOptionSelected,
+      dismissOption,
+      anyWorks,
+      clearOptionsState,
+      runOptionsAction,
+    }),
+    [
+      canvases,
+      activeId,
+      setActive,
+      close,
+      spawn,
+      sendChat,
+      togglePlaceShortlist,
+      callPlace,
+      setOptionPriority,
+      toggleOptionSelected,
+      dismissOption,
+      anyWorks,
+      clearOptionsState,
+      runOptionsAction,
+    ],
   );
 
   return <CanvasesCtx.Provider value={value}>{children}</CanvasesCtx.Provider>;
@@ -283,10 +384,10 @@ export function useCanvases() {
 
 function pickReply(c: Canvas, text: string): string {
   const t = text.toLowerCase();
-  if (t.includes("priority") || t.includes("rank")) return "noted — i'll bias toward your high-priority picks.";
-  if (t.includes("cancel") || t.includes("stop")) return "pausing this canvas. say go to resume.";
+  if (t.includes("priority") || t.includes("rank")) return "noted — biasing toward your high-priority picks.";
+  if (t.includes("cancel") || t.includes("stop")) return "pausing. say go to resume.";
   if (t.includes("call") && c.places) return "tap any pin on the map and i'll dial.";
-  if (c.calls?.some((x) => x.status === "voicemail")) return "i'll try them again in 10. want me to send a text too?";
-  if (c.mode === "research") return "got it — folding that into the shortlist.";
+  if (c.calls?.some((x) => x.status === "voicemail")) return "i'll retry in 10. want me to text too?";
+  if (c.mode === "research") return "got it — folding that in.";
   return "on it.";
 }
