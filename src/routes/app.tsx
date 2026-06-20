@@ -1,18 +1,15 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
-import { TabStrip } from "@/components/app/TabStrip";
-import { Canvas } from "@/components/app/Canvas";
-import { HistoryRail } from "@/components/app/HistoryRail";
-import { NewTaskComposer } from "@/components/app/NewTaskComposer";
-import { CanvasesProvider, useCanvases } from "@/components/app/useCanvases";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
+import { CanvasesProvider, useCanvases, type OptionsAction } from "@/components/app/useCanvases";
+import { CardStack } from "@/components/app/CardStack";
+import { GlassDock } from "@/components/app/GlassDock";
 
 export const Route = createFileRoute("/app")({
   component: AppShell,
   head: () => ({
     meta: [
-      { title: "Asmi — Workspace" },
-      { name: "description", content: "Asmi workspace. A canvas spins up for every task you hand off." },
+      { title: "Asmi — workspace" },
+      { name: "description", content: "Asmi's workspace. A card for every task she's running for you." },
     ],
   }),
 });
@@ -26,92 +23,82 @@ function AppShell() {
 }
 
 function Workspace() {
-  const { canvases, activeId, setActive, close, spawn } = useCanvases();
-  const [composerOpen, setComposerOpen] = useState(false);
-  const live = canvases.filter((c) => c.status !== "done");
-  const past = canvases.filter((c) => c.status === "done");
-  const active = canvases.find((c) => c.id === activeId) ?? live[0] ?? past[0];
+  const { canvases, activeId, setActive, close, spawn, sendChat, runOptionsAction } = useCanvases();
+  const navigate = useNavigate();
+
+  // window: today + last 2 days = live + waiting
+  const live = useMemo(() => canvases.filter((c) => c.status !== "done"), [canvases]);
+  const past = useMemo(() => canvases.filter((c) => c.status === "done"), [canvases]);
+
+  // The front of the stack drives the active id (for dock context).
+  // We let CardStack handle ordering internally and report the front via state.
+  const [frontId, setFrontId] = useState<string | undefined>(live[0]?.id);
+  const active = canvases.find((c) => c.id === (activeId ?? frontId)) ?? live[0];
+
+  const liveCount = live.filter((c) => c.status === "live").length;
+
+  const orbState: "idle" | "live" | "news" | "done" =
+    active?.status === "live" ? "live" : active?.status === "done" ? "done" : "idle";
 
   return (
-    <main className="app-wash relative min-h-screen w-full overflow-hidden">
-      {/* Background orbs */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="orb orb-peach" />
-        <div className="orb orb-sage" />
-        <div className="orb orb-clay" />
-        <div className="absolute inset-0 dot-grid opacity-40" />
-      </div>
-
-      {/* Top bar */}
-      <header className="sticky top-0 z-30 flex flex-col gap-2 px-4 pb-2 pt-4 sm:flex-row sm:items-center sm:gap-4 sm:px-6 sm:pt-5">
-        <div className="flex items-baseline gap-2">
-          <a href="/" className="font-serif italic text-[22px] leading-none" style={{ color: "var(--color-espresso)" }}>
-            asmi
-          </a>
-          <span className="label-mono hidden sm:inline" style={{ color: "var(--color-stone-dim)", fontSize: 9 }}>
-            workspace
-          </span>
-        </div>
-        <div className="min-w-0 flex-1">
-          <TabStrip
-            canvases={live}
-            activeId={active?.id}
-            onSelect={setActive}
-            onClose={close}
-            onNew={() => setComposerOpen(true)}
-          />
+    <main className="app-shell relative w-full pb-32">
+      {/* Header */}
+      <header className="sticky top-0 z-30 flex items-center justify-between px-5 pb-2 pt-4 sm:px-8 sm:pt-5">
+        <a
+          href="/"
+          className="text-[20px] font-semibold tracking-[-0.02em]"
+          style={{ color: "var(--color-ink)", fontFamily: "var(--font-display)" }}
+        >
+          asmi
+        </a>
+        <div className="flex items-center gap-1.5">
+          <span className={`status-dot ${liveCount > 0 ? "live" : "queued"}`} />
+          <span className="chip-mono">{liveCount} active</span>
         </div>
       </header>
 
-      {/* Stage */}
-      <section className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-stretch px-3 pb-24 pt-3 sm:px-6 sm:pt-6">
-        <AnimatePresence mode="wait">
-          {active ? (
-            <motion.div
-              key={active.id}
-              initial={{ opacity: 0, scale: 0.97, filter: "blur(14px)" }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-              exit={{ opacity: 0, scale: 0.98, filter: "blur(10px)" }}
-              transition={{ duration: 0.42, ease: [0.2, 0.8, 0.2, 1] }}
-            >
-              <Canvas canvas={active} />
-            </motion.div>
-          ) : (
-            <EmptyState onNew={() => setComposerOpen(true)} />
-          )}
-        </AnimatePresence>
-
-        {past.length > 0 && <HistoryRail canvases={past} onReopen={setActive} />}
+      {/* Stack */}
+      <section className="relative z-10 pt-3">
+        {live.length > 0 ? (
+          <CardStack
+            canvases={live}
+            pastCount={past.length}
+            onArchive={(id) => {
+              close(id);
+              setActive(live.find((c) => c.id !== id)?.id ?? "");
+            }}
+            onMore={() => navigate({ to: "/app/history" })}
+            onFrontChange={setFrontId}
+          />
+        ) : (
+          <Empty />
+        )}
       </section>
 
-      <AnimatePresence>
-        {composerOpen && (
-          <NewTaskComposer
-            onClose={() => setComposerOpen(false)}
-            onSubmit={(text) => {
-              const id = spawn(text);
-              setComposerOpen(false);
-              setActive(id);
-            }}
-          />
-        )}
-      </AnimatePresence>
+      {/* Liquid glass dock */}
+      <GlassDock
+        active={active}
+        onSend={(text) => active && sendChat(active.id, text)}
+        onSpawn={(text) => {
+          const id = spawn(text);
+          setActive(id);
+        }}
+        onRunAction={(action: OptionsAction) => active && runOptionsAction(active.id, action)}
+        orbState={orbState}
+      />
     </main>
   );
 }
 
-function EmptyState({ onNew }: { onNew: () => void }) {
+function Empty() {
   return (
-    <div className="canvas-card flex flex-col items-center justify-center gap-5 px-10 py-24 text-center">
-      <p className="font-serif italic text-[28px]" style={{ color: "var(--color-espresso)" }}>
-        nothing on your plate.
+    <div className="mx-auto max-w-md px-6 py-24 text-center">
+      <p className="text-[22px] font-medium" style={{ color: "var(--color-ink)", fontFamily: "var(--font-display)" }}>
+        nothing on your plate
       </p>
-      <p className="text-[14px]" style={{ color: "var(--color-stone)" }}>
-        hand asmi a task — a new canvas will spin up for it.
+      <p className="mt-2 text-[14px]" style={{ color: "var(--color-ink-soft)" }}>
+        tap the orb to hand asmi a task.
       </p>
-      <button onClick={onNew} className="btn-pill mt-3">
-        + new task
-      </button>
     </div>
   );
 }
