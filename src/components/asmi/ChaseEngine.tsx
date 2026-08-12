@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
 import { ChaseLog, ChaseStep } from "./ChaseLog";
 import { Reveal, RevealGroup } from "./Reveal";
+
 
 interface Job {
   id: string;
