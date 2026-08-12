@@ -101,8 +101,9 @@ export function ChaseEngine() {
           </Reveal>
           <Reveal inGroup variant="text">
             <h2 className="max-w-2xl">
-              one task. every channel. until it's <span style={{ color: "var(--citrus)" }}>done</span>.
+              one task. every channel. until it's done.
             </h2>
+
           </Reveal>
           <Reveal inGroup variant="accent">
             <p className="max-w-xl font-sans" style={{ fontSize: 15, color: "rgba(255,253,248,0.7)" }}>
