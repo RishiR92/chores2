@@ -1,29 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useRef } from "react";
 import { Nav } from "@/components/asmi/Nav";
 import { ScrollProgress } from "@/components/asmi/ScrollProgress";
-import { Act1Opening } from "@/components/asmi/Act1Opening";
-import { Act2Dread } from "@/components/asmi/Act2Dread";
-import { Act3Work } from "@/components/asmi/Act3Work";
-import { Act4Cloud } from "@/components/asmi/Act4Cloud";
-import { Act5, Act5Stories } from "@/components/asmi/Act5";
-import { Act6Close } from "@/components/asmi/Act6Close";
-import { OrganicDivider } from "@/components/asmi/Atmosphere";
+import { Hero } from "@/components/asmi/Hero";
+import { Receipts } from "@/components/asmi/Receipts";
+import { ChaseEngine } from "@/components/asmi/ChaseEngine";
+import { ChoreGrid } from "@/components/asmi/ChoreGrid";
+import { LangCluster } from "@/components/asmi/LangCluster";
+import { CloseCTA } from "@/components/asmi/CloseCTA";
+import { StickyChannelBar } from "@/components/asmi/ChannelCTA";
 
 export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "asmi — just text her. she handles the calls." },
+      { title: "asmi — the most irritating assistant in the world" },
       {
         name: "description",
         content:
-          "text asmi and she calls, texts, emails and chases until it's done — cancel the gym, fight the charge, book the dentist. no app, no signup.",
+          "she calls, texts, emails and chases — until your thing is actually done. cancel the gym, fight the charge, book the dentist. just text her on iMessage or WhatsApp.",
       },
-      { property: "og:title", content: "asmi — just text her." },
+      { property: "og:title", content: "asmi — the most irritating assistant in the world" },
       {
         property: "og:description",
-        content: "she calls, texts, emails and chases — until the thing is actually done.",
+        content: "she calls, texts, emails and chases — she won't leave people alone until it's done.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -32,48 +31,26 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const heroRef = useRef<HTMLElement>(null);
   return (
     <main className="landing-theme relative" style={{ overflowX: "clip" }}>
       <ScrollProgress />
       <Nav />
-      <Act1Opening sectionRef={heroRef} />
-      <Act2Dread />
-      <Act3Work />
-      <OrganicDivider />
-      <Act4Cloud />
-      <Act5Stories />
-      <Act5 />
-      <Act6Close />
+      <Hero />
+      <Receipts />
+      <ChaseEngine />
+      <ChoreGrid />
+      <LangCluster />
+      <CloseCTA />
 
-      {/* Footer */}
-      <footer className="relative" style={{ background: "#EDE6DC" }}>
-        <svg
-          viewBox="0 0 1440 24"
-          className="w-full block"
-          preserveAspectRatio="none"
-          style={{ height: 24, marginTop: -1 }}
-          aria-hidden
-        >
-          <path
-            d="M0,12 C180,4 360,20 540,12 C720,4 900,20 1080,12 C1260,4 1380,16 1440,12"
-            stroke="#7A6F64"
-            strokeOpacity="0.2"
-            strokeWidth="1"
-            fill="none"
-          />
-        </svg>
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <a href="#" className="font-serif italic" style={{ color: "var(--color-espresso)", fontSize: 20 }}>
+      <footer className="px-5 sm:px-8" style={{ background: "var(--paper-deep)" }}>
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 py-10 sm:flex-row sm:items-center sm:justify-between">
+          <a href="#" className="font-display" style={{ fontSize: 20, fontWeight: 800, letterSpacing: "-0.04em" }}>
             asmi
           </a>
-          <p className="font-serif italic" style={{ color: "var(--color-stone-dim)", fontSize: 14, maxWidth: 420 }}>
+          <p className="font-sans" style={{ color: "var(--ink-dim)", fontSize: 14, maxWidth: 420 }}>
             she calls, texts, emails and chases — until it's done.
           </p>
-          <div
-            className="font-serif italic flex items-center gap-2"
-            style={{ color: "var(--color-stone-dim)", fontSize: 14 }}
-          >
+          <div className="flex items-center gap-2 font-sans" style={{ color: "var(--ink-dim)", fontSize: 14 }}>
             <a href="mailto:support@asmiai.com" style={{ color: "inherit" }}>
               support@asmiai.com
             </a>
@@ -83,7 +60,10 @@ function Index() {
             </a>
           </div>
         </div>
+        <div className="h-16 md:h-0" aria-hidden />
       </footer>
+
+      <StickyChannelBar />
     </main>
   );
 }

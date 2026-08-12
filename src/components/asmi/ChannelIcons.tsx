@@ -7,8 +7,8 @@ export function IMessageMark({ size = 40 }: { size?: number }) {
       style={{
         width: size,
         height: size,
-        background: "linear-gradient(180deg, #5BD75B, #1FB728)",
-        boxShadow: "0 6px 16px -8px rgba(31,183,40,0.7)",
+        background: "linear-gradient(180deg, #4FA3FF, #0A72E8)",
+        boxShadow: "0 6px 16px -8px rgba(10,114,232,0.7)",
       }}
       aria-hidden
     >
