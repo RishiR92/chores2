@@ -71,8 +71,10 @@ const STATUS = {
 const STEP_MS = 900;
 
 export function ChaseEngine() {
+  const sectionRef = useRef<HTMLElement>(null);
   const chipsRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
+  const inView = useInView(sectionRef, { once: true, amount: 0.3 });
   const [active, setActive] = useState(0);
   const [runId, setRunId] = useState(0);
   const [shown, setShown] = useState(0);
@@ -80,8 +82,9 @@ export function ChaseEngine() {
   const total = job.steps.length;
   const running = shown < total;
 
-  // replay the log one step at a time whenever the task changes
+  // replay the log one step at a time — but only once the section is on screen
   useEffect(() => {
+    if (!inView) return;
     if (reduced) {
       setShown(total);
       return;
@@ -94,7 +97,8 @@ export function ChaseEngine() {
       if (i >= total) clearInterval(id);
     }, STEP_MS);
     return () => clearInterval(id);
-  }, [active, runId, total, reduced]);
+  }, [active, runId, total, reduced, inView]);
+
 
   useEffect(() => {
     const chips = chipsRef.current;
