@@ -357,50 +357,107 @@
 .paper-grain { position: relative; }
 .call-branch { stroke-dasharray: 200; stroke-dashoffset: 200; }
 
-/* ── Landing theme (pre-video "Liquid Linen" palette), scoped to marketing pages ── */
+/* ── Landing theme — "most irritating assistant" (bold paper + ink) ── */
 .landing-theme {
-  --color-linen: #F6F1EB;
-  --color-sand: #EDE6DC;
-  --color-morning: #F2EDE7;
-  --color-espresso: #2C2520;
-  --color-espresso-strong: #211a16;
-  --color-ink: #5C5349;
-  --color-stone: #6B6560;
-  --color-stone-dim: #8A8278;
-  --color-terracotta: #C25B3F;
-  --color-terracotta-deep: #A24830;
-  --color-sage: #8BA888;
-  --color-sage-strong: #5F8365;
-  --color-sage-deep: #49644E;
-  --color-sky: #7EADC2;
-  --color-clay: #D4A574;
-  --color-gold: #D4A574;
-  --color-cream: #FBF8F3;
-  --color-amber: #C25B3F;
-  --color-amber-deep: #A24830;
+  --paper: #FBF7F0;
+  --paper-deep: #F3EDE2;
+  --ink: #141318;
+  --ink-soft: #4A4753;
+  --ink-dim: #7C7887;
+  --blue: #2F5BFF;
+  --coral: #FF5A47;
+  --citrus: #E8FF5A;
+  --violet-soft: #B39CFF;
+  --mint-pop: #35D6A4;
+  --cream: #FFFDF8;
 
-  color: var(--color-espresso);
+  color: var(--ink);
   font-family: var(--font-sans);
-  font-weight: 300;
+  font-weight: 400;
   min-height: 100vh;
-  background: linear-gradient(135deg, #F6F1EB, #EDE6DC, #F2EDE7, #F6F1EB);
-  background-size: 400% 400%;
-  animation: breathe 22s ease-in-out infinite;
+  background: var(--paper);
 }
-.landing-theme ::selection { background: var(--color-terracotta); color: var(--color-cream); }
+.landing-theme ::selection { background: var(--citrus); color: var(--ink); }
+.landing-theme h1, .landing-theme h2, .landing-theme h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.94;
+  text-transform: lowercase;
+}
+.landing-theme .scroll-progress { background: var(--coral); }
+
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E");
+}
+
+.ink-section { background: var(--ink); color: var(--cream); }
+.ink-section h2, .ink-section h3 { color: var(--cream); }
+
+.edge-card {
+  background: var(--cream);
+  border: 2px solid var(--ink);
+  border-radius: 26px;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.soft-card {
+  background: var(--cream);
+  border: 1px solid rgba(20, 19, 24, 0.1);
+  border-radius: 24px;
+}
+
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 52px;
+  padding: 0.9rem 1.5rem;
+  border-radius: 9999px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  border: 2px solid var(--ink);
+  transition: transform 0.14s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.14s ease;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.pill-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--ink); }
+@media (hover: hover) { .pill-btn:hover { transform: translate(-1px, -1px); box-shadow: 6px 6px 0 var(--ink); } }
+.pill-blue { background: var(--blue); color: #fff; }
+.pill-mint { background: var(--mint-pop); color: var(--ink); }
+.pill-citrus { background: var(--citrus); color: var(--ink); }
+.pill-ghost { background: transparent; color: inherit; box-shadow: none; }
+
 .landing-theme .btn-pill {
-  background: var(--color-terracotta);
-  color: var(--color-cream);
-  box-shadow: 0 14px 30px -14px rgba(194, 91, 63, 0.7);
+  background: var(--coral);
+  color: var(--cream);
+  box-shadow: 0 14px 30px -14px rgba(255, 90, 71, 0.7);
 }
-.landing-theme .btn-pill:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 18px 36px -14px rgba(194, 91, 63, 0.75);
+
+@keyframes ringpulse {
+  0% { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(2.1); opacity: 0; }
 }
-.landing-theme .scroll-progress { background: var(--color-terracotta); }
-@media (prefers-reduced-motion: reduce) { .landing-theme { animation: none; } }
+.ring-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 2px solid currentColor;
+  animation: ringpulse 1.8s ease-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ring-pulse::after { animation: none; }
+}
 
 @keyframes breathe {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
+
