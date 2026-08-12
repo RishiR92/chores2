@@ -93,7 +93,7 @@ function Piece({
       whileInView={{ opacity: l.opacity ?? 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ type: "spring", stiffness: 180, damping: 22, delay: l.depth * 0.15 }}
-      className={`absolute select-none ${l.desktopOnly ? "hidden md:block" : ""}`}
+      className={`absolute select-none ${l.desktopOnly ? "hidden md:block" : ""}${l.mobileOnly ? "md:hidden" : ""}`}
       style={{
         left: l.x,
         top: l.y,
