@@ -16,7 +16,7 @@ const PILE: CollageLayer[] = [
   { src: chair, x: "80%", y: "60%", w: "min(24vw, 270px)", depth: 0.35, rot: 5, desktopOnly: true, opacity: 0.9 },
   { src: receipt, x: "41%", y: "74%", w: "min(11vw, 120px)", depth: 0.25, rot: -12, desktopOnly: true, opacity: 0.9 },
   { src: bell, x: "50%", y: "6%", w: "min(9vw, 100px)", depth: 0.45, rot: 8, desktopOnly: true, opacity: 0.85 },
-  { src: ticket, x: "86%", y: "2%", w: "min(15vw, 180px)", depth: 0.8, rot: -13, desktopOnly: true, opacity: 0.95 },
+  { src: ticket, x: "80%", y: "4%", w: "min(15vw, 175px)", depth: 0.8, rot: -13, desktopOnly: true, opacity: 0.95 },
   { src: ticket, x: "66%", y: "7%", w: "21vw", depth: 0.8, rot: -13, opacity: 0.95, mobileOnly: true },
   { src: bell, x: "62%", y: "82%", w: "26vw", depth: 0.45, rot: 8, opacity: 0.8, mobileOnly: true },
 ];
