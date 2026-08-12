@@ -25,7 +25,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   const heroRef = useRef<HTMLElement>(null);
   return (
-    <main className="relative" style={{ overflowX: "clip" }}>
+    <main className="landing-theme relative" style={{ overflowX: "clip" }}>
       <ScrollProgress />
       <Nav />
       <Act1Opening sectionRef={heroRef} />
