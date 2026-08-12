@@ -7,7 +7,8 @@ const LANGS = [
   "తెలుగు", "türkçe", "தமிழ்", "tiếng việt", "한국어",
 ];
 
-const POP = new Set(["english", "中文", "हिन्दी", "español", "العربية"]);
+
+
 
 export function LangCluster() {
   return (
