@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Nav } from "@/components/asmi/Nav";
+import { Cursor } from "@/components/asmi/Cursor";
 import { ScrollProgress } from "@/components/asmi/ScrollProgress";
 import { Hero } from "@/components/asmi/Hero";
 import { Receipts } from "@/components/asmi/Receipts";

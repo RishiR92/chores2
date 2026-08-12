@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { FlipNumber } from "./Ticker";
+import handsetImg from "@/assets/cut-handset.png";
 
 function useHoldClock() {
   const [s, setS] = useState(15 * 60);
