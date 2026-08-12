@@ -82,17 +82,17 @@ const CARDS = [
 
 export function Receipts() {
   return (
-    <section id="why" className="relative px-5 py-16 sm:px-8 md:py-24">
+    <section id="why" className="relative px-5 py-11 sm:px-8 sm:py-16 md:py-24">
       <div className="mx-auto max-w-7xl">
         <motion.h2
           initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          className="max-w-2xl text-[2.1rem] sm:text-5xl"
+          className="max-w-2xl text-[1.65rem] sm:text-5xl"
         >
           annoying — but only to <span style={{ color: "var(--coral)" }}>them</span>.
         </motion.h2>
-        <p className="mt-4 max-w-lg font-sans" style={{ color: "var(--ink-soft)", fontSize: 16.5 }}>
+        <p className="mt-4 max-w-lg font-sans" style={{ color: "var(--ink-soft)", fontSize: 15 }}>
           all the stuff that makes you put it off for three weeks. she just… sits there and does it.
         </p>
 
@@ -104,7 +104,7 @@ export function Receipts() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ delay: i * 0.08, type: "spring", stiffness: 220, damping: 24 }}
-              className="soft-card flex min-w-0 flex-col gap-4 p-5"
+              className="soft-card flex min-w-0 flex-col gap-3.5 p-4 sm:gap-4 sm:p-5"
             >
               <span
                 className="inline-flex w-fit items-center rounded-full px-3 py-1 font-mono"

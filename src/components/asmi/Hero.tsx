@@ -52,13 +52,13 @@ export function Hero() {
           aria-hidden
         />
 
-        <div className="relative mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-center gap-5 px-5 pt-[76px] pb-[84px] sm:gap-7 sm:px-8 md:pt-28 md:pb-24 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-14">
+        <div className="relative mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-center gap-5 px-5 pt-[68px] pb-[60px] sm:gap-7 sm:px-8 md:pt-28 md:pb-24 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-14">
           <div className="min-w-0">
             <motion.h1
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-              className="text-[2.35rem] leading-[0.92] sm:text-6xl lg:text-[5.6rem]"
+              className="text-[1.95rem] leading-[0.94] sm:text-6xl lg:text-[5.6rem]"
             >
               the most{" "}
               <span className="relative inline-block">
@@ -90,7 +90,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 24, rotate: -1 }}
             animate={{ opacity: 1, y: 0, rotate: -1 }}
             transition={{ duration: 0.7, delay: 0.15, ease: [0.2, 0.8, 0.2, 1] }}
-            className="edge-card min-w-0 p-3.5 sm:p-5"
+            className="edge-card min-w-0 p-3 sm:p-5"
           >
             <div className="flex items-center gap-2 pb-3" style={{ borderBottom: "1px dashed rgba(20,19,24,0.15)" }}>
               <span
@@ -118,7 +118,7 @@ export function Hero() {
                     m.from === "you" ? "self-end" : "self-start"
                   }`}
                   style={{
-                    fontSize: 14.5,
+                    fontSize: 13.5,
                     background: m.from === "you" ? "var(--blue)" : "rgba(20,19,24,0.06)",
                     color: m.from === "you" ? "#fff" : "var(--ink)",
                     borderBottomRightRadius: m.from === "you" ? 8 : undefined,
@@ -130,7 +130,7 @@ export function Hero() {
               ))}
             </div>
 
-            <div className="rounded-2xl p-3.5" style={{ background: "rgba(20,19,24,0.04)" }}>
+            <div className="rounded-2xl p-3 sm:p-3.5" style={{ background: "rgba(20,19,24,0.04)" }}>
               <div className="mb-3 flex items-center justify-between">
                 <p className="font-mono" style={{ fontSize: 10.5, color: "var(--ink-dim)", letterSpacing: "0.06em" }}>
                   THE CHASE
@@ -140,7 +140,7 @@ export function Hero() {
                 </p>
               </div>
 
-              <ul className="relative flex flex-col gap-2.5 pl-5" style={{ minHeight: 132 }}>
+              <ul className="relative flex flex-col gap-2 pl-5 sm:gap-2.5" style={{ minHeight: 96 }}>
                 <span
                   className="absolute left-[7px] top-2 bottom-2 w-px"
                   style={{ background: "rgba(20,19,24,0.12)" }}
@@ -188,7 +188,7 @@ export function Hero() {
               </ul>
             </div>
 
-            <div className="mt-3 min-h-[46px]">
+            <div className="mt-3 min-h-[40px]">
               <AnimatePresence mode="wait">
                 {done ? (
                   <motion.div
