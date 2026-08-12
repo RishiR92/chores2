@@ -69,6 +69,9 @@ export function Hero() {
         <span className="ghost-mark" aria-hidden>
           asmi
         </span>
+        <Collage layers={PILE} eager />
+
+
 
 
         <div className="relative mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-center gap-5 px-5 pt-[68px] pb-[60px] sm:gap-7 sm:px-8 md:pt-28 md:pb-24 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-14">
