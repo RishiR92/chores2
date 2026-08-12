@@ -75,7 +75,7 @@ Mobile stacks: headline → category ticker → icons row → thread card → ch
 ## Technical notes
 
 - Rewrite `src/components/asmi/Act1Opening.tsx`; keep `AmbientBlobs` and `WaitlistForm`, drop the word-by-word scroll dim.
-- New `src/components/asmi/ChannelIcons.tsx` (inline SVG for iMessage bubble and WhatsApp glyph — no logo images) and `src/components/asmi/HeroThread.tsx` for the self-typing thread card.
+- New `src/components/asmi/ChannelIcons.tsx` (inline SVG for iMessage bubble and WhatsApp glyph — no logo images), `src/components/asmi/HeroThread.tsx` for the self-typing thread card with the 5-call parallel row, and a small `CategoryTicker` inside Act1.
 - Nav gains an always-visible state on the hero instead of appearing only after 85vh, so the waitlist CTA is reachable immediately.
 - Add a display-sans font (e.g. Bricolage Grotesque or General Sans, loaded via `<link>` in `src/routes/__root.tsx`) and a `--font-display` token in the `.landing-theme` scope; existing sections keep Newsreader/Figtree.
 - Motion via the existing `motion/react`; all entrance animation collapses to static under `prefers-reduced-motion`.
