@@ -158,12 +158,13 @@ export function GenerativeUI() {
                 return (
                   <motion.div
                     key={p.id}
-                    initial={reduced ? false : { opacity: 0, x: 56, rotate: 1.5 }}
+                    initial={reduced ? false : { opacity: 0, x: "100%", rotate: 2 }}
                     whileInView={{ opacity: 1, x: 0, rotate: 0 }}
-                    viewport={{ once: true, amount: 0.5 }}
+                    viewport={{ once: true, amount: 0.4 }}
                     transition={{ type: "spring", stiffness: 260, damping: 24, delay: i * 0.12 }}
                     className="min-w-0"
                   >
+
                   <motion.button
                     onClick={() => phase === "choose" && setSelected(on ? null : p.id)}
                     whileTap={{ scale: 0.98 }}

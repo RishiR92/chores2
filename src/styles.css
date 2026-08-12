@@ -414,18 +414,19 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 9vh;
+  bottom: 6vh;
   width: 100%;
   text-align: center;
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: min(30vw, 26rem);
-  line-height: 0.72;
+  font-size: clamp(3rem, 22vw, 22rem);
+  line-height: 1.05;
   letter-spacing: -0.06em;
   color: rgba(20, 19, 24, 0.04);
   pointer-events: none;
   user-select: none;
 }
+
 
 .hi-swipe {
   position: absolute;
