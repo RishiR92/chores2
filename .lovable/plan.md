@@ -1,61 +1,35 @@
 # asmi.com — full rewrite for a young US audience
 
-Goal: a top-tier US consumer AI site that is fun and fast up top, credible further down, and that plants a flag on a new category — **AI that does the real-world stuff you keep putting off**. Not a manifesto site, not a feature site. Every line has to sound like a person texting a friend, not a product describing itself.
+Goal: a top-tier US consumer AI site that is fun and fast up top, credible further down, and that plants a flag on a new category — **AI for real-world chores**. Not a manifesto site, not a feature site. The whole page is one argument: *the annoying real-world stuff — calling, waiting, chasing — stops being yours.*
 
-The whole page is one feeling: *the thing you've been avoiding for three weeks is now handled, and you didn't have to call anyone.*
-
-The current site opens with "The screen era is over.", a scroll-scrubbed serif manifesto, and leans on plumber / HVAC / prescription / check-on-mom examples. That reads 40+ homeowner. Under-30 renters do not call plumbers; they get ghosted by landlords, fight Ticketmaster, cancel gym memberships they signed in 2023, and would genuinely rather suffer than call the dentist.
-
-## The emotions we're actually aiming at
-
-Every section maps to one real feeling, named in the user's words — not ours:
-
-1. **"i hate calling people."** Phone anxiety is the single biggest, most under-served emotion here. Lead with it.
-2. **"it's been sitting on my list for a month."** The guilt of the unfinished thing.
-3. **"they're just hoping i give up."** Being worn down on purpose by hold music, IVR menus, and "come in person to cancel."
-4. **"wait, that's actually done?"** The relief hit. This is the payoff we're selling.
-5. **"i don't want to think about it."** Not time saved — headspace returned.
-
-## Voice — how it should sound
-
-Write the way the user texts, not the way a brand writes.
-
-- Say it like a friend would: "she'll call them so you don't have to." Not "multi-channel task orchestration."
-- **Banned words:** life admin, errands, productivity, seamless, effortless, leverage, assistant, workflow, agentic, empower, streamline, "save X hours."
-- **Use instead:** the stuff you've been putting off, the call you don't want to make, on hold, ghosted, chasing them, sorted, handled, done.
-- Lowercase, contractions, short. If a line couldn't appear in an actual text message, rewrite it.
-- Humor is dry and specific, never quippy-AI. Specificity is the whole trick: "$340 back" beats "resolves billing issues."
+The current site opens with "The screen era is over.", a scroll-scrubbed serif manifesto, and leans on plumber / HVAC / prescription / check-on-mom examples. That reads 40+ homeowner. Under-30 renters do not call plumbers; they get ghosted by landlords, fight Ticketmaster, cancel gym memberships they signed in 2023, and would rather die than call the dentist.
 
 ## Audience split down the page
 
 - **Sections 1–3 (young):** the stuff a 22–32 year old feels weekly. Phone anxiety, subscriptions, refunds, landlords, appointments, group plans.
-- **Sections 4–6 (broader):** widen to households and family — repairs, insurance, parents, multi-language. This is where the older, higher-frequency use cases live, framed as "asmi grows with your life."
+- **Sections 4–6 (broader):** widen to households and family — repairs, insurance, elderly parents, multi-language. This is where the older, higher-frequency use cases live, framed as "asmi grows with your life."
 
+## Section 1 — Hero: "just text her."
 
-## Section 1 — Hero: "she'll make the call."
-
-Replaces the manifesto. Lead with the feeling everyone has: *I don't want to call them.*
+Replaces the manifesto. Hook first, philosophy later.
 
 ```text
-          she'll make the call.
+              just text her.
 
-   asmi calls, texts, emails and keeps chasing
-      until it's done. you just text her.
+   she calls, texts, emails and chases —
+        until the thing is actually done.
 
         [ iMessage ]   [ WhatsApp ]
           no app. no signup. just text.
 ```
 
-Alternates in the same voice, for the team to pick from: "just text her." · "you never have to call them again." · "the thing you've been putting off? consider it done."
-
-- Headline lowercase, heavy geometric sans, oversized. "her" / "call" in serif italic terracotta so the brand voice survives.
-- **Channel row** — iMessage and WhatsApp tiles (inline SVG, not logo images) directly under the sub-headline with the "no app. no signup." caption. Answers "do I have to download something?" in the first second.
-- **Live thread card**, tilted, right on desktop / below on mobile. Self-types in real texting voice: *"my landlord's been ignoring me for 3 weeks about the AC"* → *"ugh. calling him now, texting the property manager too, and putting it in writing."* → chips flip `called ✓` `texted ✓` `emailed ✓` → **"work order #4471. tech comes thursday 10am."** Multichannel shows up as a fact, never as a feature word.
-- **Ticker** under the sub-line, cycling in the user's phrasing: `"cancel my gym" · "my landlord's ghosting me" · "get this charge refunded" · "book a dentist" · "cake by friday" · "dinner for 6 saturday"`.
+- Headline lowercase, heavy geometric sans, oversized. "her" in serif italic terracotta so the brand voice survives.
+- **Channel row** — iMessage and WhatsApp tiles (inline SVG, not logo images) directly under the sub-headline with the "no app. no signup." caption. This is the trust cue and it answers "do I have to download something?" in the first second.
+- **Live thread card**, tilted, right on desktop / below on mobile. Self-types: *"my landlord's ghosting me about the AC"* → *"on it — calling now, texting the property manager, emailing a paper trail"* → chips flip to `called ✓` `texted ✓` `emailed ✓` → **"work order #4471, tech comes thu 10am."** Multichannel is visible in the first artifact, not described later.
+- **Category ticker** under the sub-line, cycling: `the dentist · your landlord · that refund · the DMV · a birthday cake · the group dinner`.
 - CTA: filled terracotta pill "get early access →", with avatar cluster + "2,400+ on the list".
 - Motion lands under one second — spring pop, card slide, icons bounce last. Scroll-scrub only for the exit.
 - "the screen era is over." survives as a quiet one-line statement between sections 3 and 4.
-
 
 ## Section 2 — The dread reel (the hook that makes them stay)
 
