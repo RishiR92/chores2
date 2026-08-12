@@ -36,6 +36,7 @@ function Index() {
   return (
     <main className="landing-theme relative" style={{ overflowX: "clip" }}>
       <ScrollProgress />
+      <Cursor />
       <Nav />
       <Hero />
       <Receipts />
