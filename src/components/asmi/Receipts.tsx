@@ -71,10 +71,6 @@ export function Receipts() {
               <h2 className="mt-6 max-w-xl">
                 she'll wait. you won't have to.
               </h2>
-              <p className="t-body mt-4 max-w-md" style={{ color: "rgba(255,253,248,0.62)" }}>
-                the hold music, the transfer, the "we're experiencing higher than usual volume". she sits
-                in it so it never touches your day.
-              </p>
             </div>
 
             <ul className="flex flex-col divide-y" style={{ borderColor: "rgba(255,253,248,0.14)" }}>
