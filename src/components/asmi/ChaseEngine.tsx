@@ -14,7 +14,7 @@ interface Job {
 const JOBS: Job[] = [
   {
     id: "plumber",
-    title: "leak under the sink — call all 3",
+    title: "leak under the sink",
     who: "3 plumbers, in parallel",
     status: "live",
     steps: [
@@ -44,7 +44,7 @@ const JOBS: Job[] = [
     steps: [
       { kind: "call", text: "clinic 1 — no morning slots", time: "10:05a", tone: "fail" },
       { kind: "call", text: "clinic 2 — voicemail, left one", time: "10:09a", tone: "fail" },
-      { kind: "web", text: "filled clinic 3's booking form", time: "10:12a" },
+      { kind: "email", text: "emailed clinic 3 for a morning slot", time: "10:12a" },
       { kind: "call", text: "tues 8:30am. added to your calendar.", time: "10:24a", tone: "win" },
     ],
   },
@@ -56,7 +56,7 @@ const JOBS: Job[] = [
     status: "live",
     steps: [
       { kind: "text", text: "texted all 5 — 3 said saturday", time: "6:02p" },
-      { kind: "text", text: "nudged the two who ghosted", time: "7:30p", tone: "fail" },
+      { kind: "call", text: "called the two who ghosted", time: "7:30p", tone: "fail" },
       { kind: "text", text: "both in. saturday locked.", time: "9:14p", tone: "win" },
       { kind: "call", text: "calling the bar for a table of 5", time: "now" },
     ],
@@ -162,7 +162,7 @@ export function ChaseEngine() {
             </div>
 
             <p className="mt-5 font-sans" style={{ fontSize: 14.5, color: "rgba(255,253,248,0.7)" }}>
-              she runs several calls at once when it saves you time — and tells you the second one lands.
+              she runs several threads in parallel and informs you once the task is done.
             </p>
           </div>
 

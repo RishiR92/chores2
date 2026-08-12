@@ -1,13 +1,12 @@
 import { motion } from "motion/react";
 
 const LANGS = [
-  "english", "español", "हिन्दी", "العربية", "français", "中文", "português", "tagalog",
-  "deutsch", "italiano", "русский", "日本語", "한국어", "polski", "tiếng việt", "türkçe",
-  "বাংলা", "தமிழ்", "ਪੰਜਾਬੀ", "ελληνικά", "svenska", "nederlands", "farsi", "kiswahili",
-  "עברית", "ไทย", "українська", "magyar", "română", "čeština",
+  "english", "中文", "हिन्दी", "español", "العربية", "français", "বাংলা", "português",
+  "русский", "اردو", "bahasa indonesia", "deutsch", "日本語", "ਪੰਜਾਬੀ", "मराठी",
+  "తెలుగు", "türkçe", "தமிழ்", "tiếng việt", "한국어",
 ];
 
-const POP = new Set(["हिन्दी", "العربية", "español", "tagalog"]);
+const POP = new Set(["english", "中文", "हिन्दी", "español", "العربية"]);
 
 export function LangCluster() {
   return (
