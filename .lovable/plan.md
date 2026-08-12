@@ -5,9 +5,9 @@ A single self-contained HTML email file, styled after the asmi site (paper #FBF7
 ## Story flow
 
 1. **Preheader + header** - asmi wordmark, tiny line: "you're in."
-2. **Hook (the story)** - a short scene: you've been on hold 41 minutes, the gym still won't cancel, the dentist never called back. asmi sits through all of it so you never have to. 3-4 short lines, big display type on the punchline.
-3. **What she actually does** - one line: she calls, texts, emails and chases until it's done.
-4. **Categories** - compact 2-column grid of 6 chips: bills & subscriptions, appointments, disputes & refunds, local errands, travel changes, life admin (passport, DMV, insurance).
+2. **Hook (the story)** - a relatable Gen-Z scene told as a text thread: you fell asleep trying to plan a Saturday date, and at 2:14am asmi texts: "dinner booked at 7:30, movie tickets for 9:40. you're welcome." The message sits in a realistic iMessage bubble, with a tiny chase line underneath: "called 4 places · 2 had nothing · one had a cancellation · sat locked." One story beat = instant proof of the product.
+3. **What she actually does** - one line: she calls, texts, emails and chases until it's done, so you never have to.
+4. **Categories (plain language)** - six chips written like you'd actually say them: "cancel stuff you forgot you signed up for", "get a haircut or dentist slot", "fight weird charges", "call a landlord / plumber / mover", "change flights or reservations", "passport, DMV, insurance stuff".
 5. **How it works** - three numbered beats: text her → she plans it with you in the thread → she calls/emails/chases and reports back.
 6. **CTA block** - two big buttons: "open iMessage" (blue) → https://asmi-ai.link/imsg and "open WhatsApp" (green) → https://asmi-ai.link/whatsapp, with "no app. no signup. just text her." beneath.
 7. **Sign-off + footer** - "she doesn't stop until it's done." plus a plain-text unsubscribe/company line placeholder.
