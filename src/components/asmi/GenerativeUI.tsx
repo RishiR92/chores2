@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Check, Phone, Star } from "lucide-react";
+import { Reveal, RevealGroup } from "./Reveal";
 import barImg from "@/assets/place-bar.jpg";
 import vegImg from "@/assets/place-veg.jpg";
 import tavernImg from "@/assets/place-tavern.jpg";
