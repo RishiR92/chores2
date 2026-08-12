@@ -58,13 +58,13 @@ export function Hero() {
           >
             the most{" "}
             <span className="relative inline-block">
-              irritating
+              <span className="relative z-10">irritating</span>
               <motion.span
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ delay: 0.6, duration: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
                 className="absolute left-0 right-0 -bottom-1 h-[10px] origin-left rounded-full sm:h-[14px]"
-                style={{ background: "var(--coral)", zIndex: -1 }}
+                style={{ background: "var(--coral)" }}
                 aria-hidden
               />
             </span>{" "}
