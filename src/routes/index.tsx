@@ -8,7 +8,6 @@ import { ChaseEngine } from "@/components/asmi/ChaseEngine";
 
 import { ChoreGrid } from "@/components/asmi/ChoreGrid";
 import { LangCluster } from "@/components/asmi/LangCluster";
-import { CloseCTA } from "@/components/asmi/CloseCTA";
 import { ScrollSection } from "@/components/asmi/Reveal";
 
 export const Route = createFileRoute("/")({
