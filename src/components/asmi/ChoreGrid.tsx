@@ -18,7 +18,9 @@ const CHORES: Chore[] = [
   { label: "reschedule my flight", reply: "on with the airline. no change fee if we move to the 6:40am.", tint: "var(--violet-soft)" },
   { label: "is this in stock?", reply: "called 5 stores. two have it — one's holding it under your name.", tint: "var(--mint-pop)" },
   { label: "chase my refund", reply: "day 3 of chasing. escalated to a supervisor, callback booked.", tint: "var(--citrus)" },
+  { label: "pick a night that works for all 6 of us", reply: "texted all 6. four replied, chased the other two. saturday wins — booking the table now.", tint: "var(--violet-soft)" },
 ];
+
 
 export function ChoreGrid() {
   const [open, setOpen] = useState<string | null>(null);
