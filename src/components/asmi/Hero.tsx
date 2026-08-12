@@ -68,7 +68,7 @@ export function Hero() {
           style={{ y: gridY }}
           aria-hidden
         />
-        <div className="pad-rule" aria-hidden />
+        
         <span className="ghost-mark" aria-hidden>
           asmi
         </span>
