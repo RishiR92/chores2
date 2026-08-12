@@ -200,14 +200,17 @@ export function GenerativeUI() {
                           )}
                         </div>
                         <div
-                          className="mt-1 flex items-center gap-1.5 font-mono"
+                          className="mt-1 flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-0.5 font-mono"
                           style={{ fontSize: 11, color: "var(--ink-dim)" }}
                         >
-                          <Star size={11} fill="currentColor" style={{ color: "var(--coral)" }} />
-                          <span style={{ color: "var(--ink)" }}>{p.rating}</span>
-                          <span>({p.reviews})</span>
-                          <span>· {p.meta}</span>
+                          <span className="flex shrink-0 items-center gap-1">
+                            <Star size={11} fill="currentColor" style={{ color: "var(--coral)" }} />
+                            <span style={{ color: "var(--ink)" }}>{p.rating}</span>
+                            <span>({p.reviews})</span>
+                          </span>
+                          <span className="whitespace-nowrap">· {p.meta}</span>
                         </div>
+
                         <p className="mt-1 font-sans" style={{ fontSize: "var(--t-sm)", color: "var(--ink-soft)" }}>
                           {p.why}
                         </p>
