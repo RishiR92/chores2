@@ -182,16 +182,16 @@ function Artifact({ kind, index }: { kind: string; index: number }) {
   }
 
   return (
-    <div className="relative" style={{ height: 54, width: 210 }}>
+    <div className="relative" style={{ height: 128, width: 220 }}>
       {[0, 1, 2, 3].map((i) => (
         <motion.div
           key={i}
-          className="absolute left-0 top-0"
-          style={{ transform: `translate(${i * 6}px, ${i * 5}px)` }}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 - i * 0.18 }}
+          className="absolute left-0"
+          style={{ top: i * 32, transform: `translateX(${i * 8}px)` }}
+          initial={{ opacity: 0, x: 6 }}
+          whileInView={{ opacity: 1 - i * 0.16, x: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: index * 0.05 + i * 0.12 }}
+          transition={{ delay: index * 0.05 + i * 0.14 }}
         >
           <Shell>
             <span className="font-sans whitespace-nowrap" style={{ color: "var(--color-stone)", fontSize: 12.5 }}>
@@ -203,3 +203,4 @@ function Artifact({ kind, index }: { kind: string; index: number }) {
     </div>
   );
 }
+
