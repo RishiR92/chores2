@@ -39,7 +39,7 @@ export function Hero() {
   const done = visible >= STEPS.length;
 
   return (
-    <section ref={ref} className="relative" style={{ height: "215vh" }}>
+    <section ref={ref} className="relative" style={{ height: "205vh" }}>
       <div className="sticky top-0 grain overflow-hidden">
         <div
           className="pointer-events-none absolute -top-24 -right-24 h-[420px] w-[420px] rounded-full blur-3xl"
@@ -52,13 +52,13 @@ export function Hero() {
           aria-hidden
         />
 
-        <div className="relative mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-center gap-8 px-5 pt-24 pb-24 sm:px-8 md:pt-28 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-14">
+        <div className="relative mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-center gap-5 px-5 pt-[76px] pb-[84px] sm:gap-7 sm:px-8 md:pt-28 md:pb-24 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-14">
           <div className="min-w-0">
             <motion.h1
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-              className="text-[3.1rem] leading-[0.9] sm:text-7xl lg:text-[5.8rem]"
+              className="text-[2.6rem] leading-[0.9] sm:text-6xl lg:text-[5.6rem]"
             >
               the most{" "}
               <span className="relative inline-block">
@@ -79,12 +79,12 @@ export function Hero() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-8"
+              className="mt-5 sm:mt-7"
             >
               <ChannelCTA size="lg" />
             </motion.div>
 
-            <div className="mt-5 min-h-[26px]">
+            <div className="mt-3 min-h-[24px] sm:mt-4">
               <AnimatePresence>
                 {done && (
                   <motion.p
@@ -106,7 +106,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 24, rotate: -1 }}
             animate={{ opacity: 1, y: 0, rotate: -1 }}
             transition={{ duration: 0.7, delay: 0.15, ease: [0.2, 0.8, 0.2, 1] }}
-            className="edge-card min-w-0 p-4 sm:p-5"
+            className="edge-card min-w-0 p-3.5 sm:p-5"
           >
             <div className="flex items-center gap-2 pb-3" style={{ borderBottom: "1px dashed rgba(20,19,24,0.15)" }}>
               <span
@@ -123,7 +123,7 @@ export function Hero() {
               </span>
             </div>
 
-            <div className="flex flex-col gap-2.5 py-3.5">
+            <div className="flex flex-col gap-2 py-3">
               {THREAD.map((m, i) => (
                 <motion.div
                   key={m.text}
@@ -156,7 +156,7 @@ export function Hero() {
                 </p>
               </div>
 
-              <ul className="relative flex flex-col gap-2.5 pl-5" style={{ minHeight: 168 }}>
+              <ul className="relative flex flex-col gap-2.5 pl-5" style={{ minHeight: 150 }}>
                 <span
                   className="absolute left-[7px] top-2 bottom-2 w-px"
                   style={{ background: "rgba(20,19,24,0.12)" }}
