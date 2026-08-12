@@ -9,21 +9,21 @@ interface Chore {
 }
 
 const CHORES: Chore[] = [
-  { label: "cancel this subscription", reply: "found the retention line. cancelled, confirmation emailed to you." },
-  { label: "lower my internet bill", reply: "2 hrs with retentions. $34 off a month, same speed." },
-  { label: "chase my insurance claim", reply: "day 6 of chasing. adjuster assigned, callback booked for 4pm." },
-  { label: "book a haircut saturday", reply: "called 3 shops. 11:15am saturday, the one you liked last time." },
-  { label: "reschedule my flight", reply: "on with the airline. no change fee if we move to the 6:40am." },
-  { label: "DMV appointment", reply: "sat in their queue 38 min. you're in for thurs 9:10am." },
-  { label: "dispute this parking ticket", reply: "filed the contest form + called the office for a hearing date." },
-  { label: "my landlord's ghosting me", reply: "called twice, texted, and emailed with a paper trail. he replied." },
-  { label: "return this order", reply: "got the label out of them and booked the pickup for tuesday." },
-  { label: "is this in stock nearby?", reply: "called 5 stores. two have it — one's holding it under your name." },
-  { label: "find a mover for the 14th", reply: "3 quotes in. cheapest $420, soonest is the 13th. want the list?" },
-  { label: "get my car serviced", reply: "booked friday 8am, they'll do the loaner. quoted $190." },
-  { label: "renew my passport", reply: "checked the wait times, booked your appointment, listed what to bring." },
-  { label: "cancel my gym", reply: "they dodged twice. third call + written notice — cancelled, no fee." },
-  { label: "vet slot for the dog", reply: "two clinics full. third had a 5:40pm cancellation — took it." },
+  { label: "cancel this subscription", reply: "found the retention line they hide. cancelled, confirmation in your inbox." },
+  { label: "lower my internet bill", reply: "2 hrs with retentions. $34 off a month, same speed. you're welcome." },
+  { label: "chase my insurance claim", reply: "day 6 of politely refusing to go away. adjuster assigned, callback at 4pm." },
+  { label: "book a haircut saturday", reply: "called 3 shops. 11:15am saturday — the one you actually liked." },
+  { label: "reschedule my flight", reply: "held the airline line. no change fee if we take the 6:40am." },
+  { label: "DMV appointment", reply: "38 minutes in their queue so you weren't. thurs 9:10am, you're in." },
+  { label: "dispute this parking ticket", reply: "contest form filed, office called, hearing date pinned down." },
+  { label: "my landlord's ghosting me", reply: "two calls, a text, and an email with a paper trail. he replied." },
+  { label: "return this order", reply: "prised the label out of them and booked tuesday pickup." },
+  { label: "is this in stock nearby?", reply: "called 5 stores. two have it — one's holding yours at the counter." },
+  { label: "find a mover for the 14th", reply: "3 quotes in. cheapest $420, soonest the 13th. pick one, i'll book it." },
+  { label: "get my car serviced", reply: "friday 8am, loaner included, $190 quoted. haggled a little." },
+  { label: "renew my passport", reply: "wait times checked, appointment booked, and a list of what to bring." },
+  { label: "cancel my gym", reply: "they dodged twice. third call plus written notice — cancelled, no fee." },
+  { label: "vet slot for the dog", reply: "two clinics full. third had a 5:40pm cancellation. took it instantly." },
 ];
 
 const ROW_A = CHORES.slice(0, 8);
@@ -67,7 +67,7 @@ export function ChoreGrid() {
           </Reveal>
           <Reveal inGroup variant="accent">
             <p className="t-body mt-4 max-w-lg" style={{ color: "var(--ink-soft)" }}>
-              tap anything moving past.
+              tap one. see exactly how she'd close it.
             </p>
           </Reveal>
         </RevealGroup>

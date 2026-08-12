@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { FlipNumber } from "./Ticker";
 
 function useHoldClock() {
-  const [s, setS] = useState(41 * 60 + 12);
+  const [s, setS] = useState(15 * 60);
   useEffect(() => {
     const id = setInterval(() => setS((v) => v + 1), 1000);
     return () => clearInterval(id);
@@ -15,14 +15,14 @@ function useHoldClock() {
 
 const FOOTNOTES = [
   {
-    n: "06",
-    label: "menus deep",
-    line: "before a human picks up. she presses every one.",
+    n: "04",
+    label: "salons called",
+    line: "three said no. the fourth had a 6pm. that's the job.",
   },
   {
     n: "03",
     label: "channels tried",
-    line: "call, text, email — she switches until one lands.",
+    line: "call, text, email — she navigates smartly until it's done.",
   },
 ];
 
@@ -71,10 +71,6 @@ export function Receipts() {
               <h2 className="mt-6 max-w-xl">
                 she'll wait. you won't have to.
               </h2>
-              <p className="t-body mt-4 max-w-md" style={{ color: "rgba(255,253,248,0.62)" }}>
-                the hold music, the transfer, the "we're experiencing higher than usual volume". she sits
-                in it so it never touches your day.
-              </p>
             </div>
 
             <ul className="flex flex-col divide-y" style={{ borderColor: "rgba(255,253,248,0.14)" }}>

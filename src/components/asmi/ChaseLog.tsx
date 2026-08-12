@@ -12,11 +12,16 @@ export function ChaseLog({
   steps,
   dark = false,
   delay = 0,
+  visible,
 }: {
   steps: ChaseStep[];
   dark?: boolean;
   delay?: number;
+  /** when set, the parent drives the reveal: only the first N steps render */
+  visible?: number;
 }) {
+  const driven = typeof visible === "number";
+  const shown = driven ? steps.slice(0, visible) : steps;
   const line = dark ? "rgba(255,253,248,0.16)" : "rgba(20,19,24,0.12)";
   const dim = dark ? "rgba(255,253,248,0.55)" : "var(--ink-dim)";
   const body = dark ? "var(--cream)" : "var(--ink)";
@@ -28,7 +33,7 @@ export function ChaseLog({
         style={{ background: line }}
         aria-hidden
       />
-      {steps.map((s, i) => {
+      {shown.map((s, i) => {
         const win = s.tone === "win";
         const fail = s.tone === "fail";
         const accent = win ? "var(--mint-pop)" : fail ? "var(--coral)" : "var(--blue)";
@@ -36,9 +41,10 @@ export function ChaseLog({
           <motion.li
             key={s.text + i}
             initial={{ opacity: 0, x: -8 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ delay: delay + i * 0.14, type: "spring", stiffness: 260, damping: 22 }}
+            {...(driven
+              ? { animate: { opacity: 1, x: 0 } }
+              : { whileInView: { opacity: 1, x: 0 }, viewport: { once: true, margin: "-60px" } })}
+            transition={{ delay: driven ? 0 : delay + i * 0.14, type: "spring", stiffness: 260, damping: 22 }}
             className="relative flex items-center gap-2.5"
           >
             <span
