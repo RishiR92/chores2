@@ -12,7 +12,7 @@ const EASE = [0.22, 0.8, 0.24, 1] as const;
 
 type Variant = "text" | "card" | "accent";
 
-const VARIANTS: Record<Variant, { from: Record<string, unknown>; to: Record<string, unknown>; duration: number }> = {
+const VARIANTS: Record<Variant, { from: TargetAndTransition; to: TargetAndTransition; duration: number }> = {
   text: {
     from: { opacity: 0, y: 14, clipPath: "inset(0 0 18% 0)" },
     to: { opacity: 1, y: 0, clipPath: "inset(0 0 0% 0)" },
