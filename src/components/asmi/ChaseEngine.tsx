@@ -25,20 +25,34 @@ const JOBS: Job[] = [
     who: "5 friends + the restaurant",
     beats: [
       { kind: "text", label: "texted all 5", time: "6:02p" },
-      { kind: "call", label: "2 ghosted", time: "7:30p", tone: "fail" },
-      { kind: "call", label: "chased them", time: "8:40p" },
-      { kind: "text", label: "saturday locked", time: "9:14p", tone: "win" },
+      { kind: "call", label: "called them", time: "7:30p", tone: "fail" },
+      { kind: "call", label: "got the yes", time: "8:40p" },
+      { kind: "text", label: "booked restaurant · Sat locked", time: "9:14p", tone: "win" },
+
     ],
+
     outcome: "table for 5, 8pm saturday — booked",
+  },
+  {
+    id: "dentist",
+    title: "book a dentist, mornings only",
+    who: "4 clinics near you",
+    beats: [
+      { kind: "call", label: "clinic 1 — no morning slot", time: "10:05a", tone: "fail" },
+      { kind: "call", label: "clinic 2 — went to voicemail", time: "10:09a", tone: "fail" },
+      { kind: "email", label: "emailed clinic 3", time: "10:12a" },
+      { kind: "call", label: "clinic 4 — 8:30am tues confirmed", time: "10:24a", tone: "win" },
+    ],
+    outcome: "tues 8:30am — already in your calendar",
   },
   {
     id: "plumber",
     title: "leak under the sink",
     who: "3 plumbers, in parallel",
     beats: [
-      { kind: "call", label: "$180, 6pm", time: "11:02a", tone: "win" },
-      { kind: "call", label: "booked out", time: "11:04a", tone: "fail" },
-      { kind: "call", label: "still on hold", time: "11:11a" },
+      { kind: "call", label: "plumber A — $180, 6pm", time: "11:02a", tone: "win" },
+      { kind: "call", label: "plumber B — booked out", time: "11:04a", tone: "fail" },
+      { kind: "call", label: "plumber C — still on hold", time: "11:11a" },
       { kind: "text", label: "2 live options", time: "11:20a", tone: "win" },
     ],
     outcome: "plumber at your door, 6pm today",
@@ -50,24 +64,13 @@ const JOBS: Job[] = [
     beats: [
       { kind: "call", label: "dispute opened", time: "9:15a" },
       { kind: "email", label: "receipt requested", time: "9:31a" },
-      { kind: "call", label: "silence", time: "1:40p", tone: "fail" },
+      { kind: "call", label: "bank went silent", time: "1:40p", tone: "fail" },
       { kind: "call", label: "refund agreed", time: "2:06p", tone: "win" },
     ],
     outcome: "$60 back — 3–5 days",
   },
-  {
-    id: "dentist",
-    title: "book a dentist, mornings only",
-    who: "4 clinics near you",
-    beats: [
-      { kind: "call", label: "no mornings", time: "10:05a", tone: "fail" },
-      { kind: "call", label: "voicemail", time: "10:09a", tone: "fail" },
-      { kind: "email", label: "emailed clinic 3", time: "10:12a" },
-      { kind: "call", label: "slot found", time: "10:24a", tone: "win" },
-    ],
-    outcome: "tues 8:30am — already in your calendar",
-  },
 ];
+
 
 const STEP_MS = 900;
 
@@ -100,17 +103,13 @@ export function ChaseEngine() {
     return () => clearInterval(id);
   }, [active, runId, total, reduced, inView]);
 
-  // keep the newest lit beat in view on narrow screens
+  // keep the rail pinned to the left so the first step stays fully visible
   useEffect(() => {
     const rail = railRef.current;
-    const node = rail?.children[Math.max(0, shown - 1)] as HTMLElement | undefined;
-    if (rail && node) {
-      rail.scrollTo({
-        left: node.offsetLeft - rail.clientWidth / 2 + node.clientWidth / 2,
-        behavior: "smooth",
-      });
+    if (rail) {
+      rail.scrollTo({ left: 0, behavior: "auto" });
     }
-  }, [shown]);
+  }, [active]);
 
   useEffect(() => {
     const chips = chipsRef.current;
@@ -205,7 +204,7 @@ export function ChaseEngine() {
                     <div key={b.label + i} className="flex shrink-0 items-start">
                       {i > 0 && (
                         <span
-                          className="mt-[19px] block h-px w-8 shrink-0 sm:w-14"
+                          className="mt-[19px] block h-px w-3 shrink-0 sm:w-10"
                           style={{
                             background: lit ? "rgba(255,253,248,0.45)" : "rgba(255,253,248,0.14)",
                             transition: "background 260ms",
@@ -213,7 +212,11 @@ export function ChaseEngine() {
                           aria-hidden
                         />
                       )}
-                      <div className="flex w-[92px] flex-col items-center gap-2 sm:w-[112px]">
+                      <div className="flex w-[88px] flex-col items-center gap-2 sm:w-[130px]">
+
+
+
+
                         <motion.span
                           className="grid place-items-center rounded-full"
                           animate={
@@ -233,9 +236,8 @@ export function ChaseEngine() {
                           <ChannelGlyph kind={b.kind} size={16} />
                         </motion.span>
                         <span
-                          className="text-center font-sans"
+                          className="text-center font-sans text-[10.5px] sm:text-[12.5px]"
                           style={{
-                            fontSize: 12.5,
                             lineHeight: 1.25,
                             color: lit ? "var(--cream)" : "rgba(255,253,248,0.32)",
                             fontWeight: b.tone === "win" ? 600 : 400,
@@ -243,6 +245,7 @@ export function ChaseEngine() {
                             transition: "color 260ms",
                           }}
                         >
+
                           {b.label}
                         </span>
                         <span

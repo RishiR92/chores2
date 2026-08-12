@@ -72,15 +72,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
+      { title: "asmi — the most irritating assistant in the world" },
       { name: "description", content: "Asmi is an AI that makes real phone calls in the physical world for you." },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
+      { name: "author", content: "asmi" },
+      { property: "og:title", content: "asmi — the most irritating assistant in the world" },
       { property: "og:description", content: "Asmi is an AI that makes real phone calls in the physical world for you." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Lovable App" },
+      { name: "twitter:site", content: "@asmi" },
+      { name: "twitter:title", content: "asmi — the most irritating assistant in the world" },
       { name: "twitter:description", content: "Asmi is an AI that makes real phone calls in the physical world for you." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d3fbb070-9cd4-4306-af7e-f24ae7a26197/id-preview-232e13f7--6d6b2778-c078-4d4e-8085-25e2da0727f6.lovable.app-1778900453400.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d3fbb070-9cd4-4306-af7e-f24ae7a26197/id-preview-232e13f7--6d6b2778-c078-4d4e-8085-25e2da0727f6.lovable.app-1778900453400.png" },
@@ -93,6 +93,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: "https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Archivo+Black&display=swap" },
       { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
     ],
   }),
   shellComponent: RootShell,
@@ -100,6 +101,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
 });
+
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { IMessageMark, WhatsAppMark } from "./ChannelIcons";
 import { IMSG_LINK, WA_LINK } from "./ChannelCTA";
+import asmiLogo from "@/assets/asmi-logo-black.png.asset.json";
 
 export function Nav() {
   const [past, setPast] = useState(false);
@@ -26,12 +27,14 @@ export function Nav() {
         className="mx-auto flex max-w-7xl items-center px-4 py-2.5 md:px-6"
         style={{ minHeight: 58 }}
       >
-        <a
-          href="#"
-          className="font-display shrink-0"
-          style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.04em" }}
-        >
-          asmi
+        <a href="#" className="shrink-0" aria-label="asmi home">
+          <img
+            src={asmiLogo.url}
+            alt="asmi"
+            width={78}
+            height={28}
+            className="h-7 w-auto"
+          />
         </a>
 
         <AnimatePresence>

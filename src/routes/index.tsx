@@ -10,6 +10,8 @@ import { ChaseEngine } from "@/components/asmi/ChaseEngine";
 import { ChoreGrid } from "@/components/asmi/ChoreGrid";
 import { LangCluster } from "@/components/asmi/LangCluster";
 import { ScrollSection } from "@/components/asmi/Reveal";
+import asmiLogo from "@/assets/asmi-logo-black.png.asset.json";
+
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -56,9 +58,10 @@ function Index() {
 
       <footer className="px-5 sm:px-8" style={{ background: "var(--paper-deep)" }}>
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 py-7">
-          <a href="#" className="font-display" style={{ fontSize: 20, fontWeight: 800, letterSpacing: "-0.04em" }}>
-            asmi
+          <a href="#" aria-label="asmi home" className="shrink-0">
+            <img src={asmiLogo.url} alt="asmi" width={78} height={28} className="h-7 w-auto" />
           </a>
+
           <div className="flex items-center gap-2 font-sans" style={{ color: "var(--ink-dim)", fontSize: 14 }}>
             <a href="mailto:support@asmiai.com" style={{ color: "inherit" }}>
               support@asmiai.com
