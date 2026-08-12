@@ -42,12 +42,13 @@ A second, smaller **channel trail** sits under the thread card: `call → text �
 
 Tomo's energy comes from: one bold sentence, oversized rounded type, a live-looking product artifact on screen, and playful micro-motion. We take the energy, not the layout.
 
-1. **Typography with attitude** — keep Newsreader for one accent word, but set the main line in a heavy geometric sans, lowercase, tight tracking. Lowercase is the single strongest Gen-Z signal. Mixed-case moment: the accent word "her" stays serif italic terracotta, so it still reads as asmi.
-2. **A live artifact, not an abstract blob** — a tilted iMessage thread card floating to the right (desktop) / below (mobile) that types itself out: user sends "my sink is leaking", asmi replies "on it — calling 3 plumbers now", then a status chip flips to "booked, Tue 2pm ✓". This is the hero's proof, and it recycles the visual language already built in the /app prototype.
-3. **Motion that snaps** — the current slow scroll-scrub dim is replaced by an entrance that lands in under a second: words pop in on a spring, the thread card slides up, the icons bounce in last. Scroll-scrub stays only for the exit into Act 2.
-4. **Social proof line** — a small avatar cluster + "2,400+ on the list" under the CTA. Scarcity and peer count do heavy lifting for this audience.
-5. **Palette** — keep linen/espresso/terracotta so the rest of the site still matches, but raise contrast in the hero: espresso goes near-black, terracotta gets used as a filled pill on the CTA rather than a thin outline, and the ambient blobs get slightly more saturation so the page feels alive rather than muted.
-6. **Copy tone** — short, lowercase, second person, zero corporate words. "no app. no signup. just text." beats "seamless multi-channel assistant".
+1. **Typography with attitude** — keep Newsreader for one accent word, but set the main line in a heavy geometric sans, lowercase, tight tracking. Lowercase is the single strongest Gen-Z signal. The accent word "her" stays serif italic terracotta, so it still reads as asmi.
+2. **A live artifact, not an abstract blob** — a tilted iMessage thread card floating right (desktop) / below (mobile) that types itself out: "my sink is leaking" → "on it — calling 5 plumbers now" → a live row of 5 tiny call chips flipping from ringing to voicemail to **booked, tue 2pm ✓**. Parallel calling is the most screenshot-worthy thing asmi does, so it is the hero's proof. Reuses the visual language already built in the /app prototype.
+3. **Task-category ticker** — one line under the sub-headline cycling the real jobs in asmi's own words: "the dentist" / "the AC guy" / "your bank" / "that refund" / "the birthday cake" / "the group dinner". Six categories, no feature grid, fully scannable.
+4. **Motion that snaps** — the slow scroll-scrub dim is replaced by an entrance landing in under a second: words pop on a spring, thread card slides up, icons bounce in last, call chips resolve on a stagger. Scroll-scrub stays only for the exit into Act 2.
+5. **Social proof line** — a small avatar cluster + "2,400+ on the list" under the CTA. Peer count does heavy lifting for this audience.
+6. **Palette** — keep linen/espresso/terracotta so the rest of the site matches, but raise hero contrast: espresso goes near-black, terracotta becomes a filled CTA pill instead of a thin outline, ambient blobs get more saturation so the page feels alive.
+7. **Copy tone** — short, lowercase, second person, zero corporate words. "no app. no signup. just text." beats "seamless multi-channel assistant". Never say "productivity" or "save time" — the promise is *not thinking about it*, so the closing microcopy is "you stop thinking about it."
 
 ## Layout
 
@@ -56,18 +57,20 @@ Tomo's energy comes from: one bold sentence, oversized rounded type, a live-look
  │  asmi                              [waitlist] │
  │                                               │
  │   just text her.        ┌───────────────┐     │
- │   asmi calls, books,    │ imessage card │     │
- │   and chases it down.   │ typing…       │     │
- │                         │ booked ✓      │     │
+ │   she calls, argues,    │ imessage card │     │
+ │   and chases it down.   │ calling 5…    │     │
+ │   → the dentist         │ ●●●●●         │     │
+ │                         │ booked tue ✓  │     │
  │   [iMessage] [WhatsApp] └───────────────┘     │
- │   no app. no signup.                          │
+ │   no app. no signup.    call→text→email→web   │
  │                                               │
  │   [ get early access → ]                      │
  │   ●●●● 2,400+ waiting                         │
  └───────────────────────────────────────────────┘
 ```
 
-Mobile stacks: headline → icons row → thread card → CTA. Hero becomes a real 100svh section with content, not a sticky scroll-scrub stage, so the fold always shows the promise + the icons + the CTA.
+Mobile stacks: headline → category ticker → icons row → thread card → channel trail → CTA. Hero becomes a real 100svh section with content, not a sticky scroll-scrub stage, so the fold always shows the promise, the icons and the CTA.
+
 
 ## Technical notes
 
