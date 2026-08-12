@@ -118,7 +118,7 @@ export function Hero() {
                     m.from === "you" ? "self-end" : "self-start"
                   }`}
                   style={{
-                    fontSize: 14.5,
+                    fontSize: 13.5,
                     background: m.from === "you" ? "var(--blue)" : "rgba(20,19,24,0.06)",
                     color: m.from === "you" ? "#fff" : "var(--ink)",
                     borderBottomRightRadius: m.from === "you" ? 8 : undefined,
@@ -130,7 +130,7 @@ export function Hero() {
               ))}
             </div>
 
-            <div className="rounded-2xl p-3.5" style={{ background: "rgba(20,19,24,0.04)" }}>
+            <div className="rounded-2xl p-3 sm:p-3.5" style={{ background: "rgba(20,19,24,0.04)" }}>
               <div className="mb-3 flex items-center justify-between">
                 <p className="font-mono" style={{ fontSize: 10.5, color: "var(--ink-dim)", letterSpacing: "0.06em" }}>
                   THE CHASE
@@ -140,7 +140,7 @@ export function Hero() {
                 </p>
               </div>
 
-              <ul className="relative flex flex-col gap-2.5 pl-5" style={{ minHeight: 132 }}>
+              <ul className="relative flex flex-col gap-2 pl-5 sm:gap-2.5" style={{ minHeight: 96 }}>
                 <span
                   className="absolute left-[7px] top-2 bottom-2 w-px"
                   style={{ background: "rgba(20,19,24,0.12)" }}
@@ -188,7 +188,7 @@ export function Hero() {
               </ul>
             </div>
 
-            <div className="mt-3 min-h-[46px]">
+            <div className="mt-3 min-h-[40px]">
               <AnimatePresence mode="wait">
                 {done ? (
                   <motion.div
