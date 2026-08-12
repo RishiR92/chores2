@@ -88,7 +88,7 @@ export function Hero() {
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ delay: 0.65, duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
-                style={{ left: -10, right: "18%", top: -8, bottom: -8, transformOrigin: "left" }}
+                style={{ left: -6, right: "26%", bottom: -6, height: 26, transformOrigin: "left", opacity: 0.85 }}
                 aria-hidden
               />
               <div className="relative">
