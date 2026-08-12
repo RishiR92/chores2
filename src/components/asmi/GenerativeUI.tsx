@@ -223,6 +223,8 @@ export function GenerativeUI() {
                       </span>
                     </div>
                   </motion.button>
+                  </motion.div>
+
                 );
               })}
             </div>
