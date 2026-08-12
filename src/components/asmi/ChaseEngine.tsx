@@ -208,7 +208,7 @@ export function ChaseEngine() {
                     <div key={b.label + i} className="flex shrink-0 items-start">
                       {i > 0 && (
                         <span
-                          className="mt-[19px] block h-px w-6 shrink-0 sm:w-10"
+                          className="mt-[19px] block h-px w-3.5 shrink-0 sm:w-10"
                           style={{
                             background: lit ? "rgba(255,253,248,0.45)" : "rgba(255,253,248,0.14)",
                             transition: "background 260ms",
@@ -216,7 +216,8 @@ export function ChaseEngine() {
                           aria-hidden
                         />
                       )}
-                      <div className="flex w-[110px] flex-col items-center gap-2 sm:w-[130px]">
+                      <div className="flex w-[78px] flex-col items-center gap-2 sm:w-[130px]">
+
 
 
                         <motion.span
