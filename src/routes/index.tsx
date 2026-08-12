@@ -9,7 +9,7 @@ import { ChaseEngine } from "@/components/asmi/ChaseEngine";
 import { ChoreGrid } from "@/components/asmi/ChoreGrid";
 import { LangCluster } from "@/components/asmi/LangCluster";
 import { CloseCTA } from "@/components/asmi/CloseCTA";
-import { StickyChannelBar } from "@/components/asmi/ChannelCTA";
+import { Reveal } from "@/components/asmi/Reveal";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -38,13 +38,24 @@ function Index() {
       <ScrollProgress />
       <Nav />
       <Hero />
-      <Receipts />
-      <GenerativeUI />
-      <ChaseEngine />
-
-      <ChoreGrid />
-      <LangCluster />
-      <CloseCTA />
+      <Reveal>
+        <Receipts />
+      </Reveal>
+      <Reveal>
+        <GenerativeUI />
+      </Reveal>
+      <Reveal>
+        <ChaseEngine />
+      </Reveal>
+      <Reveal>
+        <ChoreGrid />
+      </Reveal>
+      <Reveal>
+        <LangCluster />
+      </Reveal>
+      <Reveal>
+        <CloseCTA />
+      </Reveal>
 
       <footer className="px-5 sm:px-8" style={{ background: "var(--paper-deep)" }}>
         <div className="mx-auto flex max-w-7xl flex-col gap-4 py-10 sm:flex-row sm:items-center sm:justify-between">
