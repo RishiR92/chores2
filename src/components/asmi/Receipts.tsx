@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { Reveal, RevealGroup } from "./Reveal";
 import { useEffect, useState } from "react";
 
 function HoldTimer() {
@@ -84,17 +85,18 @@ export function Receipts() {
   return (
     <section id="why" className="relative px-5 py-11 sm:px-8 sm:py-16 md:py-24">
       <div className="mx-auto max-w-7xl">
-        <motion.h2
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          className="max-w-2xl text-[1.65rem] sm:text-5xl"
-        >
-          annoying — but only to <span style={{ color: "var(--coral)" }}>them</span>.
-        </motion.h2>
-        <p className="mt-4 max-w-lg font-sans" style={{ color: "var(--ink-soft)", fontSize: 15 }}>
-          all the stuff that makes you put it off for three weeks. she just… sits there and does it.
-        </p>
+        <RevealGroup>
+          <Reveal inGroup variant="text">
+            <h2 className="max-w-2xl text-[1.65rem] sm:text-5xl">
+              annoying — but only to <span style={{ color: "var(--coral)" }}>them</span>.
+            </h2>
+          </Reveal>
+          <Reveal inGroup variant="accent">
+            <p className="mt-4 max-w-lg font-sans" style={{ color: "var(--ink-soft)", fontSize: 15 }}>
+              all the stuff that makes you put it off for three weeks. she just… sits there and does it.
+            </p>
+          </Reveal>
+        </RevealGroup>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {CARDS.map((c, i) => (

@@ -1,5 +1,5 @@
-import { motion } from "motion/react";
 import { ChannelCTA } from "./ChannelCTA";
+import { Reveal } from "./Reveal";
 
 export function CloseCTA() {
   return (
@@ -10,14 +10,9 @@ export function CloseCTA() {
         aria-hidden
       />
       <div className="relative mx-auto flex max-w-3xl flex-col items-center text-center">
-        <motion.h2
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          className="text-[1.85rem] sm:text-6xl"
-        >
-          you stop thinking about it.
-        </motion.h2>
+        <Reveal variant="text">
+          <h2 className="text-[1.85rem] sm:text-6xl">you stop thinking about it.</h2>
+        </Reveal>
         <p className="mt-5 max-w-md font-sans" style={{ fontSize: 15, color: "rgba(255,253,248,0.72)" }}>
           text her once. she takes it from there — and won't stop until it's done.
         </p>

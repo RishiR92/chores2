@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Check, Phone, Star } from "lucide-react";
+import { Reveal, RevealGroup } from "./Reveal";
 import barImg from "@/assets/place-bar.jpg";
 import vegImg from "@/assets/place-veg.jpg";
 import tavernImg from "@/assets/place-tavern.jpg";
@@ -84,28 +85,36 @@ export function GenerativeUI() {
   return (
     <section id="thread" className="relative px-5 py-11 sm:px-8 sm:py-16 md:py-24">
       <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-        <div className="min-w-0">
-          <span className="font-mono" style={{ fontSize: 11, letterSpacing: "0.08em", color: "var(--ink-dim)" }}>
-            GENERATIVE UI, IN THE CHAT
-          </span>
-          <h2 className="mt-3 text-[1.65rem] sm:text-5xl">
-            she plans it with you. then she <span style={{ color: "var(--coral)" }}>goes and does it</span>.
-          </h2>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {["plan", "tap", "done"].map((t) => (
-              <span
-                key={t}
-                className="rounded-full px-3 py-1.5 font-mono"
-                style={{ fontSize: 11, border: "2px solid var(--ink)", background: "var(--citrus)" }}
-              >
-                {t}
-              </span>
-            ))}
-          </div>
-          <p className="mt-6 max-w-md font-sans" style={{ fontSize: 15, color: "var(--ink-soft)" }}>
-            no ten tabs. she builds the interface you need right inside the thread — then executes it.
-          </p>
-        </div>
+        <RevealGroup className="min-w-0">
+          <Reveal inGroup variant="accent">
+            <span className="font-mono" style={{ fontSize: 11, letterSpacing: "0.08em", color: "var(--ink-dim)" }}>
+              GENERATIVE UI, IN THE CHAT
+            </span>
+          </Reveal>
+          <Reveal inGroup variant="text">
+            <h2 className="mt-3 text-[1.65rem] sm:text-5xl">
+              she plans it with you. then she <span style={{ color: "var(--coral)" }}>goes and does it</span>.
+            </h2>
+          </Reveal>
+          <Reveal inGroup variant="accent">
+            <div className="mt-6 flex flex-wrap gap-2">
+              {["plan", "tap", "done"].map((t) => (
+                <span
+                  key={t}
+                  className="rounded-full px-3 py-1.5 font-mono"
+                  style={{ fontSize: 11, border: "2px solid var(--ink)", background: "var(--citrus)" }}
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+          </Reveal>
+          <Reveal inGroup variant="accent">
+            <p className="mt-6 max-w-md font-sans" style={{ fontSize: 15, color: "var(--ink-soft)" }}>
+              no ten tabs. she builds the interface you need right inside the thread — then executes it.
+            </p>
+          </Reveal>
+        </RevealGroup>
 
         {/* the thread */}
         <div className="min-w-0">

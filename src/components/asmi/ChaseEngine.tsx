@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ChaseLog, ChaseStep } from "./ChaseLog";
+import { Reveal, RevealGroup } from "./Reveal";
 import { ChannelGlyph } from "./ChannelIcons";
 
 interface Job {
@@ -92,18 +93,24 @@ export function ChaseEngine() {
         aria-hidden
       />
       <div className="relative mx-auto max-w-7xl">
-        <div className="flex flex-col gap-3 px-5 sm:px-8">
-          <span className="font-mono" style={{ fontSize: 11, letterSpacing: "0.08em", color: "var(--citrus)" }}>
-            THE CHASE ENGINE
-          </span>
-          <h2 className="max-w-2xl text-[1.65rem] sm:text-5xl">
-            one task. every channel. until it's <span style={{ color: "var(--citrus)" }}>done</span>.
-          </h2>
-          <p className="max-w-xl font-sans" style={{ fontSize: 15, color: "rgba(255,253,248,0.7)" }}>
-            call → voicemail → text → email → their web form → call again. she escalates on her own and
-            keeps you posted in one thread.
-          </p>
-        </div>
+        <RevealGroup className="flex flex-col gap-3 px-5 sm:px-8">
+          <Reveal inGroup variant="accent">
+            <span className="font-mono" style={{ fontSize: 11, letterSpacing: "0.08em", color: "var(--citrus)" }}>
+              THE CHASE ENGINE
+            </span>
+          </Reveal>
+          <Reveal inGroup variant="text">
+            <h2 className="max-w-2xl text-[1.65rem] sm:text-5xl">
+              one task. every channel. until it's <span style={{ color: "var(--citrus)" }}>done</span>.
+            </h2>
+          </Reveal>
+          <Reveal inGroup variant="accent">
+            <p className="max-w-xl font-sans" style={{ fontSize: 15, color: "rgba(255,253,248,0.7)" }}>
+              call → voicemail → text → email → their web form → call again. she escalates on her own and
+              keeps you posted in one thread.
+            </p>
+          </Reveal>
+        </RevealGroup>
 
         <div
           ref={chipsRef}

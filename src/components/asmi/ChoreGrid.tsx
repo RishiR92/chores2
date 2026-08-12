@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
+import { Reveal, RevealGroup } from "./Reveal";
 import { useState } from "react";
 
 interface Chore {
@@ -32,10 +33,16 @@ export function ChoreGrid() {
   return (
     <section id="stories" className="relative px-5 py-11 sm:px-8 sm:py-16 md:py-24">
       <div className="mx-auto max-w-7xl">
-        <h2 className="max-w-2xl text-[1.65rem] sm:text-5xl">she'll handle this.</h2>
-        <p className="mt-4 max-w-lg font-sans" style={{ color: "var(--ink-soft)", fontSize: 15 }}>
-          tap one to see how she'd run it.
-        </p>
+        <RevealGroup>
+          <Reveal inGroup variant="text">
+            <h2 className="max-w-2xl text-[1.65rem] sm:text-5xl">she'll handle this.</h2>
+          </Reveal>
+          <Reveal inGroup variant="accent">
+            <p className="mt-4 max-w-lg font-sans" style={{ color: "var(--ink-soft)", fontSize: 15 }}>
+              tap one to see how she'd run it.
+            </p>
+          </Reveal>
+        </RevealGroup>
 
         <div
           className="mt-9 flex flex-wrap gap-2.5"
