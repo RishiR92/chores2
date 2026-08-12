@@ -82,13 +82,13 @@ export function GenerativeUI() {
   const ss = String(hold % 60).padStart(2, "0");
 
   return (
-    <section id="thread" className="relative px-5 py-16 sm:px-8 md:py-24">
+    <section id="thread" className="relative px-5 py-11 sm:px-8 sm:py-11 sm:py-16 md:py-24">
       <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
         <div className="min-w-0">
           <span className="font-mono" style={{ fontSize: 11, letterSpacing: "0.08em", color: "var(--ink-dim)" }}>
             GENERATIVE UI, IN THE CHAT
           </span>
-          <h2 className="mt-3 text-[2.1rem] sm:text-5xl">
+          <h2 className="mt-3 text-[1.65rem] sm:text-5xl">
             she plans it with you. then she <span style={{ color: "var(--coral)" }}>goes and does it</span>.
           </h2>
           <div className="mt-6 flex flex-wrap gap-2">
@@ -102,14 +102,14 @@ export function GenerativeUI() {
               </span>
             ))}
           </div>
-          <p className="mt-6 max-w-md font-sans" style={{ fontSize: 16.5, color: "var(--ink-soft)" }}>
+          <p className="mt-6 max-w-md font-sans" style={{ fontSize: 15, color: "var(--ink-soft)" }}>
             no ten tabs. she builds the interface you need right inside the thread — then executes it.
           </p>
         </div>
 
         {/* the thread */}
         <div className="min-w-0">
-          <div className="edge-card mx-auto min-w-0 max-w-[520px] overflow-hidden p-4 sm:p-5">
+          <div className="edge-card mx-auto min-w-0 max-w-[520px] overflow-hidden p-3.5 sm:p-5">
             <div className="flex items-center gap-2 pb-3" style={{ borderBottom: "1px dashed rgba(20,19,24,0.15)" }}>
               <span
                 className="grid h-8 w-8 shrink-0 place-items-center rounded-full font-display"
@@ -128,13 +128,13 @@ export function GenerativeUI() {
             <div className="flex flex-col gap-2.5 py-3.5">
               <div
                 className="max-w-[86%] self-end rounded-3xl px-4 py-2.5 font-sans"
-                style={{ fontSize: 14.5, background: "var(--blue)", color: "#fff", borderBottomRightRadius: 8 }}
+                style={{ fontSize: 13.5, background: "var(--blue)", color: "#fff", borderBottomRightRadius: 8 }}
               >
                 bars near me with actual veg food, table for 5
               </div>
               <div
                 className="max-w-[86%] self-start rounded-3xl px-4 py-2.5 font-sans"
-                style={{ fontSize: 14.5, background: "rgba(20,19,24,0.06)", borderBottomLeftRadius: 8 }}
+                style={{ fontSize: 13.5, background: "rgba(20,19,24,0.06)", borderBottomLeftRadius: 8 }}
               >
                 found 3. tap the one you like 👇
               </div>
@@ -164,7 +164,7 @@ export function GenerativeUI() {
                         loading="lazy"
                         width={640}
                         height={640}
-                        className="h-16 w-16 shrink-0 rounded-xl object-cover sm:h-[68px] sm:w-[68px]"
+                        className="h-14 w-14 shrink-0 rounded-xl object-cover sm:h-[68px] sm:w-[68px]"
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex min-w-0 items-center gap-1.5">

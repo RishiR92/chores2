@@ -85,7 +85,7 @@ export function ChaseEngine() {
   }, [active]);
 
   return (
-    <section id="how" className="ink-section relative grain overflow-hidden py-16 md:py-24">
+    <section id="how" className="ink-section relative grain overflow-hidden py-11 sm:py-16 md:py-24">
       <div
         className="pointer-events-none absolute -bottom-32 -right-20 h-[380px] w-[380px] rounded-full blur-3xl"
         style={{ background: "rgba(47,91,255,0.35)" }}
@@ -96,10 +96,10 @@ export function ChaseEngine() {
           <span className="font-mono" style={{ fontSize: 11, letterSpacing: "0.08em", color: "var(--citrus)" }}>
             THE CHASE ENGINE
           </span>
-          <h2 className="max-w-2xl text-[2.1rem] sm:text-5xl">
+          <h2 className="max-w-2xl text-[1.65rem] sm:text-5xl">
             one task. every channel. until it's <span style={{ color: "var(--citrus)" }}>done</span>.
           </h2>
-          <p className="max-w-xl font-sans" style={{ fontSize: 16.5, color: "rgba(255,253,248,0.7)" }}>
+          <p className="max-w-xl font-sans" style={{ fontSize: 15, color: "rgba(255,253,248,0.7)" }}>
             call → voicemail → text → email → their web form → call again. she escalates on her own and
             keeps you posted in one thread.
           </p>
@@ -139,7 +139,7 @@ export function ChaseEngine() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-              className="min-w-0 max-w-[640px] rounded-[26px] p-5"
+              className="min-w-0 max-w-[640px] rounded-[26px] p-4 sm:p-5"
               style={{
                 background: "rgba(255,253,248,0.06)",
                 border: "1px solid rgba(255,253,248,0.14)",
@@ -147,7 +147,7 @@ export function ChaseEngine() {
             >
               <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
                 <div className="min-w-0">
-                  <h3 className="text-[1.35rem] sm:text-[1.6rem]">{job.title}</h3>
+                  <h3 className="text-[1.15rem] sm:text-[1.6rem]">{job.title}</h3>
                   <p className="mt-1.5 font-mono" style={{ fontSize: 11.5, color: "rgba(255,253,248,0.55)" }}>
                     {job.who}
                   </p>

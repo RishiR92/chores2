@@ -18,8 +18,8 @@ export function ChannelCTA({
   align = "start",
   caption = "text her on",
 }: Props) {
-  const btn = size === "lg" ? "h-[62px] w-[86px] sm:w-[104px]" : "h-[54px] w-[78px] sm:w-[92px]";
-  const icon = size === "lg" ? 30 : 26;
+  const btn = size === "lg" ? "h-[54px] w-[78px] sm:h-[62px] sm:w-[104px]" : "h-[48px] w-[70px] sm:h-[54px] sm:w-[92px]";
+  const icon = size === "lg" ? 26 : 23;
   const darkEdge =
     variant === "dark"
       ? { border: "none", boxShadow: "0 10px 30px -12px rgba(0,0,0,0.6)" }
