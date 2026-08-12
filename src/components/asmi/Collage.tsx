@@ -15,6 +15,8 @@ export interface CollageLayer {
   rot: number;
   /** hide on small screens */
   desktopOnly?: boolean;
+  /** hide on md and up */
+  mobileOnly?: boolean;
   flip?: boolean;
   opacity?: number;
 }
