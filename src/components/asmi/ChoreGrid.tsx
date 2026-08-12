@@ -1,104 +1,117 @@
 import { AnimatePresence, motion } from "motion/react";
-import { Reveal, RevealGroup } from "./Reveal";
 import { useState } from "react";
+import { Marquee } from "./Marquee";
+import { Reveal, RevealGroup } from "./Reveal";
 
 interface Chore {
   label: string;
   reply: string;
-  tint: string;
 }
 
 const CHORES: Chore[] = [
-  { label: "cancel this subscription", reply: "found the retention line. cancelled, confirmation emailed to you.", tint: "var(--coral)" },
-  { label: "lower my internet bill", reply: "2 hrs with retentions. $34 off a month, same speed.", tint: "var(--blue)" },
-  { label: "chase my insurance claim", reply: "day 6 of chasing. adjuster assigned, callback booked for 4pm.", tint: "var(--violet-soft)" },
-  { label: "book a haircut saturday", reply: "called 3 shops. 11:15am saturday, the one you liked last time.", tint: "var(--citrus)" },
-  { label: "reschedule my flight", reply: "on with the airline. no change fee if we move to the 6:40am.", tint: "var(--mint-pop)" },
-  { label: "DMV appointment", reply: "sat in their queue 38 min. you're in for thurs 9:10am.", tint: "var(--blue)" },
-  { label: "dispute this parking ticket", reply: "filed the contest form + called the office for a hearing date.", tint: "var(--coral)" },
-  { label: "my landlord's ghosting me", reply: "called twice, texted, and emailed with a paper trail. he replied.", tint: "var(--citrus)" },
-  { label: "return this order", reply: "got the label out of them and booked the pickup for tuesday.", tint: "var(--violet-soft)" },
-  { label: "is this in stock nearby?", reply: "called 5 stores. two have it — one's holding it under your name.", tint: "var(--mint-pop)" },
-  { label: "find a mover for the 14th", reply: "3 quotes in. cheapest $420, soonest is the 13th. want the list?", tint: "var(--blue)" },
-  { label: "get my car serviced", reply: "booked friday 8am, they'll do the loaner. quoted $190.", tint: "var(--coral)" },
-  { label: "renew my passport", reply: "checked the wait times, booked your appointment, listed what to bring.", tint: "var(--violet-soft)" },
-  { label: "cancel my gym", reply: "they dodged twice. third call + written notice — cancelled, no fee.", tint: "var(--citrus)" },
-  { label: "vet slot for the dog", reply: "two clinics full. third had a 5:40pm cancellation — took it.", tint: "var(--mint-pop)" },
+  { label: "cancel this subscription", reply: "found the retention line. cancelled, confirmation emailed to you." },
+  { label: "lower my internet bill", reply: "2 hrs with retentions. $34 off a month, same speed." },
+  { label: "chase my insurance claim", reply: "day 6 of chasing. adjuster assigned, callback booked for 4pm." },
+  { label: "book a haircut saturday", reply: "called 3 shops. 11:15am saturday, the one you liked last time." },
+  { label: "reschedule my flight", reply: "on with the airline. no change fee if we move to the 6:40am." },
+  { label: "DMV appointment", reply: "sat in their queue 38 min. you're in for thurs 9:10am." },
+  { label: "dispute this parking ticket", reply: "filed the contest form + called the office for a hearing date." },
+  { label: "my landlord's ghosting me", reply: "called twice, texted, and emailed with a paper trail. he replied." },
+  { label: "return this order", reply: "got the label out of them and booked the pickup for tuesday." },
+  { label: "is this in stock nearby?", reply: "called 5 stores. two have it — one's holding it under your name." },
+  { label: "find a mover for the 14th", reply: "3 quotes in. cheapest $420, soonest is the 13th. want the list?" },
+  { label: "get my car serviced", reply: "booked friday 8am, they'll do the loaner. quoted $190." },
+  { label: "renew my passport", reply: "checked the wait times, booked your appointment, listed what to bring." },
+  { label: "cancel my gym", reply: "they dodged twice. third call + written notice — cancelled, no fee." },
+  { label: "vet slot for the dog", reply: "two clinics full. third had a 5:40pm cancellation — took it." },
 ];
 
+const ROW_A = CHORES.slice(0, 8);
+const ROW_B = CHORES.slice(8);
+
+function Request({
+  chore,
+  active,
+  onSelect,
+}: {
+  chore: Chore;
+  active: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <button
+      onClick={onSelect}
+      className="shrink-0 whitespace-nowrap px-4 py-3 text-left transition-colors"
+      style={{
+        borderRadius: 10,
+        border: "1px solid var(--ink)",
+        background: active ? "var(--ink)" : "transparent",
+        color: active ? "var(--cream)" : "var(--ink)",
+        fontSize: "var(--t-base)",
+      }}
+    >
+      {chore.label}
+    </button>
+  );
+}
 
 export function ChoreGrid() {
-  const [open, setOpen] = useState<string | null>(null);
+  const [open, setOpen] = useState<Chore | null>(null);
 
   return (
-    <section id="stories" className="relative px-5 py-11 sm:px-8 sm:py-16 md:py-24">
-      <div className="mx-auto max-w-7xl">
+    <section id="stories" className="relative py-11 sm:py-16 md:py-24">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <RevealGroup>
           <Reveal inGroup variant="text">
-            <h2 className="max-w-2xl text-[1.65rem] sm:text-5xl">she'll handle this.</h2>
+            <h2 className="max-w-2xl">she'll handle this.</h2>
           </Reveal>
           <Reveal inGroup variant="accent">
-            <p className="mt-4 max-w-lg font-sans" style={{ color: "var(--ink-soft)", fontSize: 15 }}>
-              tap one to see how she'd run it.
+            <p className="t-body mt-4 max-w-lg" style={{ color: "var(--ink-soft)" }}>
+              tap anything moving past.
             </p>
           </Reveal>
         </RevealGroup>
+      </div>
 
-        <div
-          className="mt-9 flex flex-wrap gap-2.5"
-          style={{ scrollbarWidth: "none" }}
-        >
-          {CHORES.map((c, i) => {
-            const on = open === c.label;
-            return (
-              <motion.button
-                key={c.label}
-                initial={{ opacity: 0, scale: 0.94 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ delay: i * 0.035, type: "spring", stiffness: 300, damping: 22 }}
-                onClick={() => setOpen(on ? null : c.label)}
-                className="rounded-full px-3.5 py-2.5 font-sans text-left transition-colors"
-                style={{
-                  fontSize: 14.5,
-                  minHeight: 42,
-                  border: "2px solid var(--ink)",
-                  background: on ? c.tint : "var(--cream)",
-                  color: "var(--ink)",
-                  fontWeight: on ? 600 : 400,
-                }}
-              >
-                {c.label}
-              </motion.button>
-            );
-          })}
-        </div>
+      <div className="mt-9 flex flex-col gap-3">
+        <Marquee baseVelocity={30} paused={!!open}>
+          {ROW_A.map((c) => (
+            <Request key={c.label} chore={c} active={open?.label === c.label} onSelect={() => setOpen(c)} />
+          ))}
+        </Marquee>
+        <Marquee baseVelocity={-24} paused={!!open}>
+          {ROW_B.map((c) => (
+            <Request key={c.label} chore={c} active={open?.label === c.label} onSelect={() => setOpen(c)} />
+          ))}
+        </Marquee>
+      </div>
 
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <AnimatePresence mode="wait">
           {open && (
             <motion.div
-              key={open}
+              key={open.label}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.28 }}
-              className="mt-6 flex max-w-xl items-start gap-3"
+              transition={{ duration: 0.28, ease: [0.22, 0.8, 0.24, 1] }}
+              className="mt-8 flex max-w-xl items-start gap-3"
             >
               <span
                 className="grid h-8 w-8 shrink-0 place-items-center rounded-full font-display"
-                style={{ background: "var(--blue)", color: "#fff", fontSize: 13, fontWeight: 700 }}
+                style={{ background: "var(--ink)", color: "var(--cream)", fontSize: 13, fontWeight: 700 }}
               >
                 a
               </span>
               <p
-                className="rounded-3xl px-4 py-3 font-sans"
+                className="t-body px-4 py-3"
                 style={{
-                  fontSize: 15,
                   background: "rgba(20,19,24,0.06)",
-                  borderBottomLeftRadius: 8,
+                  borderRadius: 18,
+                  borderBottomLeftRadius: 6,
                 }}
               >
-                {CHORES.find((c) => c.label === open)?.reply}
+                {open.reply}
               </p>
             </motion.div>
           )}
