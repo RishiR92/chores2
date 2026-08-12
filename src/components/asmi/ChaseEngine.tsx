@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { ChaseLog, ChaseStep } from "./ChaseLog";
 import { ChannelGlyph } from "./ChannelIcons";
 
@@ -68,45 +69,9 @@ const STATUS = {
 } as const;
 
 export function ChaseEngine() {
-  const trackRef = useRef<HTMLDivElement>(null);
   const chipsRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
-
-  const scrollToIndex = useCallback((i: number) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const card = track.children[i] as HTMLElement | undefined;
-    if (card) track.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: "smooth" });
-  }, []);
-
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    let raf = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const center = track.scrollLeft + track.clientWidth / 2;
-        let best = 0;
-        let bestDist = Infinity;
-        Array.from(track.children).forEach((el, i) => {
-          const c = el as HTMLElement;
-          const mid = c.offsetLeft - track.offsetLeft + c.clientWidth / 2;
-          const d = Math.abs(mid - center);
-          if (d < bestDist) {
-            bestDist = d;
-            best = i;
-          }
-        });
-        setActive(best);
-      });
-    };
-    track.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      track.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(raf);
-    };
-  }, []);
+  const job = JOBS[active];
 
   useEffect(() => {
     const chips = chipsRef.current;
@@ -150,7 +115,7 @@ export function ChaseEngine() {
             return (
               <button
                 key={j.id}
-                onClick={() => scrollToIndex(i)}
+                onClick={() => setActive(i)}
                 className="shrink-0 rounded-full px-4 py-2.5 font-sans transition-colors"
                 style={{
                   fontSize: 14,
@@ -166,17 +131,16 @@ export function ChaseEngine() {
           })}
         </div>
 
-        <div
-          ref={trackRef}
-          className="mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-3 sm:px-8"
-          style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
-        >
-          {JOBS.map((job) => (
-            <article
+        <div className="mt-4 px-5 sm:px-8">
+          <AnimatePresence mode="wait">
+            <motion.article
               key={job.id}
-              className="min-w-0 shrink-0 snap-center rounded-[26px] p-5"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              className="min-w-0 max-w-[640px] rounded-[26px] p-5"
               style={{
-                width: "min(88%, 560px)",
                 background: "rgba(255,253,248,0.06)",
                 border: "1px solid rgba(255,253,248,0.14)",
               }}
@@ -227,24 +191,8 @@ export function ChaseEngine() {
               <p className="mt-5 hidden font-sans md:block" style={{ fontSize: 14.5, color: "rgba(255,253,248,0.7)" }}>
                 she runs several threads in parallel and informs you once the task is done.
               </p>
-            </article>
-          ))}
-        </div>
-
-        <div className="mt-2 flex justify-center gap-2">
-          {JOBS.map((j, i) => (
-            <button
-              key={j.id}
-              onClick={() => scrollToIndex(i)}
-              aria-label={`show ${j.title}`}
-              className="rounded-full transition-all"
-              style={{
-                height: 6,
-                width: i === active ? 22 : 6,
-                background: i === active ? "var(--citrus)" : "rgba(255,253,248,0.3)",
-              }}
-            />
-          ))}
+            </motion.article>
+          </AnimatePresence>
         </div>
       </div>
     </section>
