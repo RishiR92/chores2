@@ -1,119 +1,120 @@
-# asmi.com — full rewrite for a young US audience
+# asmi.com — a story-led rewrite for a younger US audience
 
-Goal: a top-tier US consumer AI site that is fun and fast up top, credible further down, and that plants a flag on a new category — **AI for real-world chores**. Not a manifesto site, not a feature site. The whole page is one argument: *the annoying real-world stuff — calling, waiting, chasing — stops being yours.*
+The site should feel like reading someone's texts, not reading a product page. No "life admin", no "multichannel", no "AI assistant that…". The words on screen are the words asmi would actually text you, and the words you'd actually text a friend.
 
-The current site opens with "The screen era is over.", a scroll-scrubbed serif manifesto, and leans on plumber / HVAC / prescription / check-on-mom examples. That reads 40+ homeowner. Under-30 renters do not call plumbers; they get ghosted by landlords, fight Ticketmaster, cancel gym memberships they signed in 2023, and would rather die than call the dentist.
+The whole page makes one emotional argument: **the thing you've been avoiding is already done.** That feeling — relief, plus a little disbelief — is the product.
 
-## Audience split down the page
+Current site opens with "The screen era is over." over a scroll-scrubbed serif manifesto, and the examples are plumber, HVAC, prescription refill, check on mom. That's a 40-year-old homeowner. Under-30s don't call plumbers; they get ghosted by a landlord, get charged for a gym they left in 2023, and would genuinely rather suffer than call the dentist.
 
-- **Sections 1–3 (young):** the stuff a 22–32 year old feels weekly. Phone anxiety, subscriptions, refunds, landlords, appointments, group plans.
-- **Sections 4–6 (broader):** widen to households and family — repairs, insurance, elderly parents, multi-language. This is where the older, higher-frequency use cases live, framed as "asmi grows with your life."
+## The spine: stories first, product later
 
-## Section 1 — Hero: "just text her."
+Top of the page is one story after another, each told as a real message that arrives. No feature list, no icon grid, no "how it works" in the first three screens. The product explains itself because you're watching it happen.
 
-Replaces the manifesto. Hook first, philosophy later.
+Each story is one screen. Big message bubble, small timestamp, one line of aftermath. That's it.
+
+## Section 1 — Hero
 
 ```text
-              just text her.
+              you were asleep.
 
-   she calls, texts, emails and chases —
-        until the thing is actually done.
+     "booked you 7:30 at the italian place
+      and two seats for the 9:40. you're welcome."
+
+                                    — asmi, 2:14am
 
         [ iMessage ]   [ WhatsApp ]
-          no app. no signup. just text.
+           no app. just text her.
 ```
 
-- Headline lowercase, heavy geometric sans, oversized. "her" in serif italic terracotta so the brand voice survives.
-- **Channel row** — iMessage and WhatsApp tiles (inline SVG, not logo images) directly under the sub-headline with the "no app. no signup." caption. This is the trust cue and it answers "do I have to download something?" in the first second.
-- **Live thread card**, tilted, right on desktop / below on mobile. Self-types: *"my landlord's ghosting me about the AC"* → *"on it — calling now, texting the property manager, emailing a paper trail"* → chips flip to `called ✓` `texted ✓` `emailed ✓` → **"work order #4471, tech comes thu 10am."** Multichannel is visible in the first artifact, not described later.
-- **Category ticker** under the sub-line, cycling: `the dentist · your landlord · that refund · the DMV · a birthday cake · the group dinner`.
-- CTA: filled terracotta pill "get early access →", with avatar cluster + "2,400+ on the list".
-- Motion lands under one second — spring pop, card slide, icons bounce last. Scroll-scrub only for the exit.
-- "the screen era is over." survives as a quiet one-line statement between sections 3 and 4.
+- The headline is the setup; the bubble is the punchline. The message types itself in, the timestamp lands, then the reply chips appear underneath: `called 4 places · 2 had nothing · one had a cancellation`.
+- Lowercase, heavy display sans for the setup line, the message in a real iMessage-style bubble with the terracotta/linen palette.
+- Channel icons sit under it as the trust cue: no download, no signup, it's just a contact in your phone.
+- CTA: filled pill, "get her number →", plus "2,400+ waiting".
+- The scroll cue is literally a downward-drifting next bubble, so scrolling feels like scrolling a thread.
 
-## Section 2 — The dread reel (the hook that makes them stay)
+## Section 2 — The story reel (3–4 screens, scroll-snapped)
 
-Rapid, funny, painfully accurate. Full-bleed, each line snapping in on scroll with a tiny artifact beside it:
+Each is a different person, a different moment, same shape. Real voice. Real stakes. Nothing heroic — small things that were quietly ruining someone's week.
 
-- "on hold for 41 minutes." → a hold-timer counting up
-- "press 4 for billing." → an IVR keypad lighting up
-- "we tried reaching you." → a missed-call notification
-- "left a voicemail. never heard back." → a voicemail blob
-- "i'll do it tomorrow." (x4, stacking) → four identical reminders
+1. **the gym**
+   > "you're out. i called, they said come in person, so i emailed them the cancellation clause. they refunded the month they snuck in too."
+   > *— tuesday, 10:04am · you never called anyone*
 
-Then it clears to: **"you're not lazy. this stuff is just built to waste your time."** This is the emotional core and the most shareable moment on the page. Nothing here is a feature.
+2. **the landlord**
+   > "your AC is on the schedule. thursday 10am, work order #4471. took 3 days and 11 messages but he answered."
+   > *— it took her 3 days. you thought about it once.*
 
-## Section 3 — Watch her work (replaces the plumber demo)
+3. **the dentist**
+   > "found one that takes your insurance and isn't 40 minutes away. thursday 4:15. i already gave them your info."
+   > *— you have not called a dentist since 2021.*
 
-The existing parallel-call visualization stays structurally — it's the best thing on the site — but the scenario changes to a young, high-frequency, multichannel one.
+4. **the birthday**
+   > "cake's ordered, pickup saturday 11am. the guy said happy birthday to her, i said i'd pass it on."
+   > *— you remembered at 11pm the night before.*
 
-Primary scenario: **the ghosted landlord / broken AC**, or swap to **"cancel my gym"** for the funniest version. The viz shows:
+The italic aftermath line under each is the emotional beat — that's where the relatability lives, and it's the part people screenshot.
 
-```text
- you   9:12   "my gym won't let me cancel"
- asmi  9:12   on it.
+Then one full-bleed clearing screen:
 
- ── call ──────  front desk · hold 6m · "come in person"
- ── call ──────  corporate · IVR · escalated
- ── text ──────  member services · read ✓
- ── email ─────  cancellation request + receipt trail
- ── web ───────  member portal form submitted
+> **you're not bad at this. this stuff is just built to waste your time.**
 
- asmi  10:04  cancelled. confirmation #GX-88214.
-              they tried to charge one more month — refunded.
-```
+## Section 3 — Watch her work (the one demo)
 
-Three things must read instantly: **parallel** (five things at once), **multichannel** (call → text → email → web escalation rail down the side), and **persistent** (the timestamp travels, and one scenario visibly spans days: "day 3 — insurance finally called back. asmi picked up.").
+Now, and only now, show the machinery. Keep the existing parallel-call visualization — it's the best thing on the site — but rescope it from plumber to something young and unglamorous. Default scenario: **the gym cancellation**. Two other tabs the visitor can flick: **the disputed charge**, **the dentist**.
 
-Two more tabs the user can flick between, same viz: **"get me a dentist that takes my insurance"** and **"refund this charge i didn't make."**
+What has to be legible without reading a caption:
 
-## Section 4 — The chore cloud, re-cast
+- she does **five things at once** (five rows going simultaneously)
+- she doesn't stop at calling — the rail down the side shows the escalation: *called → on hold → texted → emailed → filled their form*
+- she **keeps going for days** — one scenario visibly spans a timeline, with "day 3 — they finally called back. she picked up."
 
-Keep the floating pill cloud; rewrite the labels for the audience and split by weight:
+Ending state is always a receipt: a confirmation number, an amount refunded, a time booked. Concrete beats adjectives.
 
-- Young, front-loaded and biggest: cancel that subscription, chase my deposit, dispute this charge, book a dentist, get my prescription, my landlord's ghosting me, return this order, DMV appointment, find a therapist that takes my insurance, get 5 quotes, cancel my gym, birthday cake by friday, dinner for 6 on saturday, is it in stock?, when do they close?
-- Then widening into household and family: AC repair, movers, vet, insurance claim, flowers to mom, check on grandpa.
+## Section 4 — Anything with a human on the other end
 
-Headline over it: **"anything that needs a human on the other end."** Sub: "six kinds of chores. one text."
+Keep the floating pill cloud, rewrite every label in how people actually say it:
 
-## Section 5 — Stories (real receipts, younger cast)
+- "cancel this thing i signed up for", "why was i charged $60", "my landlord's ghosting me", "i need a dentist", "get my prescription", "return this", "is it still in stock", "dinner for 6 saturday", "cake by friday", "what time do they close", "chase my deposit", "the DMV", "find a therapist who takes my insurance", "get me 5 quotes"
 
-Rewrite the three story cards. Same beautiful card treatment, new casts and new channel mix. Each card shows the channels used as small icons, and the elapsed time — that's the proof of persistence:
+Then it widens — same cloud, drifting into the household and family stuff, which is where the older/high-frequency use cases live: AC repair, movers, the vet, an insurance claim, flowers to mom, calling grandpa. Line over it: **"if it needs a human on the other end, she'll handle it."**
 
-1. **"tuesday, 9am · 4 minutes"** — dentist booked that takes her insurance. Called 6 offices, 2 answered, one had a cancellation slot.
-2. **"thursday → sunday · 3 days"** — $340 disputed charge. Call, hold, callback, email with the receipt attached, bank portal form. Refunded.
-3. **"friday, 6pm · in Spanish"** — abuela's pharmacy refill, called and confirmed pickup. This is where the family/multi-language angle enters, and it bridges into section 6.
+This is the one place the category gets named, quietly: *the calls, the holds, the follow-ups, the chasing. all of it.*
 
-Keep the language cloud (it's strong and already matches the video), placed right after.
+## Section 5 — Receipts
+
+Three story cards (keep the existing beautiful treatment), but now with the proof attached: elapsed time, how many calls, which channels, the confirmation number. Same voice as section 2, just with the evidence visible. The third one is the Spanish-language call to abuela, which bridges naturally into the language cloud that follows (keep it — it's strong and matches the launch video).
 
 ## Section 6 — Close
 
-**"you stop thinking about it."** Then the waitlist form, the channel icons again, and one line: "text asmi at 9am tomorrow. she'll ask what needs doing."
+> **she'll text you when it's done.**
+> that's the whole thing.
 
-Also adds the morning-call habit, which is currently invisible on the site: a single line/artifact showing asmi ringing at 9:03 — "morning. what's on the list?"
+Waitlist form, channel icons, and the morning habit — currently invisible on the site — as one last bubble: *"morning. anything today?" — 9:03am*.
 
-## Design system shifts
+## Voice rules
 
-- **Type:** add a heavy geometric display sans (Bricolage Grotesque or General Sans) for headlines; Newsreader italic retained only for the wordmark and single accent words; Figtree stays for body. Everything lowercase.
-- **Color:** linen/espresso/terracotta stays — it's distinctive and matches the launch video — but hero contrast goes up: near-black ink, filled terracotta CTAs, sage reserved strictly for "done ✓", and slightly more saturated ambient blobs. No new palette.
-- **Surfaces:** message bubbles and status chips become the page's repeated visual motif, so every section feels like part of one thread.
-- **Motion:** springy and short (200–400ms) for entrances; scroll-scrub kept only for the two cinematic sections (2 and 3). Everything collapses to static under `prefers-reduced-motion`.
-- **Interaction:** the demo scenarios are tappable (pick your chore), the chore cloud pills are hoverable/tappable and flip to their outcome, and the CTA is reachable from any scroll position via an always-visible nav.
+- Write it like a text: lowercase, contractions, short. "on it." "done." "you're out." "he finally answered."
+- Never: life admin, productivity, seamless, save time, errands, task management, assistant, leverage, effortless.
+- Every claim carries an artifact — a time, a number, an amount, a confirmation code.
+- The aftermath lines do the emotional work; the bubbles do the product work. Don't mix them.
 
-## Copy rules
+## Design
 
-Lowercase, second person, contractions, no em-dash-free corporate hedging. Banned: "seamless", "productivity", "save time", "leverage", "assistant that…". Every claim is a concrete artifact — a confirmation number, a hold timer, a refund amount.
+- **Type:** heavy geometric display sans (Bricolage Grotesque or General Sans), all lowercase, for setup lines; Newsreader italic kept only for the wordmark and aftermath lines; Figtree for body.
+- **Color:** keep linen / espresso / terracotta so the site still matches the launch video. Higher contrast up top, sage reserved strictly for "done ✓", slightly more saturated ambient blobs.
+- **Motif:** the message bubble is the page's repeated unit. Every section is a variation on a thread, so scrolling the site feels like scrolling a conversation.
+- **Motion:** typing indicators, bubbles landing with a small spring, timestamps fading in a beat later, receipts stamping in. 200–400ms, never slow. Scroll-scrub kept only for section 3. Everything static under `prefers-reduced-motion`.
+- **Interaction:** tap to switch demo scenario, tap a cloud pill to see its outcome bubble, nav always visible so the CTA is one tap away.
 
 ## Technical notes
 
-- Rewrite `Act1Opening.tsx` into a real content hero (no sticky scroll-scrub); new `ChannelIcons.tsx`, `HeroThread.tsx`, `CategoryTicker.tsx`.
-- New `Act2Dread.tsx` for the dread reel; existing `Act2CallViz.tsx` becomes `Act3Work.tsx` with scenario data extracted to `src/components/asmi/data/scenarios.ts` and a new channel-escalation rail.
-- `Act4Cloud.tsx`: labels only. `Act5.tsx`: story data rewritten, add channel icons + elapsed time to the card. `Act6Close.tsx`: new headline, channel icons, morning-call line.
-- `Nav.tsx`: always visible, updated anchors.
-- Fonts loaded via `<link>` in `src/routes/__root.tsx`; new `--font-display` token inside the `.landing-theme` scope in `src/styles.css`.
-- Update route `head()` title/description/og on `src/routes/index.tsx` to the new positioning.
-- Motion via existing `motion/react`; GSAP ScrollTrigger already in use for the viz stays.
+- `Act1Opening.tsx` becomes a real content hero (no sticky scroll-scrub). New `MessageBubble.tsx`, `ChannelIcons.tsx` (inline SVG, no logo images), `HeroStory.tsx`.
+- New `Act2Stories.tsx` for the scroll-snapped story reel, with copy in `src/components/asmi/data/stories.ts`.
+- `Act2CallViz.tsx` → `Act3Work.tsx`: same GSAP/ScrollTrigger machinery, new scenario data in `data/scenarios.ts`, plus the escalation rail and multi-day timeline.
+- `Act4Cloud.tsx`: labels only. `Act5.tsx`: story data + receipts row. `Act6Close.tsx`: new close and morning bubble. `Nav.tsx`: always visible.
+- Display font via `<link>` in `src/routes/__root.tsx`; `--font-display` token added inside the `.landing-theme` scope in `src/styles.css`.
+- New title/description/og in `src/routes/index.tsx`.
 
 ## Out of scope
 
-Backend/waitlist changes, real deep-link numbers, the `/app` prototype, the launch video.
+Backend or waitlist changes, real phone numbers/deep links, the `/app` prototype, the launch video.
