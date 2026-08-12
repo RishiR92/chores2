@@ -239,9 +239,8 @@ export function ChaseEngine() {
                           <ChannelGlyph kind={b.kind} size={16} />
                         </motion.span>
                         <span
-                          className="text-center font-sans"
+                          className="text-center font-sans text-[10.5px] sm:text-[12.5px]"
                           style={{
-                            fontSize: 12.5,
                             lineHeight: 1.25,
                             color: lit ? "var(--cream)" : "rgba(255,253,248,0.32)",
                             fontWeight: b.tone === "win" ? 600 : 400,
@@ -249,6 +248,7 @@ export function ChaseEngine() {
                             transition: "color 260ms",
                           }}
                         >
+
                           {b.label}
                         </span>
                         <span
