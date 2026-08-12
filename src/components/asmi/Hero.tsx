@@ -230,7 +230,7 @@ export function Hero() {
                     className="pt-3 text-center font-mono"
                     style={{ fontSize: "var(--t-mono)", color: "var(--ink-dim)" }}
                   >
-                    keep scrolling ↓ watch her refuse to quit
+                    keep scrolling ↓ she's not done yet
                   </motion.p>
                 )}
               </AnimatePresence>

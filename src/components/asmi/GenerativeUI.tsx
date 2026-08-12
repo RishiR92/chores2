@@ -303,7 +303,7 @@ export function GenerativeUI() {
                     className="pt-4 text-center font-mono"
                     style={{ fontSize: 11, color: "var(--ink-dim)" }}
                   >
-                    tap a card — she'll call it in
+                    tap one. she does the awkward phone part.
                   </motion.p>
                 )}
               </AnimatePresence>
