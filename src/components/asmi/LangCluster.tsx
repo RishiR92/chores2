@@ -29,7 +29,7 @@ export function LangCluster() {
           </Reveal>
           <Reveal inGroup variant="accent">
             <p className="t-body mt-5 max-w-md" style={{ color: "var(--ink-soft)" }}>
-              no training, no awkward handoff. she just switches.
+              no phrasebook, no awkward handoff. she switches mid-sentence and keeps chasing.
             </p>
           </Reveal>
         </RevealGroup>

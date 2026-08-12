@@ -17,12 +17,12 @@ const FOOTNOTES = [
   {
     n: "04",
     label: "salons called",
-    line: "three said no. the fourth had a 6pm. that's the job.",
+    line: "three said no. the fourth had a 6pm. she doesn't take the first no.",
   },
   {
     n: "03",
     label: "channels tried",
-    line: "call, text, email — she navigates smartly until it's done.",
+    line: "call, text, email — she keeps switching lanes until someone folds.",
   },
 ];
 

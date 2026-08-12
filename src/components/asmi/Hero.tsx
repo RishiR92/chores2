@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from "motion/react";
+import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { ChannelCTA } from "./ChannelCTA";
 import { ChannelGlyph, ChannelKind } from "./ChannelIcons";
 
@@ -28,7 +28,9 @@ export function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  const gridY = useTransform(scrollYProgress, [0, 1], [0, 46]);
   const [shown, setShown] = useState(0);
+
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     const n = Math.round(Math.min(1, Math.max(0, (v - 0.06) / 0.62)) * STEPS.length);
@@ -41,16 +43,16 @@ export function Hero() {
   return (
     <section ref={ref} className="relative" style={{ height: "205vh" }}>
       <div className="sticky top-0 grain overflow-hidden">
-        <div
-          className="pointer-events-none absolute -top-24 -right-24 h-[420px] w-[420px] rounded-full blur-3xl"
-          style={{ background: "rgba(179,156,255,0.35)" }}
+        <motion.div
+          className="pad-grid"
+          style={{ y: gridY }}
           aria-hidden
         />
-        <div
-          className="pointer-events-none absolute bottom-0 -left-28 h-[320px] w-[320px] rounded-full blur-3xl"
-          style={{ background: "rgba(255,90,71,0.22)" }}
-          aria-hidden
-        />
+        <div className="pad-rule" aria-hidden />
+        <span className="ghost-mark" aria-hidden>
+          asmi
+        </span>
+
 
         <div className="relative mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-center gap-5 px-5 pt-[68px] pb-[60px] sm:gap-7 sm:px-8 md:pt-28 md:pb-24 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-14">
           <div className="min-w-0">
@@ -79,10 +81,21 @@ export function Hero() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-6 sm:mt-8"
+              className="relative mt-6 sm:mt-8"
             >
-              <ChannelCTA size="lg" />
+              <motion.span
+                className="hi-swipe"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 0.65, duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
+                style={{ left: -6, right: "26%", bottom: -6, height: 26, transformOrigin: "left", opacity: 0.85 }}
+                aria-hidden
+              />
+              <div className="relative">
+                <ChannelCTA size="lg" />
+              </div>
             </motion.div>
+
           </div>
 
           {/* thread + scroll-revealed chase */}
@@ -217,7 +230,7 @@ export function Hero() {
                     className="pt-3 text-center font-mono"
                     style={{ fontSize: "var(--t-mono)", color: "var(--ink-dim)" }}
                   >
-                    keep scrolling ↓ watch her refuse to quit
+                    keep scrolling ↓ she's not done yet
                   </motion.p>
                 )}
               </AnimatePresence>

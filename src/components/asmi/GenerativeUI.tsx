@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Check, Phone, Star } from "lucide-react";
 import { Reveal, RevealGroup } from "./Reveal";
 import barImg from "@/assets/place-bar.jpg";
@@ -52,6 +52,7 @@ type Phase = "choose" | "calling" | "done";
 
 
 export function GenerativeUI() {
+  const reduced = useReducedMotion();
   const [selected, setSelected] = useState<string | null>(null);
   const [phase, setPhase] = useState<Phase>("choose");
   const [hold, setHold] = useState(0);
@@ -111,7 +112,7 @@ export function GenerativeUI() {
           </Reveal>
           <Reveal inGroup variant="accent">
             <p className="mt-6 max-w-md font-sans" style={{ fontSize: 15, color: "var(--ink-soft)" }}>
-              no ten tabs, no comparison spreadsheet. she builds the exact view you need in the thread — then goes and books it.
+              no ten tabs, no wall of text. she builds the exact view you need in the thread — then goes and books it.
             </p>
           </Reveal>
         </RevealGroup>
@@ -151,12 +152,19 @@ export function GenerativeUI() {
 
             {/* cards */}
             <div className="flex flex-col gap-2.5">
-              {PLACES.map((p) => {
+              {PLACES.map((p, i) => {
                 const on = selected === p.id;
                 const dim = selected !== null && !on;
                 return (
-                  <motion.button
+                  <motion.div
                     key={p.id}
+                    initial={reduced ? false : { opacity: 0, x: 56, rotate: 1.5 }}
+                    whileInView={{ opacity: 1, x: 0, rotate: 0 }}
+                    viewport={{ once: true, amount: 0.5 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 24, delay: i * 0.12 }}
+                    className="min-w-0"
+                  >
+                  <motion.button
                     onClick={() => phase === "choose" && setSelected(on ? null : p.id)}
                     whileTap={{ scale: 0.98 }}
                     animate={{ opacity: dim ? 0.4 : 1 }}
@@ -166,6 +174,7 @@ export function GenerativeUI() {
                       background: on ? "var(--citrus)" : "var(--cream)",
                     }}
                   >
+
                     <div className="flex min-w-0 gap-3">
                       <img
                         src={p.img}
@@ -215,6 +224,8 @@ export function GenerativeUI() {
                       </span>
                     </div>
                   </motion.button>
+                  </motion.div>
+
                 );
               })}
             </div>
@@ -292,7 +303,7 @@ export function GenerativeUI() {
                     className="pt-4 text-center font-mono"
                     style={{ fontSize: 11, color: "var(--ink-dim)" }}
                   >
-                    tap a card — she'll call it in
+                    tap one. she does the awkward phone part.
                   </motion.p>
                 )}
               </AnimatePresence>
