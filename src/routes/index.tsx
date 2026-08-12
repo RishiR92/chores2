@@ -75,10 +75,8 @@ function Index() {
             </a>
           </div>
         </div>
-        <div className="h-16 md:h-0" aria-hidden />
       </footer>
 
-      <StickyChannelBar />
     </main>
   );
 }
