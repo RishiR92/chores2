@@ -51,10 +51,21 @@ Everywhere the page shows a list of examples, one of them is now group coordinat
 - **Generative UI strip**: the group-poll chip above.
 
 
+## 5. Works the same on phone and laptop
+
+Every interaction above must land on both — nothing concept-critical hidden on mobile.
+
+- Hero: scroll-driven chase reveal works on touch scroll; headline scales 40 → 88px; thread stacks under it.
+- Generative UI phone: on desktop it sits beside the copy with the card carousel side-by-side; on mobile the cards become a horizontal snap-scroll inside the phone, with the tap → book → done flip identical.
+- Chase engine tabs: horizontal snap chips on mobile, wrapped row on desktop.
+- 44px+ tap targets everywhere, no hover-only affordances (every hover has a tap equivalent), sticky bottom channel bar stays on small screens.
+
 ## Technical notes
 
 - `Hero.tsx`: split into headline block + `HeroThread` (typing bubbles) + scroll-driven `ChaseLog`. Use `useScroll`/`useTransform` from `motion/react` on a tall hero container; drive per-step opacity from a progress value. Honour `useReducedMotion`.
 - New `src/components/asmi/GenerativeUI.tsx` + `PlaceCard.tsx`; add it to `src/routes/index.tsx` after `<Receipts />`. Generate 3 images into `src/assets/` and import them.
-- `Receipts.tsx`: swap the third card's body/caption for the transfer counter.
+- `Receipts.tsx`: replace the third card with the four-channel ghosting strip.
+- `ChoreGrid.tsx` + `ChaseEngine.tsx`: add the friends/group-coordination entries.
 - Add a nav link for the new section; update route `head()` description to mention visual, tappable interfaces in chat.
 - Palette, fonts and existing tokens unchanged.
+
