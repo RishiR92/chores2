@@ -8,29 +8,35 @@ The current hero is a scroll-driven serif statement ("The screen era is over.") 
 
 ## New headline direction
 
-Replace the manifesto with a verb. The product's magic is that there is nothing to install: you text a contact and real-world stuff gets done.
+Replace the manifesto with a verb. The magic is that there's nothing to install and nothing to manage: you text a contact, and the messy real-world stuff — the calling, waiting, chasing — stops being yours.
 
 Primary (recommended):
 
 ```text
               just text her.
-   asmi calls the plumber, books the table,
-        chases the refund. you don't.
+   asmi calls the plumber, argues with the bank,
+      chases the refund for a week. you don't.
 
         [ iMessage ]   [ WhatsApp ]
           no app. no signup. just text.
 ```
 
 Alternates to swap in if the team prefers:
-- "text asmi. she handles it." / "your errands, in your DMs."
-- "she'll call them for you." (leans into phone-call anxiety, a very Gen-Z pain point)
-- "unbothered." with the sub explaining the calls
+- "text asmi. she handles it." / "your life admin, in your DMs."
+- "she'll make the call." (phone-call anxiety is the sharpest Gen-Z pain point)
+- "never be on hold again."
+- "unbothered." with the sub carrying the explanation
 
 "The screen era is over." is not deleted — it moves to a later act as a quieter statement line, so the brand thesis survives without blocking the hook.
 
+The hero must land three product truths in under two seconds: (1) it lives in the messages app you already use, (2) it makes real phone calls to real humans and businesses, (3) it keeps going for hours or days until the thing is actually done.
+
 ## Where the icons go
 
-A single **channel row** directly under the sub-headline: two rounded 40px tiles (iMessage blue-green gradient bubble, WhatsApp green) plus a "no app needed" caption. They are the trust cue, not decoration — placed after the promise, before the CTA. On tap they open the respective deep link (sms:/wa.me) once the numbers exist; until then they are visual only and the CTA stays the waitlist form.
+A single **channel row** directly under the sub-headline: two rounded 40px tiles (iMessage blue-green gradient bubble, WhatsApp green) plus a "no app. no signup." caption. They are the trust cue, not decoration — placed after the promise, before the CTA. On tap they open the respective deep link (sms:/wa.me) once the numbers exist; until then they are visual only and the CTA stays the waitlist form.
+
+A second, smaller **channel trail** sits under the thread card: `call → text → email → web` with tiny icons and the caption "until it's actually done." That single line carries the escalation model — the thing no other assistant does — without a paragraph of explanation.
+
 
 ## Making it feel Gen-Z without copying Tomo
 
