@@ -51,7 +51,7 @@ export function ChannelRow({ caption = "no app. no signup. just text her." }: { 
         <IMessageMark />
         <WhatsAppMark />
       </div>
-      <p className="font-sans" style={{ color: "var(--color-stone-dim)", fontSize: 13.5 }}>
+      <p className="font-sans" style={{ color: "var(--color-stone-dim)", fontSize: "var(--t-sm)" }}>
         {caption}
       </p>
     </div>
@@ -104,7 +104,7 @@ export function ChannelChips({ kinds }: { kinds: ChannelKind[] }) {
           key={k}
           className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-sans"
           style={{
-            fontSize: 11.5,
+            fontSize: "var(--t-mono)",
             color: "var(--color-stone)",
             background: "rgba(44,37,32,0.045)",
             border: "1px solid rgba(44,37,32,0.06)",

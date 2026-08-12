@@ -30,7 +30,7 @@ export function ChannelCTA({
       <span
         className="font-mono"
         style={{
-          fontSize: 11.5,
+          fontSize: "var(--t-mono)",
           letterSpacing: "0.08em",
           textTransform: "uppercase",
           color: variant === "dark" ? "rgba(255,253,248,0.55)" : "var(--ink-dim)",
