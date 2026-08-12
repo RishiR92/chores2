@@ -42,6 +42,17 @@ export function Receipts() {
         transition={{ duration: 0.55, ease: [0.22, 0.8, 0.24, 1] }}
         className="ink-section receipt-band relative overflow-hidden"
       >
+        <img
+          src={handsetImg}
+          alt=""
+          aria-hidden
+          loading="lazy"
+          width={900}
+          height={900}
+          className="pointer-events-none absolute -left-16 -bottom-14 hidden w-[300px] select-none md:block lg:w-[380px]"
+          style={{ opacity: 0.16, transform: "rotate(-14deg)", filter: "grayscale(0.7)" }}
+        />
+
         <div className="relative mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-24">
           <p className="t-mono" style={{ color: "rgba(255,253,248,0.5)" }}>
             SOMEONE HAS TO SIT THROUGH THIS
