@@ -12,11 +12,16 @@ export function ChaseLog({
   steps,
   dark = false,
   delay = 0,
+  visible,
 }: {
   steps: ChaseStep[];
   dark?: boolean;
   delay?: number;
+  /** when set, the parent drives the reveal: only the first N steps render */
+  visible?: number;
 }) {
+  const driven = typeof visible === "number";
+  const shown = driven ? steps.slice(0, visible) : steps;
   const line = dark ? "rgba(255,253,248,0.16)" : "rgba(20,19,24,0.12)";
   const dim = dark ? "rgba(255,253,248,0.55)" : "var(--ink-dim)";
   const body = dark ? "var(--cream)" : "var(--ink)";
