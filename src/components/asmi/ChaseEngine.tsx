@@ -1,5 +1,4 @@
-import { motion } from "motion/react";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ChaseLog, ChaseStep } from "./ChaseLog";
 import { ChannelGlyph } from "./ChannelIcons";
 
@@ -49,7 +48,6 @@ const JOBS: Job[] = [
     ],
   },
   {
-
     id: "friends",
     title: "dinner with 5 friends, saturday",
     who: "5 friends + the restaurant",
@@ -63,7 +61,6 @@ const JOBS: Job[] = [
   },
 ];
 
-
 const STATUS = {
   done: { label: "done", bg: "var(--mint-pop)", fg: "var(--ink)" },
   live: { label: "chasing", bg: "var(--coral)", fg: "#fff" },
@@ -71,18 +68,66 @@ const STATUS = {
 } as const;
 
 export function ChaseEngine() {
-  const [active, setActive] = useState(JOBS[0].id);
-  const job = JOBS.find((j) => j.id === active)!;
+  const trackRef = useRef<HTMLDivElement>(null);
+  const chipsRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+
+  const scrollToIndex = useCallback((i: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const card = track.children[i] as HTMLElement | undefined;
+    if (card) track.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const center = track.scrollLeft + track.clientWidth / 2;
+        let best = 0;
+        let bestDist = Infinity;
+        Array.from(track.children).forEach((el, i) => {
+          const c = el as HTMLElement;
+          const mid = c.offsetLeft - track.offsetLeft + c.clientWidth / 2;
+          const d = Math.abs(mid - center);
+          if (d < bestDist) {
+            bestDist = d;
+            best = i;
+          }
+        });
+        setActive(best);
+      });
+    };
+    track.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      track.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  useEffect(() => {
+    const chips = chipsRef.current;
+    const chip = chips?.children[active] as HTMLElement | undefined;
+    if (chips && chip) {
+      chips.scrollTo({
+        left: chip.offsetLeft - chips.offsetLeft - chips.clientWidth / 2 + chip.clientWidth / 2,
+        behavior: "smooth",
+      });
+    }
+  }, [active]);
 
   return (
-    <section id="how" className="ink-section relative grain overflow-hidden px-5 py-16 sm:px-8 md:py-24">
+    <section id="how" className="ink-section relative grain overflow-hidden py-16 md:py-24">
       <div
         className="pointer-events-none absolute -bottom-32 -right-20 h-[380px] w-[380px] rounded-full blur-3xl"
         style={{ background: "rgba(47,91,255,0.35)" }}
         aria-hidden
       />
       <div className="relative mx-auto max-w-7xl">
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 px-5 sm:px-8">
           <span className="font-mono" style={{ fontSize: 11, letterSpacing: "0.08em", color: "var(--citrus)" }}>
             THE CHASE ENGINE
           </span>
@@ -95,13 +140,17 @@ export function ChaseEngine() {
           </p>
         </div>
 
-        <div className="mt-9 flex gap-2 overflow-x-auto pb-2 -mx-5 px-5 sm:mx-0 sm:px-0 sm:flex-wrap">
-          {JOBS.map((j) => {
-            const on = j.id === active;
+        <div
+          ref={chipsRef}
+          className="mt-8 flex gap-2 overflow-x-auto px-5 pb-2 sm:px-8"
+          style={{ scrollbarWidth: "none" }}
+        >
+          {JOBS.map((j, i) => {
+            const on = i === active;
             return (
               <button
                 key={j.id}
-                onClick={() => setActive(j.id)}
+                onClick={() => scrollToIndex(i)}
                 className="shrink-0 rounded-full px-4 py-2.5 font-sans transition-colors"
                 style={{
                   fontSize: 14,
@@ -117,65 +166,86 @@ export function ChaseEngine() {
           })}
         </div>
 
-        <motion.div
-          key={job.id}
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35 }}
-          className="mt-5 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]"
+        <div
+          ref={trackRef}
+          className="mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-3 sm:px-8"
+          style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
         >
-          <div
-            className="min-w-0 rounded-[26px] p-5"
-            style={{ background: "rgba(255,253,248,0.06)", border: "1px solid rgba(255,253,248,0.14)" }}
-          >
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
-              <div className="min-w-0">
-                <h3 className="text-[1.35rem] sm:text-[1.6rem]">{job.title}</h3>
-                <p className="mt-1.5 font-mono" style={{ fontSize: 11.5, color: "rgba(255,253,248,0.55)" }}>
-                  {job.who}
-                </p>
-              </div>
-              <span
-                className="shrink-0 rounded-full px-3 py-1.5 font-mono"
-                style={{ fontSize: 11, background: STATUS[job.status].bg, color: STATUS[job.status].fg }}
-              >
-                {STATUS[job.status].label}
-              </span>
-            </div>
-
-            <div className="mt-5 flex flex-wrap gap-2">
-              {(["call", "text", "email", "web"] as const).map((k) => (
+          {JOBS.map((job) => (
+            <article
+              key={job.id}
+              className="min-w-0 shrink-0 snap-center rounded-[26px] p-5"
+              style={{
+                width: "min(88%, 560px)",
+                background: "rgba(255,253,248,0.06)",
+                border: "1px solid rgba(255,253,248,0.14)",
+              }}
+            >
+              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+                <div className="min-w-0">
+                  <h3 className="text-[1.35rem] sm:text-[1.6rem]">{job.title}</h3>
+                  <p className="mt-1.5 font-mono" style={{ fontSize: 11.5, color: "rgba(255,253,248,0.55)" }}>
+                    {job.who}
+                  </p>
+                </div>
                 <span
-                  key={k}
-                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 font-sans"
-                  style={{
-                    fontSize: 12.5,
-                    color: "var(--cream)",
-                    background: "rgba(255,253,248,0.08)",
-                    border: "1px solid rgba(255,253,248,0.16)",
-                  }}
+                  className="shrink-0 rounded-full px-3 py-1.5 font-mono"
+                  style={{ fontSize: 11, background: STATUS[job.status].bg, color: STATUS[job.status].fg }}
                 >
-                  <ChannelGlyph kind={k} size={13} />
-                  {k}
+                  {STATUS[job.status].label}
                 </span>
-              ))}
-            </div>
+              </div>
 
-            <p className="mt-5 font-sans" style={{ fontSize: 14.5, color: "rgba(255,253,248,0.7)" }}>
-              she runs several threads in parallel and informs you once the task is done.
-            </p>
-          </div>
+              <div className="mt-5 hidden flex-wrap gap-2 md:flex">
+                {(["call", "text", "email", "web"] as const).map((k) => (
+                  <span
+                    key={k}
+                    className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 font-sans"
+                    style={{
+                      fontSize: 12.5,
+                      color: "var(--cream)",
+                      background: "rgba(255,253,248,0.08)",
+                      border: "1px solid rgba(255,253,248,0.16)",
+                    }}
+                  >
+                    <ChannelGlyph kind={k} size={13} />
+                    {k}
+                  </span>
+                ))}
+              </div>
 
-          <div
-            className="min-w-0 rounded-[26px] p-5"
-            style={{ background: "rgba(255,253,248,0.06)", border: "1px solid rgba(255,253,248,0.14)" }}
-          >
-            <p className="mb-4 font-mono" style={{ fontSize: 10.5, letterSpacing: "0.06em", color: "rgba(255,253,248,0.5)" }}>
-              LIVE LOG
-            </p>
-            <ChaseLog steps={job.steps} dark />
-          </div>
-        </motion.div>
+              <div className="mt-5">
+                <p
+                  className="mb-4 font-mono"
+                  style={{ fontSize: 10.5, letterSpacing: "0.06em", color: "rgba(255,253,248,0.5)" }}
+                >
+                  LIVE LOG
+                </p>
+                <ChaseLog steps={job.steps} dark />
+              </div>
+
+              <p className="mt-5 hidden font-sans md:block" style={{ fontSize: 14.5, color: "rgba(255,253,248,0.7)" }}>
+                she runs several threads in parallel and informs you once the task is done.
+              </p>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-2 flex justify-center gap-2">
+          {JOBS.map((j, i) => (
+            <button
+              key={j.id}
+              onClick={() => scrollToIndex(i)}
+              aria-label={`show ${j.title}`}
+              className="rounded-full transition-all"
+              style={{
+                height: 6,
+                width: i === active ? 22 : 6,
+                background: i === active ? "var(--citrus)" : "rgba(255,253,248,0.3)",
+              }}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

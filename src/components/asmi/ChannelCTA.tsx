@@ -7,61 +7,55 @@ interface Props {
   className?: string;
   size?: "md" | "lg";
   variant?: "light" | "dark";
+  align?: "start" | "center";
+  caption?: string;
 }
 
-export function ChannelCTA({ className = "", size = "md", variant = "light" }: Props) {
-  const pad = size === "lg" ? "px-7 py-4 text-[1.05rem]" : "px-5 py-3.5";
-  return (
-    <div className={`flex flex-col sm:flex-row gap-3 w-full sm:w-auto ${className}`}>
-      <a
-        href={IMSG_LINK}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`pill-btn pill-blue w-full sm:w-auto ${pad}`}
-      >
-        <IMessageMark size={22} />
-        text her on imessage
-      </a>
-      <a
-        href={WA_LINK}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`pill-btn pill-mint w-full sm:w-auto ${pad}`}
-        style={variant === "dark" ? { borderColor: "var(--cream)", boxShadow: "4px 4px 0 var(--cream)" } : undefined}
-      >
-        <WhatsAppMark size={22} />
-        whatsapp
-      </a>
-    </div>
-  );
-}
+export function ChannelCTA({
+  className = "",
+  size = "md",
+  variant = "light",
+  align = "start",
+  caption = "text her on",
+}: Props) {
+  const btn = size === "lg" ? "h-[62px] w-[86px] sm:w-[104px]" : "h-[54px] w-[78px] sm:w-[92px]";
+  const icon = size === "lg" ? 30 : 26;
+  const darkEdge =
+    variant === "dark" ? { borderColor: "var(--cream)", boxShadow: "4px 4px 0 var(--cream)" } : undefined;
 
-export function StickyChannelBar() {
   return (
-    <div
-      className="fixed bottom-0 left-0 right-0 z-40 md:hidden px-3 pb-3 pt-2"
-      style={{
-        background: "linear-gradient(to top, var(--paper) 62%, transparent)",
-      }}
-    >
-      <div className="flex gap-2">
+    <div className={`flex flex-col gap-2.5 ${align === "center" ? "items-center" : "items-start"} ${className}`}>
+      <span
+        className="font-mono"
+        style={{
+          fontSize: 11.5,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          color: variant === "dark" ? "rgba(255,253,248,0.55)" : "var(--ink-dim)",
+        }}
+      >
+        {caption}
+      </span>
+      <div className="flex gap-3">
         <a
           href={IMSG_LINK}
           target="_blank"
           rel="noopener noreferrer"
-          className="pill-btn pill-blue flex-1 text-[0.95rem] px-3"
+          aria-label="text asmi on imessage"
+          className={`pill-btn pill-blue !px-0 ${btn}`}
+          style={darkEdge}
         >
-          <IMessageMark size={20} />
-          imessage
+          <IMessageMark size={icon} />
         </a>
         <a
           href={WA_LINK}
           target="_blank"
           rel="noopener noreferrer"
-          className="pill-btn pill-mint flex-1 text-[0.95rem] px-3"
+          aria-label="text asmi on whatsapp"
+          className={`pill-btn pill-mint !px-0 ${btn}`}
+          style={darkEdge}
         >
-          <WhatsAppMark size={20} />
-          whatsapp
+          <WhatsAppMark size={icon} />
         </a>
       </div>
     </div>

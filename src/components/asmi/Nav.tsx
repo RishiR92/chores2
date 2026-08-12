@@ -1,5 +1,3 @@
-import { IMSG_LINK } from "./ChannelCTA";
-
 export function Nav() {
   return (
     <nav
@@ -11,26 +9,15 @@ export function Nav() {
       }}
     >
       <div
-        className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-2.5 md:px-6"
+        className="mx-auto flex max-w-7xl items-center px-4 py-2.5 md:px-6"
         style={{ minHeight: 58 }}
       >
-        <div className="flex min-w-0 items-center gap-7">
-          <a
-            href="#"
-            className="font-display shrink-0"
-            style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.04em" }}
-          >
-            asmi
-          </a>
-        </div>
         <a
-          href={IMSG_LINK}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="pill-btn pill-blue shrink-0"
-          style={{ minHeight: 42, padding: "0.5rem 1.1rem", fontSize: "0.9rem", boxShadow: "3px 3px 0 var(--ink)" }}
+          href="#"
+          className="font-display shrink-0"
+          style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.04em" }}
         >
-          text asmi
+          asmi
         </a>
       </div>
     </nav>
