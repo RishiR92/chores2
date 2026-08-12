@@ -54,7 +54,7 @@ export function Hero() {
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     const n = Math.round(Math.min(1, Math.max(0, (v - 0.06) / 0.62)) * STEPS.length);
-    setShown(n);
+    setShown((prev) => (prev === n ? prev : n));
   });
 
   const visible = reduced ? STEPS.length : shown;

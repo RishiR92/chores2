@@ -59,7 +59,7 @@ function Index() {
       <footer className="px-5 sm:px-8" style={{ background: "var(--paper-deep)" }}>
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 py-7">
           <a href="#" aria-label="asmi home" className="shrink-0">
-            <img src={asmiLogo.url} alt="asmi" width={78} height={28} className="h-7 w-auto" />
+            <img src={asmiLogo.url} alt="asmi" width={112} height={40} className="h-9 w-auto" />
           </a>
 
           <div className="flex items-center gap-2 font-sans" style={{ color: "var(--ink-dim)", fontSize: 14 }}>
