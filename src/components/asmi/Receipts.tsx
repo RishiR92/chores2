@@ -47,16 +47,38 @@ const CARDS = [
     caption: "six menus deep to reach a human. press 4.",
   },
   {
-    tag: "\"we'll call you back\"",
+    tag: "nobody replies",
     color: "var(--violet-soft)",
     body: (
-      <span className="font-mono" style={{ fontSize: 34, fontWeight: 700 }}>
-        ×3
-      </span>
+      <div className="flex flex-col gap-1.5">
+        {[
+          { c: "called", r: "rang out", dead: true },
+          { c: "texted", r: "delivered · 2 days", dead: true },
+          { c: "dm'd", r: "unread", dead: true },
+          { c: "emailed", r: "replied ✅", dead: false },
+        ].map((x) => (
+          <div key={x.c} className="flex items-center gap-2 font-mono" style={{ fontSize: 12 }}>
+            <span
+              className="w-16 shrink-0 rounded-full px-2 py-0.5 text-center"
+              style={{
+                background: x.dead ? "rgba(20,19,24,0.07)" : "var(--mint-pop)",
+                color: x.dead ? "var(--ink-dim)" : "var(--ink)",
+                fontWeight: x.dead ? 400 : 700,
+              }}
+            >
+              {x.c}
+            </span>
+            <span style={{ color: x.dead ? "var(--ink-dim)" : "var(--ink)", textDecoration: x.dead ? "line-through" : "none" }}>
+              {x.r}
+            </span>
+          </div>
+        ))}
+      </div>
     ),
-    caption: "they never do. so she calls them. and again.",
+    caption: "she keeps switching channels until one of them works.",
   },
 ];
+
 
 export function Receipts() {
   return (
