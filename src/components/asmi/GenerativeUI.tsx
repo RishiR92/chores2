@@ -30,7 +30,7 @@ const PLACES: Place[] = [
   },
   {
     id: "question",
-    name: "Question Mark Tavern",
+    name: "Wayfare Tavern",
     img: tavernImg,
     rating: 4.9,
     reviews: 335,
