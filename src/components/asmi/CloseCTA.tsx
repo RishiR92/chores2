@@ -1,4 +1,3 @@
-import { motion } from "motion/react";
 import { ChannelCTA } from "./ChannelCTA";
 import { Reveal } from "./Reveal";
 
