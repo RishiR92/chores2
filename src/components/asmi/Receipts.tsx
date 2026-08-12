@@ -15,14 +15,14 @@ function useHoldClock() {
 
 const FOOTNOTES = [
   {
-    n: "06",
-    label: "menus deep",
-    line: "before a human picks up. she presses every one.",
+    n: "04",
+    label: "salons called",
+    line: "three said no. the fourth had a 6pm. that's the job.",
   },
   {
     n: "03",
     label: "channels tried",
-    line: "call, text, email — she switches until one lands.",
+    line: "call, text, email — she navigates smartly until it's done.",
   },
 ];
 
