@@ -141,7 +141,7 @@ export function GenerativeUI() {
             </div>
 
             {/* cards */}
-            <div className="-mx-1 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-2 sm:mx-0 sm:grid sm:grid-cols-1 sm:gap-2.5 sm:overflow-visible sm:px-0">
+            <div className="flex flex-col gap-2.5">
               {PLACES.map((p) => {
                 const on = selected === p.id;
                 const dim = selected !== null && !on;
@@ -151,7 +151,7 @@ export function GenerativeUI() {
                     onClick={() => phase === "choose" && setSelected(on ? null : p.id)}
                     whileTap={{ scale: 0.98 }}
                     animate={{ opacity: dim ? 0.4 : 1 }}
-                    className="min-w-[248px] shrink-0 snap-start rounded-2xl p-2.5 text-left sm:w-full sm:min-w-0"
+                    className="w-full min-w-0 rounded-2xl p-2.5 text-left"
                     style={{
                       border: on ? "2px solid var(--ink)" : "1px solid rgba(20,19,24,0.12)",
                       background: on ? "var(--citrus)" : "var(--cream)",
