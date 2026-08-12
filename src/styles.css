@@ -388,7 +388,18 @@
   animation: breathe 22s ease-in-out infinite;
 }
 .landing-theme ::selection { background: var(--color-terracotta); color: var(--color-cream); }
+.landing-theme .btn-pill {
+  background: var(--color-terracotta);
+  color: var(--color-cream);
+  box-shadow: 0 14px 30px -14px rgba(194, 91, 63, 0.7);
+}
+.landing-theme .btn-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 36px -14px rgba(194, 91, 63, 0.75);
+}
+.landing-theme .scroll-progress { background: var(--color-terracotta); }
 @media (prefers-reduced-motion: reduce) { .landing-theme { animation: none; } }
+
 @keyframes breathe {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
