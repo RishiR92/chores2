@@ -39,7 +39,9 @@ function Index() {
       <Nav />
       <Hero />
       <Receipts />
+      <GenerativeUI />
       <ChaseEngine />
+
       <ChoreGrid />
       <LangCluster />
       <CloseCTA />
