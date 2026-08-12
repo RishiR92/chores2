@@ -37,7 +37,10 @@ export function ChoreGrid() {
           tap one to see how she'd run it.
         </p>
 
-        <div className="mt-9 flex flex-wrap gap-2.5">
+        <div
+          className="-mx-5 mt-9 grid snap-x auto-cols-max grid-flow-col grid-rows-3 gap-2.5 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex sm:flex-wrap sm:overflow-visible sm:px-0"
+          style={{ scrollbarWidth: "none" }}
+        >
           {CHORES.map((c, i) => {
             const on = open === c.label;
             return (
@@ -48,7 +51,7 @@ export function ChoreGrid() {
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ delay: i * 0.035, type: "spring", stiffness: 300, damping: 22 }}
                 onClick={() => setOpen(on ? null : c.label)}
-                className="rounded-full px-4 py-3 font-sans text-left transition-colors"
+                className="snap-start rounded-full px-4 py-3 font-sans text-left transition-colors"
                 style={{
                   fontSize: 15,
                   minHeight: 46,
