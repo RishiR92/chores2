@@ -10,14 +10,14 @@ import bill from "@/assets/cut-bill.png";
 import dentist from "@/assets/cut-dentist.png";
 
 const PILE: CollageLayer[] = [
-  { src: wrench, x: "-1%", y: "66%", w: "min(20vw, 220px)", depth: 0.8, rot: 12, desktopOnly: true },
-  { src: chair, x: "82%", y: "62%", w: "min(21vw, 250px)", depth: 0.4, rot: 5, desktopOnly: true, opacity: 0.92 },
-  { src: gymcard, x: "83%", y: "3%", w: "min(15vw, 165px)", depth: 0.7, rot: -11, desktopOnly: true },
-  { src: bill, x: "68%", y: "40%", w: "min(13vw, 145px)", depth: 0.3, rot: 9, desktopOnly: true, opacity: 0.88 },
-  { src: dentist, x: "34%", y: "3%", w: "min(11vw, 125px)", depth: 0.5, rot: -7, desktopOnly: true, opacity: 0.9 },
+  { src: wrench, x: "-2%", y: "74%", w: "min(18vw, 200px)", depth: 0.8, rot: 12, desktopOnly: true },
+  { src: chair, x: "83%", y: "60%", w: "min(20vw, 240px)", depth: 0.4, rot: 5, desktopOnly: true, opacity: 0.92 },
+  { src: gymcard, x: "84%", y: "2%", w: "min(14vw, 155px)", depth: 0.7, rot: -11, desktopOnly: true },
+  { src: bill, x: "43%", y: "70%", w: "min(12vw, 140px)", depth: 0.3, rot: 9, desktopOnly: true, opacity: 0.88 },
+  { src: dentist, x: "35%", y: "2%", w: "min(11vw, 125px)", depth: 0.5, rot: -7, desktopOnly: true, opacity: 0.9 },
 
-  { src: wrench, x: "-4%", y: "78%", w: "30vw", depth: 0.7, rot: 12, opacity: 0.75, mobileOnly: true },
-  { src: gymcard, x: "70%", y: "5%", w: "26vw", depth: 0.5, rot: -10, opacity: 0.75, mobileOnly: true },
+  { src: wrench, x: "-8%", y: "86%", w: "34vw", depth: 0.7, rot: 12, opacity: 0.8, mobileOnly: true },
+  { src: gymcard, x: "70%", y: "4%", w: "26vw", depth: 0.5, rot: -10, opacity: 0.8, mobileOnly: true },
 ];
 
 
