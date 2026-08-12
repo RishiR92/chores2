@@ -14,11 +14,6 @@ Sample rewrites:
 
 Outcome chip stays, worded as a result the user can act on.
 
-## 4. Restaurant option cards — same horizontal slide on laptop
-
-The restaurant discovery cards currently slide in from right to left on mobile only. Apply the same right-to-left entrance on desktop so the interaction feels consistent across viewports. Keep the rest of the layout (3-card grid) untouched, just make each card translate in from `x: 100%` and settle as the user scrolls into the section.
-
-
 ## 2. Hero background wordmark
 
 The giant ghost "asmi" behind the hero clips on phones. Fix by scaling it to fit the viewport width on small screens and raising it clear of the bottom edge so the whole word is visible.
@@ -26,6 +21,11 @@ The giant ghost "asmi" behind the hero clips on phones. Fix by scaling it to fit
 ## 3. Logo
 
 Use the uploaded asmi wordmark (serif italic) in place of the current text logo in the header, with the white version reserved for dark sections. Also set it as the site favicon (square, padded copy in `public/`).
+
+## 4. Restaurant option cards — same horizontal slide on laptop
+
+The restaurant discovery cards currently slide in from right to left on mobile only. Apply the same right-to-left entrance on desktop so the interaction feels consistent across viewports. Keep the rest of the layout (3-card grid) untouched, just make each card translate in from `x: 100%` and settle as the user scrolls into the section.
+
 
 ## Technical notes
 
