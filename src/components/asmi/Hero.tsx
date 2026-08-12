@@ -11,7 +11,7 @@ import receipt from "@/assets/cut-receipt.png";
 import bell from "@/assets/cut-bell.png";
 
 const PILE: CollageLayer[] = [
-  { src: handset, x: "-7%", y: "1%", w: "min(28vw, 280px)", depth: 0.85, rot: -9, desktopOnly: true },
+  { src: handset, x: "-2%", y: "2%", w: "min(26vw, 260px)", depth: 0.85, rot: -9, desktopOnly: true },
   { src: wrench, x: "1%", y: "72%", w: "min(22vw, 230px)", depth: 0.55, rot: 14, desktopOnly: true },
   { src: chair, x: "80%", y: "60%", w: "min(24vw, 270px)", depth: 0.35, rot: 5, desktopOnly: true, opacity: 0.9 },
   { src: receipt, x: "41%", y: "74%", w: "min(11vw, 120px)", depth: 0.25, rot: -12, desktopOnly: true, opacity: 0.9 },
