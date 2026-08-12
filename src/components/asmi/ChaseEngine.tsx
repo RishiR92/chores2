@@ -48,7 +48,21 @@ const JOBS: Job[] = [
       { kind: "call", text: "tues 8:30am. added to your calendar.", time: "10:24a", tone: "win" },
     ],
   },
+  {
+
+    id: "friends",
+    title: "dinner with 5 friends, saturday",
+    who: "5 friends + the restaurant",
+    status: "live",
+    steps: [
+      { kind: "text", text: "texted all 5 — 3 said saturday", time: "6:02p" },
+      { kind: "text", text: "nudged the two who ghosted", time: "7:30p", tone: "fail" },
+      { kind: "text", text: "both in. saturday locked.", time: "9:14p", tone: "win" },
+      { kind: "call", text: "calling the bar for a table of 5", time: "now" },
+    ],
+  },
 ];
+
 
 const STATUS = {
   done: { label: "done", bg: "var(--mint-pop)", fg: "var(--ink)" },

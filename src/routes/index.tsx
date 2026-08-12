@@ -3,7 +3,9 @@ import { Nav } from "@/components/asmi/Nav";
 import { ScrollProgress } from "@/components/asmi/ScrollProgress";
 import { Hero } from "@/components/asmi/Hero";
 import { Receipts } from "@/components/asmi/Receipts";
+import { GenerativeUI } from "@/components/asmi/GenerativeUI";
 import { ChaseEngine } from "@/components/asmi/ChaseEngine";
+
 import { ChoreGrid } from "@/components/asmi/ChoreGrid";
 import { LangCluster } from "@/components/asmi/LangCluster";
 import { CloseCTA } from "@/components/asmi/CloseCTA";
@@ -37,7 +39,9 @@ function Index() {
       <Nav />
       <Hero />
       <Receipts />
+      <GenerativeUI />
       <ChaseEngine />
+
       <ChoreGrid />
       <LangCluster />
       <CloseCTA />
