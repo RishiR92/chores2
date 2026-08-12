@@ -73,6 +73,7 @@ export function ChaseEngine() {
   const chipsRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const [active, setActive] = useState(0);
+  const [runId, setRunId] = useState(0);
   const [shown, setShown] = useState(0);
   const job = JOBS[active];
   const total = job.steps.length;
@@ -92,7 +93,7 @@ export function ChaseEngine() {
       if (i >= total) clearInterval(id);
     }, STEP_MS);
     return () => clearInterval(id);
-  }, [active, total, reduced]);
+  }, [active, runId, total, reduced]);
 
   useEffect(() => {
     const chips = chipsRef.current;
@@ -106,24 +107,8 @@ export function ChaseEngine() {
   }, [active]);
 
   const select = (i: number) => {
-    if (i === active) {
-      // replay
-      setShown(0);
-      const t = setTimeout(() => setShown(reduced ? total : 0), 0);
-      clearTimeout(t);
-      // force effect re-run by toggling through state
-      setActive(i);
-      if (!reduced) {
-        let n = 0;
-        const id = setInterval(() => {
-          n += 1;
-          setShown(n);
-          if (n >= total) clearInterval(id);
-        }, STEP_MS);
-      }
-      return;
-    }
     setActive(i);
+    setRunId((r) => r + 1);
   };
 
   return (
