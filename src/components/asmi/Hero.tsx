@@ -79,35 +79,10 @@ export function Hero() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-5 sm:mt-7"
+              className="mt-6 sm:mt-8"
             >
-              <ChannelCTA size="lg" className="!flex-row [&_a]:!w-auto [&_a]:flex-1 [&_a]:px-3 [&_a]:text-[0.92rem] sm:[&_a]:px-7 sm:[&_a]:text-[1.05rem]" />
+              <ChannelCTA size="lg" />
             </motion.div>
-
-            <div className="mt-3 min-h-[24px] sm:mt-4">
-              <AnimatePresence>
-                {done && (
-                  <motion.span
-                    initial={{ opacity: 0, y: 8, rotate: -1.6, scale: 0.96 }}
-                    animate={{ opacity: 1, y: 0, rotate: -1.6, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ type: "spring", stiffness: 320, damping: 18 }}
-                    className="font-display relative inline-block whitespace-nowrap"
-                    style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em" }}
-                  >
-                    she doesn't stop until it's done.
-                    <motion.span
-                      initial={{ scaleX: 0 }}
-                      animate={{ scaleX: 1 }}
-                      transition={{ delay: 0.25, duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
-                      className="absolute left-0 right-0 -bottom-[3px] h-[6px] origin-left rounded-full"
-                      style={{ background: "var(--coral)", opacity: 0.55 }}
-                      aria-hidden
-                    />
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </div>
           </div>
 
           {/* thread + scroll-revealed chase */}
