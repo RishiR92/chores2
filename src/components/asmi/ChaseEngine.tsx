@@ -118,11 +118,9 @@ export function ChaseEngine() {
 
   return (
     <section ref={sectionRef} id="how" className="ink-section relative grain overflow-hidden py-11 sm:py-16 md:py-24">
-      <div
-        className="pointer-events-none absolute -bottom-32 -right-20 h-[380px] w-[380px] rounded-full blur-3xl"
-        style={{ background: "rgba(47,91,255,0.35)" }}
-        aria-hidden
-      />
+      <span className="torn-top" aria-hidden />
+      <div className="dot-field dot-field-light" aria-hidden />
+
       <div className="relative mx-auto max-w-7xl">
         <RevealGroup className="flex flex-col gap-3 px-5 sm:px-8">
           <Reveal inGroup variant="accent">
