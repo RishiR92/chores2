@@ -31,9 +31,9 @@ export function Nav() {
           <img
             src={asmiLogo.url}
             alt="asmi"
-            width={78}
-            height={28}
-            className="h-7 w-auto"
+            width={112}
+            height={40}
+            className="h-9 w-auto md:h-10"
           />
         </a>
 

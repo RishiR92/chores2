@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
 
 export interface CollageLayer {
@@ -25,6 +25,15 @@ export interface CollageLayer {
  * Cutout objects pinned over the paper. Depth drives parallax rate,
  * shadow weight and scale — nothing is a card, everything is an object.
  */
+function useFinePointer() {
+  const [fine, setFine] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setFine(window.matchMedia("(pointer: fine)").matches);
+  }, []);
+  return fine;
+}
+
 export function Collage({
   layers,
   eager = false,
@@ -77,7 +86,8 @@ function Piece({
   reduced: boolean;
   eager: boolean;
 }) {
-  const drift = 40 + l.depth * 150;
+  const fine = useFinePointer();
+  const drift = fine ? 40 + l.depth * 150 : 0;
   const tilt = 6 + l.depth * 22;
   const scrollShift = useTransform(scrollY, [0, 900], [0, -drift]);
   const mx = useTransform(sx, (v) => v * tilt);
@@ -104,6 +114,7 @@ function Piece({
         translateY: reduced ? 0 : my,
         opacity: l.opacity ?? 1,
         scaleX: l.flip ? -1 : 1,
+        willChange: "transform",
         filter: `drop-shadow(${(2 + l.depth * 8).toFixed(0)}px ${(3 + l.depth * 10).toFixed(0)}px 0 rgba(20,19,24,0.10)) saturate(0.82)`,
       }}
     />

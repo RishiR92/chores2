@@ -158,10 +158,10 @@ export function GenerativeUI() {
                 return (
                   <motion.div
                     key={p.id}
-                    initial={reduced ? false : { opacity: 0, x: "100%", rotate: 2 }}
-                    whileInView={{ opacity: 1, x: 0, rotate: 0 }}
-                    viewport={{ once: true, amount: 0.4 }}
-                    transition={{ type: "spring", stiffness: 260, damping: 24, delay: i * 0.12 }}
+                    initial={reduced ? false : { opacity: 0, x: 44 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.15, margin: "0px 0px -40px 0px" }}
+                    transition={{ type: "spring", stiffness: 240, damping: 26, delay: i * 0.09 }}
                     className="min-w-0"
                   >
 
