@@ -188,9 +188,40 @@ export function Hero() {
               </ul>
             </div>
 
-            <p className="mt-3 text-center font-mono" style={{ fontSize: 10.5, color: "var(--ink-dim)" }}>
-              {done ? "no app · no signup · 50+ languages" : "keep scrolling ↓ watch her chase"}
-            </p>
+            <div className="mt-3 min-h-[46px]">
+              <AnimatePresence mode="wait">
+                {done ? (
+                  <motion.div
+                    key="stamp"
+                    initial={{ opacity: 0, scale: 0.86, rotate: -6 }}
+                    animate={{ opacity: 1, scale: 1, rotate: -2.2 }}
+                    transition={{ type: "spring", stiffness: 420, damping: 15 }}
+                    className="font-display w-full rounded-2xl px-3 py-2.5 text-center uppercase"
+                    style={{
+                      fontSize: 14,
+                      fontWeight: 800,
+                      letterSpacing: "0.01em",
+                      color: "var(--coral)",
+                      border: "2.5px solid var(--coral)",
+                      background: "rgba(255,90,71,0.07)",
+                    }}
+                  >
+                    she doesn't stop until it's done.
+                  </motion.div>
+                ) : (
+                  <motion.p
+                    key="hint"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="pt-3 text-center font-mono"
+                    style={{ fontSize: 10.5, color: "var(--ink-dim)" }}
+                  >
+                    keep scrolling ↓ watch her chase
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </div>
           </motion.div>
         </div>
       </div>
