@@ -463,3 +463,49 @@
   50% { background-position: 100% 50%; }
 }
 
+
+/* ── Landing: type + spacing scale (single source of truth) ── */
+.landing-theme {
+  --t-mono: 11px;
+  --t-sm: 13px;
+  --t-base: 15px;
+  --t-lg: 18px;
+}
+@media (min-width: 640px) {
+  .landing-theme { --t-sm: 14px; --t-base: 16px; --t-lg: 20px; }
+}
+.landing-theme .t-mono {
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.landing-theme .t-sm   { font-family: var(--font-sans); font-size: var(--t-sm); }
+.landing-theme .t-body { font-family: var(--font-sans); font-size: var(--t-base); line-height: 1.5; }
+.landing-theme .t-lead { font-family: var(--font-sans); font-size: var(--t-lg); line-height: 1.45; }
+
+.landing-theme h2 {
+  font-size: 1.75rem;
+  line-height: 1.05;
+}
+@media (min-width: 640px) { .landing-theme h2 { font-size: 3rem; } }
+
+/* Receipt band — printed paper texture over ink */
+.receipt-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.16;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,253,248,0.09) 0 1px, transparent 1px 4px);
+}
+.receipt-band::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 10px;
+  pointer-events: none;
+  background: radial-gradient(circle at 6px -2px, var(--paper) 6px, transparent 6.5px) repeat-x;
+  background-size: 14px 14px;
+}
