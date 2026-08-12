@@ -95,23 +95,25 @@ export function Act4Cloud() {
     <section ref={ref} className="relative py-24 md:py-32" style={{ overflowX: "hidden" }}>
       <div className="text-center mb-12 md:mb-14 px-5 sm:px-6">
         <h2
-          className="font-serif"
+          className="font-display lowercase"
           style={{
             color: "var(--color-espresso)",
             fontSize: "clamp(2rem, 7vw, 5rem)",
-            lineHeight: 1.05,
-            letterSpacing: "-0.02em",
+            lineHeight: 1.02,
+            letterSpacing: "-0.04em",
+            fontWeight: 600,
           }}
         >
-          From plumbers to prescriptions.
+          anything that needs a human on the other end.
         </h2>
         <p
           className="mt-3 md:mt-4 font-sans"
           style={{ color: "#6B6560", fontSize: "clamp(0.95rem, 1.4vw, 1.2rem)" }}
         >
-          Everything that needs a phone call.
+          say it how you'd say it to a friend.
         </p>
       </div>
+
 
       {isMobile ? (
         <motion.div
