@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "motion/react";
 
 /**
- * Oversized ink arrow — treated as a graphic, not chrome.
+ * Oversized ink arrow - treated as a graphic, not chrome.
  * Desktop pointers only; never mounts on touch or reduced-motion.
  */
 export function Cursor() {

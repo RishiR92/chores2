@@ -5,7 +5,7 @@ export function QuotesTable({ quotes }: { quotes: Quote[] }) {
   // mark cheapest with the sparkle ribbon
   const numericPrice = (p: string) => parseFloat(p.replace(/[^\d.]/g, "")) || Infinity;
   const cheapestId = quotes
-    .filter((q) => q.price && q.price !== "—")
+    .filter((q) => q.price && q.price !== "-")
     .sort((a, b) => numericPrice(a.price) - numericPrice(b.price))[0]?.id;
 
   return (
@@ -42,7 +42,7 @@ export function QuotesTable({ quotes }: { quotes: Quote[] }) {
               {q.note && <div className="truncate text-[10.5px]" style={{ color: "var(--color-ink-soft)" }}>{q.note}</div>}
             </div>
             <div className="flex items-center gap-1 text-[11.5px]" style={{ color: "var(--color-ink-soft)" }}>
-              {q.rating ? (<><Star size={10} className="fill-current" style={{ color: "#E64BFF" }} />{q.rating}</>) : "—"}
+              {q.rating ? (<><Star size={10} className="fill-current" style={{ color: "#E64BFF" }} />{q.rating}</>) : "-"}
             </div>
             <div className="font-mono text-[11.5px]" style={{ color: "#6D28D9" }}>{q.price}</div>
             <div className="text-[11.5px]" style={{ color: "var(--color-ink-soft)" }}>{q.availability}</div>

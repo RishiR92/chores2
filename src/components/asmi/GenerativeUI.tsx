@@ -34,7 +34,7 @@ const PLACES: Place[] = [
     img: tavernImg,
     rating: 4.9,
     reviews: 335,
-    why: "highest rated, tiny — needs a booking",
+    why: "highest rated, tiny - needs a booking",
     meta: "open till 10 · $$",
   },
   {
@@ -112,7 +112,7 @@ export function GenerativeUI() {
           </Reveal>
           <Reveal inGroup variant="accent">
             <p className="mt-6 max-w-md font-sans" style={{ fontSize: 15, color: "var(--ink-soft)" }}>
-              no ten tabs, no wall of text. she builds the exact view you need in chat — then goes and books it.
+              no ten tabs, no wall of text. she builds the exact view you need in chat - then goes and books it.
             </p>
           </Reveal>
         </RevealGroup>

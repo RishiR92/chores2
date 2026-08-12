@@ -23,7 +23,7 @@ export interface CollageLayer {
 
 /**
  * Cutout objects pinned over the paper. Depth drives parallax rate,
- * shadow weight and scale — nothing is a card, everything is an object.
+ * shadow weight and scale - nothing is a card, everything is an object.
  */
 function useFinePointer() {
   const [fine, setFine] = useState(false);

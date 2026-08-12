@@ -7,7 +7,7 @@ const art = (kind: Artifact["kind"], title: string, body: string, meta?: string)
 const asmi = (text: string): ChatMsg => ({ id: uid(), role: "asmi", text });
 
 // ────────────────────────────────────────────────────────────────────────────
-// 15 seeded canvases — each demonstrates a distinct interaction pattern.
+// 15 seeded canvases - each demonstrates a distinct interaction pattern.
 // ────────────────────────────────────────────────────────────────────────────
 
 export function seedCanvases(): Canvas[] {
@@ -27,10 +27,10 @@ export function seedCanvases(): Canvas[] {
   });
 
   return [
-    // 1 ─ Single live call (no transcript shown — privacy)
+    // 1 ─ Single live call (no transcript shown - privacy)
     base({
       id: "marco-hvac",
-      title: "Marco — HVAC repair",
+      title: "Marco - HVAC repair",
       origin: "whatsapp",
       status: "live",
       mode: "action",
@@ -53,9 +53,9 @@ export function seedCanvases(): Canvas[] {
       timeline: [
         t("spawned", "You handed this off from WhatsApp", "2m ago"),
         t("dialed", "Dialed Marco at West Bay HVAC", "1m ago"),
-        t("connected", "Connected — Asmi is on the call", "now"),
+        t("connected", "Connected - Asmi is on the call", "now"),
       ],
-      chat: [asmi("i'm on with marco now. won't share the live transcript — i'll bring back the outcome when we wrap.")],
+      chat: [asmi("i'm on with marco now. won't share the live transcript - i'll bring back the outcome when we wrap.")],
     }),
 
     // 2 ─ Research with map (SF restaurants)
@@ -78,7 +78,7 @@ export function seedCanvases(): Canvas[] {
         { id: "p4", name: "Liholiho Yacht Club", cuisine: "Hawaiian", rating: 4.6, price: "$$$", x: 0.38, y: 0.68, distance: "0.7 mi", vibe: "fun" },
         { id: "p5", name: "Zuni Café", cuisine: "Bistro", rating: 4.5, price: "$$$", x: 0.46, y: 0.24, distance: "0.5 mi", vibe: "classic", status: "shortlist" },
       ],
-      chat: [asmi("tap a pin to peek. shortlist a few — i'll call them in parallel and grab the first 7:30 that holds 5.")],
+      chat: [asmi("tap a pin to peek. shortlist a few - i'll call them in parallel and grab the first 7:30 that holds 5.")],
     }),
 
     // 3 ─ Parallel calls (plumbers)
@@ -127,13 +127,13 @@ export function seedCanvases(): Canvas[] {
       ],
       calls: [{ id: "rx-1", person: "Walgreens Mission", status: "success", durationSec: 124, result: "Confirmed pickup window" }],
       artifacts: [art("confirmation", "Pickup confirmed", "Walgreens · Mission St · ready by 4:00 PM. Rx #5582.")],
-      timeline: [t("wrapped", "All done — confirmation sent to you", "1h ago")],
+      timeline: [t("wrapped", "All done - confirmation sent to you", "1h ago")],
     }),
 
     // 5 ─ Scheduled message
     base({
       id: "dad-checkin",
-      title: "Dad — weekly check-in",
+      title: "Dad - weekly check-in",
       origin: "whatsapp",
       status: "waiting",
       mode: "action",
@@ -147,7 +147,7 @@ export function seedCanvases(): Canvas[] {
         with: "Dad",
         channel: "whatsapp",
         lines: [
-          { id: uid(), role: "asmi", text: "Draft: 'Hey dad — quick check-in. How's the back this week? Aanya sent over photos from Saturday 💛'", ts: "draft" },
+          { id: uid(), role: "asmi", text: "Draft: 'Hey dad - quick check-in. How's the back this week? Aanya sent over photos from Saturday 💛'", ts: "draft" },
         ],
       },
       timeline: [t("spawned", "Scheduled from your weekly routine", "6h ago"), t("message_sent", "Will fire Sunday at 11am", "queued")],
@@ -175,9 +175,9 @@ export function seedCanvases(): Canvas[] {
         t("connected", "Transferred to Sarah's queue", "16m ago"),
         t("voicemail", "Went to voicemail after 14m hold", "2m ago"),
         t("callback_scheduled", "Retry queued for 2:14 PM", "now"),
-        t("message_sent", "Texted Sarah: 'tried at 2:00 — will retry shortly'", "now"),
+        t("message_sent", "Texted Sarah: 'tried at 2:00 - will retry shortly'", "now"),
       ],
-      artifacts: [art("message", "Text sent to Sarah", "Hi Sarah — tried claim #CLM-44219 at 2:00. Will retry at 2:14. Available till 4 PM.")],
+      artifacts: [art("message", "Text sent to Sarah", "Hi Sarah - tried claim #CLM-44219 at 2:00. Will retry at 2:14. Available till 4 PM.")],
       chat: [asmi("she didn't pick up. i texted her, and i'll redial in 10. want me to escalate to a supervisor instead?")],
     }),
 
@@ -197,13 +197,13 @@ export function seedCanvases(): Canvas[] {
       decisionPrompt: "tag priorities on the ones you love. asmi blends ratings, ship time, and your taste.",
       options: [
         { id: "g1", title: "Olive wood cheese board", subtitle: "Made in Florence", price: "$94", badge: "ships Tue", priority: "high", selected: true },
-        { id: "g2", title: "Linen robe — sage", subtitle: "Parachute Home", price: "$148", badge: "in stock", priority: "med" },
+        { id: "g2", title: "Linen robe - sage", subtitle: "Parachute Home", price: "$148", badge: "in stock", priority: "med" },
         { id: "g3", title: "Watercolor class for two", subtitle: "Mission · Sat 10am", price: "$120", badge: "1 seat left" },
         { id: "g4", title: "Aesop hand & body trio", subtitle: "Resurrection set", price: "$85", priority: "low" },
         { id: "g5", title: "Custom photo book", subtitle: "Artifact Uprising · 60 pgs", price: "$95", badge: "needs photos" },
         { id: "g6", title: "Le Creuset braiser 3.5qt", subtitle: "Cerise", price: "$170", badge: "ships Wed", selected: true },
       ],
-      chat: [asmi("tap a priority chip — high, med, low. multi-select what's in the running. i can also just decide.")],
+      chat: [asmi("tap a priority chip - high, med, low. multi-select what's in the running. i can also just decide.")],
     }),
 
     // 8 ─ Sequence: call → voicemail → email
@@ -220,24 +220,24 @@ export function seedCanvases(): Canvas[] {
         { label: "saves", value: "$89/mo" },
       ],
       calls: [
-        { id: "gy-1", person: "Fitness SF — Mission desk", status: "voicemail", durationSec: 64, result: "Left message · no callback in 24h" },
+        { id: "gy-1", person: "Fitness SF - Mission desk", status: "voicemail", durationSec: 64, result: "Left message · no callback in 24h" },
       ],
       timeline: [
         t("dialed", "Called Mission front desk", "yesterday"),
-        t("voicemail", "Voicemail — left request", "yesterday"),
+        t("voicemail", "Voicemail - left request", "yesterday"),
         t("email_sent", "Sent formal cancellation email", "10m ago"),
         t("wrapped", "Awaiting written confirmation", "now"),
       ],
       artifacts: [
-        art("email", "Cancellation email sent", "To: cancellations@fitnesssf.com — formal 30-day notice citing policy §4.2, effective Aug 18. Requested written confirmation.", "delivered"),
+        art("email", "Cancellation email sent", "To: cancellations@fitnesssf.com - formal 30-day notice citing policy §4.2, effective Aug 18. Requested written confirmation.", "delivered"),
       ],
-      chat: [asmi("phone route was dead. email gives us a paper trail — that's what they need anyway for the 30-day notice.")],
+      chat: [asmi("phone route was dead. email gives us a paper trail - that's what they need anyway for the 30-day notice.")],
     }),
 
     // 9 ─ Scheduling grid (multi-person)
     base({
       id: "dentist",
-      title: "Family dentist — coordinate 3",
+      title: "Family dentist - coordinate 3",
       origin: "web",
       status: "live",
       mode: "research",
@@ -274,7 +274,7 @@ export function seedCanvases(): Canvas[] {
       ],
       calls: [{ id: "cb-1", person: "Xfinity retention", status: "success", durationSec: 1080, result: "Retention offer accepted" }],
       artifacts: [
-        art("savings", "Saved $42/mo · $504/yr", "Retention promo applied — Performance Pro plan, $87/mo for 12 months. Confirmation #XF-991042."),
+        art("savings", "Saved $42/mo · $504/yr", "Retention promo applied - Performance Pro plan, $87/mo for 12 months. Confirmation #XF-991042."),
         art("summary", "Call summary", "Asked for retention. Threatened churn politely. Agent offered $87 with no contract. Accepted."),
       ],
       timeline: [t("wrapped", "Promo applied · confirmation in inbox", "2h ago")],
@@ -283,7 +283,7 @@ export function seedCanvases(): Canvas[] {
     // 11 ─ Vendor quote table
     base({
       id: "dog-walker",
-      title: "Dog walker — Mission",
+      title: "Dog walker - Mission",
       origin: "imessage",
       status: "live",
       mode: "research",
@@ -296,7 +296,7 @@ export function seedCanvases(): Canvas[] {
         { id: "q1", vendor: "Wag · pro tier", rating: 4.7, price: "$28 / walk", availability: "starts Mon", status: "received" },
         { id: "q2", vendor: "Lila (indie)", rating: 4.9, price: "$32 / walk", availability: "starts Wed", note: "trial walk free", status: "received" },
         { id: "q3", vendor: "Mission Pups", rating: 4.6, price: "$25 / walk", availability: "starts Mon", status: "received" },
-        { id: "q4", vendor: "Rover · Sasha P.", rating: 4.8, price: "—", availability: "—", status: "pending" },
+        { id: "q4", vendor: "Rover · Sasha P.", rating: 4.8, price: "-", availability: "-", status: "pending" },
       ],
       chat: [asmi("lila's the highest-rated but slowest start. mission pups is cheapest. shall i book trials with two?")],
     }),
@@ -317,9 +317,9 @@ export function seedCanvases(): Canvas[] {
         with: "Amazon support",
         channel: "imessage",
         lines: [
-          { id: uid(), role: "asmi", text: "Hi — requesting return + refund for order #114-2298. Kettle arrived with a cracked base.", ts: "2:01 PM" },
+          { id: uid(), role: "asmi", text: "Hi - requesting return + refund for order #114-2298. Kettle arrived with a cracked base.", ts: "2:01 PM" },
           { id: uid(), role: "them", text: "Sorry about that! I can issue a prepaid label and refund on drop-off. Photos for our records?", ts: "2:03 PM" },
-          { id: uid(), role: "asmi", text: "Attached 2 photos. Drop-off at UPS — any nearest to 94110?", ts: "2:04 PM" },
+          { id: uid(), role: "asmi", text: "Attached 2 photos. Drop-off at UPS - any nearest to 94110?", ts: "2:04 PM" },
           { id: uid(), role: "them", text: "Label generated. UPS Mission @ 24th will be closest. Refund in 3–5 days after scan.", ts: "2:05 PM" },
         ],
       },
@@ -330,7 +330,7 @@ export function seedCanvases(): Canvas[] {
     // 13 ─ Parallel quote dashboard (contractors)
     base({
       id: "contractors",
-      title: "Bathroom remodel — 3 quotes",
+      title: "Bathroom remodel - 3 quotes",
       origin: "web",
       status: "live",
       mode: "action",
@@ -347,8 +347,8 @@ export function seedCanvases(): Canvas[] {
       ],
       quotes: [
         { id: "ctq1", vendor: "Bayview Build", price: "$18–24k", availability: "Thu site visit", status: "received" },
-        { id: "ctq2", vendor: "Reform & Co", price: "—", availability: "—", status: "pending" },
-        { id: "ctq3", vendor: "SF Reno Group", price: "—", availability: "—", status: "pending" },
+        { id: "ctq2", vendor: "Reform & Co", price: "-", availability: "-", status: "pending" },
+        { id: "ctq3", vendor: "SF Reno Group", price: "-", availability: "-", status: "pending" },
       ],
       chat: [asmi("first quote's in. i'll line them up side by side once all three answer.")],
     }),
@@ -369,9 +369,9 @@ export function seedCanvases(): Canvas[] {
         { id: "ch1", label: "Cabin booked", status: "done", detail: "Airbnb · West Shore · $640 total" },
         { id: "ch2", label: "Rental car held", status: "done", detail: "Hertz · SUV · pickup SFO 5pm" },
         { id: "ch3", label: "Saturday dinner reservation", status: "doing", detail: "calling Sunnyside · 7:30 for 4" },
-        { id: "ch4", label: "Trail permits", status: "todo", detail: "Eagle Lake — opens 7am Fri" },
+        { id: "ch4", label: "Trail permits", status: "todo", detail: "Eagle Lake - opens 7am Fri" },
       ],
-      chat: [asmi("two locked. i'm on with sunnyside right now — permits queue opens friday morning.")],
+      chat: [asmi("two locked. i'm on with sunnyside right now - permits queue opens friday morning.")],
     }),
 
     // 15 ─ Sequential calls (first available wins)
@@ -416,11 +416,11 @@ export function scriptedSpawn(prompt: string): Canvas {
     ],
     timeline: [t("spawned", "Canvas spawned", "now")],
     artifacts: [],
-    chat: [asmi(isResearch ? "looking now — i'll surface options you can act on." : "on it. i'll keep this canvas live as it moves.")],
+    chat: [asmi(isResearch ? "looking now - i'll surface options you can act on." : "on it. i'll keep this canvas live as it moves.")],
   };
 }
 
-// gentle world tick — only nudge live call durations
+// gentle world tick - only nudge live call durations
 export function tickWorld(c: Canvas): Canvas {
   if (c.status !== "live" || !c.calls) return c;
   let changed = false;

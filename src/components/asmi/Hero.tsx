@@ -36,7 +36,7 @@ interface Step {
 }
 
 const STEPS: Step[] = [
-  { kind: "call", text: "called — 14 min hold", time: "2:41p" },
+  { kind: "call", text: "called - 14 min hold", time: "2:41p" },
   { kind: "call", text: "voicemail", time: "2:58p", tone: "fail" },
   { kind: "text", text: "texted the manager", time: "3:10p" },
   { kind: "email", text: "emailed a paper trail", time: "3:12p" },

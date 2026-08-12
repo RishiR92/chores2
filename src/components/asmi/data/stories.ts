@@ -14,7 +14,7 @@ export const STORIES: Story[] = [
     id: "gym",
     setup: "you'd been putting it off since january.",
     message:
-      "you're out. i called, they said come in person, so i emailed them the cancellation clause. they also snuck in one more month — refunded.",
+      "you're out. i called, they said come in person, so i emailed them the cancellation clause. they also snuck in one more month - refunded.",
     time: "tuesday, 10:04am",
     aftermath: "you never talked to anyone.",
     channels: ["call", "text", "email"],
@@ -80,7 +80,7 @@ export const SCENARIOS: Scenario[] = [
       { channel: "web", who: "member portal", note: "form submitted", state: "won", at: "10:01" },
     ],
     receipt: "cancelled. confirmation #GX-88214.",
-    receiptMeta: "they tried to charge one more month — $59 refunded.",
+    receiptMeta: "they tried to charge one more month - $59 refunded.",
   },
   {
     id: "charge",
