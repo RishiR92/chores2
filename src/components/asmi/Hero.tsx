@@ -81,10 +81,21 @@ export function Hero() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-6 sm:mt-8"
+              className="relative mt-6 sm:mt-8"
             >
-              <ChannelCTA size="lg" />
+              <motion.span
+                className="hi-swipe"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 0.65, duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
+                style={{ left: -10, right: "18%", top: -8, bottom: -8, transformOrigin: "left" }}
+                aria-hidden
+              />
+              <div className="relative">
+                <ChannelCTA size="lg" />
+              </div>
             </motion.div>
+
           </div>
 
           {/* thread + scroll-revealed chase */}
