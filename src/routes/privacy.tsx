@@ -16,7 +16,7 @@ export const Route = createFileRoute("/privacy")({
 
 function PrivacyPage() {
   return (
-    <main className="min-h-screen px-5 sm:px-8 py-16 md:py-24">
+    <main className="landing-theme min-h-screen px-5 sm:px-8 py-16 md:py-24">
       <div className="max-w-2xl mx-auto">
         <Link
           to="/"
