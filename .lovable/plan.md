@@ -2,19 +2,24 @@
 
 ## 1. New cutout objects (replace the rotary phone, bell and "47" calendar)
 
-The current three read as generic vintage props. Replace with objects that instantly say "the chore asmi is fighting for you":
+The plumber's wrench and the salon chair stay — they read instantly as a real chore. The three weak props are replaced with objects in the same family of everyday, physical, "someone has to call about this" things:
 
+- plumber's wrench (kept)
+- salon chair (kept)
 - a gym membership card (the cancellation everyone dreads)
-- a folded utility/credit-card bill with a highlighted charge
+- a folded bill / credit-card statement with one charge circled
 - a dentist appointment reminder card
-- a tangled phone cord with a small handset (kept — it's the one prop that means "on hold")
-- a pair of salon scissors
+- a car key fob or a stack of takeout menus as the sixth option, whichever cuts out cleanest
 
-Generated as cutout PNGs with the same hard-lit, hard-shadow, slightly desaturated treatment so the set stays consistent. The old cut-bell / cut-ticket / cut-chair files are removed and every usage (hero, chore marquees, hold band) is repointed to the new set.
+Generated as cutout PNGs with the same hard-lit, hard-shadow, slightly desaturated treatment so the set stays consistent. The old cut-bell / cut-ticket / cut-handset props are dropped from the hero (the handset stays in the hold band where it means "on hold"), and the chore marquees repoint to the new set.
 
-## 2. Mobile: fewer, visible objects
+## 2. How many, where
 
-Today the two mobile layers sit at coordinates that push them off-screen or behind text. Fix: exactly **one** cutout on mobile — the coiled handset, tucked into the bottom-left gutter under the CTA, small and low-opacity, never overlapping the headline or thread card. Desktop keeps three (handset left, bill bottom-right, gym card top-right) instead of six, so it reads pinned rather than cluttered.
+Desktop: **5** objects — wrench bottom-left, salon chair bottom-right, gym card top-right, bill mid-right low, dentist card top-centre-left. Spread around the headline and thread card, never over text.
+
+Mobile: **2** only — wrench tucked into the bottom-left gutter and the gym card in the top-right corner, both small and low-opacity, with coordinates verified on a 394px viewport so neither clips off-screen or sits behind the headline.
+
+
 
 ## 3. Background wordmark + red line
 
