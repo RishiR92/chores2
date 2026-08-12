@@ -151,12 +151,19 @@ export function GenerativeUI() {
 
             {/* cards */}
             <div className="flex flex-col gap-2.5">
-              {PLACES.map((p) => {
+              {PLACES.map((p, i) => {
                 const on = selected === p.id;
                 const dim = selected !== null && !on;
                 return (
-                  <motion.button
+                  <motion.div
                     key={p.id}
+                    initial={reduced ? false : { opacity: 0, x: 56, rotate: 1.5 }}
+                    whileInView={{ opacity: 1, x: 0, rotate: 0 }}
+                    viewport={{ once: true, amount: 0.5 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 24, delay: i * 0.12 }}
+                    className="min-w-0"
+                  >
+                  <motion.button
                     onClick={() => phase === "choose" && setSelected(on ? null : p.id)}
                     whileTap={{ scale: 0.98 }}
                     animate={{ opacity: dim ? 0.4 : 1 }}
@@ -166,6 +173,7 @@ export function GenerativeUI() {
                       background: on ? "var(--citrus)" : "var(--cream)",
                     }}
                   >
+
                     <div className="flex min-w-0 gap-3">
                       <img
                         src={p.img}
