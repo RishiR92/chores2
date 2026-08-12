@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Check, Phone, Star } from "lucide-react";
 import { Reveal, RevealGroup } from "./Reveal";
 import barImg from "@/assets/place-bar.jpg";
@@ -52,6 +52,7 @@ type Phase = "choose" | "calling" | "done";
 
 
 export function GenerativeUI() {
+  const reduced = useReducedMotion();
   const [selected, setSelected] = useState<string | null>(null);
   const [phase, setPhase] = useState<Phase>("choose");
   const [hold, setHold] = useState(0);
