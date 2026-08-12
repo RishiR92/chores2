@@ -3,23 +3,23 @@ import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScro
 import { ChannelCTA } from "./ChannelCTA";
 import { ChannelGlyph, ChannelKind } from "./ChannelIcons";
 import { Collage, CollageLayer } from "./Collage";
-import handset from "@/assets/cut-handset.png";
-import ticket from "@/assets/cut-ticket.png";
 import wrench from "@/assets/cut-wrench.png";
 import chair from "@/assets/cut-chair.png";
-import receipt from "@/assets/cut-receipt.png";
-import bell from "@/assets/cut-bell.png";
+import gymcard from "@/assets/cut-gymcard.png";
+import bill from "@/assets/cut-bill.png";
+import dentist from "@/assets/cut-dentist.png";
 
 const PILE: CollageLayer[] = [
-  { src: handset, x: "-2%", y: "2%", w: "min(26vw, 260px)", depth: 0.85, rot: -9, desktopOnly: true },
-  { src: wrench, x: "1%", y: "72%", w: "min(22vw, 230px)", depth: 0.55, rot: 14, desktopOnly: true },
-  { src: chair, x: "80%", y: "60%", w: "min(24vw, 270px)", depth: 0.35, rot: 5, desktopOnly: true, opacity: 0.9 },
-  { src: receipt, x: "41%", y: "74%", w: "min(11vw, 120px)", depth: 0.25, rot: -12, desktopOnly: true, opacity: 0.9 },
-  { src: bell, x: "50%", y: "6%", w: "min(9vw, 100px)", depth: 0.45, rot: 8, desktopOnly: true, opacity: 0.85 },
-  { src: ticket, x: "80%", y: "4%", w: "min(15vw, 175px)", depth: 0.8, rot: -13, desktopOnly: true, opacity: 0.95 },
-  { src: ticket, x: "66%", y: "7%", w: "21vw", depth: 0.8, rot: -13, opacity: 0.95, mobileOnly: true },
-  { src: bell, x: "62%", y: "82%", w: "26vw", depth: 0.45, rot: 8, opacity: 0.8, mobileOnly: true },
+  { src: wrench, x: "-2%", y: "74%", w: "min(18vw, 200px)", depth: 0.8, rot: 12, desktopOnly: true },
+  { src: chair, x: "83%", y: "60%", w: "min(20vw, 240px)", depth: 0.4, rot: 5, desktopOnly: true, opacity: 0.92 },
+  { src: gymcard, x: "84%", y: "2%", w: "min(14vw, 155px)", depth: 0.7, rot: -11, desktopOnly: true },
+  { src: bill, x: "43%", y: "70%", w: "min(12vw, 140px)", depth: 0.3, rot: 9, desktopOnly: true, opacity: 0.88 },
+  { src: dentist, x: "35%", y: "2%", w: "min(11vw, 125px)", depth: 0.5, rot: -7, desktopOnly: true, opacity: 0.9 },
+
+  { src: wrench, x: "-8%", y: "86%", w: "34vw", depth: 0.7, rot: 12, opacity: 0.8, mobileOnly: true },
+  { src: gymcard, x: "70%", y: "4%", w: "26vw", depth: 0.5, rot: -10, opacity: 0.8, mobileOnly: true },
 ];
+
 
 
 
@@ -68,7 +68,7 @@ export function Hero() {
           style={{ y: gridY }}
           aria-hidden
         />
-        <div className="pad-rule" aria-hidden />
+        
         <span className="ghost-mark" aria-hidden>
           asmi
         </span>

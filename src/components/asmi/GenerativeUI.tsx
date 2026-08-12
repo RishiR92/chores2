@@ -112,7 +112,7 @@ export function GenerativeUI() {
           </Reveal>
           <Reveal inGroup variant="accent">
             <p className="mt-6 max-w-md font-sans" style={{ fontSize: 15, color: "var(--ink-soft)" }}>
-              no ten tabs, no wall of text. she builds the exact view you need in the thread — then goes and books it.
+              no ten tabs, no wall of text. she builds the exact view you need in chat — then goes and books it.
             </p>
           </Reveal>
         </RevealGroup>

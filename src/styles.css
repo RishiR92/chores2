@@ -410,28 +410,23 @@
   -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent 78%);
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent 78%);
 }
-.pad-rule {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 8%;
-  width: 2px;
-  background: rgba(255, 90, 71, 0.25);
-  pointer-events: none;
-}
 .ghost-mark {
   position: absolute;
-  left: -6vw;
-  bottom: -8vh;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 9vh;
+  width: 100%;
+  text-align: center;
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(16rem, 42vw, 40rem);
-  line-height: 0.7;
+  font-size: min(30vw, 26rem);
+  line-height: 0.72;
   letter-spacing: -0.06em;
-  color: rgba(20, 19, 24, 0.038);
+  color: rgba(20, 19, 24, 0.04);
   pointer-events: none;
   user-select: none;
 }
+
 .hi-swipe {
   position: absolute;
   pointer-events: none;

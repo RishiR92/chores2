@@ -3,9 +3,9 @@ import { Fragment, useState } from "react";
 import { Marquee } from "./Marquee";
 import { Reveal, RevealGroup } from "./Reveal";
 import wrenchImg from "@/assets/cut-wrench.png";
-import bellImg from "@/assets/cut-bell.png";
-import ticketImg from "@/assets/cut-ticket.png";
-import receiptImg from "@/assets/cut-receipt.png";
+import gymImg from "@/assets/cut-gymcard.png";
+import dentistImg from "@/assets/cut-dentist.png";
+import receiptImg from "@/assets/cut-bill.png";
 
 function Punctuation({ src }: { src: string }) {
   return (
@@ -96,7 +96,7 @@ export function ChoreGrid() {
           {ROW_A.map((c, i) => (
             <Fragment key={c.label}>
               <Request chore={c} active={open?.label === c.label} onSelect={() => setOpen(c)} />
-              {i % 3 === 2 && <Punctuation src={i % 6 === 2 ? wrenchImg : bellImg} />}
+              {i % 3 === 2 && <Punctuation src={i % 6 === 2 ? wrenchImg : gymImg} />}
             </Fragment>
           ))}
         </Marquee>
@@ -104,7 +104,7 @@ export function ChoreGrid() {
           {ROW_B.map((c, i) => (
             <Fragment key={c.label}>
               <Request chore={c} active={open?.label === c.label} onSelect={() => setOpen(c)} />
-              {i % 3 === 1 && <Punctuation src={i % 6 === 1 ? ticketImg : receiptImg} />}
+              {i % 3 === 1 && <Punctuation src={i % 6 === 1 ? dentistImg : receiptImg} />}
             </Fragment>
           ))}
         </Marquee>
