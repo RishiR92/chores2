@@ -41,16 +41,16 @@ export function Hero() {
   return (
     <section ref={ref} className="relative" style={{ height: "205vh" }}>
       <div className="sticky top-0 grain overflow-hidden">
-        <div
-          className="pointer-events-none absolute -top-24 -right-24 h-[420px] w-[420px] rounded-full blur-3xl"
-          style={{ background: "rgba(179,156,255,0.35)" }}
+        <motion.div
+          className="pad-grid"
+          style={{ y: gridY }}
           aria-hidden
         />
-        <div
-          className="pointer-events-none absolute bottom-0 -left-28 h-[320px] w-[320px] rounded-full blur-3xl"
-          style={{ background: "rgba(255,90,71,0.22)" }}
-          aria-hidden
-        />
+        <div className="pad-rule" aria-hidden />
+        <span className="ghost-mark" aria-hidden>
+          asmi
+        </span>
+
 
         <div className="relative mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-center gap-5 px-5 pt-[68px] pb-[60px] sm:gap-7 sm:px-8 md:pt-28 md:pb-24 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-14">
           <div className="min-w-0">
