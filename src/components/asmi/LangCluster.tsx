@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { Reveal, RevealGroup } from "./Reveal";
 
 const LANGS = [
   "english", "中文", "हिन्दी", "español", "العربية", "français", "বাংলা", "português",
