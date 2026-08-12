@@ -356,3 +356,40 @@
 .scroll-progress { position: fixed; top: 0; left: 0; height: 2px; background: var(--color-violet); z-index: 10000; pointer-events: none; }
 .paper-grain { position: relative; }
 .call-branch { stroke-dasharray: 200; stroke-dashoffset: 200; }
+
+/* ── Landing theme (pre-video "Liquid Linen" palette), scoped to marketing pages ── */
+.landing-theme {
+  --color-linen: #F6F1EB;
+  --color-sand: #EDE6DC;
+  --color-morning: #F2EDE7;
+  --color-espresso: #2C2520;
+  --color-espresso-strong: #211a16;
+  --color-ink: #5C5349;
+  --color-stone: #6B6560;
+  --color-stone-dim: #8A8278;
+  --color-terracotta: #C25B3F;
+  --color-terracotta-deep: #A24830;
+  --color-sage: #8BA888;
+  --color-sage-strong: #5F8365;
+  --color-sage-deep: #49644E;
+  --color-sky: #7EADC2;
+  --color-clay: #D4A574;
+  --color-gold: #D4A574;
+  --color-cream: #FBF8F3;
+  --color-amber: #C25B3F;
+  --color-amber-deep: #A24830;
+
+  color: var(--color-espresso);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #F6F1EB, #EDE6DC, #F2EDE7, #F6F1EB);
+  background-size: 400% 400%;
+  animation: breathe 22s ease-in-out infinite;
+}
+.landing-theme ::selection { background: var(--color-terracotta); color: var(--color-cream); }
+@media (prefers-reduced-motion: reduce) { .landing-theme { animation: none; } }
+@keyframes breathe {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
