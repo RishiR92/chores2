@@ -414,7 +414,7 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 5vh;
+  bottom: 9vh;
   width: 100%;
   text-align: center;
   font-family: var(--font-display);
