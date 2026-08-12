@@ -1,117 +1,77 @@
-# Asmi — "Violet Pulse" Energy + Iconography Pass
+# Hero rewrite — "just text her" (Gen-Z, USA)
 
-A vibrant rewrite of the visual + motion system, plus a proper icon language. Keep the card-stack architecture and 15 use cases. Replace the linen/amber world with a living purple universe, and give every surface real iconography so it reads like a 2026 consumer app (Airbnb / Arc / Linear / Things 3 / Cash App level), not a wireframe.
+The current hero is a scroll-driven serif statement ("The screen era is over.") with the wordmark and waitlist form fading in underneath. It reads as a luxury-brand manifesto: beautiful, but slow, abstract, and it leaves no room for the iMessage/WhatsApp proof point. Bolting channel icons onto that headline would look like a logo strip stapled to a poem.
 
-## 1. Palette — purple-led, status-driven
+## The problem with the current headline
 
-Move off amber entirely.
+"The screen era is over." is a thesis, not a hook. It asks the visitor to agree with a philosophy before knowing what the product does. Gen-Z scans in about two seconds and wants: what is it, does it look fun, do my friends use it, how do I start. It also fights the icons — a manifesto about ending screens can't credibly be flanked by two messaging-app logos.
 
-- **Background base:** soft white `#F7F4FF` with a permanent animated mesh.
-- **Mesh blobs (drifting):** violet `#7C3AED`, magenta `#E64BFF`, indigo `#5B5BFF`, sky `#A5D8FF`, peach `#FFC4E1`. 4 blobs, 24–40s loops, blur 120px, opacity 55%.
-- **Ink:** `#1A0B2E` deep aubergine. Secondary `#6B5B8A`.
-- **Status (the only color language):**
-  - **live** → electric violet `#7C3AED` + pulsing halo
-  - **queued** → soft lilac `#C9B8FF`
-  - **needs you** → magenta `#E64BFF` shimmer
-  - **done** → mint `#5EEAD4` single flash → ghost
-  - **paused** → slate `#9CA3B8`
-- **No orange. No amber.** Strip from tokens.
+## New headline direction
 
-## 2. Iconography — the new layer
+Replace the manifesto with a verb. The product's magic is that there is nothing to install: you text a contact and real-world stuff gets done.
 
-This is what's missing. Every meaningful noun and verb gets an icon. Reference bar: Airbnb (rounded duotone), Arc (precise line), Things 3 (warm geometric), Linear (1.5px line).
+Primary (recommended):
 
-### Icon system
-- **Library:** `lucide-react` (already installed) at 1.5px stroke, plus a small custom set for Asmi-specific things (orb, call-wave, transcript-bars).
-- **Sizes:** 14 / 16 / 20 / 24. Always paired with text at matching baseline.
-- **Two treatments:**
-  - **Line** (default) — `strokeWidth: 1.5`, currentColor, used inline.
-  - **Tinted tile** — 28×28 or 32×32 rounded-[10px] tile, status-tinted bg (12% alpha), icon in full status color. Used for category, channel, action.
-- **Motion:** icons inherit parent transitions; status icons pulse with the dot; success uses a quick scale+rotate (CheckCircle 0→1.1→1, 280ms).
+```text
+              just text her.
+   asmi calls the plumber, books the table,
+        chases the refund. you don't.
 
-### Where icons go (concrete map)
-- **App header:** `Sparkles` (asmi mark), `Bell` (notifications), `Clock` (history).
-- **CanvasHeader:** category icon in a tinted tile to the left of the title (Plumber→`Wrench`, Restaurant→`UtensilsCrossed`, Gift→`Gift`, Barber→`Scissors`, Dentist→`Stethoscope`, Travel→`Plane`, Ride→`Car`, Reminder→`Bell`, Shopping→`ShoppingBag`, Email→`Mail`, Quotes→`FileText`, Schedule→`CalendarDays`, Map→`MapPin`, Checklist→`ListChecks`, Message→`MessageCircle`). Channel chip becomes icon+label (`Phone`, `MessageSquare`, `Mail`).
-- **Status dot:** replaced with **status glyph** — `Radio` (live, animated rings), `Clock3` (queued), `AlertCircle` (needs you), `CheckCircle2` (done), `Pause` (paused).
-- **OptionsList rows:** leading tinted tile with `MapPin` + distance, `Star` rating, `DollarSign` price; trailing `Check` when selected, `ChevronUp`/`ChevronDown` priority, `X` dismissed. Swipe reveals colored action panels with icons (right→`Star` magenta, left→`Trash2` slate).
-- **GlassDock idle:** `Sparkles` placeholder icon left of "ask asmi…", `ArrowUp` send, `Mic` voice (decorative).
-- **Dock action mode:** each action chip leads with an icon — `PhoneCall` (call top 3), `ListOrdered` (call by priority), `MessageSquare` (message all), `Wand2` (let asmi pick).
-- **Dock composer suggestions:** each chip prefixed with its category icon.
-- **ParallelCalls:** per-lane `Phone` icon, live lane shows animated wave bars (custom), outcome icons (`Voicemail`, `CheckCircle2`, `XCircle`, `RotateCw` for retry, `Calendar` for booked).
-- **CallStepper:** dialing `PhoneOutgoing` → talking `Radio` → done `CheckCircle2` → next `ArrowRight`.
-- **TimelineFeed:** every event gets a leading icon by type (`Phone`, `Mail`, `MessageSquare`, `Calendar`, `MapPin`, `DollarSign`, `User`, `Sparkles`).
-- **MapView:** `MapPin` markers with status tint, `Navigation` recenter button, `Route` directions chip.
-- **SchedulingView:** `CalendarDays` header, `Clock` slot rows, `Users` party size, `Check`/`X` slot state.
-- **QuotesTable:** column headers with `DollarSign`, `Star`, `Clock`, `MapPin`; cheapest row gets a `Sparkles` ribbon.
-- **MessageThread:** sender avatars circle with initial, `Check`/`CheckCheck` read receipts, `Paperclip` attachments.
-- **Checklist:** `Circle`/`CheckCircle2` toggle, drag handle `GripVertical`.
-- **Artifacts:** file-type icons (`FileText`, `Image`, `Receipt`, `Ticket`), `Download`, `Share2`, `Eye`.
-- **CardStack peek rows:** category icon left, status glyph right.
-- **"More past tasks" card:** `Archive` + `ChevronRight`.
-- **app.history.tsx:** every row gets category tile + status glyph + outcome icon.
-- **Empty states:** large 40px line icon in lilac, one-line caption.
+        [ iMessage ]   [ WhatsApp ]
+          no app. no signup. just text.
+```
 
-### Custom icons (`src/components/app/icons/`)
-- `OrbMark.tsx` — the conic-gradient sphere, reusable at any size.
-- `CallWave.tsx` — 4-bar animated equalizer for live calls.
-- `SparkleBurst.tsx` — 6-dot burst for success moments.
-- `PriorityFlame.tsx` — small flame mark for high-priority rows.
+Alternates to swap in if the team prefers:
+- "text asmi. she handles it." / "your errands, in your DMs."
+- "she'll call them for you." (leans into phone-call anxiety, a very Gen-Z pain point)
+- "unbothered." with the sub explaining the calls
 
-## 3. Cards — status as identity
+"The screen era is over." is not deleted — it moves to a later act as a quieter statement line, so the brand thesis survives without blocking the hook.
 
-- White surface with a **status-tinted aura** (24px soft outer glow) and a **3px top gradient bar** in the status hue.
-- Category tile in header gives instant recognition.
-- On drag: tilt 4°, scale 1.02, glow intensifies, leading edge shows a faint motion blur streak.
-- On release-to-back: spring fling with overshoot, `SparkleBurst` at landing point.
-- Peek cards tinted 8% with their status hue → the stack reads as a colorful deck.
+## Where the icons go
 
-## 4. Background — living mesh
+A single **channel row** directly under the sub-headline: two rounded 40px tiles (iMessage blue-green gradient bubble, WhatsApp green) plus a "no app needed" caption. They are the trust cue, not decoration — placed after the promise, before the CTA. On tap they open the respective deep link (sms:/wa.me) once the numbers exist; until then they are visual only and the CTA stays the waitlist form.
 
-New `MeshBackdrop.tsx` fixed behind everything: 4 blurred radial blobs animated via framer-motion + 1.5% noise SVG. Static fallback on `prefers-reduced-motion`.
+## Making it feel Gen-Z without copying Tomo
 
-## 5. Motion — dynamic & playful
+Tomo's energy comes from: one bold sentence, oversized rounded type, a live-looking product artifact on screen, and playful micro-motion. We take the energy, not the layout.
 
-- **bouncy:** `{stiffness: 500, damping: 22}` for card swaps and dock morphs.
-- **squish:** `whileTap={{ scale: 0.94 }}` on every tappable.
-- **fling:** `{stiffness: 280, damping: 18, mass: 0.8}` for card-to-back overshoot.
-- **Sparkles:** on action fired, call ended, option selected, task done.
-- **Tickers:** counts roll up with stagger.
-- **Status glyph:** layered SVG with scaling ring + opacity fade.
-- **Orb:** conic-gradient sphere with a slow rotating ring; live speeds the ring and adds a magenta halo pulse.
+1. **Typography with attitude** — keep Newsreader for one accent word, but set the main line in a heavy geometric sans, lowercase, tight tracking. Lowercase is the single strongest Gen-Z signal. Mixed-case moment: the accent word "her" stays serif italic terracotta, so it still reads as asmi.
+2. **A live artifact, not an abstract blob** — a tilted iMessage thread card floating to the right (desktop) / below (mobile) that types itself out: user sends "my sink is leaking", asmi replies "on it — calling 3 plumbers now", then a status chip flips to "booked, Tue 2pm ✓". This is the hero's proof, and it recycles the visual language already built in the /app prototype.
+3. **Motion that snaps** — the current slow scroll-scrub dim is replaced by an entrance that lands in under a second: words pop in on a spring, the thread card slides up, the icons bounce in last. Scroll-scrub stays only for the exit into Act 2.
+4. **Social proof line** — a small avatar cluster + "2,400+ on the list" under the CTA. Scarcity and peer count do heavy lifting for this audience.
+5. **Palette** — keep linen/espresso/terracotta so the rest of the site still matches, but raise contrast in the hero: espresso goes near-black, terracotta gets used as a filled pill on the CTA rather than a thin outline, and the ambient blobs get slightly more saturation so the page feels alive rather than muted.
+6. **Copy tone** — short, lowercase, second person, zero corporate words. "no app. no signup. just text." beats "seamless multi-channel assistant".
 
-## 6. Orb + dock
+## Layout
 
-- Orb 40px, conic-gradient `#7C3AED → #E64BFF → #5B5BFF → #7C3AED`, rotates 8s, inner radial highlight, tap squish-bounce.
-- Glass dock: liquid blur tinted `rgba(124,58,237,0.06)`, 1px inner stroke white@70.
-- Primary action chip: violet→magenta gradient, white icon+text, soft violet shadow.
-- Composer pills: pastel tints from palette, hover lifts and saturates.
+```text
+ ┌───────────────────────────────────────────────┐
+ │  asmi                              [waitlist] │
+ │                                               │
+ │   just text her.        ┌───────────────┐     │
+ │   asmi calls, books,    │ imessage card │     │
+ │   and chases it down.   │ typing…       │     │
+ │                         │ booked ✓      │     │
+ │   [iMessage] [WhatsApp] └───────────────┘     │
+ │   no app. no signup.                          │
+ │                                               │
+ │   [ get early access → ]                      │
+ │   ●●●● 2,400+ waiting                         │
+ └───────────────────────────────────────────────┘
+```
 
-## 7. Typography
+Mobile stacks: headline → icons row → thread card → CTA. Hero becomes a real 100svh section with content, not a sticky scroll-scrub stage, so the fold always shows the promise + the icons + the CTA.
 
-Keep **General Sans** (already loaded). Titles 600 / -0.02em tracking. Swap JetBrains Mono → **Space Mono** for status lines (more playful tick). Header counts use tabular 500.
+## Technical notes
 
-## 8. Per-component restyle
+- Rewrite `src/components/asmi/Act1Opening.tsx`; keep `AmbientBlobs` and `WaitlistForm`, drop the word-by-word scroll dim.
+- New `src/components/asmi/ChannelIcons.tsx` (inline SVG for iMessage bubble and WhatsApp glyph — no logo images) and `src/components/asmi/HeroThread.tsx` for the self-typing thread card.
+- Nav gains an always-visible state on the hero instead of appearing only after 85vh, so the waitlist CTA is reachable immediately.
+- Add a display-sans font (e.g. Bricolage Grotesque or General Sans, loaded via `<link>` in `src/routes/__root.tsx`) and a `--font-display` token in the `.landing-theme` scope; existing sections keep Newsreader/Figtree.
+- Motion via the existing `motion/react`; all entrance animation collapses to static under `prefers-reduced-motion`.
+- Act 2 onwards untouched; "the screen era is over." is re-placed as a one-line statement between Act 2 and Act 3.
 
-`CanvasHeader`, `OptionsList`, `ParallelCalls`, `CallStepper`, `TimelineFeed`, `MapView`, `SchedulingView`, `QuotesTable`, `Checklist`, `MessageThread`, `Artifacts`, `ChannelChip`, `TaskState`, `CardStack`, `app.tsx`, `app.history.tsx` — all restyled via tokens + icons per §2 map. No structural changes.
+## Out of scope
 
-## 9. New / changed files
-
-- **New:** `MeshBackdrop.tsx`, `Sparkle.tsx`, `StatusGlyph.tsx`, `Ticker.tsx`, `CategoryTile.tsx`, `icons/OrbMark.tsx`, `icons/CallWave.tsx`, `icons/SparkleBurst.tsx`, `icons/PriorityFlame.tsx`, `lib/categoryIcon.ts` (maps canvas.kind → lucide icon + tint).
-- **Rewrite:** `src/styles.css` (purge amber/linen, add violet palette, status tokens, mesh keyframes, glow/shadow tokens, dock tint, icon tile utility `.tile-status`), `AsmiOrb.tsx` (conic gradient ring), `GlassDock.tsx` (violet tint, icon chips), `CanvasHeader.tsx` (category tile + status glyph + Space Mono).
-- **Restyle via tokens + icons:** every component in §8.
-- **Mock:** add `kind` field per canvas (plumber/restaurant/gift/…) used by `categoryIcon.ts`.
-- **Install:** `bun add @fontsource/space-mono`. Remove JetBrains Mono link from `__root.tsx`.
-
-## 10. Out of scope
-
-Architecture changes (card stack stays vertical), new use cases, auth, real calls, persistence, desktop redesign beyond reusing tokens.
-
-## 11. Acceptance check
-
-- `rg -i "amber|orange|#D67341|f59e|fb923"` returns nothing in `src/`.
-- Mesh visibly drifts behind cards.
-- Every canvas shows a category tile icon + status glyph + channel icon in the header.
-- Every options row, timeline event, action chip, dock state, history row has an icon.
-- Front card tilts on drag, lands with a sparkle burst.
-- Orb has a rotating conic ring; tap squishes and bounces.
-- `prefers-reduced-motion` collapses mesh + sparkles to static.
+Real deep-link phone numbers, backend for the waitlist beyond what exists, redesign of Acts 2–6, the /app prototype.
