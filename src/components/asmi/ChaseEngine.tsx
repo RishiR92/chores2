@@ -47,7 +47,9 @@ const JOBS: Job[] = [
       { kind: "web", text: "filled clinic 3's booking form", time: "10:12a" },
       { kind: "call", text: "tues 8:30am. added to your calendar.", time: "10:24a", tone: "win" },
     ],
+  },
   {
+
     id: "friends",
     title: "dinner with 5 friends, saturday",
     who: "5 friends + the restaurant",
