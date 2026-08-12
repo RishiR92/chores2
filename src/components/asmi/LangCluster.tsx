@@ -13,10 +13,16 @@ export function LangCluster() {
   return (
     <section id="languages" className="relative px-5 py-11 sm:px-8 sm:py-16 md:py-24">
       <div className="mx-auto max-w-4xl text-center">
-        <h2 className="text-[1.65rem] sm:text-5xl">50+ languages. one number.</h2>
-        <p className="mx-auto mt-4 max-w-md font-sans" style={{ color: "var(--ink-soft)", fontSize: 15 }}>
-          she speaks to whoever picks up, in whatever they speak.
-        </p>
+        <RevealGroup>
+          <Reveal inGroup variant="text">
+            <h2 className="text-[1.65rem] sm:text-5xl">50+ languages. one number.</h2>
+          </Reveal>
+          <Reveal inGroup variant="accent">
+            <p className="mx-auto mt-4 max-w-md font-sans" style={{ color: "var(--ink-soft)", fontSize: 15 }}>
+              she speaks to whoever picks up, in whatever they speak.
+            </p>
+          </Reveal>
+        </RevealGroup>
 
         <div className="mx-auto mt-10 flex max-w-2xl flex-wrap items-center justify-center gap-x-2 gap-y-2">
           {LANGS.map((l, i) => {
