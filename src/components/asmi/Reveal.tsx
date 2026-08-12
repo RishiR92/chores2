@@ -5,6 +5,7 @@ import {
   useSpring,
   useTransform,
   type MotionValue,
+  type TargetAndTransition,
 } from "motion/react";
 import { useRef, type ReactNode } from "react";
 
