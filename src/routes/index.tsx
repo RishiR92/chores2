@@ -3,8 +3,8 @@ import { useRef } from "react";
 import { Nav } from "@/components/asmi/Nav";
 import { ScrollProgress } from "@/components/asmi/ScrollProgress";
 import { Act1Opening } from "@/components/asmi/Act1Opening";
-import { Act2CallViz } from "@/components/asmi/Act2CallViz";
-import { Act3ThreeMoments } from "@/components/asmi/Act3Moments";
+import { Act2Dread } from "@/components/asmi/Act2Dread";
+import { Act3Work } from "@/components/asmi/Act3Work";
 import { Act4Cloud } from "@/components/asmi/Act4Cloud";
 import { Act5, Act5Stories } from "@/components/asmi/Act5";
 import { Act6Close } from "@/components/asmi/Act6Close";
@@ -14,10 +14,19 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "Asmi — AI that handles your personal chores in the physical world" },
-      { name: "description", content: "Asmi makes real phone calls — plumbers, prescriptions, family check-ins. You text. Asmi handles it." },
-      { property: "og:title", content: "Asmi — The screen era is over." },
-      { property: "og:description", content: "AI that handles your personal chores in the physical world." },
+      { title: "asmi — just text her. she handles the calls." },
+      {
+        name: "description",
+        content:
+          "text asmi and she calls, texts, emails and chases until it's done — cancel the gym, fight the charge, book the dentist. no app, no signup.",
+      },
+      { property: "og:title", content: "asmi — just text her." },
+      {
+        property: "og:description",
+        content: "she calls, texts, emails and chases — until the thing is actually done.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
 });
@@ -29,21 +38,16 @@ function Index() {
       <ScrollProgress />
       <Nav />
       <Act1Opening sectionRef={heroRef} />
-      <Act2CallViz />
-      <div aria-hidden className="hidden md:block" style={{ height: "40svh" }} />
-      <Act3ThreeMoments />
-      <Act5Stories />
+      <Act2Dread />
+      <Act3Work />
       <OrganicDivider />
       <Act4Cloud />
+      <Act5Stories />
       <Act5 />
       <Act6Close />
 
       {/* Footer */}
-      <footer
-        className="relative"
-        style={{ background: "#EDE6DC" }}
-      >
-        {/* Organic wavy separator */}
+      <footer className="relative" style={{ background: "#EDE6DC" }}>
         <svg
           viewBox="0 0 1440 24"
           className="w-full block"
@@ -60,18 +64,11 @@ function Index() {
           />
         </svg>
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <a
-            href="#"
-            className="font-serif italic"
-            style={{ color: "var(--color-espresso)", fontSize: 20 }}
-          >
+          <a href="#" className="font-serif italic" style={{ color: "var(--color-espresso)", fontSize: 20 }}>
             asmi
           </a>
-          <p
-            className="font-serif italic"
-            style={{ color: "var(--color-stone-dim)", fontSize: 14, maxWidth: 420 }}
-          >
-            AI that handles your personal chores in the physical world.
+          <p className="font-serif italic" style={{ color: "var(--color-stone-dim)", fontSize: 14, maxWidth: 420 }}>
+            she calls, texts, emails and chases — until it's done.
           </p>
           <div
             className="font-serif italic flex items-center gap-2"
