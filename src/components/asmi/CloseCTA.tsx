@@ -21,8 +21,8 @@ export function CloseCTA() {
         <p className="mt-5 max-w-md font-sans" style={{ fontSize: 17, color: "rgba(255,253,248,0.72)" }}>
           text her once. she takes it from there — and won't stop until it's done.
         </p>
-        <div className="mt-9 w-full sm:w-auto">
-          <ChannelCTA size="lg" variant="dark" className="justify-center" />
+        <div className="mt-9">
+          <ChannelCTA size="lg" variant="dark" align="center" />
         </div>
         <p className="mt-4 font-mono" style={{ fontSize: 11.5, color: "rgba(255,253,248,0.45)" }}>
           no app · no signup · she replies in seconds
