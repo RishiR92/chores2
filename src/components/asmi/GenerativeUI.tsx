@@ -49,13 +49,6 @@ const PLACES: Place[] = [
 
 type Phase = "choose" | "calling" | "done";
 
-const CHIPS = [
-  "3 quotes, side by side",
-  "time slots to tap",
-  "map of what's near",
-  "poll your group",
-  "live order tracker",
-];
 
 export function GenerativeUI() {
   const [selected, setSelected] = useState<string | null>(null);
@@ -112,18 +105,6 @@ export function GenerativeUI() {
           <p className="mt-6 max-w-md font-sans" style={{ fontSize: 16.5, color: "var(--ink-soft)" }}>
             no ten tabs. she builds the interface you need right inside the thread — then executes it.
           </p>
-
-          <div className="mt-7 flex flex-wrap gap-2">
-            {CHIPS.map((c) => (
-              <span
-                key={c}
-                className="rounded-full px-3 py-2 font-sans"
-                style={{ fontSize: 13, background: "rgba(20,19,24,0.05)", color: "var(--ink-soft)" }}
-              >
-                {c}
-              </span>
-            ))}
-          </div>
         </div>
 
         {/* the thread */}

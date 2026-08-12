@@ -22,14 +22,6 @@ export function Nav() {
           >
             asmi
           </a>
-          <div className="hidden items-center gap-6 font-sans text-[0.9rem] md:flex" style={{ color: "var(--ink-soft)" }}>
-            <a href="#why" style={{ color: "inherit" }}>why</a>
-            <a href="#thread" style={{ color: "inherit" }}>in the chat</a>
-            <a href="#how" style={{ color: "inherit" }}>how she chases</a>
-
-            <a href="#stories" style={{ color: "inherit" }}>what she'll do</a>
-            <a href="#languages" style={{ color: "inherit" }}>languages</a>
-          </div>
         </div>
         <a
           href={IMSG_LINK}
