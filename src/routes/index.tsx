@@ -38,24 +38,24 @@ function Index() {
       <ScrollProgress />
       <Nav />
       <Hero />
-      <Reveal>
+      <ScrollSection>
         <Receipts />
-      </Reveal>
-      <Reveal>
+      </ScrollSection>
+      <ScrollSection>
         <GenerativeUI />
-      </Reveal>
-      <Reveal>
+      </ScrollSection>
+      <ScrollSection strength={18}>
         <ChaseEngine />
-      </Reveal>
-      <Reveal>
+      </ScrollSection>
+      <ScrollSection>
         <ChoreGrid />
-      </Reveal>
-      <Reveal>
+      </ScrollSection>
+      <ScrollSection>
         <LangCluster />
-      </Reveal>
-      <Reveal>
+      </ScrollSection>
+      <ScrollSection strength={14}>
         <CloseCTA />
-      </Reveal>
+      </ScrollSection>
 
       <footer className="px-5 sm:px-8" style={{ background: "var(--paper-deep)" }}>
         <div className="mx-auto flex max-w-7xl flex-col gap-4 py-10 sm:flex-row sm:items-center sm:justify-between">
