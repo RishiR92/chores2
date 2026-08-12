@@ -32,27 +32,30 @@ Write the way the user texts, not the way a brand writes.
 - **Sections 4–6 (broader):** widen to households and family — repairs, insurance, parents, multi-language. This is where the older, higher-frequency use cases live, framed as "asmi grows with your life."
 
 
-## Section 1 — Hero: "just text her."
+## Section 1 — Hero: "she'll make the call."
 
-Replaces the manifesto. Hook first, philosophy later.
+Replaces the manifesto. Lead with the feeling everyone has: *I don't want to call them.*
 
 ```text
-              just text her.
+          she'll make the call.
 
-   she calls, texts, emails and chases —
-        until the thing is actually done.
+   asmi calls, texts, emails and keeps chasing
+      until it's done. you just text her.
 
         [ iMessage ]   [ WhatsApp ]
           no app. no signup. just text.
 ```
 
-- Headline lowercase, heavy geometric sans, oversized. "her" in serif italic terracotta so the brand voice survives.
-- **Channel row** — iMessage and WhatsApp tiles (inline SVG, not logo images) directly under the sub-headline with the "no app. no signup." caption. This is the trust cue and it answers "do I have to download something?" in the first second.
-- **Live thread card**, tilted, right on desktop / below on mobile. Self-types: *"my landlord's ghosting me about the AC"* → *"on it — calling now, texting the property manager, emailing a paper trail"* → chips flip to `called ✓` `texted ✓` `emailed ✓` → **"work order #4471, tech comes thu 10am."** Multichannel is visible in the first artifact, not described later.
-- **Category ticker** under the sub-line, cycling: `the dentist · your landlord · that refund · the DMV · a birthday cake · the group dinner`.
+Alternates in the same voice, for the team to pick from: "just text her." · "you never have to call them again." · "the thing you've been putting off? consider it done."
+
+- Headline lowercase, heavy geometric sans, oversized. "her" / "call" in serif italic terracotta so the brand voice survives.
+- **Channel row** — iMessage and WhatsApp tiles (inline SVG, not logo images) directly under the sub-headline with the "no app. no signup." caption. Answers "do I have to download something?" in the first second.
+- **Live thread card**, tilted, right on desktop / below on mobile. Self-types in real texting voice: *"my landlord's been ignoring me for 3 weeks about the AC"* → *"ugh. calling him now, texting the property manager too, and putting it in writing."* → chips flip `called ✓` `texted ✓` `emailed ✓` → **"work order #4471. tech comes thursday 10am."** Multichannel shows up as a fact, never as a feature word.
+- **Ticker** under the sub-line, cycling in the user's phrasing: `"cancel my gym" · "my landlord's ghosting me" · "get this charge refunded" · "book a dentist" · "cake by friday" · "dinner for 6 saturday"`.
 - CTA: filled terracotta pill "get early access →", with avatar cluster + "2,400+ on the list".
 - Motion lands under one second — spring pop, card slide, icons bounce last. Scroll-scrub only for the exit.
 - "the screen era is over." survives as a quiet one-line statement between sections 3 and 4.
+
 
 ## Section 2 — The dread reel (the hook that makes them stay)
 
