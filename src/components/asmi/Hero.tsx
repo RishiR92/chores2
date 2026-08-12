@@ -28,7 +28,9 @@ export function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  const gridY = useTransform(scrollYProgress, [0, 1], [0, 46]);
   const [shown, setShown] = useState(0);
+
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     const n = Math.round(Math.min(1, Math.max(0, (v - 0.06) / 0.62)) * STEPS.length);
