@@ -21,7 +21,9 @@ export function ChannelCTA({
   const btn = size === "lg" ? "h-[62px] w-[86px] sm:w-[104px]" : "h-[54px] w-[78px] sm:w-[92px]";
   const icon = size === "lg" ? 30 : 26;
   const darkEdge =
-    variant === "dark" ? { borderColor: "var(--cream)", boxShadow: "4px 4px 0 var(--cream)" } : undefined;
+    variant === "dark"
+      ? { border: "none", boxShadow: "0 10px 30px -12px rgba(0,0,0,0.6)" }
+      : undefined;
 
   return (
     <div className={`flex flex-col gap-2.5 ${align === "center" ? "items-center" : "items-start"} ${className}`}>
