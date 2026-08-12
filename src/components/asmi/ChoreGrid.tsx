@@ -9,16 +9,20 @@ interface Chore {
 
 const CHORES: Chore[] = [
   { label: "cancel this subscription", reply: "found the retention line. cancelled, confirmation emailed to you.", tint: "var(--coral)" },
-  { label: "why was i charged $60", reply: "bank says merchant hold. disputing it now — i'll chase the merchant too.", tint: "var(--blue)" },
-  { label: "book the dentist", reply: "calling the 4 nearest. mornings only, right?", tint: "var(--violet-soft)" },
-  { label: "my landlord's ghosting me", reply: "called twice, texted, and emailed with a paper trail. he replied.", tint: "var(--citrus)" },
-  { label: "find a plumber, call all 3", reply: "ringing all three at once. best quote so far: $180, tonight.", tint: "var(--mint-pop)" },
+  { label: "lower my internet bill", reply: "2 hrs with retentions. $34 off a month, same speed.", tint: "var(--blue)" },
+  { label: "chase my insurance claim", reply: "day 6 of chasing. adjuster assigned, callback booked for 4pm.", tint: "var(--violet-soft)" },
+  { label: "book a haircut saturday", reply: "called 3 shops. 11:15am saturday, the one you liked last time.", tint: "var(--citrus)" },
+  { label: "reschedule my flight", reply: "on with the airline. no change fee if we move to the 6:40am.", tint: "var(--mint-pop)" },
   { label: "DMV appointment", reply: "sat in their queue 38 min. you're in for thurs 9:10am.", tint: "var(--blue)" },
   { label: "dispute this parking ticket", reply: "filed the contest form + called the office for a hearing date.", tint: "var(--coral)" },
-  { label: "reschedule my flight", reply: "on with the airline. no change fee if we move to the 6:40am.", tint: "var(--violet-soft)" },
-  { label: "is this in stock?", reply: "called 5 stores. two have it — one's holding it under your name.", tint: "var(--mint-pop)" },
-  { label: "chase my refund", reply: "day 3 of chasing. escalated to a supervisor, callback booked.", tint: "var(--citrus)" },
-  { label: "pick a night that works for all 6 of us", reply: "texted all 6. four replied, chased the other two. saturday wins — booking the table now.", tint: "var(--violet-soft)" },
+  { label: "my landlord's ghosting me", reply: "called twice, texted, and emailed with a paper trail. he replied.", tint: "var(--citrus)" },
+  { label: "return this order", reply: "got the label out of them and booked the pickup for tuesday.", tint: "var(--violet-soft)" },
+  { label: "is this in stock nearby?", reply: "called 5 stores. two have it — one's holding it under your name.", tint: "var(--mint-pop)" },
+  { label: "find a mover for the 14th", reply: "3 quotes in. cheapest $420, soonest is the 13th. want the list?", tint: "var(--blue)" },
+  { label: "get my car serviced", reply: "booked friday 8am, they'll do the loaner. quoted $190.", tint: "var(--coral)" },
+  { label: "renew my passport", reply: "checked the wait times, booked your appointment, listed what to bring.", tint: "var(--violet-soft)" },
+  { label: "cancel my gym", reply: "they dodged twice. third call + written notice — cancelled, no fee.", tint: "var(--citrus)" },
+  { label: "vet slot for the dog", reply: "two clinics full. third had a 5:40pm cancellation — took it.", tint: "var(--mint-pop)" },
 ];
 
 

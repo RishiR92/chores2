@@ -87,15 +87,24 @@ export function Hero() {
             <div className="mt-3 min-h-[24px] sm:mt-4">
               <AnimatePresence>
                 {done && (
-                  <motion.p
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
+                  <motion.span
+                    initial={{ opacity: 0, y: 8, rotate: -1.6, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, rotate: -1.6, scale: 1 }}
                     exit={{ opacity: 0 }}
-                    className="font-display"
-                    style={{ fontSize: 19, fontWeight: 700, letterSpacing: "-0.02em" }}
+                    transition={{ type: "spring", stiffness: 320, damping: 18 }}
+                    className="font-display relative inline-block whitespace-nowrap"
+                    style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em" }}
                   >
                     she doesn't stop until it's done.
-                  </motion.p>
+                    <motion.span
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ delay: 0.25, duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
+                      className="absolute left-0 right-0 -bottom-[3px] h-[6px] origin-left rounded-full"
+                      style={{ background: "var(--coral)", opacity: 0.55 }}
+                      aria-hidden
+                    />
+                  </motion.span>
                 )}
               </AnimatePresence>
             </div>
