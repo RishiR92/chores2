@@ -103,17 +103,13 @@ export function ChaseEngine() {
     return () => clearInterval(id);
   }, [active, runId, total, reduced, inView]);
 
-  // keep the newest lit beat in view on narrow screens
+  // keep the rail pinned to the left so the first step stays fully visible
   useEffect(() => {
     const rail = railRef.current;
-    const node = rail?.children[Math.max(0, shown - 1)] as HTMLElement | undefined;
-    if (rail && node) {
-      rail.scrollTo({
-        left: node.offsetLeft - rail.clientWidth / 2 + node.clientWidth / 2,
-        behavior: "smooth",
-      });
+    if (rail) {
+      rail.scrollTo({ left: 0, behavior: "auto" });
     }
-  }, [shown]);
+  }, [active]);
 
   useEffect(() => {
     const chips = chipsRef.current;
