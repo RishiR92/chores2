@@ -96,7 +96,7 @@ export function ChoreGrid() {
           {ROW_A.map((c, i) => (
             <Fragment key={c.label}>
               <Request chore={c} active={open?.label === c.label} onSelect={() => setOpen(c)} />
-              {i % 3 === 2 && <Punctuation src={i % 6 === 2 ? wrenchImg : bellImg} />}
+              {i % 3 === 2 && <Punctuation src={i % 6 === 2 ? wrenchImg : gymImg} />}
             </Fragment>
           ))}
         </Marquee>
@@ -104,7 +104,7 @@ export function ChoreGrid() {
           {ROW_B.map((c, i) => (
             <Fragment key={c.label}>
               <Request chore={c} active={open?.label === c.label} onSelect={() => setOpen(c)} />
-              {i % 3 === 1 && <Punctuation src={i % 6 === 1 ? ticketImg : receiptImg} />}
+              {i % 3 === 1 && <Punctuation src={i % 6 === 1 ? dentistImg : receiptImg} />}
             </Fragment>
           ))}
         </Marquee>
