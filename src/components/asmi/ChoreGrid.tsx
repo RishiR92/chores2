@@ -3,9 +3,9 @@ import { Fragment, useState } from "react";
 import { Marquee } from "./Marquee";
 import { Reveal, RevealGroup } from "./Reveal";
 import wrenchImg from "@/assets/cut-wrench.png";
-import bellImg from "@/assets/cut-bell.png";
-import ticketImg from "@/assets/cut-ticket.png";
-import receiptImg from "@/assets/cut-receipt.png";
+import gymImg from "@/assets/cut-gymcard.png";
+import dentistImg from "@/assets/cut-dentist.png";
+import receiptImg from "@/assets/cut-bill.png";
 
 function Punctuation({ src }: { src: string }) {
   return (
