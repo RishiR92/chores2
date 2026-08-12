@@ -58,7 +58,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-              className="text-[2.6rem] leading-[0.9] sm:text-6xl lg:text-[5.6rem]"
+              className="text-[2.35rem] leading-[0.92] sm:text-6xl lg:text-[5.6rem]"
             >
               the most{" "}
               <span className="relative inline-block">
@@ -81,7 +81,7 @@ export function Hero() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mt-5 sm:mt-7"
             >
-              <ChannelCTA size="lg" />
+              <ChannelCTA size="lg" className="!flex-row [&_a]:px-3 [&_a]:text-[0.92rem] sm:[&_a]:px-7 sm:[&_a]:text-[1.05rem]" />
             </motion.div>
 
             <div className="mt-3 min-h-[24px] sm:mt-4">
@@ -156,7 +156,7 @@ export function Hero() {
                 </p>
               </div>
 
-              <ul className="relative flex flex-col gap-2.5 pl-5" style={{ minHeight: 150 }}>
+              <ul className="relative flex flex-col gap-2.5 pl-5" style={{ minHeight: 132 }}>
                 <span
                   className="absolute left-[7px] top-2 bottom-2 w-px"
                   style={{ background: "rgba(20,19,24,0.12)" }}
