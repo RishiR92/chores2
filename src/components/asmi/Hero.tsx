@@ -84,7 +84,15 @@ export function Hero() {
             >
               the most{" "}
               <span className="relative inline-block">
-                <span className="relative z-10">irritating</span>
+                <motion.span
+                  className="word-loud relative z-10 inline-block"
+                  initial={{ scaleY: 0.72, y: 4, opacity: 0 }}
+                  animate={{ scaleY: 1, y: 0, opacity: 1 }}
+                  transition={{ delay: 0.32, type: "spring", stiffness: 420, damping: 16 }}
+                  style={{ transformOrigin: "bottom" }}
+                >
+                  irritating
+                </motion.span>
                 <motion.span
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
