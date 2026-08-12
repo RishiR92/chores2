@@ -117,7 +117,7 @@ export function ChaseEngine() {
   };
 
   return (
-    <section id="how" className="ink-section relative grain overflow-hidden py-11 sm:py-16 md:py-24">
+    <section ref={sectionRef} id="how" className="ink-section relative grain overflow-hidden py-11 sm:py-16 md:py-24">
       <div
         className="pointer-events-none absolute -bottom-32 -right-20 h-[380px] w-[380px] rounded-full blur-3xl"
         style={{ background: "rgba(47,91,255,0.35)" }}
