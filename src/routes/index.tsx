@@ -8,7 +8,6 @@ import { ChaseEngine } from "@/components/asmi/ChaseEngine";
 
 import { ChoreGrid } from "@/components/asmi/ChoreGrid";
 import { LangCluster } from "@/components/asmi/LangCluster";
-import { CloseCTA } from "@/components/asmi/CloseCTA";
 import { ScrollSection } from "@/components/asmi/Reveal";
 
 export const Route = createFileRoute("/")({
@@ -53,18 +52,12 @@ function Index() {
       <ScrollSection>
         <LangCluster />
       </ScrollSection>
-      <ScrollSection strength={14}>
-        <CloseCTA />
-      </ScrollSection>
 
       <footer className="px-5 sm:px-8" style={{ background: "var(--paper-deep)" }}>
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 py-10 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 py-7">
           <a href="#" className="font-display" style={{ fontSize: 20, fontWeight: 800, letterSpacing: "-0.04em" }}>
             asmi
           </a>
-          <p className="font-sans" style={{ color: "var(--ink-dim)", fontSize: 14, maxWidth: 420 }}>
-            she calls, texts, emails and chases — until it's done.
-          </p>
           <div className="flex items-center gap-2 font-sans" style={{ color: "var(--ink-dim)", fontSize: 14 }}>
             <a href="mailto:support@asmiai.com" style={{ color: "inherit" }}>
               support@asmiai.com
@@ -76,6 +69,7 @@ function Index() {
           </div>
         </div>
       </footer>
+
 
     </main>
   );
