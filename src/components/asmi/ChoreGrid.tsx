@@ -75,16 +75,23 @@ export function ChoreGrid() {
 
       <div className="mt-9 flex flex-col gap-3">
         <Marquee baseVelocity={30} paused={!!open}>
-          {ROW_A.map((c) => (
-            <Request key={c.label} chore={c} active={open?.label === c.label} onSelect={() => setOpen(c)} />
+          {ROW_A.map((c, i) => (
+            <Fragment key={c.label}>
+              <Request chore={c} active={open?.label === c.label} onSelect={() => setOpen(c)} />
+              {i % 3 === 2 && <Punctuation src={i % 6 === 2 ? wrenchImg : bellImg} />}
+            </Fragment>
           ))}
         </Marquee>
         <Marquee baseVelocity={-24} paused={!!open}>
-          {ROW_B.map((c) => (
-            <Request key={c.label} chore={c} active={open?.label === c.label} onSelect={() => setOpen(c)} />
+          {ROW_B.map((c, i) => (
+            <Fragment key={c.label}>
+              <Request chore={c} active={open?.label === c.label} onSelect={() => setOpen(c)} />
+              {i % 3 === 1 && <Punctuation src={i % 6 === 1 ? ticketImg : receiptImg} />}
+            </Fragment>
           ))}
         </Marquee>
       </div>
+
 
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <AnimatePresence mode="wait">
