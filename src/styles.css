@@ -441,6 +441,43 @@
   opacity: 0.9;
 }
 
+/* amo pass — cutout collage, ink cursor, torn paper */
+.landing-theme .word-loud {
+  font-family: 'Archivo Black', var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+body.ink-cursor,
+body.ink-cursor a,
+body.ink-cursor button {
+  cursor: none;
+}
+.dot-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(20, 19, 24, 0.14) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.5;
+}
+.dot-field-light {
+  background-image: radial-gradient(rgba(255, 253, 248, 0.16) 1px, transparent 1px);
+}
+.torn-top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 12px;
+  pointer-events: none;
+  background: var(--paper);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='12' preserveAspectRatio='none'%3E%3Cpath d='M0 0h120v5c-8 3-14-2-22 1s-13 4-21 1-14-3-22 1-13 3-21 0-10-3-14-1z' fill='%23000'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='12' preserveAspectRatio='none'%3E%3Cpath d='M0 0h120v5c-8 3-14-2-22 1s-13 4-21 1-14-3-22 1-13 3-21 0-10-3-14-1z' fill='%23000'/%3E%3C/svg%3E");
+  -webkit-mask-size: 120px 12px;
+  mask-size: 120px 12px;
+  mask-repeat: repeat-x;
+}
+
 
 .ink-section { background: var(--ink); color: var(--cream); }
 .ink-section h2, .ink-section h3 { color: var(--cream); }

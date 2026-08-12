@@ -1,7 +1,25 @@
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Marquee } from "./Marquee";
 import { Reveal, RevealGroup } from "./Reveal";
+import wrenchImg from "@/assets/cut-wrench.png";
+import bellImg from "@/assets/cut-bell.png";
+import ticketImg from "@/assets/cut-ticket.png";
+import receiptImg from "@/assets/cut-receipt.png";
+
+function Punctuation({ src }: { src: string }) {
+  return (
+    <img
+      src={src}
+      alt=""
+      aria-hidden
+      loading="lazy"
+      className="pointer-events-none h-11 w-auto shrink-0 select-none self-center sm:h-14"
+      style={{ filter: "saturate(0.8) drop-shadow(3px 4px 0 rgba(20,19,24,0.10))" }}
+    />
+  );
+}
+
 
 interface Chore {
   label: string;
@@ -75,16 +93,23 @@ export function ChoreGrid() {
 
       <div className="mt-9 flex flex-col gap-3">
         <Marquee baseVelocity={30} paused={!!open}>
-          {ROW_A.map((c) => (
-            <Request key={c.label} chore={c} active={open?.label === c.label} onSelect={() => setOpen(c)} />
+          {ROW_A.map((c, i) => (
+            <Fragment key={c.label}>
+              <Request chore={c} active={open?.label === c.label} onSelect={() => setOpen(c)} />
+              {i % 3 === 2 && <Punctuation src={i % 6 === 2 ? wrenchImg : bellImg} />}
+            </Fragment>
           ))}
         </Marquee>
         <Marquee baseVelocity={-24} paused={!!open}>
-          {ROW_B.map((c) => (
-            <Request key={c.label} chore={c} active={open?.label === c.label} onSelect={() => setOpen(c)} />
+          {ROW_B.map((c, i) => (
+            <Fragment key={c.label}>
+              <Request chore={c} active={open?.label === c.label} onSelect={() => setOpen(c)} />
+              {i % 3 === 1 && <Punctuation src={i % 6 === 1 ? ticketImg : receiptImg} />}
+            </Fragment>
           ))}
         </Marquee>
       </div>
+
 
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <AnimatePresence mode="wait">

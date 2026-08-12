@@ -2,6 +2,26 @@ import { useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { ChannelCTA } from "./ChannelCTA";
 import { ChannelGlyph, ChannelKind } from "./ChannelIcons";
+import { Collage, CollageLayer } from "./Collage";
+import handset from "@/assets/cut-handset.png";
+import ticket from "@/assets/cut-ticket.png";
+import wrench from "@/assets/cut-wrench.png";
+import chair from "@/assets/cut-chair.png";
+import receipt from "@/assets/cut-receipt.png";
+import bell from "@/assets/cut-bell.png";
+
+const PILE: CollageLayer[] = [
+  { src: handset, x: "-2%", y: "2%", w: "min(26vw, 260px)", depth: 0.85, rot: -9, desktopOnly: true },
+  { src: wrench, x: "1%", y: "72%", w: "min(22vw, 230px)", depth: 0.55, rot: 14, desktopOnly: true },
+  { src: chair, x: "80%", y: "60%", w: "min(24vw, 270px)", depth: 0.35, rot: 5, desktopOnly: true, opacity: 0.9 },
+  { src: receipt, x: "41%", y: "74%", w: "min(11vw, 120px)", depth: 0.25, rot: -12, desktopOnly: true, opacity: 0.9 },
+  { src: bell, x: "50%", y: "6%", w: "min(9vw, 100px)", depth: 0.45, rot: 8, desktopOnly: true, opacity: 0.85 },
+  { src: ticket, x: "80%", y: "4%", w: "min(15vw, 175px)", depth: 0.8, rot: -13, desktopOnly: true, opacity: 0.95 },
+  { src: ticket, x: "66%", y: "7%", w: "21vw", depth: 0.8, rot: -13, opacity: 0.95, mobileOnly: true },
+  { src: bell, x: "62%", y: "82%", w: "26vw", depth: 0.45, rot: 8, opacity: 0.8, mobileOnly: true },
+];
+
+
 
 const THREAD: { from: "you" | "asmi"; text: string }[] = [
   { from: "you", text: "cancel my gym. they keep dodging me" },
@@ -52,6 +72,9 @@ export function Hero() {
         <span className="ghost-mark" aria-hidden>
           asmi
         </span>
+        <Collage layers={PILE} eager />
+
+
 
 
         <div className="relative mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-center gap-5 px-5 pt-[68px] pb-[60px] sm:gap-7 sm:px-8 md:pt-28 md:pb-24 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-14">
@@ -64,7 +87,15 @@ export function Hero() {
             >
               the most{" "}
               <span className="relative inline-block">
-                <span className="relative z-10">irritating</span>
+                <motion.span
+                  className="word-loud relative z-10 inline-block"
+                  initial={{ scaleY: 0.72, y: 4, opacity: 0 }}
+                  animate={{ scaleY: 1, y: 0, opacity: 1 }}
+                  transition={{ delay: 0.32, type: "spring", stiffness: 420, damping: 16 }}
+                  style={{ transformOrigin: "bottom" }}
+                >
+                  irritating
+                </motion.span>
                 <motion.span
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
