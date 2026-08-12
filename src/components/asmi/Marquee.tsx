@@ -58,7 +58,14 @@ export function Marquee({
   }
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
+    <div
+      className={`relative overflow-hidden ${className}`}
+      style={{
+        maskImage: "linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent)",
+        WebkitMaskImage: "linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent)",
+      }}
+    >
+
       <motion.div className="flex w-max flex-nowrap" style={{ x }}>
         <div ref={inner} className="flex flex-nowrap gap-3 pr-3">
           {children}
