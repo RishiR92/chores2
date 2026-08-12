@@ -208,7 +208,7 @@ export function GenerativeUI() {
                             <span style={{ color: "var(--ink)" }}>{p.rating}</span>
                             <span>({p.reviews})</span>
                           </span>
-                          <span className="whitespace-nowrap">· {p.meta}</span>
+                          <span className="whitespace-nowrap">{p.meta}</span>
                         </div>
 
                         <p className="mt-1 font-sans" style={{ fontSize: "var(--t-sm)", color: "var(--ink-soft)" }}>
