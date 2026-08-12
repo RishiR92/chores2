@@ -82,7 +82,7 @@ const CARDS = [
 
 export function Receipts() {
   return (
-    <section id="why" className="relative px-5 py-11 sm:px-8 sm:py-11 sm:py-16 md:py-24">
+    <section id="why" className="relative px-5 py-11 sm:px-8 sm:py-16 md:py-24">
       <div className="mx-auto max-w-7xl">
         <motion.h2
           initial={{ opacity: 0, y: 14 }}

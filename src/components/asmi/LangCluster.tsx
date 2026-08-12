@@ -10,7 +10,7 @@ const POP = new Set(["english", "中文", "हिन्दी", "español", "ا�
 
 export function LangCluster() {
   return (
-    <section id="languages" className="relative px-5 py-11 sm:px-8 sm:py-11 sm:py-16 md:py-24">
+    <section id="languages" className="relative px-5 py-11 sm:px-8 sm:py-16 md:py-24">
       <div className="mx-auto max-w-4xl text-center">
         <h2 className="text-[1.65rem] sm:text-5xl">50+ languages. one number.</h2>
         <p className="mx-auto mt-4 max-w-md font-sans" style={{ color: "var(--ink-soft)", fontSize: 15 }}>

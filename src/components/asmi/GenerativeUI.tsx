@@ -82,7 +82,7 @@ export function GenerativeUI() {
   const ss = String(hold % 60).padStart(2, "0");
 
   return (
-    <section id="thread" className="relative px-5 py-11 sm:px-8 sm:py-11 sm:py-16 md:py-24">
+    <section id="thread" className="relative px-5 py-11 sm:px-8 sm:py-16 md:py-24">
       <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
         <div className="min-w-0">
           <span className="font-mono" style={{ fontSize: 11, letterSpacing: "0.08em", color: "var(--ink-dim)" }}>

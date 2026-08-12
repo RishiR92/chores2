@@ -30,7 +30,7 @@ export function ChoreGrid() {
   const [open, setOpen] = useState<string | null>(null);
 
   return (
-    <section id="stories" className="relative px-5 py-11 sm:px-8 sm:py-11 sm:py-16 md:py-24">
+    <section id="stories" className="relative px-5 py-11 sm:px-8 sm:py-16 md:py-24">
       <div className="mx-auto max-w-7xl">
         <h2 className="max-w-2xl text-[1.65rem] sm:text-5xl">she'll handle this.</h2>
         <p className="mt-4 max-w-lg font-sans" style={{ color: "var(--ink-soft)", fontSize: 15 }}>
