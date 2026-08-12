@@ -2,6 +2,23 @@ import { useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { ChannelCTA } from "./ChannelCTA";
 import { ChannelGlyph, ChannelKind } from "./ChannelIcons";
+import { Collage, CollageLayer } from "./Collage";
+import handset from "@/assets/cut-handset.png";
+import ticket from "@/assets/cut-ticket.png";
+import wrench from "@/assets/cut-wrench.png";
+import chair from "@/assets/cut-chair.png";
+import receipt from "@/assets/cut-receipt.png";
+import bell from "@/assets/cut-bell.png";
+
+const PILE: CollageLayer[] = [
+  { src: handset, x: "-4%", y: "8%", w: "min(30vw, 300px)", depth: 0.85, rot: -9, desktopOnly: true },
+  { src: wrench, x: "2%", y: "68%", w: "min(24vw, 250px)", depth: 0.55, rot: 14, desktopOnly: true },
+  { src: chair, x: "78%", y: "58%", w: "min(26vw, 290px)", depth: 0.35, rot: 5, desktopOnly: true, opacity: 0.9 },
+  { src: receipt, x: "62%", y: "-6%", w: "min(12vw, 130px)", depth: 0.25, rot: -12, desktopOnly: true, opacity: 0.9 },
+  { src: ticket, x: "-7%", y: "3%", w: "34vw", depth: 0.8, rot: -13 },
+  { src: bell, x: "78%", y: "80%", w: "32vw", depth: 0.45, rot: 8, opacity: 0.85 },
+];
+
 
 const THREAD: { from: "you" | "asmi"; text: string }[] = [
   { from: "you", text: "cancel my gym. they keep dodging me" },
