@@ -100,9 +100,10 @@ export function ChaseEngine() {
             </span>
           </Reveal>
           <Reveal inGroup variant="text">
-            <h2 className="max-w-2xl text-[1.65rem] sm:text-5xl">
-              one task. every channel. until it's <span style={{ color: "var(--citrus)" }}>done</span>.
+            <h2 className="max-w-2xl">
+              one task. every channel. until it's done.
             </h2>
+
           </Reveal>
           <Reveal inGroup variant="accent">
             <p className="max-w-xl font-sans" style={{ fontSize: 15, color: "rgba(255,253,248,0.7)" }}>
@@ -155,7 +156,7 @@ export function ChaseEngine() {
               <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
                 <div className="min-w-0">
                   <h3 className="text-[1.15rem] sm:text-[1.6rem]">{job.title}</h3>
-                  <p className="mt-1.5 font-mono" style={{ fontSize: 11.5, color: "rgba(255,253,248,0.55)" }}>
+                  <p className="mt-1.5 font-mono" style={{ fontSize: "var(--t-mono)", color: "rgba(255,253,248,0.55)" }}>
                     {job.who}
                   </p>
                 </div>
@@ -173,7 +174,7 @@ export function ChaseEngine() {
                     key={k}
                     className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 font-sans"
                     style={{
-                      fontSize: 12.5,
+                      fontSize: "var(--t-sm)",
                       color: "var(--cream)",
                       background: "rgba(255,253,248,0.08)",
                       border: "1px solid rgba(255,253,248,0.16)",
@@ -188,14 +189,14 @@ export function ChaseEngine() {
               <div className="mt-5">
                 <p
                   className="mb-4 font-mono"
-                  style={{ fontSize: 10.5, letterSpacing: "0.06em", color: "rgba(255,253,248,0.5)" }}
+                  style={{ fontSize: "var(--t-mono)", letterSpacing: "0.06em", color: "rgba(255,253,248,0.5)" }}
                 >
                   LIVE LOG
                 </p>
                 <ChaseLog steps={job.steps} dark />
               </div>
 
-              <p className="mt-5 hidden font-sans md:block" style={{ fontSize: 14.5, color: "rgba(255,253,248,0.7)" }}>
+              <p className="mt-5 hidden font-sans md:block" style={{ fontSize: "var(--t-base)", color: "rgba(255,253,248,0.7)" }}>
                 she runs several threads in parallel and informs you once the task is done.
               </p>
             </motion.article>

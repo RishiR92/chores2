@@ -102,7 +102,7 @@ export function Hero() {
               <p className="font-display truncate" style={{ fontWeight: 700, fontSize: 15 }}>
                 asmi
               </p>
-              <span className="ml-auto font-mono shrink-0" style={{ fontSize: 10.5, color: "var(--ink-dim)" }}>
+              <span className="ml-auto font-mono shrink-0" style={{ fontSize: "var(--t-mono)", color: "var(--ink-dim)" }}>
                 imessage
               </span>
             </div>
@@ -118,7 +118,7 @@ export function Hero() {
                     m.from === "you" ? "self-end" : "self-start"
                   }`}
                   style={{
-                    fontSize: 13.5,
+                    fontSize: "var(--t-sm)",
                     background: m.from === "you" ? "var(--blue)" : "rgba(20,19,24,0.06)",
                     color: m.from === "you" ? "#fff" : "var(--ink)",
                     borderBottomRightRadius: m.from === "you" ? 8 : undefined,
@@ -132,10 +132,10 @@ export function Hero() {
 
             <div className="rounded-2xl p-3 sm:p-3.5" style={{ background: "rgba(20,19,24,0.04)" }}>
               <div className="mb-3 flex items-center justify-between">
-                <p className="font-mono" style={{ fontSize: 10.5, color: "var(--ink-dim)", letterSpacing: "0.06em" }}>
+                <p className="font-mono" style={{ fontSize: "var(--t-mono)", color: "var(--ink-dim)", letterSpacing: "0.06em" }}>
                   THE CHASE
                 </p>
-                <p className="font-mono" style={{ fontSize: 10.5, color: "var(--ink-dim)" }}>
+                <p className="font-mono" style={{ fontSize: "var(--t-mono)", color: "var(--ink-dim)" }}>
                   {visible}/{STEPS.length}
                 </p>
               </div>
@@ -215,7 +215,7 @@ export function Hero() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     className="pt-3 text-center font-mono"
-                    style={{ fontSize: 10.5, color: "var(--ink-dim)" }}
+                    style={{ fontSize: "var(--t-mono)", color: "var(--ink-dim)" }}
                   >
                     keep scrolling ↓ watch her chase
                   </motion.p>

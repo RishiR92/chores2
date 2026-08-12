@@ -92,7 +92,7 @@ export function GenerativeUI() {
             </span>
           </Reveal>
           <Reveal inGroup variant="text">
-            <h2 className="mt-3 text-[1.65rem] sm:text-5xl">
+            <h2 className="mt-3">
               she plans it with you. then she <span style={{ color: "var(--coral)" }}>goes and does it</span>.
             </h2>
           </Reveal>
@@ -129,7 +129,7 @@ export function GenerativeUI() {
               <p className="font-display truncate" style={{ fontWeight: 700, fontSize: 15 }}>
                 asmi
               </p>
-              <span className="ml-auto shrink-0 font-mono" style={{ fontSize: 10.5, color: "var(--ink-dim)" }}>
+              <span className="ml-auto shrink-0 font-mono" style={{ fontSize: "var(--t-mono)", color: "var(--ink-dim)" }}>
                 imessage
               </span>
             </div>
@@ -137,13 +137,13 @@ export function GenerativeUI() {
             <div className="flex flex-col gap-2.5 py-3.5">
               <div
                 className="max-w-[86%] self-end rounded-3xl px-4 py-2.5 font-sans"
-                style={{ fontSize: 13.5, background: "var(--blue)", color: "#fff", borderBottomRightRadius: 8 }}
+                style={{ fontSize: "var(--t-sm)", background: "var(--blue)", color: "#fff", borderBottomRightRadius: 8 }}
               >
                 bars near me with actual veg food, table for 5
               </div>
               <div
                 className="max-w-[86%] self-start rounded-3xl px-4 py-2.5 font-sans"
-                style={{ fontSize: 13.5, background: "rgba(20,19,24,0.06)", borderBottomLeftRadius: 8 }}
+                style={{ fontSize: "var(--t-sm)", background: "rgba(20,19,24,0.06)", borderBottomLeftRadius: 8 }}
               >
                 found 3. tap the one you like 👇
               </div>
@@ -198,7 +198,7 @@ export function GenerativeUI() {
                           <span>({p.reviews})</span>
                           <span>· {p.meta}</span>
                         </div>
-                        <p className="mt-1 font-sans" style={{ fontSize: 12.5, color: "var(--ink-soft)" }}>
+                        <p className="mt-1 font-sans" style={{ fontSize: "var(--t-sm)", color: "var(--ink-soft)" }}>
                           {p.why}
                         </p>
                       </div>
@@ -251,7 +251,7 @@ export function GenerativeUI() {
                       className="h-2.5 w-2.5 shrink-0 rounded-full"
                       style={{ background: "var(--coral)" }}
                     />
-                    <span className="min-w-0 truncate font-sans" style={{ fontSize: 14.5 }}>
+                    <span className="min-w-0 truncate font-sans" style={{ fontSize: "var(--t-base)" }}>
                       calling {chosen?.name} · on hold
                     </span>
                     <span className="ml-auto shrink-0 font-mono" style={{ fontSize: 13, fontWeight: 700 }}>

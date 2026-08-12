@@ -1,8 +1,8 @@
-import { motion } from "motion/react";
-import { Reveal, RevealGroup } from "./Reveal";
-import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { FlipNumber } from "./Ticker";
 
-function HoldTimer() {
+function useHoldClock() {
   const [s, setS] = useState(41 * 60 + 12);
   useEffect(() => {
     const id = setInterval(() => setS((v) => v + 1), 1000);
@@ -10,118 +10,104 @@ function HoldTimer() {
   }, []);
   const mm = String(Math.floor(s / 60)).padStart(2, "0");
   const ss = String(s % 60).padStart(2, "0");
-  return (
-    <span className="font-mono" style={{ fontSize: 34, fontWeight: 700 }}>
-      {mm}:{ss}
-    </span>
-  );
+  return `${mm}:${ss}`;
 }
 
-const CARDS = [
+const FOOTNOTES = [
   {
-    tag: "on hold",
-    color: "var(--coral)",
-    body: <HoldTimer />,
-    caption: "elevator music, forever. she doesn't hang up.",
+    n: "06",
+    label: "menus deep",
+    line: "before a human picks up. she presses every one.",
   },
   {
-    tag: "phone menus",
-    color: "var(--blue)",
-    body: (
-      <div className="flex flex-wrap gap-1.5">
-        {["1", "2", "3", "4", "0", "#"].map((k) => (
-          <span
-            key={k}
-            className="grid h-9 w-9 place-items-center rounded-xl font-mono"
-            style={{
-              fontSize: 13,
-              border: "1.5px solid rgba(20,19,24,0.15)",
-              background: k === "4" ? "var(--citrus)" : "transparent",
-              fontWeight: k === "4" ? 700 : 400,
-            }}
-          >
-            {k}
-          </span>
-        ))}
-      </div>
-    ),
-    caption: "six menus deep to reach a human. press 4.",
-  },
-  {
-    tag: "nobody replies",
-    color: "var(--violet-soft)",
-    body: (
-      <div className="flex flex-col gap-1.5">
-        {[
-          { c: "called", r: "rang out", dead: true },
-          { c: "texted", r: "delivered · 2 days", dead: true },
-          
-          { c: "emailed", r: "replied ✅", dead: false },
-        ].map((x) => (
-          <div key={x.c} className="flex items-center gap-2 font-mono" style={{ fontSize: 12 }}>
-            <span
-              className="w-16 shrink-0 rounded-full px-2 py-0.5 text-center"
-              style={{
-                background: x.dead ? "rgba(20,19,24,0.07)" : "var(--mint-pop)",
-                color: x.dead ? "var(--ink-dim)" : "var(--ink)",
-                fontWeight: x.dead ? 400 : 700,
-              }}
-            >
-              {x.c}
-            </span>
-            <span style={{ color: x.dead ? "var(--ink-dim)" : "var(--ink)", textDecoration: x.dead ? "line-through" : "none" }}>
-              {x.r}
-            </span>
-          </div>
-        ))}
-      </div>
-    ),
-    caption: "she keeps switching channels until one of them works.",
+    n: "03",
+    label: "channels tried",
+    line: "call, text, email — she switches until one lands.",
   },
 ];
 
-
 export function Receipts() {
-  return (
-    <section id="why" className="relative px-5 py-11 sm:px-8 sm:py-16 md:py-24">
-      <div className="mx-auto max-w-7xl">
-        <RevealGroup>
-          <Reveal inGroup variant="text">
-            <h2 className="max-w-2xl text-[1.65rem] sm:text-5xl">
-              annoying — but only to <span style={{ color: "var(--coral)" }}>them</span>.
-            </h2>
-          </Reveal>
-          <Reveal inGroup variant="accent">
-            <p className="mt-4 max-w-lg font-sans" style={{ color: "var(--ink-soft)", fontSize: 15 }}>
-              all the stuff that makes you put it off for three weeks. she just… sits there and does it.
-            </p>
-          </Reveal>
-        </RevealGroup>
+  const clock = useHoldClock();
+  const reduced = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {CARDS.map((c, i) => (
-            <motion.article
-              key={c.tag}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ delay: i * 0.08, type: "spring", stiffness: 220, damping: 24 }}
-              className="soft-card flex min-w-0 flex-col gap-3.5 p-4 sm:gap-4 sm:p-5"
-            >
-              <span
-                className="inline-flex w-fit items-center rounded-full px-3 py-1 font-mono"
-                style={{ fontSize: 11, background: c.color, color: c.color === "var(--blue)" ? "#fff" : "var(--ink)" }}
+  return (
+    <section id="why" className="relative">
+      {/* full-bleed dark band, cut in with a wipe */}
+      <motion.div
+        ref={ref}
+        initial={reduced ? undefined : { clipPath: "inset(14% 0% 14% 0%)" }}
+        whileInView={reduced ? undefined : { clipPath: "inset(0% 0% 0% 0%)" }}
+        viewport={{ once: true, margin: "-90px" }}
+        transition={{ duration: 0.55, ease: [0.22, 0.8, 0.24, 1] }}
+        className="ink-section receipt-band relative overflow-hidden"
+      >
+        <div className="relative mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-24">
+          <p className="t-mono" style={{ color: "rgba(255,253,248,0.5)" }}>
+            SOMEONE HAS TO SIT THROUGH THIS
+          </p>
+
+          <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:items-end">
+            <div>
+              <motion.div
+                initial={reduced ? undefined : { opacity: 0, y: 12 }}
+                whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.45, ease: [0.22, 0.8, 0.24, 1] }}
+                className="flex items-end gap-3"
+                style={{ color: "var(--citrus)" }}
               >
-                {c.tag}
-              </span>
-              <div className="min-h-[56px]">{c.body}</div>
-              <p className="font-sans" style={{ fontSize: 14.5, color: "var(--ink-soft)" }}>
-                {c.caption}
+                <span className="hidden sm:inline">
+                  <FlipNumber value={clock} size={112} />
+                </span>
+                <span className="sm:hidden">
+                  <FlipNumber value={clock} size={62} />
+                </span>
+                <span className="t-mono pb-3" style={{ color: "rgba(255,253,248,0.45)" }}>
+                  ON HOLD
+                </span>
+              </motion.div>
+
+              <h2 className="mt-6 max-w-xl">
+                she'll wait. you won't have to.
+              </h2>
+              <p className="t-body mt-4 max-w-md" style={{ color: "rgba(255,253,248,0.62)" }}>
+                the hold music, the transfer, the "we're experiencing higher than usual volume". she sits
+                in it so it never touches your day.
               </p>
-            </motion.article>
-          ))}
+            </div>
+
+            <ul className="flex flex-col divide-y" style={{ borderColor: "rgba(255,253,248,0.14)" }}>
+              {FOOTNOTES.map((f, i) => (
+                <motion.li
+                  key={f.n}
+                  initial={reduced ? undefined : { opacity: 0, y: 10 }}
+                  whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.4, delay: 0.1 + i * 0.1, ease: [0.22, 0.8, 0.24, 1] }}
+                  className="flex items-baseline gap-4 py-5"
+                  style={{ borderColor: "rgba(255,253,248,0.14)" }}
+                >
+                  <span
+                    className="font-mono shrink-0"
+                    style={{ fontSize: 26, fontWeight: 700, color: "var(--coral)" }}
+                  >
+                    {f.n}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="t-mono block" style={{ color: "rgba(255,253,248,0.5)" }}>
+                      {f.label.toUpperCase()}
+                    </span>
+                    <span className="t-body mt-1 block" style={{ color: "rgba(255,253,248,0.78)" }}>
+                      {f.line}
+                    </span>
+                  </span>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
