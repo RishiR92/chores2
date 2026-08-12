@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ChaseLog, ChaseStep } from "./ChaseLog";
+import { Reveal, RevealGroup } from "./Reveal";
 import { ChannelGlyph } from "./ChannelIcons";
 
 interface Job {
