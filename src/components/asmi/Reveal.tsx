@@ -73,7 +73,7 @@ export function Reveal({ children, delay = 0, className = "", variant = "text", 
   );
 }
 
-/** Stagger container — children rendered as <Reveal inGroup /> animate in sequence. */
+/** Stagger container - children rendered as <Reveal inGroup /> animate in sequence. */
 export function RevealGroup({
   children,
   className = "",

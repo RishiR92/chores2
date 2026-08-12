@@ -31,28 +31,28 @@ const JOBS: Job[] = [
 
     ],
 
-    outcome: "table for 5, 8pm saturday — booked",
+    outcome: "table for 5, 8pm saturday - booked",
   },
   {
     id: "dentist",
     title: "book a dentist, mornings only",
     who: "4 clinics near you",
     beats: [
-      { kind: "call", label: "clinic 1 — no morning slot", time: "10:05a", tone: "fail" },
-      { kind: "call", label: "clinic 2 — went to voicemail", time: "10:09a", tone: "fail" },
+      { kind: "call", label: "clinic 1 - no morning slot", time: "10:05a", tone: "fail" },
+      { kind: "call", label: "clinic 2 - went to voicemail", time: "10:09a", tone: "fail" },
       { kind: "email", label: "emailed clinic 3", time: "10:12a" },
-      { kind: "call", label: "clinic 4 — 8:30am tues confirmed", time: "10:24a", tone: "win" },
+      { kind: "call", label: "clinic 4 - 8:30am tues confirmed", time: "10:24a", tone: "win" },
     ],
-    outcome: "tues 8:30am — already in your calendar",
+    outcome: "tues 8:30am - already in your calendar",
   },
   {
     id: "plumber",
     title: "leak under the sink",
     who: "3 plumbers, in parallel",
     beats: [
-      { kind: "call", label: "plumber A — $180, 6pm", time: "11:02a", tone: "win" },
-      { kind: "call", label: "plumber B — booked out", time: "11:04a", tone: "fail" },
-      { kind: "call", label: "plumber C — still on hold", time: "11:11a" },
+      { kind: "call", label: "plumber A - $180, 6pm", time: "11:02a", tone: "win" },
+      { kind: "call", label: "plumber B - booked out", time: "11:04a", tone: "fail" },
+      { kind: "call", label: "plumber C - still on hold", time: "11:11a" },
       { kind: "text", label: "2 live options", time: "11:20a", tone: "win" },
     ],
     outcome: "plumber at your door, 6pm today",
@@ -67,7 +67,7 @@ const JOBS: Job[] = [
       { kind: "call", label: "bank went silent", time: "1:40p", tone: "fail" },
       { kind: "call", label: "refund agreed", time: "2:06p", tone: "win" },
     ],
-    outcome: "$60 back — 3–5 days",
+    outcome: "$60 back - 3–5 days",
   },
 ];
 

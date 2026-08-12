@@ -46,7 +46,7 @@ export function CanvasView({ canvas }: { canvas: CanvasT }) {
       <CanvasHeader canvas={canvas} />
 
       <div className="space-y-4 px-5 pb-5 sm:px-7">
-        {/* Primary block — options take precedence when present */}
+        {/* Primary block - options take precedence when present */}
         {(hasOptions || hasOptionsSummary) && (
           <OptionsList
             options={canvas.options ?? []}
@@ -93,7 +93,7 @@ export function CanvasView({ canvas }: { canvas: CanvasT }) {
           <LatestEvent text={canvas.timeline![canvas.timeline!.length - 1].text} ts={canvas.timeline![canvas.timeline!.length - 1].ts} />
         )}
 
-        {/* Details — everything secondary, collapsed by default */}
+        {/* Details - everything secondary, collapsed by default */}
         {(hasOptions || hasOptionsSummary) && (hasCalls || hasPlaces || hasScheduling || hasChecklist || hasThread || hasQuotes) || (hasArtifacts && canvas.status === "live") || (hasTimeline && (canvas.timeline?.length ?? 0) > 1) ? (
           <div>
             <button

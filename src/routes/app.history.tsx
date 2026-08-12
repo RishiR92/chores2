@@ -10,7 +10,7 @@ export const Route = createFileRoute("/app/history")({
   component: HistoryShell,
   head: () => ({
     meta: [
-      { title: "Asmi — history" },
+      { title: "Asmi - history" },
       { name: "description", content: "Past tasks Asmi ran for you." },
     ],
   }),

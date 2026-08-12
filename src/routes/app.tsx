@@ -11,7 +11,7 @@ export const Route = createFileRoute("/app")({
   component: AppShell,
   head: () => ({
     meta: [
-      { title: "Asmi — workspace" },
+      { title: "Asmi - workspace" },
       { name: "description", content: "Asmi's workspace. A card for every task she's running for you." },
     ],
   }),

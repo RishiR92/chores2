@@ -17,16 +17,16 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "asmi — the most irritating assistant in the world" },
+      { title: "asmi - the most irritating assistant in the world" },
       {
         name: "description",
         content:
-          "she calls, texts, emails and chases — until your thing is actually done. cancel the gym, fight the charge, book the dentist. just text her on iMessage or WhatsApp.",
+          "she calls, texts, emails and chases - until your thing is actually done. cancel the gym, fight the charge, book the dentist. just text her on iMessage or WhatsApp.",
       },
-      { property: "og:title", content: "asmi — the most irritating assistant in the world" },
+      { property: "og:title", content: "asmi - the most irritating assistant in the world" },
       {
         property: "og:description",
-        content: "she calls, texts, emails and chases — she won't leave people alone until it's done.",
+        content: "she calls, texts, emails and chases - she won't leave people alone until it's done.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

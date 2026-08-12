@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { seedCanvases, scriptedSpawn, tickWorld } from "./mock/scripts";
 
 // ────────────────────────────────────────────────────────────────────────────
-// Types — a canvas is composable. It declares which blocks to render by
+// Types - a canvas is composable. It declares which blocks to render by
 // which fields are populated. One model, many UIs.
 // ────────────────────────────────────────────────────────────────────────────
 
@@ -317,7 +317,7 @@ export function CanvasesProvider({ children }: { children: React.ReactNode }) {
             ? `messaging ${selected.length} options`
             : "asmi is picking one for you";
         const ackByAction: Record<OptionsAction, string> = {
-          call_top: "on it — dialing the top picks in parallel. i'll bring back the first yes.",
+          call_top: "on it - dialing the top picks in parallel. i'll bring back the first yes.",
           call_priority: "going in priority order. i'll skip past the no's.",
           message_all: "messages going out now. i'll show replies as they come.",
           asmi_pick: "i'll weigh ratings, price, and your tags. back in a minute.",
@@ -384,10 +384,10 @@ export function useCanvases() {
 
 function pickReply(c: Canvas, text: string): string {
   const t = text.toLowerCase();
-  if (t.includes("priority") || t.includes("rank")) return "noted — biasing toward your high-priority picks.";
+  if (t.includes("priority") || t.includes("rank")) return "noted - biasing toward your high-priority picks.";
   if (t.includes("cancel") || t.includes("stop")) return "pausing. say go to resume.";
   if (t.includes("call") && c.places) return "tap any pin on the map and i'll dial.";
   if (c.calls?.some((x) => x.status === "voicemail")) return "i'll retry in 10. want me to text too?";
-  if (c.mode === "research") return "got it — folding that in.";
+  if (c.mode === "research") return "got it - folding that in.";
   return "on it.";
 }

@@ -1,4 +1,4 @@
-// Inline SVG channel marks — no third-party logo images.
+// Inline SVG channel marks - no third-party logo images.
 
 export function IMessageMark({ size = 40 }: { size?: number }) {
   return (

@@ -23,7 +23,7 @@ const FOOTNOTES = [
   {
     n: "03",
     label: "channels tried",
-    line: "call, text, email — she keeps switching lanes until someone folds.",
+    line: "call, text, email - she keeps switching lanes until someone folds.",
   },
 ];
 
