@@ -94,7 +94,7 @@ export function GenerativeUI() {
           </Reveal>
           <Reveal inGroup variant="text">
             <h2 className="mt-3">
-              she plans it with you. then she <span style={{ color: "var(--coral)" }}>goes and does it</span>.
+              she plans it with you. then she gets it done.
             </h2>
           </Reveal>
           <Reveal inGroup variant="accent">
