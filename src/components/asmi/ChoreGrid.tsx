@@ -1,7 +1,25 @@
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Marquee } from "./Marquee";
 import { Reveal, RevealGroup } from "./Reveal";
+import wrenchImg from "@/assets/cut-wrench.png";
+import bellImg from "@/assets/cut-bell.png";
+import ticketImg from "@/assets/cut-ticket.png";
+import receiptImg from "@/assets/cut-receipt.png";
+
+function Punctuation({ src }: { src: string }) {
+  return (
+    <img
+      src={src}
+      alt=""
+      aria-hidden
+      loading="lazy"
+      className="pointer-events-none h-11 w-auto shrink-0 select-none self-center sm:h-14"
+      style={{ filter: "saturate(0.8) drop-shadow(3px 4px 0 rgba(20,19,24,0.10))" }}
+    />
+  );
+}
+
 
 interface Chore {
   label: string;
