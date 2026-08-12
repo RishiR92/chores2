@@ -81,7 +81,7 @@ export function Hero() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mt-5 sm:mt-7"
             >
-              <ChannelCTA size="lg" className="!flex-row [&_a]:px-3 [&_a]:text-[0.92rem] sm:[&_a]:px-7 sm:[&_a]:text-[1.05rem]" />
+              <ChannelCTA size="lg" className="!flex-row [&_a]:!w-auto [&_a]:flex-1 [&_a]:px-3 [&_a]:text-[0.92rem] sm:[&_a]:px-7 sm:[&_a]:text-[1.05rem]" />
             </motion.div>
 
             <div className="mt-3 min-h-[24px] sm:mt-4">
