@@ -33,7 +33,7 @@ export function ChaseLog({
         style={{ background: line }}
         aria-hidden
       />
-      {steps.map((s, i) => {
+      {shown.map((s, i) => {
         const win = s.tone === "win";
         const fail = s.tone === "fail";
         const accent = win ? "var(--mint-pop)" : fail ? "var(--coral)" : "var(--blue)";
@@ -41,9 +41,10 @@ export function ChaseLog({
           <motion.li
             key={s.text + i}
             initial={{ opacity: 0, x: -8 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ delay: delay + i * 0.14, type: "spring", stiffness: 260, damping: 22 }}
+            {...(driven
+              ? { animate: { opacity: 1, x: 0 } }
+              : { whileInView: { opacity: 1, x: 0 }, viewport: { once: true, margin: "-60px" } })}
+            transition={{ delay: driven ? 0 : delay + i * 0.14, type: "spring", stiffness: 260, damping: 22 }}
             className="relative flex items-center gap-2.5"
           >
             <span
