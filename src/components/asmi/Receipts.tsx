@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { FlipNumber } from "./Ticker";
 
 function useHoldClock() {
-  const [s, setS] = useState(41 * 60 + 12);
+  const [s, setS] = useState(15 * 60);
   useEffect(() => {
     const id = setInterval(() => setS((v) => v + 1), 1000);
     return () => clearInterval(id);
