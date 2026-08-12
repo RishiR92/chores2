@@ -111,7 +111,7 @@ export function GenerativeUI() {
           </Reveal>
           <Reveal inGroup variant="accent">
             <p className="mt-6 max-w-md font-sans" style={{ fontSize: 15, color: "var(--ink-soft)" }}>
-              no ten tabs. she builds the interface you need right inside the thread — then executes it.
+              no ten tabs, no comparison spreadsheet. she builds the exact view you need in the thread — then goes and books it.
             </p>
           </Reveal>
         </RevealGroup>
