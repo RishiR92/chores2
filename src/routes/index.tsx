@@ -37,9 +37,8 @@ function Index() {
       <ScrollProgress />
       <Nav />
       <Hero />
-      <ScrollSection>
-        <Receipts />
-      </ScrollSection>
+      <Receipts />
+
       <ScrollSection>
         <GenerativeUI />
       </ScrollSection>
