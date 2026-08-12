@@ -54,7 +54,7 @@ const CARDS = [
         {[
           { c: "called", r: "rang out", dead: true },
           { c: "texted", r: "delivered · 2 days", dead: true },
-          { c: "dm'd", r: "unread", dead: true },
+          
           { c: "emailed", r: "replied ✅", dead: false },
         ].map((x) => (
           <div key={x.c} className="flex items-center gap-2 font-mono" style={{ fontSize: 12 }}>
