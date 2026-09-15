@@ -56,3 +56,12 @@
 - [x] Replace confetti/stat cards with evidence-driven 20,000 and 30M reveals
 - [x] Compose and mix a new cinematic electronic score with real dynamic range
 - [x] Render, inspect, and verify vertical and widescreen V8 masters
+
+## V9 high-energy consumer launch rebuild
+
+- [x] Replace the dark studio world with Asmi's bright editorial energy
+- [x] Rebuild the task range as kinetic tactile conveyors with cutout objects
+- [x] Make call → text → email → call again a physical, readable relay
+- [x] Rebuild the win, languages, 20,000, and 30M as impact moments
+- [x] Generate a studio-quality 32-second launch score through ElevenLabs
+- [ ] Render, inspect, and verify vertical and widescreen V9 masters
