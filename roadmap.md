@@ -15,3 +15,11 @@
 - [x] Remove the language-section melodic interruption
 - [x] Build the real-logo final lockup
 - [x] Render, inspect, and verify both v4 exports
+
+## V5 channel escalation clarity
+
+- [ ] Explain call → text → email → call again before the gym example
+- [ ] Reorder the story to example → outcome → languages → final ending
+- [ ] Add a persistent, readable channel progress rail
+- [ ] Recut transitions and soundtrack to the new sequence
+- [ ] Render, inspect, and verify both v5 exports
