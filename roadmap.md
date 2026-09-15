@@ -4,5 +4,5 @@
 - [x] Remove recorded call audio
 - [x] Build realistic call, message, and email surfaces
 - [x] Add the 50+ languages capability reveal
-- [ ] Render and inspect both formats
-- [ ] Mix, verify, and export both final MP4s
+- [x] Render and inspect both formats
+- [x] Mix, verify, and export both final MP4s
