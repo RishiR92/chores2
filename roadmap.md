@@ -82,3 +82,11 @@
 - [x] Expand the task range to fifteen relatable requests
 - [x] Rebuild languages as a kinetic twenty-language typography sequence
 - [x] Render, inspect, and verify vertical and widescreen V11 masters
+
+## V11 copy and icon corrections
+
+- [x] Keep “One Message” clear of the phone without changing later channel views
+- [x] Recompose the opening as “Most Irritating / Assistant / In the World”
+- [x] Correct the email and everyday-task copy
+- [x] Replace the WhatsApp drawing with an accurate mark
+- [x] Render and verify both corrected V11 masters
