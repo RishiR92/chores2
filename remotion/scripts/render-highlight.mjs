@@ -8,12 +8,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const bundled = await bundle({entryPoint:path.resolve(__dirname,"../src/index.ts"),webpackOverride:(c)=>c});
 const browser = await openBrowser("chrome",{browserExecutable:process.env.PUPPETEER_EXECUTABLE_PATH??"/bin/chromium",chromiumOptions:{args:["--no-sandbox","--disable-gpu","--disable-dev-shm-usage"]},chromeMode:"chrome-for-testing"});
 const ids = process.env.COMP ? [process.env.COMP] : ["highlightVertical","highlightWidescreen"];
-const stems = {highlightVertical:"asmi-story-v6-vertical",highlightWidescreen:"asmi-story-v6-widescreen"};
+const stems = {highlightVertical:"asmi-story-v7-vertical",highlightWidescreen:"asmi-story-v7-widescreen"};
 
 for (const id of ids) {
   const composition=await selectComposition({serveUrl:bundled,id,puppeteerInstance:browser});
   if(process.env.STILLS === "1") {
-    for(const frame of [38,105,185,265,320,375,430,485,545,620,700,755,815,850]) await renderStill({composition,serveUrl:bundled,output:`/tmp/${id}-v6-${frame}.png`,frame,puppeteerInstance:browser});
+    for(const frame of [28,82,132,188,265,330,390,450,515,565,630,705,790,850,885]) await renderStill({composition,serveUrl:bundled,output:`/tmp/${id}-v7-${frame}.png`,frame,puppeteerInstance:browser});
     continue;
   }
   const stem=stems[id]; const video=`/tmp/${stem}-silent.mp4`; const audio=`/tmp/${stem}.wav`; const out=`/mnt/documents/${stem}.mp4`;

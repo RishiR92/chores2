@@ -36,3 +36,13 @@
 - [x] Rebuild 20,000 and 30M as cinematic proof moments
 - [x] Compose a structured launch score around the final cut
 - [x] Render, inspect, and verify both v6 exports
+
+## V7 motion-picture reset
+
+- [x] Replace the explainer slide with an action-led channel relay
+- [x] Rebuild task range as a cinematic object avalanche
+- [x] Treat the iPhone as a physical hero object with realistic proportions
+- [x] Make the gym chase one continuous camera move with persistent escalation
+- [x] Rebuild achievements as the visual and musical climax
+- [x] Compose a continuous jazz-house score around the final edit
+- [x] Render, inspect, and verify both v7 exports
