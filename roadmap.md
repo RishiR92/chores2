@@ -49,10 +49,10 @@
 
 ## V8 cinematic product-film reset
 
-- [ ] Replace the slide/card visual grammar with one photographed-feeling world
-- [ ] Rebuild the iPhone as a premium hero product with native readable surfaces
-- [ ] Replace channel cards and the progress rail with causal interface transformations
-- [ ] Replace the task cloud with a physical artifact corridor and restrained task pictograms
-- [ ] Replace confetti/stat cards with evidence-driven 20,000 and 30M reveals
-- [ ] Compose and mix a new cinematic electronic score with real dynamic range
-- [ ] Render, inspect, and verify vertical and widescreen V8 masters
+- [x] Replace the slide/card visual grammar with one photographed-feeling world
+- [x] Rebuild the iPhone as a premium hero product with native readable surfaces
+- [x] Replace channel cards and the progress rail with causal interface transformations
+- [x] Replace the task cloud with a physical artifact corridor and restrained task pictograms
+- [x] Replace confetti/stat cards with evidence-driven 20,000 and 30M reveals
+- [x] Compose and mix a new cinematic electronic score with real dynamic range
+- [x] Render, inspect, and verify vertical and widescreen V8 masters
