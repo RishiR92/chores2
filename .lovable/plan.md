@@ -1,4 +1,4 @@
-# Asmi 18-second story-first launch film
+# Asmi 20-second story-first launch film
 
 ## Creative reset
 
@@ -33,7 +33,14 @@ Rebuild both vertical and widescreen edits from scratch as a short narrative, no
 - A membership card, timestamps, and proof-of-action receipts keep the sequence grounded and believable.
 - Music accelerates; tactile ticks, send sounds, and status impacts punctuate key moments.
 
-### 0:13-0:16 — The payoff
+### 0:13-0:16 — Same persistence, any language
+- The final call surface expands into a dense, controlled field of the world’s most spoken languages.
+- One short cancellation phrase travels across the field and transforms naturally between scripts, including Spanish, Hindi, Mandarin, Arabic, French, and Japanese.
+- The language names orbit inward rather than scattering randomly, then lock into: **“50+ languages.”**
+- Supporting line: **“different language. same problem. still handled.”**
+- Use typographic ripples, character transformations, and directional sound accents so this feels like a capability reveal, not a list of pills.
+
+### 0:16-0:19 — The payoff
 - Everything snaps into a bold completion receipt:
   - **cancelled.**
   - **$0 next month.**
@@ -41,7 +48,7 @@ Rebuild both vertical and widescreen edits from scratch as a short narrative, no
 - Punchline: **“turns out they do answer. eventually.”**
 - The release should feel decisive and satisfying, not like another status screen.
 
-### 0:16-0:18 — Make people want to try Asmi
+### 0:19-0:20 — End game
 - The receipt folds and resolves into the Asmi wordmark.
 - End copy:
   - **“your annoying thing next.”**
@@ -60,6 +67,7 @@ Rebuild both vertical and widescreen edits from scratch as a short narrative, no
 - a coral chase line connecting every action
 - a gym membership card that becomes the final cancellation receipt
 - recognizable call, message, and email surfaces that stay legible but never become full product demos
+- a concentrated multilingual type field that transforms across writing systems before resolving to “50+ languages”
 - status stamps that feel earned rather than decorative
 
 ## Motion system
@@ -81,7 +89,7 @@ Rebuild both vertical and widescreen edits from scratch as a short narrative, no
 ## Build and quality checks
 
 - Replace the current highlight compositions while preserving the prior exports as separate files.
-- Render new versioned vertical and widescreen MP4s at 18 seconds.
+- Render new versioned vertical and widescreen MP4s at 20 seconds.
 - Inspect key frames from every story beat for clipping, hierarchy, and mobile readability.
 - Watch both full edits for rhythm and verify audio on headphones and phone-speaker simulation.
 - Confirm H.264 video, AAC stereo audio, exact dimensions, and duration before delivery.
