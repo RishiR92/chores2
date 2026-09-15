@@ -24,4 +24,4 @@
 - [x] Add a persistent, readable channel progress rail
 - [x] Add 20,000 tasks and 30 million social views, both in the past 30 days
 - [x] Recut transitions and soundtrack to the new sequence
-- [ ] Render, inspect, and verify both v5 exports
+- [x] Render, inspect, and verify both v5 exports
