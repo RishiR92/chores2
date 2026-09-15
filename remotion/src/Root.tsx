@@ -25,7 +25,7 @@ export const RemotionRoot: React.FC = () => (
       id="highlightVertical"
       component={HighlightVideo}
       defaultProps={{ vertical: true }}
-      durationInFrames={840}
+      durationInFrames={870}
       fps={30}
       width={1080}
       height={1920}
@@ -34,7 +34,7 @@ export const RemotionRoot: React.FC = () => (
       id="highlightWidescreen"
       component={HighlightVideo}
       defaultProps={{ vertical: false }}
-      durationInFrames={840}
+      durationInFrames={870}
       fps={30}
       width={1920}
       height={1080}

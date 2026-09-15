@@ -25,3 +25,14 @@
 - [x] Add 20,000 tasks and 30 million social views, both in the past 30 days
 - [x] Recut transitions and soundtrack to the new sequence
 - [x] Render, inspect, and verify both v5 exports
+
+
+## V6 impact rebuild
+
+- [x] Rebuild channel escalation as one compact, readable lockup
+- [x] Correct the iPhone silhouette and screen proportions
+- [x] Replace the category grid with the task-storm selection
+- [x] Make the gym progress timeline persistent and prominent
+- [x] Rebuild 20,000 and 30M as cinematic proof moments
+- [x] Compose a structured launch score around the final cut
+- [ ] Render, inspect, and verify both v6 exports
