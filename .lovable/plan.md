@@ -26,13 +26,16 @@ Keep the strong dark, flash-lit film language and the multilingual sequence, but
 
 ## Smoother transitions
 
-- Replace the current flash-and-slide scene swaps with match cuts tied to the same member ID:
-  - phone call label becomes the message header
-  - the final message bubble expands into the email body
-  - the send action contracts into the second-call connection state
-- Use one consistent camera move and one restrained light sweep across the sequence.
-- Retain the multilingual transformation style the user likes, then use its final gather as the bridge into proof.
-- Remove patchy full-screen flashes where they interrupt readability.
+- Build a distinctive **relentless relay** motion language rather than standard app-demo wipes: each completed action physically triggers the next surface, so Asmi always appears to be moving forward.
+- Use inventive match transformations tied to real interface details:
+  - the first call’s red end button rolls forward like a stamp, revealing the message thread beneath it
+  - the member ID detaches from the call screen and stays pinned as a tracking token through message and mail
+  - the final blue message bubble stretches into the email subject row, while its typing cursor becomes the mail send arrow
+  - the sent-email checkmark tunnels through the screen and resolves as the green connected-call indicator
+- Let the iPhone move like a physical object: controlled macro camera passes over its edge, screen reflections traveling with it, and quick rotations that land exactly square when content must be read.
+- Use a recurring circular **chase pulse** that begins in the Dynamic Island, passes through call controls and send icons, then expands into the multilingual scene. This becomes Asmi’s unique transition signature.
+- Keep the multilingual transformation style the user likes, but make its final translated sentence break into letterforms that sweep behind the proof email and reassemble as the real Asmi logo at the end.
+- Avoid generic slides, page swipes, random zooms, and repeated full-screen flashes. Every transition must carry a story object into the next beat while preserving readability.
 
 ## Music and sound
 
