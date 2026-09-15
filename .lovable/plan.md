@@ -59,7 +59,9 @@ The final period is not a cartoon puck. It becomes the red live-call indicator a
 
 The camera tracks past a rapid physical corridor of real completed-task artifacts at different depths: a boarding pass changing gates, a dentist appointment confirmation, an insurance approval letter, a restaurant reservation, a plumber arrival window, a refunded charge, a passport reminder, and a vet booking.
 
-These are not presented for selection. They are glimpses of Asmi already working in the world. Focus lands on one incoming iMessage:
+Each artifact can carry one restrained, object-specific pictogram for faster recognition: a salon chair for a haircut, aircraft for a flight, tooth for a dentist, wrench for a plumber, fork and glass for dinner, passport mark for renewal, paw for a vet, and shield/document for insurance. These are premium monochrome marks integrated into the printed or screen artifact, not colorful app icons, floating stickers, or a recreated website grid.
+
+These are not presented for selection. They are glimpses of Asmi already working in the world. The icon helps the category register instantly while the artifact supplies realism. Focus lands on one incoming iMessage:
 
 `they won't let me cancel my gym. i've tried twice.`
 
@@ -135,6 +137,7 @@ Then reveal the real iMessage and WhatsApp entry points with restrained native m
 - **Camera rule:** every move has a narrative purpose; the phone settles square whenever text must be read.
 - **Depth rule:** every major shot has foreground, subject, and background separation with real parallax.
 - **Restraint rule:** no bouncing, decorative orbiting, repeated shockwaves, random rotations, emoji symbols, pills, card carousels, progress rails, particle confetti, or centered stat slides.
+- **Task-icon rule:** use one consistent pictogram family only where it improves instant recognition; keep icons embedded in real artifacts and subordinate to the task result.
 - **Format rule:** vertical and widescreen receive separate camera framing, not one composition scaled into two ratios.
 
 ## Total soundtrack replacement
