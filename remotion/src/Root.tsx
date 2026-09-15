@@ -3,6 +3,7 @@ import { MainVideo } from "./MainVideo";
 import { Launch16x9 } from "./Launch16x9";
 import { HighlightVideo } from "./HighlightVideo";
 import { HighlightVideoV9 } from "./HighlightVideoV9";
+import { HighlightVideoV10 } from "./HighlightVideoV10";
 
 export const RemotionRoot: React.FC = () => (
   <>
@@ -52,6 +53,24 @@ export const RemotionRoot: React.FC = () => (
     <Composition
       id="highlightV9Widescreen"
       component={HighlightVideoV9}
+      defaultProps={{ vertical: false }}
+      durationInFrames={960}
+      fps={30}
+      width={1920}
+      height={1080}
+    />
+    <Composition
+      id="highlightV10Vertical"
+      component={HighlightVideoV10}
+      defaultProps={{ vertical: true }}
+      durationInFrames={960}
+      fps={30}
+      width={1080}
+      height={1920}
+    />
+    <Composition
+      id="highlightV10Widescreen"
+      component={HighlightVideoV10}
       defaultProps={{ vertical: false }}
       durationInFrames={960}
       fps={30}
