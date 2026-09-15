@@ -1,6 +1,7 @@
 import { Composition } from "remotion";
 import { MainVideo } from "./MainVideo";
 import { Launch16x9 } from "./Launch16x9";
+import { HighlightVideo } from "./HighlightVideo";
 
 export const RemotionRoot: React.FC = () => (
   <>
@@ -16,6 +17,24 @@ export const RemotionRoot: React.FC = () => (
       id="launch16x9"
       component={Launch16x9}
       durationInFrames={1650}
+      fps={30}
+      width={1920}
+      height={1080}
+    />
+    <Composition
+      id="highlightVertical"
+      component={HighlightVideo}
+      defaultProps={{ vertical: true }}
+      durationInFrames={540}
+      fps={30}
+      width={1080}
+      height={1920}
+    />
+    <Composition
+      id="highlightWidescreen"
+      component={HighlightVideo}
+      defaultProps={{ vertical: false }}
+      durationInFrames={540}
       fps={30}
       width={1920}
       height={1080}
