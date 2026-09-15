@@ -64,4 +64,4 @@
 - [x] Make call → text → email → call again a physical, readable relay
 - [x] Rebuild the win, languages, 20,000, and 30M as impact moments
 - [x] Generate a studio-quality 32-second launch score through ElevenLabs
-- [ ] Render, inspect, and verify vertical and widescreen V9 masters
+- [x] Render, inspect, and verify vertical and widescreen V9 masters
