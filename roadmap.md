@@ -35,4 +35,4 @@
 - [x] Make the gym progress timeline persistent and prominent
 - [x] Rebuild 20,000 and 30M as cinematic proof moments
 - [x] Compose a structured launch score around the final cut
-- [ ] Render, inspect, and verify both v6 exports
+- [x] Render, inspect, and verify both v6 exports
