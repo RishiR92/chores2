@@ -4,48 +4,49 @@
 
 Rebuild both vertical and widescreen edits from scratch as a short narrative, not a website montage.
 
-**Core idea:** someone asks Asmi to cancel a gym membership that keeps dodging them. Asmi turns one casual message into persistent action across calls and written follow-ups, then returns with a clean result: cancelled, no fee.
+**Core idea:** introduce Asmi first as **“the most irritating assistant in the world.”** Hold for suspense, then reveal: **“annoying, but only to them.”** Prove the promise through one gym-cancellation story where Asmi turns a casual message into persistent action across calls, texts, and email, then returns with a clean result: cancelled, no fee.
 
 **No call recordings.** The soundtrack will use energetic instrumental music and sparse interface sounds only.
 
 ## Storyboard and exact pacing
 
-### 0:00-0:02 — The problem
-- Open immediately on: **“cancel my gym. they keep dodging me.”**
-- The line lands like a real message, surrounded by gym charges and ignored-cancellation fragments moving past quickly.
-- Asmi answers: **“on it.”**
-- Purpose: establish a recognizable frustration in two seconds.
+### 0:00-0:03 — Introduce Asmi with suspense
+- Open boldly on: **“the most irritating assistant in the world.”**
+- Hold just long enough to create curiosity, then reveal: **“annoying, but only to them.”**
+- The word **“them”** triggers the transition into the people and businesses Asmi chases.
+- Purpose: establish Asmi’s personality and make the viewer need to see what the claim means.
 
-### 0:02-0:05 — What Asmi does
-- The message expands into one smart visual thread rather than multiple website panels.
-- A concise sequence appears: **call → voicemail → written notice → call again**.
+### 0:03-0:06 — Give her one irritating job
+- A realistic iMessage conversation appears: **“cancel my gym. they keep dodging me.”**
+- Asmi replies: **“on it.”**
+- The message becomes a compact action plan: **call → text → email → call again**.
 - Supporting line: **“you ask once. she figures out the rest.”**
-- Each step visibly hands momentum to the next, so the process is understood without narration.
 
-### 0:05-0:11 — The chase
-- Build tension through one continuous kinetic sequence:
-  - **called. voicemail.**
-  - **sent the cancellation notice.**
-  - **called again.**
-- A membership card, timestamps, and small proof-of-action receipts move through the frame like physical evidence.
-- Asmi’s personality appears in one dry line: **“they were hoping you’d forget. awkward.”**
-- Music accelerates; tactile ticks and message sounds punctuate key moments.
+### 0:06-0:13 — Watch her chase them
+- Move through three recognizable, realistic communication surfaces without showing fake transcripts:
+  - **Call:** an iPhone-style active-call surface with the gym name, elapsed time, and status changing from **“calling”** to **“voicemail.”**
+  - **Message:** a concise SMS thread where Asmi sends the cancellation request and receives no useful resolution.
+  - **Email:** a clean mail composer/receipt showing a formal cancellation notice, membership details, and sent timestamp.
+- The surfaces should transform into one another in a continuous flow rather than sitting in a three-panel layout.
+- Finish the escalation with a second call surface: **“called again.”**
+- Asmi’s dry aside appears once: **“they were hoping you’d forget. awkward.”**
+- A membership card, timestamps, and proof-of-action receipts keep the sequence grounded and believable.
+- Music accelerates; tactile ticks, send sounds, and status impacts punctuate key moments.
 
-### 0:11-0:15 — The payoff
+### 0:13-0:16 — The payoff
 - Everything snaps into a bold completion receipt:
   - **cancelled.**
   - **$0 next month.**
   - **no fee.**
-- Supporting line: **“she doesn’t stop until it’s done.”**
+- Punchline: **“turns out they do answer. eventually.”**
 - The release should feel decisive and satisfying, not like another status screen.
 
-### 0:15-0:18 — The product promise
+### 0:16-0:18 — Make people want to try Asmi
 - The receipt folds and resolves into the Asmi wordmark.
 - End copy:
-  - **“ask once.”**
-  - **“get it done.”**
+  - **“your annoying thing next.”**
   - **“text asmi.”**
-- iMessage and WhatsApp marks enter last and remain clearly readable.
+- iMessage and WhatsApp marks enter last as the clear destination, not decorative badges.
 
 ## Visual direction
 
@@ -58,6 +59,7 @@ Rebuild both vertical and widescreen edits from scratch as a short narrative, no
 **Recurring motifs:**
 - a coral chase line connecting every action
 - a gym membership card that becomes the final cancellation receipt
+- recognizable call, message, and email surfaces that stay legible but never become full product demos
 - status stamps that feel earned rather than decorative
 
 ## Motion system
@@ -73,7 +75,7 @@ Rebuild both vertical and widescreen edits from scratch as a short narrative, no
 
 - Remove all real call audio and waveform imagery.
 - Use a vocal-free, hype instrumental with a clear build and satisfying final hit.
-- Add only a few purposeful sounds: message arrival, voicemail click, paper/stamp impact, completion chime.
+- Add only a few purposeful sounds: call connect, voicemail click, message send, email send, paper/stamp impact, completion chime.
 - Keep the story fully understandable when muted.
 
 ## Build and quality checks
