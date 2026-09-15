@@ -9,9 +9,9 @@
 
 ## V4 clarity and impact pass
 
-- [ ] Tighten the opening typography and reveal
-- [ ] Rebuild the iPhone and communication surfaces
-- [ ] Create the relentless relay transition system
-- [ ] Remove the language-section melodic interruption
-- [ ] Build the real-logo final lockup
-- [ ] Render, inspect, and verify both v4 exports
+- [x] Tighten the opening typography and reveal
+- [x] Rebuild the iPhone and communication surfaces
+- [x] Create the relentless relay transition system
+- [x] Remove the language-section melodic interruption
+- [x] Build the real-logo final lockup
+- [x] Render, inspect, and verify both v4 exports
