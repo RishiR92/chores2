@@ -71,4 +71,4 @@
 - [x] Replace flight and repeated examples with eight relatable everyday tasks
 - [x] Rebuild languages as a dense, non-overlapping global sequence
 - [x] Use recognizable Messages and WhatsApp marks in the final call to action
-- [ ] Render, inspect, and verify vertical and widescreen V10 masters
+- [x] Render, inspect, and verify vertical and widescreen V10 masters
