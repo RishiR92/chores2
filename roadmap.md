@@ -65,3 +65,10 @@
 - [x] Rebuild the win, languages, 20,000, and 30M as impact moments
 - [x] Generate a studio-quality 32-second launch score through ElevenLabs
 - [x] Render, inspect, and verify vertical and widescreen V9 masters
+
+## V10 relatability and language polish
+
+- [x] Replace flight and repeated examples with eight relatable everyday tasks
+- [x] Rebuild languages as a dense, non-overlapping global sequence
+- [x] Use recognizable Messages and WhatsApp marks in the final call to action
+- [ ] Render, inspect, and verify vertical and widescreen V10 masters
