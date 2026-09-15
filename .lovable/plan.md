@@ -19,6 +19,19 @@ Create a **premium cinematic product film**, not a motion-graphics explainer. Th
 
 The film lives in one coherent photographed-feeling world. A real-looking iPhone and its screen are the hero. Messages, call states, email, documents, and confirmations inherit motion from one another. There are no channel cards, task clouds, progress diagrams, confetti, emoji icons, glowing pursuit dot, or generic black title-card resets.
 
+## 2026 quality bar: bespoke, not template motion
+
+The entire V7 creative system is rejected, not reused with nicer styling. V8 will not inherit its animations, compositions, decorative devices, transition timing, typography treatment, or score logic.
+
+- **Every shot needs a visual idea.** No content floating over a background. Each frame must reveal material, scale, depth, light, or cause-and-effect.
+- **Transitions are authored around the story.** The call button becoming Messages, the sent reply becoming an email subject, and the mail arrow becoming the connected call are three different physical transformations, not one reusable wipe preset.
+- **The film must feel photographed.** Use cinematic focal-length changes, foreground occlusion, parallax, reflections, controlled motion blur, depth falloff, and motivated lighting. Avoid the weightless feel of flat vector layers.
+- **Graphics behave like title design, not app presentation.** Type may be cropped by the frame, revealed by objects, reflected in glass, or discovered through focus. It never arrives as a centered headline plus icons.
+- **Product UI stays credible.** When the screen is readable, the camera is stable and the interface is native. When the camera becomes expressive, the copy is no longer asking to be read.
+- **Premium restraint replaces cartoon energy.** Remove glowing dots, bouncing springs, orbiting notes, colored shockwaves, emoji marks, confetti, playful scatter, and decorative motion without narrative purpose.
+- **Originality comes from one proprietary move:** Asmi's persistence is expressed by communication controls physically transforming across the same device while the camera continues one uninterrupted pursuit. This becomes the film's recognizable signature, not a borrowed trend.
+- **Review standard:** any frame that could pass as a SaaS explainer slide, app-store animation, motion template, or mobile-game reward screen is rejected before the full render.
+
 ### Visual language
 
 - Near-black physical studio environment with motivated practical light: phone glow, reflected blue glass, restrained warm key light, and one red friction accent.
