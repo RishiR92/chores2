@@ -18,8 +18,10 @@
 
 ## V5 channel escalation clarity
 
-- [ ] Explain call → text → email → call again before the gym example
-- [ ] Reorder the story to example → outcome → languages → final ending
-- [ ] Add a persistent, readable channel progress rail
-- [ ] Recut transitions and soundtrack to the new sequence
-- [ ] Render, inspect, and verify both v5 exports
+- [x] Explain call → text → email → call again before the gym example
+- [x] Add the website's real task range before the gym example
+- [x] Reorder the story to example → outcome → languages → achievements → final ending
+- [x] Add a persistent, readable channel progress rail
+- [x] Add 20,000 tasks and 30 million social views, both in the past 30 days
+- [x] Recut transitions and soundtrack to the new sequence
+- [x] Render, inspect, and verify both v5 exports
