@@ -72,3 +72,13 @@
 - [x] Rebuild languages as a dense, non-overlapping global sequence
 - [x] Use recognizable Messages and WhatsApp marks in the final call to action
 - [x] Render, inspect, and verify vertical and widescreen V10 masters
+
+
+## V11 clarity, scale, and language sequence
+
+- [x] Replace the opening with “Most Irritating Assistant in the World”
+- [x] Make every channel title large and readable during the gym chase
+- [x] Recompose the outcome inside strict safe areas
+- [x] Expand the task range to fifteen relatable requests
+- [x] Rebuild languages as a kinetic twenty-language typography sequence
+- [ ] Render, inspect, and verify vertical and widescreen V11 masters
