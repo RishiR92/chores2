@@ -89,4 +89,4 @@
 - [x] Recompose the opening as “Most Irritating / Assistant / In the World”
 - [x] Correct the email and everyday-task copy
 - [x] Replace the WhatsApp drawing with an accurate mark
-- [ ] Render and verify both corrected V11 masters
+- [x] Render and verify both corrected V11 masters
