@@ -39,10 +39,10 @@
 
 ## V7 motion-picture reset
 
-- [ ] Replace the explainer slide with an action-led channel relay
-- [ ] Rebuild task range as a cinematic object avalanche
-- [ ] Treat the iPhone as a physical hero object with realistic proportions
-- [ ] Make the gym chase one continuous camera move with persistent escalation
-- [ ] Rebuild achievements as the visual and musical climax
-- [ ] Compose a continuous jazz-house score around the final edit
+- [x] Replace the explainer slide with an action-led channel relay
+- [x] Rebuild task range as a cinematic object avalanche
+- [x] Treat the iPhone as a physical hero object with realistic proportions
+- [x] Make the gym chase one continuous camera move with persistent escalation
+- [x] Rebuild achievements as the visual and musical climax
+- [x] Compose a continuous jazz-house score around the final edit
 - [ ] Render, inspect, and verify both v7 exports
