@@ -45,4 +45,4 @@
 - [x] Make the gym chase one continuous camera move with persistent escalation
 - [x] Rebuild achievements as the visual and musical climax
 - [x] Compose a continuous jazz-house score around the final edit
-- [ ] Render, inspect, and verify both v7 exports
+- [x] Render, inspect, and verify both v7 exports
