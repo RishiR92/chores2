@@ -118,4 +118,4 @@
 
 - [x] Make the opening text phone dominant and enlarge the user's message
 - [x] End the HVAC excerpt at a natural sentence boundary
-- [ ] Render, inspect, and verify both V5 masters
+- [x] Render, inspect, and verify both V5 masters
