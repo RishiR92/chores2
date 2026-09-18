@@ -104,4 +104,4 @@
 - [x] Remove the distracting ceiling-fan treatment and spotlight the phone
 - [x] Expand the landlord text exchange and detailed follow-up email
 - [x] Change the text outcome to “read. asked for mail.”
-- [ ] Shorten the call excerpt, render, and verify both revised masters
+- [x] Shorten the call excerpt, render, and verify both revised masters
