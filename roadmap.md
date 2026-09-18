@@ -113,3 +113,9 @@
 - [x] Replace “call again” with a three-technician search and one booking
 - [x] Change the chase timeline and outcome from three days to two days
 - [x] Shorten the call excerpt by one second, render, and verify both V4 masters
+
+## Chase Engine V5 phone and audio clarity
+
+- [x] Make the opening text phone dominant and enlarge the user's message
+- [x] End the HVAC excerpt at a natural sentence boundary
+- [x] Render, inspect, and verify both V5 masters
