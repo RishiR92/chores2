@@ -105,3 +105,11 @@
 - [x] Expand the landlord text exchange and detailed follow-up email
 - [x] Change the text outcome to “read. asked for mail.”
 - [x] Shorten the call excerpt, render, and verify both revised masters
+
+## Chase Engine V4 refinement
+
+- [x] Enlarge and recompose the opening phone with restrained AC and heat details
+- [x] Remove the duplicate phone surround in all chase phases
+- [x] Replace “call again” with a three-technician search and one booking
+- [x] Change the chase timeline and outcome from three days to two days
+- [ ] Shorten the call excerpt by one second, render, and verify both V4 masters
