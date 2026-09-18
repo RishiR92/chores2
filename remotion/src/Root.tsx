@@ -101,7 +101,7 @@ export const RemotionRoot: React.FC = () => (
       id="chaseEngineVertical"
       component={ChaseEngineFilm}
       defaultProps={{ vertical: true }}
-      durationInFrames={900}
+      durationInFrames={990}
       fps={30}
       width={1080}
       height={1920}
@@ -110,7 +110,7 @@ export const RemotionRoot: React.FC = () => (
       id="chaseEngineWidescreen"
       component={ChaseEngineFilm}
       defaultProps={{ vertical: false }}
-      durationInFrames={900}
+      durationInFrames={990}
       fps={30}
       width={1920}
       height={1080}

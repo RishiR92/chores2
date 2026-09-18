@@ -13,7 +13,7 @@ const stems = {highlightV11Vertical:"asmi-story-v11-vertical",highlightV11Widesc
 for (const id of ids) {
   const composition=await selectComposition({serveUrl:bundled,id,puppeteerInstance:browser});
   if(process.env.STILLS === "1") {
-    for(const frame of [12,45,72,105,150,190,235,285,335,390,445,505,545,590,645,715,770,830,875]) await renderStill({composition,serveUrl:bundled,output:`/tmp/${id}-review-${frame}.png`,frame,puppeteerInstance:browser});
+    for(const frame of [12,45,75,105,145,190,235,285,335,390,445,505,560,620,680,735,805,860,920,970]) await renderStill({composition,serveUrl:bundled,output:`/tmp/${id}-review-${frame}.png`,frame,puppeteerInstance:browser});
     continue;
   }
   const stem=stems[id]; const video=`/tmp/${stem}-silent.mp4`; const audio=`/tmp/${stem}.wav`; const out=`/mnt/documents/${stem}.mp4`;
