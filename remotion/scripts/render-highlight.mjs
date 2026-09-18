@@ -7,13 +7,13 @@ import {fileURLToPath} from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const bundled = await bundle({entryPoint:path.resolve(__dirname,"../src/index.ts"),webpackOverride:(c)=>c});
 const browser = await openBrowser("chrome",{browserExecutable:process.env.PUPPETEER_EXECUTABLE_PATH??"/bin/chromium",chromiumOptions:{args:["--no-sandbox","--disable-gpu","--disable-dev-shm-usage"]},chromeMode:"chrome-for-testing"});
-const ids = process.env.COMP ? [process.env.COMP] : ["highlightV11Vertical","highlightV11Widescreen"];
-const stems = {highlightV11Vertical:"asmi-story-v11-vertical",highlightV11Widescreen:"asmi-story-v11-widescreen"};
+const ids = process.env.COMP ? [process.env.COMP] : ["chaseEngineVertical","chaseEngineWidescreen"];
+const stems = {highlightV11Vertical:"asmi-story-v11-vertical",highlightV11Widescreen:"asmi-story-v11-widescreen",chaseEngineVertical:"asmi-chase-engine-vertical",chaseEngineWidescreen:"asmi-chase-engine-widescreen"};
 
 for (const id of ids) {
   const composition=await selectComposition({serveUrl:bundled,id,puppeteerInstance:browser});
   if(process.env.STILLS === "1") {
-    for(const frame of [12,28,48,165,235,245,315,325,395,405,475,485,535,550,570,590,615,640,670,690,710,735,755,798,850,910,948]) await renderStill({composition,serveUrl:bundled,output:`/tmp/${id}-v11-${frame}.png`,frame,puppeteerInstance:browser});
+    for(const frame of [12,45,72,105,150,190,235,285,335,390,445,505,545,590,645,715,770,830,875]) await renderStill({composition,serveUrl:bundled,output:`/tmp/${id}-review-${frame}.png`,frame,puppeteerInstance:browser});
     continue;
   }
   const stem=stems[id]; const video=`/tmp/${stem}-silent.mp4`; const audio=`/tmp/${stem}.wav`; const out=`/mnt/documents/${stem}.mp4`;

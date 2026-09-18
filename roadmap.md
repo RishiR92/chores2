@@ -90,3 +90,11 @@
 - [x] Correct the email and everyday-task copy
 - [x] Replace the WhatsApp drawing with an accurate mark
 - [x] Render and verify both corrected V11 masters
+
+## Chase Engine social film
+
+- [x] Lock the single-story broken-AC chase and 30-second beat map
+- [x] Build the persistent call → text → email → provider-call pursuit
+- [x] Show the three-day timeline and eleven-touchpoint outcome
+- [x] Reuse the approved visual identity, soundtrack, real logo, and channel marks
+- [x] Render, inspect, and verify vertical and widescreen masters
