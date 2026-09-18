@@ -98,3 +98,10 @@
 - [x] Show the three-day timeline and eleven-touchpoint outcome
 - [x] Reuse the approved visual identity, soundtrack, real logo, and channel marks
 - [x] Render, inspect, and verify vertical and widescreen masters
+
+## Chase Engine phone-focus revision
+
+- [x] Remove the distracting ceiling-fan treatment and spotlight the phone
+- [x] Expand the landlord text exchange and detailed follow-up email
+- [x] Change the text outcome to “read. asked for mail.”
+- [x] Shorten the call excerpt, render, and verify both revised masters
