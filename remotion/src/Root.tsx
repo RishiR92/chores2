@@ -5,6 +5,7 @@ import { HighlightVideo } from "./HighlightVideo";
 import { HighlightVideoV9 } from "./HighlightVideoV9";
 import { HighlightVideoV10 } from "./HighlightVideoV10";
 import { HighlightVideoV11 } from "./HighlightVideoV11";
+import { ChaseEngineFilm } from "./ChaseEngineFilm";
 
 export const RemotionRoot: React.FC = () => (
   <>
@@ -92,6 +93,24 @@ export const RemotionRoot: React.FC = () => (
       component={HighlightVideoV11}
       defaultProps={{ vertical: false }}
       durationInFrames={960}
+      fps={30}
+      width={1920}
+      height={1080}
+    />
+    <Composition
+      id="chaseEngineVertical"
+      component={ChaseEngineFilm}
+      defaultProps={{ vertical: true }}
+      durationInFrames={900}
+      fps={30}
+      width={1080}
+      height={1920}
+    />
+    <Composition
+      id="chaseEngineWidescreen"
+      component={ChaseEngineFilm}
+      defaultProps={{ vertical: false }}
+      durationInFrames={900}
       fps={30}
       width={1920}
       height={1080}
