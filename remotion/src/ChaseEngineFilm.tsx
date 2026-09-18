@@ -49,7 +49,7 @@ const End:React.FC<Format>=({vertical})=>{const f=useCurrentFrame();const p=pop(
 
 export const ChaseEngineFilm:React.FC<Format>=({vertical})=><AbsoluteFill style={{background:C.paper,overflow:"hidden"}}>
   <HeatHook vertical={vertical}/><Promise vertical={vertical}/><Chase vertical={vertical}/><Confirmation vertical={vertical}/><Payoff vertical={vertical}/><End vertical={vertical}/>
-  <Audio src={staticFile("audio/bgm-v9.mp3")} volume={(f)=>interpolate(f,[0,20,160,175,495,510,650,665,780,895,960,989],[.68,.9,.94,.82,.94,.12,.12,.8,.9,.75,.6,.25],clamp)}/>
+  <Audio src={staticFile("audio/bgm-v9.mp3")} volume={(f)=>interpolate(f,[0,20,160,175,495,510,620,640,780,895,960,989],[.68,.9,.94,.82,.94,.12,.12,.8,.9,.75,.6,.25],clamp)}/>
   <Sequence from={505} durationInFrames={120}><Audio src={staticFile("audio/trimmed/hvac.mp3")} volume={1.2}/></Sequence>
   {[8,95,175,270,365,475,665,794,825,906,948].map((at,i)=><Sequence key={at} from={at}><Audio src={staticFile(i%2?"audio/sfx/wa-pop.mp3":"audio/sfx/imessage-receive.mp3")} volume={i===6?.42:.2}/></Sequence>)}
 </AbsoluteFill>;
