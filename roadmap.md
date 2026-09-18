@@ -112,4 +112,4 @@
 - [x] Remove the duplicate phone surround in all chase phases
 - [x] Replace “call again” with a three-technician search and one booking
 - [x] Change the chase timeline and outcome from three days to two days
-- [ ] Shorten the call excerpt by one second, render, and verify both V4 masters
+- [x] Shorten the call excerpt by one second, render, and verify both V4 masters
