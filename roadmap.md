@@ -97,4 +97,4 @@
 - [x] Build the persistent call → text → email → provider-call pursuit
 - [x] Show the three-day timeline and eleven-touchpoint outcome
 - [x] Reuse the approved visual identity, soundtrack, real logo, and channel marks
-- [ ] Render, inspect, and verify vertical and widescreen masters
+- [x] Render, inspect, and verify vertical and widescreen masters
