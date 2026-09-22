@@ -293,7 +293,10 @@ export const AiToAiFilmV4:React.FC<Format> = ({vertical}) => {
       <End vertical={vertical}/>
 
       <Sequence from={0} durationInFrames={1170}>
-        <Audio src={staticFile("audio/ai-to-ai-v4/score.mp3")} volume={fr=>r(fr,[0,60,230,250,600,614,650,1060,1168],[0,.6,.62,.14,.14,.2,.78,.78,0])}/>
+        <Audio src={staticFile("audio/ai-to-ai-v4/score.mp3")} volume={fr=>r(fr,[0,60,230,250,600,614,650,1030,1062],[0,.6,.62,.14,.14,.2,.78,.78,0])}/>
+      </Sequence>
+      <Sequence from={1030} durationInFrames={140}>
+        <Audio src={staticFile("audio/ai-to-ai-v4/score.mp3")} startFrom={735} volume={fr=>r(fr,[0,32,96,138],[0,.82,.82,0])}/>
       </Sequence>
       <Sequence from={255} durationInFrames={36}><Audio src={staticFile("audio/ai-to-ai-v4/01-answer-short.mp3")} volume={1.18}/></Sequence>
       <Sequence from={315} durationInFrames={206}><Audio src={staticFile("audio/ai-to-ai-v4/02-request-short.mp3")} volume={1.18}/></Sequence>
