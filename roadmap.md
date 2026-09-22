@@ -138,9 +138,9 @@
 
 ## AI-to-AI V5 suspense and consumer-leadership rebuild
 
-- [ ] Lock the suspense-first story and exact copy without revealing AI-to-AI early
-- [ ] Rebuild the proof around one uninterrupted real call and a decisive reveal
-- [ ] Replace dots and abstract lines with evidence-led call records and real-world task outcomes
-- [ ] Show Asmi as the consumer-side agent across recognizable everyday tasks
-- [ ] Compose a suspense-to-release score synchronized to the reveal
-- [ ] Render, inspect, and verify widescreen and vertical V5 masters
+- [x] Lock the suspense-first story and exact copy without revealing AI-to-AI early
+- [x] Rebuild the proof around one uninterrupted real call and a decisive reveal
+- [x] Replace dots and abstract lines with evidence-led call records and real-world task outcomes
+- [x] Show Asmi as the consumer-side agent across recognizable everyday tasks
+- [x] Compose a suspense-to-release score synchronized to the reveal
+- [x] Render, inspect, and verify widescreen and vertical V5 masters
