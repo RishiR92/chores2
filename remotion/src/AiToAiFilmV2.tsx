@@ -96,16 +96,15 @@ const Headline: React.FC<{children: React.ReactNode; size: number; style?: React
 
 const ScaleOpen: React.FC<Format> = ({vertical}) => {
   const f = useCurrentFrame();
-  const zoom = r(f, [0, 145], [.66, 1.22]);
   const first = fade(f, 8, 18, 54, 64);
   const second = fade(f, 64, 76, 132, 147);
-  return <AbsoluteFill style={{opacity: r(f, [142, 150], [1, 0]), transform: `scale(${zoom})`}}>
+  return <AbsoluteFill style={{opacity: r(f, [142, 150], [1, 0])}}>
     <WorldField vertical={vertical}/>
     <div style={{position: "absolute", left: vertical ? 64 : 120, right: vertical ? 64 : 120, top: vertical ? 590 : 350}}>
       <Headline size={vertical ? 112 : 152} style={{opacity: first, transform: `translateY(${(1 - enter(f, 4)) * 36}px)`}}>
         thousands of people<br/>use <span style={{color: C.signal}}>asmi</span>
       </Headline>
-      <Headline size={vertical ? 92 : 122} style={{opacity: second, position: "absolute", top: 0}}>
+      <Headline size={vertical ? 92 : 122} style={{opacity: second, position: "absolute", top: 0, transform: `scale(${r(f, [64, 145], [.92, 1.04])})`, transformOrigin: "left center"}}>
         to deal with<br/>the real world.
       </Headline>
     </div>
@@ -183,7 +182,7 @@ const Insight: React.FC<Format> = ({vertical}) => {
   return <AbsoluteFill style={{opacity: fade(f, 1052, 1060, 1110, 1120)}}>
     <WorldField vertical={vertical} pullBack={pull}/>
     <div style={{position: "absolute", left: vertical ? 62 : 120, right: vertical ? 62 : 120, top: vertical ? 565 : 345}}>
-      <Headline size={vertical ? 82 : 110} style={{opacity: fade(local, 6, 14, 47, 58)}}>AI is starting to<br/>answer the phone.</Headline>
+      <Headline size={vertical ? 82 : 110} style={{opacity: fade(local, 6, 14, 40, 48)}}>AI is starting to<br/>answer the phone.</Headline>
       <Headline size={vertical ? 78 : 106} accent style={{position: "absolute", top: 0, opacity: ease(local, 51, 12)}}>asmi already knows<br/>how to talk to it.</Headline>
     </div>
   </AbsoluteFill>;
