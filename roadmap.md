@@ -152,3 +152,10 @@
 - [x] Keep five examples once in the evidence scene
 - [x] Generate and synchronize a new high-energy score
 - [x] Render and verify widescreen and vertical V6 masters
+
+## AI-to-AI V7 reveal refinement
+
+- [x] Remove “this is the shift” from the evidence scene
+- [x] Remove the repeated consumer-side leadership statement
+- [x] Strengthen the AI-to-AI reveal motion and impact
+- [x] Render and verify widescreen and vertical V7 masters
