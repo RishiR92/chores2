@@ -85,17 +85,22 @@ const CallArtifact:React.FC<Format>=({vertical})=>{
 const Reveal:React.FC<Format>=({vertical})=>{
   const f=useCurrentFrame(),l=f-490;
   if(l<0||l>180)return null;
-  const split=sp(l,3,15,210);
-  const title=sp(l,22,18,175);
+  const flash=r(l,[0,2,7,13],[0,1,1,0]);
+  const split=sp(l,5,11,285);
+  const title=sp(l,28,12,240);
+  const shock=r(l,[0,4,16],[1,1,0]);
+  const echo=r(l,[20,34,60],[0,.28,0]);
   const w=vertical?1080:1920,h=vertical?1920:1080;
   const divider=vertical?{left:90,right:90,top:h/2,height:2}:{top:80,bottom:80,left:w/2,width:2};
   return <AbsoluteFill style={{background:C.paper,overflow:"hidden"}}>
-    <div style={{position:"absolute",inset:0,background:C.cobalt,clipPath:vertical?`inset(0 0 ${50+50*(1-split)}% 0)`:`inset(0 ${50+50*(1-split)}% 0 0)`}}/>
-    <div style={{position:"absolute",inset:0,background:C.coral,clipPath:vertical?`inset(${50+50*(1-split)}% 0 0 0)`:`inset(0 0 0 ${50+50*(1-split)}%)`}}/>
+    <div style={{position:"absolute",inset:0,background:C.cobalt,clipPath:vertical?`polygon(0 0,100% 0,100% ${50*split}%,0 ${50*split}%)`:`polygon(0 0,${50*split}% 0,${50*split}% 100%,0 100%)`}}/>
+    <div style={{position:"absolute",inset:0,background:C.coral,clipPath:vertical?`polygon(0 ${100-50*split}%,100% ${100-50*split}%,100% 100%,0 100%)`:`polygon(${100-50*split}% 0,100% 0,100% 100%,${100-50*split}% 100%)`}}/>
+    {[0,1,2].map(i=><div key={i} style={{position:"absolute",left:"50%",top:"50%",width:(vertical?330:250)+i*(vertical?260:220),height:(vertical?330:250)+i*(vertical?260:220),border:`${vertical?8:6}px solid ${i===1?C.acid:C.paper}`,borderRadius:"50%",opacity:echo*(1-i*.18),transform:`translate(-50%,-50%) scale(${.5+split*(.8+i*.2)})`}}/>)}
     <div style={{position:"absolute",...divider,background:C.ink,transform:vertical?`scaleX(${split})`:`scaleY(${split})`}}/>
     <div style={{position:"absolute",left:vertical?60:90,top:vertical?300:170,fontFamily:body,fontSize:vertical?27:24,fontWeight:700,color:C.paper,opacity:split}}>ASMI AGENT</div>
     <div style={{position:"absolute",right:vertical?60:90,bottom:vertical?300:170,fontFamily:body,fontSize:vertical?27:24,fontWeight:700,color:C.ink,opacity:split}}>BUSINESS AGENT</div>
-    <div style={{position:"absolute",left:vertical?55:130,right:vertical?55:130,top:"50%",transform:`translateY(-50%) scale(${.76+.24*title})`,opacity:title,textAlign:"center",fontFamily:display,fontSize:vertical?112:142,lineHeight:.88,color:C.ink,textShadow:`0 3px 0 ${C.paper}`}}>an AI just<br/>called an AI.</div>
+    <div style={{position:"absolute",left:vertical?55:130,right:vertical?55:130,top:"50%",transform:`translate(${Math.sin(l*1.9)*shock*16}px,calc(-50% + ${Math.cos(l*1.5)*shock*10}px)) scale(${.42+.58*title})`,opacity:title,textAlign:"center",fontFamily:display,fontSize:vertical?112:142,lineHeight:.88,color:C.ink,textShadow:`0 3px 0 ${C.paper}`}}>an AI just<br/>called an AI.</div>
+    <div style={{position:"absolute",inset:0,background:C.paper,opacity:flash,mixBlendMode:"screen"}}/>
     <Noise/>
   </AbsoluteFill>;
 };
@@ -116,7 +121,6 @@ const Evidence:React.FC<Format>=({vertical})=>{
         <span style={{fontFamily:display,fontSize:vertical?28:24}}>{x.task}</span><span style={{fontFamily:body,fontSize:vertical?28:23,fontWeight:600}}>{x.detail}</span><span style={{fontFamily:body,fontSize:vertical?20:17,fontWeight:700,color:C.cobalt,textAlign:"right"}}>AGENT ANSWERED</span>
       </div>;
     })}
-    <div style={{position:"absolute",right:vertical?54:110,bottom:vertical?100:58,fontFamily:display,fontSize:vertical?58:52,color:C.acid,opacity:r(l,[180,200],[0,1])}}>this is the shift.</div>
     <Noise/>
   </AbsoluteFill>;
 };
@@ -125,12 +129,10 @@ const TaskBoard:React.FC<Format>=({vertical})=>{
   const f=useCurrentFrame(),l=f-850;
   if(l<0)return null;
   const flow=sp(l,5,20,180);
-  const leadership=sp(l,142,18,180);
-  const stageFade=r(l,[135,154],[1,.08]);
   const w=vertical?1080:1920;
   const laneTop=vertical?680:390;
   return <AbsoluteFill style={{background:C.paper,color:C.ink,overflow:"hidden"}}>
-    <div style={{position:"absolute",inset:0,opacity:stageFade}}>
+    <div style={{position:"absolute",inset:0}}>
       <div style={{position:"absolute",left:vertical?54:92,right:vertical?54:92,top:vertical?110:65,fontFamily:display,fontSize:vertical?70:82,lineHeight:.92}}>businesses have agents answering.<br/><span style={{color:C.cobalt}}>consumers have asmi calling.</span></div>
       <div style={{position:"absolute",left:vertical?70:150,top:laneTop,width:vertical?280:420,fontFamily:body,fontSize:vertical?27:23,fontWeight:700}}>CONSUMER REQUESTS</div>
       <div style={{position:"absolute",right:vertical?70:150,top:laneTop,width:vertical?250:360,textAlign:"right",fontFamily:body,fontSize:vertical?27:23,fontWeight:700}}>REAL WORLD</div>
@@ -147,7 +149,6 @@ const TaskBoard:React.FC<Format>=({vertical})=>{
       <div style={{position:"absolute",left:"50%",top:vertical?1060:650,transform:`translate(-50%,-50%) scale(${.82+.18*flow})`,width:vertical?210:178,height:vertical?210:178,borderRadius:"50%",background:C.cobalt,border:`12px solid ${C.paper}`,boxShadow:`0 0 0 4px ${C.ink}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:display,fontSize:vertical?42:34,color:C.paper}}>asmi</div>
       <div style={{position:"absolute",left:vertical?70:180,right:vertical?70:180,bottom:vertical?170:65,fontFamily:body,fontSize:vertical?34:29,fontWeight:700,textAlign:"center"}}>one consumer agent. the real world on the other side.</div>
     </div>
-    <div style={{position:"absolute",left:vertical?54:150,right:vertical?54:150,top:"50%",transform:`translateY(-50%) scale(${.78+.22*leadership})`,opacity:leadership,textAlign:"center",fontFamily:display,fontSize:vertical?84:94,lineHeight:.9}}>asmi is leading<br/><span style={{color:C.cobalt}}>the consumer side</span><br/>of the agent-to-agent world.</div>
     <Noise/>
   </AbsoluteFill>;
 };
@@ -162,7 +163,7 @@ const End:React.FC<Format>=({vertical})=>{
   </AbsoluteFill>;
 };
 
-export const AiToAiFilmV6:React.FC<Format>=({vertical})=>{
+export const AiToAiFilmV7:React.FC<Format>=({vertical})=>{
   return <AbsoluteFill style={{background:C.ink}}>
     <Opening vertical={vertical}/>
     <CallArtifact vertical={vertical}/>
