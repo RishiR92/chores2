@@ -56,7 +56,7 @@ const Node:React.FC<{vertical:boolean;side:"asmi"|"host";active:boolean}>=({vert
 
 const Caption:React.FC<{vertical:boolean,speaker:string,color:string,text:string,progress:number}>=({vertical,speaker,color,text,progress})=>{const words=text.split(" "),n=Math.max(1,Math.ceil(words.length*progress));return <div style={{position:"absolute",left:vertical?58:300,right:vertical?58:300,bottom:vertical?235:66,minHeight:vertical?235:128}}>
  <div style={{fontFamily,color,fontWeight:700,fontSize:vertical?20:16,marginBottom:12}}>ONE REAL ASMI CALL · {speaker}</div>
- <div style={{fontFamily,color:C.soft,fontWeight:500,fontSize:vertical?46:38,lineHeight:1.1}}>{words.slice(0,n).join(" ")}</div>
+ <div style={{fontFamily,color:C.soft,fontWeight:500,fontSize:vertical?54:50,lineHeight:1.1}}>{words.slice(0,n).join(" ")}</div>
  </div>};
 
 const Proof:React.FC<Format>=({vertical})=>{const f=useCurrentFrame(),l=f-240;const answer=l>=15&&l<55,request=l>=75&&l<290,vegan=l>=305&&l<380;let caption:React.ReactNode=null;
