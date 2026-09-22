@@ -66,9 +66,9 @@ The second and third lines join the first in one accumulating composition rather
 
 The call records transform into a fast consumer-side task board. Five clear requests enter from people:
 
-- check restaurant options
 - book a dentist
 - cancel a gym membership
+- book a gardener
 - chase a landlord
 - move a salon appointment
 
