@@ -63,7 +63,7 @@ const MagneticField:React.FC<Format> = ({vertical}) => {
           const y = cy+Math.sin(p.a)*rad*(vertical?1.12:.78);
           const pulse = .5+.5*Math.sin(f/9+p.phase)**2;
           const near = Math.max(0, 1-Math.abs(rad)/(amp*.5));
-          const op = (p.ai?.78:.3)*(1-near*.75);
+          const op = (p.ai?.9:.42)*(1-near*.72);
           return (
             <g key={i} opacity={op}>
               {p.ai && <circle cx={x} cy={y} r={(5+4*pulse)*p.depth} fill={C.signal} opacity={.35}/>}
@@ -117,7 +117,7 @@ const Phrase:React.FC<{
 
 const nodePos = (vertical:boolean, asmi:boolean) => vertical
   ? {x:540, y:asmi?660:1290}
-  : {x:asmi?470:1450, y:505};
+  : {x:asmi?450:1470, y:480};
 
 const bez = (p0:{x:number,y:number}, p1:{x:number,y:number}, bow:number, t:number) => {
   const mx=(p0.x+p1.x)/2, my=(p0.y+p1.y)/2;
@@ -132,7 +132,7 @@ const Node:React.FC<{vertical:boolean;asmi:boolean;active:boolean;label:boolean}
   const f = useCurrentFrame();
   const p = nodePos(vertical,asmi);
   const col = asmi?C.signal:C.amber;
-  const size = vertical?168:186;
+  const size = vertical?210:250;
   return (
     <div style={{position:"absolute",left:p.x,top:p.y,transform:"translate(-50%,-50%)",width:size,height:size}}>
       {[1,1.45,1.9].map((s,i)=>(
@@ -154,7 +154,7 @@ const Caption:React.FC<{vertical:boolean;speaker:string;color:string;text:string
   return (
     <div style={{position:"absolute",left:vertical?58:300,right:vertical?58:300,bottom:vertical?250:70,minHeight:vertical?240:130}}>
       <div style={{fontFamily,color,fontWeight:700,fontSize:vertical?20:16,marginBottom:12,letterSpacing:1.2}}>ONE REAL ASMI CALL · {speaker}</div>
-      <div style={{fontFamily,color:C.soft,fontWeight:500,fontSize:vertical?52:48,lineHeight:1.12}}>{words.slice(0,n).join(" ")}</div>
+      <div style={{fontFamily,color:C.soft,fontWeight:500,fontSize:vertical?56:52,lineHeight:1.12}}>{words.slice(0,n).join(" ")}</div>
     </div>
   );
 };
@@ -179,7 +179,7 @@ const Proof:React.FC<Format> = ({vertical}) => {
     <AbsoluteFill style={{opacity:r(f,[236,246],[0,1])*r(f,[626,640],[1,0])}}>
       <svg style={{position:"absolute",inset:0}} width="100%" height="100%" viewBox={vertical?"0 0 1080 1920":"0 0 1920 1080"}>
         <defs><linearGradient id="v4path"><stop stopColor={C.signal}/><stop offset="1" stopColor={C.amber}/></linearGradient></defs>
-        <polyline points={pts.join(" ")} fill="none" stroke="url(#v4path)" strokeWidth={vertical?6:4} opacity=".55" strokeDasharray="2600" strokeDashoffset={2600*(1-draw)}/>
+        <polyline points={pts.join(" ")} fill="none" stroke="url(#v4path)" strokeWidth={vertical?8:7} opacity=".75" strokeDasharray="2600" strokeDashoffset={2600*(1-draw)}/>
         {sig && <>
           <circle cx={sig.x} cy={sig.y} r={vertical?34:30} fill={travel>.5?C.amber:C.signal} opacity=".18"/>
           <circle cx={sig.x} cy={sig.y} r={vertical?14:12} fill={C.soft}/>
@@ -207,7 +207,7 @@ const Exchange:React.FC<Format> = ({vertical}) => {
   return (
     <AbsoluteFill style={{opacity:vis}}>
       <svg style={{position:"absolute",inset:0}} width="100%" height="100%" viewBox={vertical?"0 0 1080 1920":"0 0 1920 1080"}>
-        <polyline points={Array.from({length:49},(_,i)=>{const p=bez(a,b,bow,i/48);return `${p.x},${p.y}`;}).join(" ")} fill="none" stroke={C.line} strokeWidth={vertical?5:3} opacity=".7"/>
+        <polyline points={Array.from({length:49},(_,i)=>{const p=bez(a,b,bow,i/48);return `${p.x},${p.y}`;}).join(" ")} fill="none" stroke="#3A4A42" strokeWidth={vertical?7:6} opacity=".85"/>
         {trips.map((t,i)=>{
           if (l<t.s||l>t.e+8) return null;
           const prog = r(l,[t.s,t.e],[0,1]);
