@@ -35,7 +35,7 @@ const DOTS = Array.from({length:130},(_,i)=>{
   return {a, rad, depth:.35+rnd(i,3)*.65, ai:rnd(i,4)>.74, phase:rnd(i,5)*Math.PI*2, lag:Math.floor(rnd(i,6)*16)};
 });
 
-const PAIRS = Array.from({length:11},(_,i)=>({
+const PAIRS = Array.from({length:14},(_,i)=>({
   x:.12+rnd(i,11)*.76, y:.14+rnd(i,12)*.72,
   dx:(rnd(i,13)-.5)*.3, dy:(rnd(i,14)-.5)*.22,
   start:770+Math.floor(rnd(i,15)*84), speed:34+rnd(i,16)*24,
@@ -84,16 +84,16 @@ const Phrase:React.FC<{
 }> = ({vertical,start,exit,text,accent,size,top,color}) => {
   const f = useCurrentFrame();
   const words = text.split(" ");
-  const out = r(f,[exit,exit+26],[0,1]);
+  const out = r(f,[exit,exit+13],[0,1]);
   const inAll = r(f,[start,start+6],[0,1]);
-  if (f < start-2 || f > exit+30) return null;
+  if (f < start-2 || f > exit+14) return null;
   return (
     <div style={{
       position:"absolute", left:vertical?64:132, right:vertical?64:132,
       top:top ?? (vertical?600:352),
       transformOrigin:"left center",
-      transform:`scale(${1-out*.2}) translateY(${-out*62}px)`,
-      opacity:(1-out*.9)*inAll,
+      transform:`scale(${1-out*.16}) translateY(${-out*52}px)`,
+      opacity:(1-out)*inAll,
       filter:out>0?`blur(${out*3}px)`:undefined,
     }}>
       <div style={{fontFamily,fontWeight:600,fontSize:size??(vertical?82:104),lineHeight:1.0,color:color??C.soft,display:"flex",flexWrap:"wrap",gap:vertical?"0 20px":"0 24px"}}>
@@ -116,8 +116,8 @@ const Phrase:React.FC<{
 };
 
 const nodePos = (vertical:boolean, asmi:boolean) => vertical
-  ? {x:540, y:asmi?640:1300}
-  : {x:asmi?520:1400, y:540};
+  ? {x:540, y:asmi?660:1290}
+  : {x:asmi?470:1450, y:505};
 
 const bez = (p0:{x:number,y:number}, p1:{x:number,y:number}, bow:number, t:number) => {
   const mx=(p0.x+p1.x)/2, my=(p0.y+p1.y)/2;
@@ -132,7 +132,7 @@ const Node:React.FC<{vertical:boolean;asmi:boolean;active:boolean;label:boolean}
   const f = useCurrentFrame();
   const p = nodePos(vertical,asmi);
   const col = asmi?C.signal:C.amber;
-  const size = vertical?140:150;
+  const size = vertical?168:186;
   return (
     <div style={{position:"absolute",left:p.x,top:p.y,transform:"translate(-50%,-50%)",width:size,height:size}}>
       {[1,1.45,1.9].map((s,i)=>(
@@ -140,7 +140,7 @@ const Node:React.FC<{vertical:boolean;asmi:boolean;active:boolean;label:boolean}
       ))}
       <div style={{position:"absolute",inset:size*.33,borderRadius:"50%",background:col,opacity:active?1:.34,boxShadow:active?`0 0 48px ${col}`:"none"}}/>
       {label && (
-        <div style={{position:"absolute",top:size+18,left:"50%",width:vertical?320:360,transform:"translateX(-50%)",textAlign:"center",fontFamily,color:active?C.soft:C.dim,fontWeight:600,fontSize:vertical?22:19,letterSpacing:.6}}>
+        <div style={{position:"absolute",top:size+18,left:"50%",width:vertical?320:360,transform:"translateX(-50%)",textAlign:"center",fontFamily,color:active?C.soft:C.dim,fontWeight:600,fontSize:vertical?24:21,letterSpacing:.6}}>
           {asmi?"ASMI · AI CALLER":"HERMAN’S · AI HOST"}
         </div>
       )}
@@ -181,8 +181,8 @@ const Proof:React.FC<Format> = ({vertical}) => {
         <defs><linearGradient id="v4path"><stop stopColor={C.signal}/><stop offset="1" stopColor={C.amber}/></linearGradient></defs>
         <polyline points={pts.join(" ")} fill="none" stroke="url(#v4path)" strokeWidth={vertical?6:4} opacity=".55" strokeDasharray="2600" strokeDashoffset={2600*(1-draw)}/>
         {sig && <>
-          <circle cx={sig.x} cy={sig.y} r={vertical?26:22} fill={travel>.5?C.amber:C.signal} opacity=".18"/>
-          <circle cx={sig.x} cy={sig.y} r={vertical?11:9} fill={C.soft}/>
+          <circle cx={sig.x} cy={sig.y} r={vertical?34:30} fill={travel>.5?C.amber:C.signal} opacity=".18"/>
+          <circle cx={sig.x} cy={sig.y} r={vertical?14:12} fill={C.soft}/>
         </>}
       </svg>
       <Node vertical={vertical} asmi active={request} label/>
@@ -218,8 +218,8 @@ const Exchange:React.FC<Format> = ({vertical}) => {
           const endP = fwd?b:a;
           return (
             <g key={i}>
-              <line x1={tail.x} y1={tail.y} x2={pt.x} y2={pt.y} stroke={t.col} strokeWidth={vertical?9:7} strokeLinecap="round" opacity={.65*(1-land)}/>
-              <circle cx={pt.x} cy={pt.y} r={vertical?18:15} fill={t.col} opacity={(1-land)*.9}/>
+              <line x1={tail.x} y1={tail.y} x2={pt.x} y2={pt.y} stroke={t.col} strokeWidth={vertical?13:11} strokeLinecap="round" opacity={.65*(1-land)}/>
+              <circle cx={pt.x} cy={pt.y} r={vertical?24:21} fill={t.col} opacity={(1-land)*.9}/>
               {land>0 && <circle cx={endP.x} cy={endP.y} r={40+land*(vertical?150:130)} fill="none" stroke={t.col} strokeWidth={3} opacity={(1-land)*.7}/>}
             </g>
           );
@@ -244,7 +244,7 @@ const Swarm:React.FC<Format> = ({vertical}) => {
           const born = r(f,[p.start,p.start+18],[0,1]);
           const t = (Math.sin((f-p.start)/p.speed*Math.PI)+1)/2;
           const px = x1+(x2-x1)*t, py = y1+(y2-y1)*t;
-          const rr = vertical?9:7;
+          const rr = vertical?12:10;
           return (
             <g key={i} opacity={born}>
               <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={C.line} strokeWidth={2} opacity=".85"/>
