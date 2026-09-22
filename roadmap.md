@@ -134,4 +134,4 @@
 - [x] Shorten the proof call to end on “Herman’s is fully vegan”
 - [x] Remove all music and dialogue after the proof
 - [x] Build the silent agent-to-agent reveal and concise ending
-- [ ] Render, inspect, and verify widescreen and vertical V3 masters
+- [x] Render, inspect, and verify widescreen and vertical V3 masters
