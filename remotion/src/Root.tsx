@@ -7,6 +7,7 @@ import { HighlightVideoV10 } from "./HighlightVideoV10";
 import { HighlightVideoV11 } from "./HighlightVideoV11";
 import { ChaseEngineFilm } from "./ChaseEngineFilm";
 import { AiToAiFilm } from "./AiToAiFilm";
+import { AiToAiFilmV2 } from "./AiToAiFilmV2";
 
 export const RemotionRoot: React.FC = () => (
   <>
@@ -130,6 +131,24 @@ export const RemotionRoot: React.FC = () => (
       component={AiToAiFilm}
       defaultProps={{ vertical: true }}
       durationInFrames={960}
+      fps={30}
+      width={1080}
+      height={1920}
+    />
+    <Composition
+      id="aiToAiV2Widescreen"
+      component={AiToAiFilmV2}
+      defaultProps={{ vertical: false }}
+      durationInFrames={1140}
+      fps={30}
+      width={1920}
+      height={1080}
+    />
+    <Composition
+      id="aiToAiV2Vertical"
+      component={AiToAiFilmV2}
+      defaultProps={{ vertical: true }}
+      durationInFrames={1140}
       fps={30}
       width={1080}
       height={1920}
