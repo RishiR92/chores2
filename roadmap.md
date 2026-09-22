@@ -127,3 +127,11 @@
 - [x] Build the new widescreen-first and vertical compositions
 - [x] Mix the authentic calls with the approved launch score
 - [x] Inspect and verify both final masters
+
+## AI-to-AI V3 insight-led revision
+
+- [x] Reframe the opening as an Asmi insight from real-world activity
+- [x] Shorten the proof call to end on “Herman’s is fully vegan”
+- [x] Remove all music and dialogue after the proof
+- [x] Build the silent agent-to-agent reveal and concise ending
+- [x] Render, inspect, and verify widescreen and vertical V3 masters
