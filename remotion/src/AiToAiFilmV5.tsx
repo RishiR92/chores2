@@ -109,7 +109,7 @@ const Evidence:React.FC<Format>=({vertical})=>{
   const f=useCurrentFrame(),l=f-640;
   if(l<0||l>250)return null;
   const w=vertical?1080:1920;
-  const headline=sp(l,28,20,160);
+  const headline=sp(l,8,20,160);
   return <AbsoluteFill style={{background:C.ink,overflow:"hidden"}}>
     <div style={{position:"absolute",left:vertical?54:92,right:vertical?54:92,top:vertical?160:92,fontFamily:display,fontSize:vertical?72:92,lineHeight:.92,color:C.paper,transform:`translateY(${(1-headline)*45}px)`,opacity:headline}}>more calls are being<br/>answered by agents.</div>
     <div style={{position:"absolute",left:vertical?54:92,right:vertical?54:92,top:vertical?460:300,fontFamily:body,fontSize:vertical?42:46,fontWeight:700,color:C.acid,opacity:r(l,[82,100],[0,1])}}>agent-to-agent isn’t coming. <span style={{color:C.paper}}>it’s already happening.</span></div>
@@ -132,7 +132,10 @@ const TaskBoard:React.FC<Format>=({vertical})=>{
   const flow=sp(l,6,22,160);
   const lineY=vertical?820:505;
   const asmiX=vertical?540:960;
+  const leadership=sp(l,145,18,180);
+  const boardFade=r(l,[142,158],[1,.12]);
   return <AbsoluteFill style={{background:C.paper,color:C.ink,overflow:"hidden"}}>
+    <div style={{position:"absolute",inset:0,opacity:boardFade}}>
     <div style={{position:"absolute",left:vertical?54:92,right:vertical?54:92,top:vertical?100:65,fontFamily:display,fontSize:vertical?70:82,lineHeight:.92}}>businesses have agents answering.<br/><span style={{color:C.cobalt}}>consumers have asmi calling.</span></div>
     <div style={{position:"absolute",left:vertical?54:92,right:vertical?54:92,top:lineY,height:4,background:C.ink,transform:`scaleX(${flow})`}}/>
     <div style={{position:"absolute",left:asmiX,top:lineY,transform:"translate(-50%,-50%)",width:vertical?178:160,height:vertical?178:160,borderRadius:"50%",background:C.cobalt,border:`12px solid ${C.paper}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:display,fontSize:vertical?36:32,color:C.paper,boxShadow:`0 0 0 4px ${C.ink}`}}>asmi</div>
@@ -143,6 +146,8 @@ const TaskBoard:React.FC<Format>=({vertical})=>{
       const top=vertical?1040+Math.floor(i/2)*210:690+(i%2)*120;
       return <div key={t} style={{position:"absolute",left,top,width:vertical?450:325,height:vertical?132:92,background:done>.4?C.acid:C.paper,border:`3px solid ${C.ink}`,transform:`translateY(${(1-born)*60}px) scale(${.9+.1*born})`,opacity:born,padding:vertical?"22px 24px":"15px 18px",fontFamily:body,fontWeight:700,fontSize:vertical?30:24,display:"flex",alignItems:"center",justifyContent:"space-between",boxShadow:`7px 7px 0 ${i%2?C.coral:C.cobalt}`}}><span style={{maxWidth:"76%"}}>{t}</span><span style={{fontFamily:display,fontSize:vertical?25:20}}>{done>.4?"DONE":"→"}</span></div>;
     })}
+    </div>
+    <div style={{position:"absolute",left:vertical?54:150,right:vertical?54:150,top:"50%",transform:`translateY(-50%) scale(${.84+.16*leadership})`,opacity:leadership,textAlign:"center",fontFamily:display,fontSize:vertical?84:94,lineHeight:.9}}>asmi is leading<br/><span style={{color:C.cobalt}}>the consumer side</span><br/>of the agent-to-agent world.</div>
     <Noise/>
   </AbsoluteFill>;
 };
