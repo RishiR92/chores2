@@ -130,8 +130,8 @@
 
 ## AI-to-AI V3 insight-led revision
 
-- [ ] Reframe the opening as an Asmi insight from real-world activity
-- [ ] Shorten the proof call to end on “Herman’s is fully vegan”
-- [ ] Remove all music and dialogue after the proof
-- [ ] Build the silent agent-to-agent reveal and concise ending
+- [x] Reframe the opening as an Asmi insight from real-world activity
+- [x] Shorten the proof call to end on “Herman’s is fully vegan”
+- [x] Remove all music and dialogue after the proof
+- [x] Build the silent agent-to-agent reveal and concise ending
 - [ ] Render, inspect, and verify widescreen and vertical V3 masters
