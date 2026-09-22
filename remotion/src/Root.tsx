@@ -120,7 +120,7 @@ export const RemotionRoot: React.FC = () => (
       id="aiToAiWidescreen"
       component={AiToAiFilm}
       defaultProps={{ vertical: false }}
-      durationInFrames={900}
+      durationInFrames={960}
       fps={30}
       width={1920}
       height={1080}
@@ -129,7 +129,7 @@ export const RemotionRoot: React.FC = () => (
       id="aiToAiVertical"
       component={AiToAiFilm}
       defaultProps={{ vertical: true }}
-      durationInFrames={900}
+      durationInFrames={960}
       fps={30}
       width={1080}
       height={1920}
