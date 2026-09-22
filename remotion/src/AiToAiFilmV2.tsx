@@ -97,8 +97,8 @@ const Headline: React.FC<{children: React.ReactNode; size: number; style?: React
 const ScaleOpen: React.FC<Format> = ({vertical}) => {
   const f = useCurrentFrame();
   const zoom = r(f, [0, 145], [.66, 1.22]);
-  const first = fade(f, 8, 18, 72, 86);
-  const second = fade(f, 66, 78, 132, 147);
+  const first = fade(f, 8, 18, 54, 64);
+  const second = fade(f, 64, 76, 132, 147);
   return <AbsoluteFill style={{opacity: r(f, [142, 150], [1, 0]), transform: `scale(${zoom})`}}>
     <WorldField vertical={vertical}/>
     <div style={{position: "absolute", left: vertical ? 64 : 120, right: vertical ? 64 : 120, top: vertical ? 590 : 350}}>
@@ -108,9 +108,6 @@ const ScaleOpen: React.FC<Format> = ({vertical}) => {
       <Headline size={vertical ? 92 : 122} style={{opacity: second, position: "absolute", top: 0}}>
         to deal with<br/>the real world.
       </Headline>
-    </div>
-    <div style={{position: "absolute", left: vertical ? 64 : 122, bottom: vertical ? 330 : 92, color: C.dim, fontFamily, fontSize: vertical ? 23 : 20, letterSpacing: 0}}>
-      one of those calls is live now
     </div>
   </AbsoluteFill>;
 };
@@ -154,9 +151,9 @@ const CallWorld: React.FC<Format> = ({vertical}) => {
   ];
   let transcript: React.ReactNode = null;
   if (answer) transcript = <Transcript vertical={vertical} speaker="HERMAN’S" text="Yes, of course. I can help you with a booking, cancellation, or any questions about Herman’s. What can I do for John today?" progress={r(local, [5, 220], [0, 1])}/>;
-  if (request) transcript = <Transcript vertical={vertical} speaker="ASMI" text="John is looking to visit on August 21st and wanted to check what vegetarian menu options you’ll have available that day." progress={r(local, [230, 484], [0, 1])}/>;
-  if (vegan) transcript = <Transcript vertical={vertical} speaker="HERMAN’S" text="Just to clarify, Herman’s is fully vegan, so every dish on the buffet is plant-based." progress={r(local, [495, 668], [0, 1])}/>;
-  if (rotation) transcript = <Transcript vertical={vertical} speaker="HERMAN’S" text="The buffet rotates daily, so I can’t promise which exact dishes will be on the menu that day." progress={r(local, [680, 898], [0, 1])}/>;
+  if (request) transcript = <Transcript vertical={vertical} speaker="ASMI" text="That’s great. John is looking to visit on August 21st and wanted to check what vegetarian menu options you’ll have available that day." progress={r(local, [230, 484], [0, 1])}/>;
+  if (vegan) transcript = <Transcript vertical={vertical} speaker="HERMAN’S" text="I appreciate you asking. Just to clarify, Herman’s is fully vegan, so every dish on the buffet is plant-based." progress={r(local, [495, 668], [0, 1])}/>;
+  if (rotation) transcript = <Transcript vertical={vertical} speaker="HERMAN’S" text="As for what’s available on August 21st specifically, the buffet rotates daily, so I can’t promise which exact dishes will be on the menu that day." progress={r(local, [680, 898], [0, 1])}/>;
   const dive = r(local, [0, 70], [1.7, 1]);
   return <AbsoluteFill style={{opacity: fade(f, 140, 148, 1050, 1062), transform: `scale(${dive})`}}>
     <WorldField vertical={vertical} focus={.8}/>
@@ -181,9 +178,9 @@ const CallWorld: React.FC<Format> = ({vertical}) => {
 
 const Insight: React.FC<Format> = ({vertical}) => {
   const f = useCurrentFrame();
-  const local = f - 1040;
+  const local = f - 1055;
   const pull = r(local, [0, 75], [.2, 1]);
-  return <AbsoluteFill style={{opacity: fade(f, 1035, 1048, 1112, 1122)}}>
+  return <AbsoluteFill style={{opacity: fade(f, 1052, 1060, 1110, 1120)}}>
     <WorldField vertical={vertical} pullBack={pull}/>
     <div style={{position: "absolute", left: vertical ? 62 : 120, right: vertical ? 62 : 120, top: vertical ? 565 : 345}}>
       <Headline size={vertical ? 82 : 110} style={{opacity: fade(local, 6, 14, 47, 58)}}>AI is starting to<br/>answer the phone.</Headline>
@@ -194,13 +191,13 @@ const Insight: React.FC<Format> = ({vertical}) => {
 
 const End: React.FC<Format> = ({vertical}) => {
   const f = useCurrentFrame();
-  const local = f - 1114;
+  const local = f - 1118;
   const p = enter(local, 0);
-  return <AbsoluteFill style={{background: C.void, opacity: ease(f, 1114, 10), display: "flex", alignItems: "center", justifyContent: "center"}}>
+  return <AbsoluteFill style={{background: C.void, opacity: ease(f, 1118, 10), display: "flex", alignItems: "center", justifyContent: "center"}}>
     <div style={{position: "absolute", width: vertical ? 850 : 1080, height: vertical ? 340 : 300, transform: `scale(${.84 + .16 * p})`, opacity: p}}>
       <Img src={staticFile("brand/asmi-logo-white.png")} style={{width: "100%", height: "100%", objectFit: "contain"}}/>
     </div>
-    <div style={{position: "absolute", top: vertical ? 1160 : 735, fontFamily, color: C.soft, fontSize: vertical ? 36 : 32, fontWeight: 400, opacity: ease(local, 24, 18)}}>built for whoever answers.</div>
+    <div style={{position: "absolute", top: vertical ? 1160 : 735, fontFamily, color: C.soft, fontSize: vertical ? 36 : 32, fontWeight: 400, opacity: ease(local, 8, 16)}}>built for whoever answers.</div>
     <div style={{position: "absolute", width: 8, height: 8, borderRadius: "50%", background: C.signal, top: vertical ? 1045 : 670, boxShadow: `0 0 28px ${C.signal}`, opacity: .7 + .3 * Math.sin(f / 8)}}/>
   </AbsoluteFill>;
 };
@@ -211,7 +208,7 @@ export const AiToAiFilmV2: React.FC<Format> = ({vertical}) => <AbsoluteFill styl
   <Insight vertical={vertical}/>
   <End vertical={vertical}/>
   <Grain/>
-  <Audio src={staticFile("audio/ai-to-ai-v2/score.mp3")} volume={(f) => r(f, [0, 120, 145, 1035, 1050, 1110, 1140], [.72, .8, .13, .13, .55, .8, .38])}/>
+  <Audio src={staticFile("audio/ai-to-ai-v2/score.mp3")} volume={(f) => r(f, [0, 120, 145, 1038, 1048, 1060, 1110, 1145, 1169], [.72, .8, .13, .13, .13, .55, .8, .52, .28])}/>
   <Sequence from={150} durationInFrames={217}><Audio src={staticFile("audio/ai-to-ai-v2/01-answer.mp3")} volume={1.18}/></Sequence>
   <Sequence from={375} durationInFrames={255}><Audio src={staticFile("audio/ai-to-ai-v2/02-request.mp3")} volume={1.18}/></Sequence>
   <Sequence from={640} durationInFrames={175}><Audio src={staticFile("audio/ai-to-ai-v2/03-vegan.mp3")} volume={1.18}/></Sequence>
