@@ -144,3 +144,11 @@
 - [x] Show Asmi as the consumer-side agent across recognizable everyday tasks
 - [x] Compose a suspense-to-release score synchronized to the reveal
 - [x] Render, inspect, and verify widescreen and vertical V5 masters
+
+## AI-to-AI V6 repetition and energy rebuild
+
+- [ ] Remove task examples from opening and leadership scenes
+- [ ] Build thriller opening and high-impact AI-to-AI reveal
+- [ ] Keep five examples once in the evidence scene
+- [ ] Generate and synchronize a new high-energy score
+- [ ] Render and verify widescreen and vertical V6 masters
