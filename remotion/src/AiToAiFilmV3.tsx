@@ -73,7 +73,7 @@ const SilentInsight:React.FC<Format>=({vertical})=>{const f=useCurrentFrame(),l=
  {a:72,b:128,text:<>an <span style={{color:C.amber}}>AI</span> answered.</>},
  {a:132,b:198,text:<>the task kept moving.</>},
  {a:202,b:270,text:<>this is already happening.</>},
- ];return <AbsoluteFill><Field vertical={vertical} expanded labels/>{beats.map((x,i)=><Text key={i} vertical={vertical} size={vertical?86:112} style={{position:"absolute",left:vertical?62:120,right:vertical?62:120,top:vertical?590:345,opacity:fade(l,x.a,x.a+9,x.b-9,x.b)}}>{x.text}</Text>)}</AbsoluteFill>};
+ ];return <AbsoluteFill style={{opacity:fade(f,624,632,892,902)}}><Field vertical={vertical} expanded labels/>{beats.map((x,i)=><Text key={i} vertical={vertical} size={vertical?86:112} style={{position:"absolute",left:vertical?62:120,right:vertical?62:120,top:vertical?590:345,opacity:fade(l,x.a,x.a+9,x.b-9,x.b)}}>{x.text}</Text>)}</AbsoluteFill>};
 
 const Shift:React.FC<Format>=({vertical})=>{const f=useCurrentFrame(),l=f-900;return <AbsoluteFill style={{opacity:fade(f,896,904,1064,1074)}}><Field vertical={vertical} expanded labels/>
  <div style={{position:"absolute",left:vertical?62:120,right:vertical?62:120,top:vertical?545:300}}>
