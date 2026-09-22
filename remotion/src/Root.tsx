@@ -10,6 +10,7 @@ import { AiToAiFilm } from "./AiToAiFilm";
 import { AiToAiFilmV2 } from "./AiToAiFilmV2";
 import { AiToAiFilmV3 } from "./AiToAiFilmV3";
 import { AiToAiFilmV4 } from "./AiToAiFilmV4";
+import { AiToAiFilmV5 } from "./AiToAiFilmV5";
 
 export const RemotionRoot: React.FC = () => (
   <>
@@ -185,6 +186,24 @@ export const RemotionRoot: React.FC = () => (
     <Composition
       id="aiToAiV4Vertical"
       component={AiToAiFilmV4}
+      defaultProps={{ vertical: true }}
+      durationInFrames={1170}
+      fps={30}
+      width={1080}
+      height={1920}
+    />
+    <Composition
+      id="aiToAiV5Widescreen"
+      component={AiToAiFilmV5}
+      defaultProps={{ vertical: false }}
+      durationInFrames={1170}
+      fps={30}
+      width={1920}
+      height={1080}
+    />
+    <Composition
+      id="aiToAiV5Vertical"
+      component={AiToAiFilmV5}
       defaultProps={{ vertical: true }}
       durationInFrames={1170}
       fps={30}
