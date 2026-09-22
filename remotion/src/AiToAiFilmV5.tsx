@@ -117,7 +117,7 @@ const Evidence:React.FC<Format>=({vertical})=>{
       const born=sp(l,55+i*18,21,180);
       const yy=(vertical?750:500)+i*(vertical?168:102);
       const rot=(i%2?.45:-.35)*(1-born);
-      return <div key={x.task} style={{position:"absolute",left:vertical?54:170+i*35:360+i*70,top:yy,width:vertical?970:1190,height:vertical?128:82,background:C.paper,color:C.ink,transform:`translateX(${(1-born)*(i%2?140:-140)}px) rotate(${rot}deg)`,opacity:born,display:"grid",gridTemplateColumns:vertical?"210px 1fr 180px":"190px 1fr 190px",alignItems:"center",padding:vertical?"0 28px":"0 24px",boxShadow:`8px 8px 0 ${x.col}`}}>
+      return <div key={x.task} style={{position:"absolute",left:vertical?54:(170+i*35),top:yy,width:vertical?970:1190,height:vertical?128:82,background:C.paper,color:C.ink,transform:`translateX(${(1-born)*(i%2?140:-140)}px) rotate(${rot}deg)`,opacity:born,display:"grid",gridTemplateColumns:vertical?"210px 1fr 180px":"190px 1fr 190px",alignItems:"center",padding:vertical?"0 28px":"0 24px",boxShadow:`8px 8px 0 ${x.col}`}}>
         <span style={{fontFamily:display,fontSize:vertical?28:24}}>{x.task}</span><span style={{fontFamily:body,fontSize:vertical?28:23,fontWeight:600}}>{x.detail}</span><span style={{fontFamily:body,fontSize:vertical?20:17,fontWeight:700,color:C.cobalt,textAlign:"right"}}>AGENT ANSWERED</span>
       </div>;
     })}
