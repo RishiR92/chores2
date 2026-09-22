@@ -2,7 +2,7 @@
 
 ## Core idea
 
-Create a new **30-second, vertical-first social film** around a real-world observation:
+Create a new **30-second, LinkedIn/X-first social film** around a real-world observation:
 
 > Asmi has been handling the world for thousands of people. Lately, more of the voices answering her calls are AI too.
 
@@ -97,7 +97,7 @@ Evolve it specifically for this story:
 - **Dialogue becomes matter:** selected spoken phrases turn into physical menu strips, booking slips, address fields, and appointment stamps.
 - **No live transcript treatment:** only short, exact, sentence-level captions synchronized to the real audio so the story remains clear sound-off.
 - **No slide structure:** every result from one exchange must physically cause the next shot.
-- **Social-safe framing:** essential copy stays clear of the top 250 px and bottom 320 px in the vertical master; phones and captions remain readable at feed size.
+- **Platform-first framing:** the primary 16:9 composition must read instantly in LinkedIn and X feeds, with large captions and strong center-safe action. The vertical version is a separately composed secondary adaptation, with essential copy clear of the top 250 px and bottom 320 px.
 
 ## Sound and edit
 
@@ -114,7 +114,8 @@ Evolve it specifically for this story:
 - Add both supplied recordings as source assets for the new Remotion film.
 - Audition and timestamp every candidate excerpt before editing; the transcript guides selection, but the audible sentence ending controls the cut.
 - Build a new composition rather than altering `ChaseEngineFilm`, V9, V11, or their delivered masters.
-- Create separate vertical 1080×1920 and widescreen 1920×1080 choreography at 30 fps; do not crop one into the other.
+- Compose the primary master at 1920×1080 for LinkedIn and X, using lateral call-and-response staging and large sound-off captions.
+- Create a secondary 1080×1920 adaptation at 30 fps with its own stacking and safe-area decisions; do not crop the primary master.
 - Keep the finished duration between 28 and 32 seconds, H.264 video with AAC 48 kHz stereo audio.
 
 ## Verification gates
@@ -124,6 +125,6 @@ Evolve it specifically for this story:
 3. **Five-second test:** a sound-off viewer understands that Asmi handles real-world calls for people and is now encountering AI on the other side.
 4. **Value test:** after one watch, viewers can name two concrete outcomes—useful restaurant information and a Thursday 2 PM estimate slot.
 5. **Design test:** reject any frame resembling a deck, dashboard, waveform visualizer, generic AI ad, or sci-fi explainer.
-6. **Phone-size test:** review the vertical master at actual social-feed size; all critical phone content and captions must be readable.
+6. **Feed-size test:** review the primary master at realistic LinkedIn and X feed sizes first, then review the vertical adaptation; all critical phone content and captions must remain readable.
 7. **Audio test:** audition on phone speakers and headphones; voices stay intelligible, music ducks cleanly, and no sentence is cut off.
 8. **Delivery test:** inspect key-frame contact sheets and full-speed exports; verify duration, resolution, 30 fps, H.264/AAC, 48 kHz, loudness, and peak safety for both formats.
