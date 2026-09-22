@@ -147,8 +147,8 @@
 
 ## AI-to-AI V6 repetition and energy rebuild
 
-- [ ] Remove task examples from opening and leadership scenes
-- [ ] Build thriller opening and high-impact AI-to-AI reveal
-- [ ] Keep five examples once in the evidence scene
-- [ ] Generate and synchronize a new high-energy score
-- [ ] Render and verify widescreen and vertical V6 masters
+- [x] Remove task examples from opening and leadership scenes
+- [x] Build thriller opening and high-impact AI-to-AI reveal
+- [x] Keep five examples once in the evidence scene
+- [x] Generate and synchronize a new high-energy score
+- [x] Render and verify widescreen and vertical V6 masters
