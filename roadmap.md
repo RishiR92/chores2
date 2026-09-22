@@ -157,5 +157,5 @@
 
 - [x] Remove “this is the shift” from the evidence scene
 - [x] Remove the repeated consumer-side leadership statement
-- [ ] Strengthen the AI-to-AI reveal motion and impact
-- [ ] Render and verify widescreen and vertical V7 masters
+- [x] Strengthen the AI-to-AI reveal motion and impact
+- [x] Render and verify widescreen and vertical V7 masters
