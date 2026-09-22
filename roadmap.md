@@ -119,3 +119,11 @@
 - [x] Make the opening text phone dominant and enlarge the user's message
 - [x] End the HVAC excerpt at a natural sentence boundary
 - [x] Render, inspect, and verify both V5 masters
+
+## AI-to-AI real-world insight film
+
+- [x] Lock the LinkedIn/X-first story, copy, and design treatment
+- [ ] Transcribe and cut two real calls at complete sentence boundaries
+- [ ] Build the new widescreen-first and vertical compositions
+- [ ] Mix the authentic calls with the approved launch score
+- [ ] Inspect and verify both final masters
