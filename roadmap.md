@@ -159,3 +159,12 @@
 - [x] Remove the repeated consumer-side leadership statement
 - [x] Strengthen the AI-to-AI reveal motion and impact
 - [x] Render and verify widescreen and vertical V7 masters
+
+## Multilingual Paris wine delivery film
+
+- [x] Verify a real phone-led Paris merchant with local delivery on request
+- [x] Lock the NYC-to-Paris story, French dialogue, and feature reveal
+- [x] Create a fresh transatlantic visual and motion system
+- [x] Produce French call dialogue and an original high-energy score
+- [x] Render and inspect vertical and widescreen masters
+- [x] Verify formats, timing, subtitles, audio mix, and safe areas
