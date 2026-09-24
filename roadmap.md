@@ -219,3 +219,14 @@
 - [x] Render and inspect widescreen and vertical transition contact sheets
 - [x] Refine story pacing, safe areas, and product-screen legibility
 - [x] Render, mix, verify, and deliver both V6 masters
+
+## Multilingual Paris wine delivery V8 complete coordination rebuild
+
+- [x] Restore the French call to natural speed with realistic shop-side ambience
+- [x] Replace the compose-only email with a complete Gmail send and merchant reply thread
+- [x] Return the final confirmation to the original iMessage conversation
+- [x] Replace the selection line and highlight `en français` as the call handoff
+- [x] Reframe 50+ languages as Asmi's worldwide task-execution stack
+- [x] Render and inspect widescreen and vertical transition frames
+- [x] Refine pacing, safe areas, and interface legibility
+- [x] Render, mix, verify, and deliver both V8 masters

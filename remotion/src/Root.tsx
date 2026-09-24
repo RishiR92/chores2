@@ -19,6 +19,7 @@ import { WineFranceFilmV3 } from "./WineFranceFilmV3";
 import { WineFranceFilmV4 } from "./WineFranceFilmV4";
 import { WineFranceFilmV5 } from "./WineFranceFilmV5";
 import { WineFranceFilmV6 } from "./WineFranceFilmV6";
+import { WineFranceFilmV8 } from "./WineFranceFilmV8";
 
 export const RemotionRoot: React.FC = () => (
   <>
@@ -304,6 +305,24 @@ export const RemotionRoot: React.FC = () => (
       component={WineFranceFilmV3}
       defaultProps={{ vertical: true }}
       durationInFrames={810}
+      fps={30}
+      width={1080}
+      height={1920}
+    />
+    <Composition
+      id="wineFranceV8Widescreen"
+      component={WineFranceFilmV8}
+      defaultProps={{ vertical: false }}
+      durationInFrames={1140}
+      fps={30}
+      width={1920}
+      height={1080}
+    />
+    <Composition
+      id="wineFranceV8Vertical"
+      component={WineFranceFilmV8}
+      defaultProps={{ vertical: true }}
+      durationInFrames={1140}
       fps={30}
       width={1080}
       height={1920}
