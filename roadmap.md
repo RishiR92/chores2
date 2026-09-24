@@ -176,4 +176,4 @@
 - [x] Rebuild the French call with distinct voices, cadence, and shop ambience
 - [x] Connect call, Mail, confirmations, and language reveal into one causal flow
 - [x] Replace the late comic score with a premium launch-film progression
-- [ ] Render, inspect, mix, and verify both V2 masters
+- [x] Render, inspect, mix, and verify both V2 masters
