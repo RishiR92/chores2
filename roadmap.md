@@ -197,4 +197,4 @@
 - [x] Replace the banner palette and old score with a cinematic transatlantic system
 - [x] Render and inspect widescreen and vertical transition contact sheets
 - [x] Refine pacing, safe areas, and continuity from the visual review
-- [ ] Render, mix, verify, and deliver both V4 masters
+- [x] Render, mix, verify, and deliver both V4 masters
