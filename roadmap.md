@@ -188,3 +188,13 @@
 - [x] Add the email artifact, completion receipt, and 50+ languages reveal
 - [x] Compose a fresh high-energy score
 - [x] Render, inspect, refine, and verify both V3 masters
+
+## Multilingual Paris wine delivery V4 story-first rebuild
+
+- [x] Reframe the film around the four-colleague gift story
+- [x] Rebuild one continuous iMessage → Asmi task → confirmation flow
+- [x] Match the real options, call status, activity, email artifact, and completion patterns
+- [x] Replace the banner palette and old score with a cinematic transatlantic system
+- [x] Render and inspect widescreen and vertical transition contact sheets
+- [x] Refine pacing, safe areas, and continuity from the visual review
+- [x] Render, mix, verify, and deliver both V4 masters
