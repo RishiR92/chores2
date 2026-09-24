@@ -227,6 +227,6 @@
 - [x] Return the final confirmation to the original iMessage conversation
 - [x] Replace the selection line and highlight `en français` as the call handoff
 - [x] Reframe 50+ languages as Asmi's worldwide task-execution stack
-- [ ] Render and inspect widescreen and vertical transition frames
-- [ ] Refine pacing, safe areas, and interface legibility
-- [ ] Render, mix, verify, and deliver both V8 masters
+- [x] Render and inspect widescreen and vertical transition frames
+- [x] Refine pacing, safe areas, and interface legibility
+- [x] Render, mix, verify, and deliver both V8 masters
