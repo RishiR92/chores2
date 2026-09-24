@@ -33,7 +33,7 @@ The flow will match the existing product behavior:
 ```text
 User texts Asmi
       ↓
-Asmi builds a task-specific choice view inside the conversation
+The message opens Asmi’s real task canvas with a task-specific choice view
       ↓
 User taps the preferred local merchant
       ↓
@@ -65,7 +65,7 @@ The message launches a physical route from **NYC · 6:42 PM** to **PARIS · 12:4
 Purpose: establish distance, urgency, and the task in under three seconds.
 
 ### 2. Asmi builds the choice — 0:03–0:07
-The message thread stretches into Asmi’s real generated view. Three local wine merchants slide in as compact, inspectable choices with factual decision cues:
+The message hands off into Asmi’s real task canvas. Three local wine merchants slide in as compact, inspectable choices with factual decision cues:
 - independent
 - Paris neighborhood
 - calls welcomed for advice
@@ -97,7 +97,7 @@ Keep the whole proof to roughly five seconds:
 
 The merchant must sound like a real shop owner answering during business: older voice, slight room ambience, natural pickup breath, slower than Asmi, not studio-clean.
 
-The screen shows only call state, elapsed time, merchant identity, and a compact waveform. English subtitles sit in the film’s editorial layer—not inside Asmi as a fake transcript.
+The Asmi canvas shows only call state, elapsed time, merchant identity, and a compact waveform. The real audio is used as cinematic proof; English subtitles sit in the film’s editorial layer—not inside Asmi as a fake transcript.
 
 The two key subtitle beats:
 - “Four excellent bottles for four colleagues, delivered tomorrow.”
@@ -106,19 +106,19 @@ The two key subtitle beats:
 ### 5. Call becomes action — 0:14–0:18
 The final merchant waveform straightens into the underline of a French email. This is one continuous transformation, not a cut to a new slide.
 
-The Mail surface shows only the essential details:
+The Asmi canvas creates a compact email artifact showing only the essential details:
 - recipient: Caves Bernard
 - subject: delivery of four bottles tomorrow
 - four recipient names/addresses represented compactly
 - delivery window and reference
 
-The send arrow fires; the message folds back into Asmi’s task view as a completed email event.
+The send action fires; the email artifact folds back into Asmi’s timeline as a completed event. No separate operating-system Mail app is shown.
 
 Copy:
 **“call done. details confirmed in french.”**
 
 ### 6. Real completion receipt — 0:18–0:21
-Return to the same Asmi conversation/task—not a separate grid.
+Return to the same Asmi task canvas—not a separate grid.
 
 One receipt appears:
 - **Caves Bernard**
