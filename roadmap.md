@@ -209,3 +209,13 @@
 - [x] Render and inspect widescreen and vertical transition contact sheets
 - [x] Refine safe areas, readability, and phone continuity
 - [x] Render, mix, verify, and deliver both V5 masters
+
+## Multilingual Paris wine delivery V6 story and product correction
+
+- [x] Replace fragmented headlines with a complete iMessage-led story
+- [x] Match the attached Asmi options layout with a featured recommendation and compact alternatives
+- [x] Replace the email artifact with a credible Gmail compose and sent confirmation
+- [x] Correct the portrait phone to a consistent modern iPhone ratio
+- [x] Render and inspect widescreen and vertical transition contact sheets
+- [x] Refine story pacing, safe areas, and product-screen legibility
+- [x] Render, mix, verify, and deliver both V6 masters
