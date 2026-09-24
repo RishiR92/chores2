@@ -206,6 +206,6 @@
 - [x] Replace desktop task canvases with one persistent iPhone workflow
 - [x] Add merchant photography, ratings, review counts, and decision cues
 - [x] Restore the French call proof at natural conversational speed
-- [ ] Render and inspect widescreen and vertical transition contact sheets
-- [ ] Refine safe areas, readability, and phone continuity
+- [x] Render and inspect widescreen and vertical transition contact sheets
+- [x] Refine safe areas, readability, and phone continuity
 - [ ] Render, mix, verify, and deliver both V5 masters
