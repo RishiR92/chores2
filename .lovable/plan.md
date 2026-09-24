@@ -89,6 +89,11 @@ Copy outside the phone stays minimal:
 
 The phone remains credible, but the camera moves through it rather than parking it beside a headline.
 
+### Cross-border language bridge — within 0:07–0:09
+Add one short, visually distinct beat between selection and dialing. The user’s English request breaks into a few meaningful word-groups—**great wine / four colleagues / Paris / tomorrow**—and travels along a restrained dimensional globe arc from New York to Paris. While moving, each phrase changes once into French—**grands vins / quatre collègues / Paris / demain**—then resolves directly into the French call brief inside Asmi’s live task canvas.
+
+This should feel like a precise translation of intent, not flying decorative words. Use a cropped globe surface rather than a full spinning globe: longitude lines, two bright city points, one cobalt route, and four typographic signals moving at different depths. Keep it under two seconds so it sharpens the story without interrupting the real workflow.
+
 ### 4. French call highlight — 0:09–0:14
 Keep the whole proof to roughly five seconds:
 1. Merchant pickup: “Caves Bernard, bonjour.” — about 0.8 seconds.
@@ -199,10 +204,11 @@ No purple haze, navy-to-burgundy banners, beige-dominated frames, glowing blobs,
 ### Signature transitions
 1. **Message → choice view:** the blue message bubble unfolds horizontally into merchant cards.
 2. **Choice → action:** the selected card snaps into the phone’s active-task header while rejected cards fall into depth.
-3. **Ringing → connected:** the route line locks into a pulse ring around the merchant avatar.
-4. **Call → email:** the final waveform becomes the email subject underline, then the Mail surface builds around it.
-5. **Receipt → language reveal:** the fixed receipt structure remains while language and channel layers rotate through it.
-6. **Feature → logo:** the three channel marks converge into the Asmi wordmark baseline.
+3. **English → French route:** selected task terms travel across a cropped globe arc and transform once at the Atlantic midpoint; the French terms land as the structured call brief.
+4. **Ringing → connected:** the route line locks into a pulse ring around the merchant avatar.
+5. **Call → email:** the final waveform becomes the email artifact underline, then the written confirmation builds around it.
+6. **Receipt → language reveal:** the fixed receipt structure remains while language and channel layers rotate through it.
+7. **Feature → logo:** the three channel marks converge into the Asmi wordmark baseline.
 
 ### Scene-specific energy
 - Ask: immediate, effortless.
@@ -216,6 +222,7 @@ No purple haze, navy-to-burgundy banners, beige-dominated frames, glowing blobs,
 ### Effects
 - Subtle device reflections, dimensional shadows, print-like micrograin, and shallow depth shifts.
 - One transatlantic route stroke used as a narrative object across scenes.
+- The globe is a brief spatial transition only: partially cropped, graphically precise, and subordinate to the product flow. Avoid stock-Earth imagery, spinning-planet clichés, country flags, and dense geographic labels.
 - No generic particles, floating dots, random rings, decorative gradients, or unrelated flashes.
 - Motion blur simulated through directional duplicate trails only on the fastest two transitions.
 
