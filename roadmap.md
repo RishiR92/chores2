@@ -195,6 +195,6 @@
 - [x] Rebuild one continuous iMessage → Asmi task → confirmation flow
 - [x] Match the real options, call status, activity, email artifact, and completion patterns
 - [x] Replace the banner palette and old score with a cinematic transatlantic system
-- [ ] Render and inspect widescreen and vertical transition contact sheets
-- [ ] Refine pacing, safe areas, and continuity from the visual review
+- [x] Render and inspect widescreen and vertical transition contact sheets
+- [x] Refine pacing, safe areas, and continuity from the visual review
 - [ ] Render, mix, verify, and deliver both V4 masters
