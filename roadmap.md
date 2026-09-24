@@ -216,6 +216,6 @@
 - [x] Match the attached Asmi options layout with a featured recommendation and compact alternatives
 - [x] Replace the email artifact with a credible Gmail compose and sent confirmation
 - [x] Correct the portrait phone to a consistent modern iPhone ratio
-- [ ] Render and inspect widescreen and vertical transition contact sheets
-- [ ] Refine story pacing, safe areas, and product-screen legibility
+- [x] Render and inspect widescreen and vertical transition contact sheets
+- [x] Refine story pacing, safe areas, and product-screen legibility
 - [ ] Render, mix, verify, and deliver both V6 masters
