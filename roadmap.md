@@ -168,3 +168,12 @@
 - [x] Produce French call dialogue and an original high-energy score
 - [x] Render and inspect vertical and widescreen masters
 - [x] Verify formats, timing, subtitles, audio mix, and safe areas
+
+## Multilingual Paris wine delivery V2 realism rebuild
+
+- [x] Replace the fake opening chat with a faithful iMessage conversation
+- [x] Replace the abstract checkout comparison with visible Asmi work progress
+- [x] Rebuild the French call with distinct voices, cadence, and shop ambience
+- [x] Connect call, Mail, confirmations, and language reveal into one causal flow
+- [x] Replace the late comic score with a premium launch-film progression
+- [ ] Render, inspect, mix, and verify both V2 masters
