@@ -218,4 +218,4 @@
 - [x] Correct the portrait phone to a consistent modern iPhone ratio
 - [x] Render and inspect widescreen and vertical transition contact sheets
 - [x] Refine story pacing, safe areas, and product-screen legibility
-- [ ] Render, mix, verify, and deliver both V6 masters
+- [x] Render, mix, verify, and deliver both V6 masters
