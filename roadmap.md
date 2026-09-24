@@ -166,5 +166,5 @@
 - [x] Lock the NYC-to-Paris story, French dialogue, and feature reveal
 - [x] Create a fresh transatlantic visual and motion system
 - [x] Produce French call dialogue and an original high-energy score
-- [ ] Render and inspect vertical and widescreen masters
-- [ ] Verify formats, timing, subtitles, audio mix, and safe areas
+- [x] Render and inspect vertical and widescreen masters
+- [x] Verify formats, timing, subtitles, audio mix, and safe areas
