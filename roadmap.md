@@ -177,3 +177,14 @@
 - [x] Connect call, Mail, confirmations, and language reveal into one causal flow
 - [x] Replace the late comic score with a premium launch-film progression
 - [x] Render, inspect, mix, and verify both V2 masters
+
+
+## Multilingual Paris wine delivery V3 real-flow rebuild
+
+- [x] Replace native Phone and Mail mockups with Asmi's real task canvas
+- [x] Add tappable local merchant choices and one explicit user selection
+- [x] Add the English-to-French NYC-to-Paris intent bridge
+- [x] Cut the French call proof to roughly five seconds with no live transcript
+- [x] Add the email artifact, completion receipt, and 50+ languages reveal
+- [x] Compose a fresh high-energy score
+- [ ] Render, inspect, refine, and verify both V3 masters
